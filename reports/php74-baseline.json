@@ -1,0 +1,156 @@
+{
+  "home": {
+    "status": 200,
+    "expect": 200,
+    "bytes": 81763,
+    "ms": 3317,
+    "hash": "fbf73dd4cdbec1ae",
+    "missing": [],
+    "php_error": false,
+    "laravel_500": false,
+    "why": "view composers, cached menu tree, slider"
+  },
+  "price-list": {
+    "status": 200,
+    "expect": 200,
+    "bytes": 109946,
+    "ms": 2137,
+    "hash": "6ef1e539e819686f",
+    "missing": [],
+    "php_error": false,
+    "laravel_500": false,
+    "why": "the biggest query; jalali dates; price formatting"
+  },
+  "category-list": {
+    "status": 200,
+    "expect": 200,
+    "bytes": 42066,
+    "ms": 3592,
+    "hash": "4c1b2c70f2c3b823",
+    "missing": [],
+    "php_error": false,
+    "laravel_500": false,
+    "why": "category tree recursion"
+  },
+  "category-page": {
+    "status": 200,
+    "expect": 200,
+    "bytes": 79145,
+    "ms": 3023,
+    "hash": "d860812afaa15a18",
+    "missing": [],
+    "php_error": false,
+    "laravel_500": false,
+    "why": "Product/Offer schema, chart bootstrapping"
+  },
+  "blog-index": {
+    "status": 200,
+    "expect": 200,
+    "bytes": 59402,
+    "ms": 3203,
+    "hash": "346ae0780e0a2478",
+    "missing": [],
+    "php_error": false,
+    "laravel_500": false,
+    "why": "pagination, article excerpts"
+  },
+  "news-gone": {
+    "status": 410,
+    "expect": 410,
+    "bytes": 807,
+    "ms": 398,
+    "hash": "2f537703897ce8a1",
+    "missing": [],
+    "php_error": false,
+    "laravel_500": false,
+    "why": "the retired section still answers 410"
+  },
+  "about": {
+    "status": 200,
+    "expect": 200,
+    "bytes": 49378,
+    "ms": 785,
+    "hash": "cd8ad9218a7a40e1",
+    "missing": [],
+    "php_error": false,
+    "laravel_500": false,
+    "why": "static page + layout"
+  },
+  "contact": {
+    "status": 200,
+    "expect": 200,
+    "bytes": 39073,
+    "ms": 1918,
+    "hash": "c70b451494c60cda",
+    "missing": [],
+    "php_error": false,
+    "laravel_500": false,
+    "why": "form rendering, CSRF"
+  },
+  "login": {
+    "status": 200,
+    "expect": 200,
+    "bytes": 2565,
+    "ms": 4825,
+    "hash": "b133444f09d1e7b0",
+    "missing": [],
+    "php_error": false,
+    "laravel_500": false,
+    "why": "the rebuilt auth screen"
+  },
+  "register": {
+    "status": 200,
+    "expect": 200,
+    "bytes": 3185,
+    "ms": 430,
+    "hash": "e10e38de69acd091",
+    "missing": [],
+    "php_error": false,
+    "laravel_500": false,
+    "why": "the rebuilt auth screen"
+  },
+  "cart": {
+    "status": 200,
+    "expect": 200,
+    "bytes": 2565,
+    "ms": 1944,
+    "hash": "b133444f09d1e7b0",
+    "missing": [],
+    "php_error": false,
+    "laravel_500": false,
+    "why": "session driver round-trip"
+  },
+  "sitemap": {
+    "status": 200,
+    "expect": 200,
+    "bytes": 11493,
+    "ms": 295,
+    "hash": "6cc4ac1c7ee6fca6",
+    "missing": [],
+    "php_error": false,
+    "laravel_500": false,
+    "why": "ext-xml / ext-xmlwriter — laravelium/sitemap"
+  },
+  "robots": {
+    "status": 200,
+    "expect": 200,
+    "bytes": 212,
+    "ms": 284,
+    "hash": "503d39265affc608",
+    "missing": [],
+    "php_error": false,
+    "laravel_500": false,
+    "why": "served at all"
+  },
+  "search-api": {
+    "status": 200,
+    "expect": 200,
+    "bytes": 162,
+    "ms": 1475,
+    "hash": "c892d87f8d3e471f",
+    "missing": [],
+    "php_error": false,
+    "laravel_500": false,
+    "why": "ext-mbstring on Persian input; JSON encoding"
+  }
+}

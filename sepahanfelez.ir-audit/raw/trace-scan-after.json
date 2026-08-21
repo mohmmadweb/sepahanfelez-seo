@@ -1,0 +1,579 @@
+{
+  "pages": [
+    {
+      "url": "https://sepahanfelez.ir",
+      "hits": {},
+      "status": 200,
+      "bytes": 75093,
+      "canonical": "https://sepahanfelez.ir",
+      "robots": "index, follow",
+      "ld_json_blocks": 1
+    },
+    {
+      "url": "https://sepahanfelez.ir/",
+      "hits": {},
+      "status": 200,
+      "bytes": 75093,
+      "canonical": "https://sepahanfelez.ir",
+      "robots": "index, follow",
+      "ld_json_blocks": 1
+    },
+    {
+      "url": "https://sepahanfelez.ir/about",
+      "hits": {},
+      "status": 200,
+      "bytes": 47460,
+      "canonical": "https://sepahanfelez.ir/about",
+      "robots": "index, follow",
+      "ld_json_blocks": 1
+    },
+    {
+      "url": "https://sepahanfelez.ir/blog",
+      "hits": {},
+      "status": 200,
+      "bytes": 58210,
+      "canonical": "https://sepahanfelez.ir/blog",
+      "robots": "index, follow",
+      "ld_json_blocks": 1
+    },
+    {
+      "url": "https://sepahanfelez.ir/blog/Wires/Black-wire",
+      "hits": {},
+      "status": 200,
+      "bytes": 55831,
+      "canonical": "https://sepahanfelez.ir/blog/Wires/Black-wire",
+      "robots": "index, follow",
+      "ld_json_blocks": 3
+    },
+    {
+      "url": "https://sepahanfelez.ir/blog/Wires/Production-of-galvanized-wire",
+      "hits": {},
+      "status": 200,
+      "bytes": 61674,
+      "canonical": "https://sepahanfelez.ir/blog/Wires/Production-of-galvanized-wire",
+      "robots": "index, follow",
+      "ld_json_blocks": 3
+    },
+    {
+      "url": "https://sepahanfelez.ir/blog/Wires/Profile",
+      "hits": {},
+      "status": 200,
+      "bytes": 60416,
+      "canonical": "https://sepahanfelez.ir/blog/Wires/Profile",
+      "robots": "index, follow",
+      "ld_json_blocks": 3
+    },
+    {
+      "url": "https://sepahanfelez.ir/blog/Wires/Types-of-profiles",
+      "hits": {},
+      "status": 200,
+      "bytes": 53668,
+      "canonical": "https://sepahanfelez.ir/blog/Wires/Types-of-profiles",
+      "robots": "index, follow",
+      "ld_json_blocks": 3
+    },
+    {
+      "url": "https://sepahanfelez.ir/blog/Wires/black-annealed-wire",
+      "hits": {},
+      "status": 200,
+      "bytes": 57994,
+      "canonical": "https://sepahanfelez.ir/blog/Wires/black-annealed-wire",
+      "robots": "index, follow",
+      "ld_json_blocks": 3
+    },
+    {
+      "url": "https://sepahanfelez.ir/blog/Wires/galvanized-wire",
+      "hits": {},
+      "status": 200,
+      "bytes": 70701,
+      "canonical": "https://sepahanfelez.ir/blog/Wires/galvanized-wire",
+      "robots": "index, follow",
+      "ld_json_blocks": 3
+    },
+    {
+      "url": "https://sepahanfelez.ir/blog/Wires/rabitz-metal",
+      "hits": {},
+      "status": 200,
+      "bytes": 53130,
+      "canonical": "https://sepahanfelez.ir/blog/Wires/rabitz-metal",
+      "robots": "index, follow",
+      "ld_json_blocks": 3
+    },
+    {
+      "url": "https://sepahanfelez.ir/blog/Wires/تشخیص-گالوانیزه-گرم-و-سرد",
+      "hits": {},
+      "status": 200,
+      "bytes": 61254,
+      "canonical": "https://sepahanfelez.ir/blog/Wires/تشخیص-گالوانیزه-گرم-و-سرد",
+      "robots": "index, follow",
+      "ld_json_blocks": 3
+    },
+    {
+      "url": "https://sepahanfelez.ir/blog/Wires/تفاوت-گالوانیزه-سرد-و-گرم",
+      "hits": {},
+      "status": 200,
+      "bytes": 64051,
+      "canonical": "https://sepahanfelez.ir/blog/Wires/تفاوت-گالوانیزه-سرد-و-گرم",
+      "robots": "index, follow",
+      "ld_json_blocks": 3
+    },
+    {
+      "url": "https://sepahanfelez.ir/blog/Wires/خرید-توری-حصاری-ارزان",
+      "hits": {},
+      "status": 200,
+      "bytes": 160316,
+      "canonical": "https://sepahanfelez.ir/blog/Wires/خرید-توری-حصاری-ارزان",
+      "robots": "index, follow",
+      "ld_json_blocks": 3
+    },
+    {
+      "url": "https://sepahanfelez.ir/blog/Wires/سیم-مفتول-از-کجا-بخرم؟",
+      "hits": {},
+      "status": 200,
+      "bytes": 68278,
+      "canonical": "https://sepahanfelez.ir/blog/Wires/سیم-مفتول-از-کجا-بخرم؟",
+      "robots": "index, follow",
+      "ld_json_blocks": 3
+    },
+    {
+      "url": "https://sepahanfelez.ir/blog/Wires/سیم-مفتول-چیست-و-روش-تولید-آن",
+      "hits": {},
+      "status": 200,
+      "bytes": 61163,
+      "canonical": "https://sepahanfelez.ir/blog/Wires/سیم-مفتول-چیست-و-روش-تولید-آن",
+      "robots": "index, follow",
+      "ld_json_blocks": 3
+    },
+    {
+      "url": "https://sepahanfelez.ir/blog/Wires/محاسبه-وزن-مفتول-گالوانیزه",
+      "hits": {},
+      "status": 200,
+      "bytes": 64689,
+      "canonical": "https://sepahanfelez.ir/blog/Wires/محاسبه-وزن-مفتول-گالوانیزه",
+      "robots": "index, follow",
+      "ld_json_blocks": 3
+    },
+    {
+      "url": "https://sepahanfelez.ir/blog/Wires/معرفی-انواع-سیم-مفتول",
+      "hits": {},
+      "status": 200,
+      "bytes": 66673,
+      "canonical": "https://sepahanfelez.ir/blog/Wires/معرفی-انواع-سیم-مفتول",
+      "robots": "index, follow",
+      "ld_json_blocks": 3
+    },
+    {
+      "url": "https://sepahanfelez.ir/blog/Wires/مفتول-گالوانیزه-چیست؟",
+      "hits": {},
+      "status": 200,
+      "bytes": 67748,
+      "canonical": "https://sepahanfelez.ir/blog/Wires/مفتول-گالوانیزه-چیست؟",
+      "robots": "index, follow",
+      "ld_json_blocks": 3
+    },
+    {
+      "url": "https://sepahanfelez.ir/blog/Wires/چه-نوع-فنسی-بهتر-است",
+      "hits": {},
+      "status": 200,
+      "bytes": 140226,
+      "canonical": "https://sepahanfelez.ir/blog/Wires/چه-نوع-فنسی-بهتر-است",
+      "robots": "index, follow",
+      "ld_json_blocks": 3
+    },
+    {
+      "url": "https://sepahanfelez.ir/blog/barbed-wire/Barbed-wire",
+      "hits": {},
+      "status": 200,
+      "bytes": 53168,
+      "canonical": "https://sepahanfelez.ir/blog/barbed-wire/Barbed-wire",
+      "robots": "index, follow",
+      "ld_json_blocks": 3
+    },
+    {
+      "url": "https://sepahanfelez.ir/blog/net/Chicken--wire--netting",
+      "hits": {},
+      "status": 200,
+      "bytes": 54685,
+      "canonical": "https://sepahanfelez.ir/blog/net/Chicken--wire--netting",
+      "robots": "index, follow",
+      "ld_json_blocks": 3
+    },
+    {
+      "url": "https://sepahanfelez.ir/blog/net/Expanded-Metal",
+      "hits": {},
+      "status": 200,
+      "bytes": 57561,
+      "canonical": "https://sepahanfelez.ir/blog/net/Expanded-Metal",
+      "robots": "index, follow",
+      "ld_json_blocks": 3
+    },
+    {
+      "url": "https://sepahanfelez.ir/blog/net/Gabion",
+      "hits": {},
+      "status": 200,
+      "bytes": 54960,
+      "canonical": "https://sepahanfelez.ir/blog/net/Gabion",
+      "robots": "index, follow",
+      "ld_json_blocks": 3
+    },
+    {
+      "url": "https://sepahanfelez.ir/blog/net/Poultry-lace",
+      "hits": {},
+      "status": 200,
+      "bytes": 57476,
+      "canonical": "https://sepahanfelez.ir/blog/net/Poultry-lace",
+      "robots": "index, follow",
+      "ld_json_blocks": 3
+    },
+    {
+      "url": "https://sepahanfelez.ir/blog/net/Price-of-press-netting",
+      "hits": {},
+      "status": 200,
+      "bytes": 56686,
+      "canonical": "https://sepahanfelez.ir/blog/net/Price-of-press-netting",
+      "robots": "index, follow",
+      "ld_json_blocks": 3
+    },
+    {
+      "url": "https://sepahanfelez.ir/blog/net/The-price-of-lace",
+      "hits": {},
+      "status": 200,
+      "bytes": 56506,
+      "canonical": "https://sepahanfelez.ir/blog/net/The-price-of-lace",
+      "robots": "index, follow",
+      "ld_json_blocks": 3
+    },
+    {
+      "url": "https://sepahanfelez.ir/blog/net/What-is-barbed-wire",
+      "hits": {},
+      "status": 200,
+      "bytes": 53599,
+      "canonical": "https://sepahanfelez.ir/blog/net/What-is-barbed-wire",
+      "robots": "index, follow",
+      "ld_json_blocks": 3
+    },
+    {
+      "url": "https://sepahanfelez.ir/blog/net/Woven-Wire-Mesh",
+      "hits": {},
+      "status": 200,
+      "bytes": 59473,
+      "canonical": "https://sepahanfelez.ir/blog/net/Woven-Wire-Mesh",
+      "robots": "index, follow",
+      "ld_json_blocks": 3
+    },
+    {
+      "url": "https://sepahanfelez.ir/blog/net/chain-wire-fence",
+      "hits": {},
+      "status": 200,
+      "bytes": 55982,
+      "canonical": "https://sepahanfelez.ir/blog/net/chain-wire-fence",
+      "robots": "index, follow",
+      "ld_json_blocks": 3
+    },
+    {
+      "url": "https://sepahanfelez.ir/blog/net/توری-آهنی-چیست؟",
+      "hits": {},
+      "status": 200,
+      "bytes": 59255,
+      "canonical": "https://sepahanfelez.ir/blog/net/توری-آهنی-چیست؟",
+      "robots": "index, follow",
+      "ld_json_blocks": 3
+    },
+    {
+      "url": "https://sepahanfelez.ir/blog/net/توری-حصاری-یا-فنس-چیست",
+      "hits": {},
+      "status": 200,
+      "bytes": 59443,
+      "canonical": "https://sepahanfelez.ir/blog/net/توری-حصاری-یا-فنس-چیست",
+      "robots": "index, follow",
+      "ld_json_blocks": 3
+    },
+    {
+      "url": "https://sepahanfelez.ir/blog/net/توری-مرغی-گالوانیزه",
+      "hits": {},
+      "status": 200,
+      "bytes": 76091,
+      "canonical": "https://sepahanfelez.ir/blog/net/توری-مرغی-گالوانیزه",
+      "robots": "index, follow",
+      "ld_json_blocks": 3
+    },
+    {
+      "url": "https://sepahanfelez.ir/blog/net/خرید-توری-باغی-با-قیمت-مناسب",
+      "hits": {},
+      "status": 200,
+      "bytes": 134572,
+      "canonical": "https://sepahanfelez.ir/blog/net/خرید-توری-باغی-با-قیمت-مناسب",
+      "robots": "index, follow",
+      "ld_json_blocks": 3
+    },
+    {
+      "url": "https://sepahanfelez.ir/blog/spacer/Plastic-spacer",
+      "hits": {},
+      "status": 200,
+      "bytes": 52199,
+      "canonical": "https://sepahanfelez.ir/blog/spacer/Plastic-spacer",
+      "robots": "index, follow",
+      "ld_json_blocks": 3
+    },
+    {
+      "url": "https://sepahanfelez.ir/blog/spacer/what-is-spacer",
+      "hits": {},
+      "status": 200,
+      "bytes": 51440,
+      "canonical": "https://sepahanfelez.ir/blog/spacer/what-is-spacer",
+      "robots": "index, follow",
+      "ld_json_blocks": 3
+    },
+    {
+      "url": "https://sepahanfelez.ir/blog/توری-مش/WELDED-WIRE-MESH",
+      "hits": {},
+      "status": 200,
+      "bytes": 52727,
+      "canonical": "https://sepahanfelez.ir/blog/توری-مش/WELDED-WIRE-MESH",
+      "robots": "index, follow",
+      "ld_json_blocks": 3
+    },
+    {
+      "url": "https://sepahanfelez.ir/blog/توری-مش/Welded-Wire-Reinforcement",
+      "hits": {},
+      "status": 200,
+      "bytes": 55857,
+      "canonical": "https://sepahanfelez.ir/blog/توری-مش/Welded-Wire-Reinforcement",
+      "robots": "index, follow",
+      "ld_json_blocks": 3
+    },
+    {
+      "url": "https://sepahanfelez.ir/blog/خاموت/خاموت",
+      "hits": {},
+      "status": 200,
+      "bytes": 50701,
+      "canonical": "https://sepahanfelez.ir/blog/خاموت/خاموت",
+      "robots": "index, follow",
+      "ld_json_blocks": 3
+    },
+    {
+      "url": "https://sepahanfelez.ir/blog/خاموت/خاموت-چیست؟",
+      "hits": {},
+      "status": 200,
+      "bytes": 58214,
+      "canonical": "https://sepahanfelez.ir/blog/خاموت/خاموت-چیست؟",
+      "robots": "index, follow",
+      "ld_json_blocks": 3
+    },
+    {
+      "url": "https://sepahanfelez.ir/blog/میلگرد/میلگرد-و-انواع-استاندارهای-آن",
+      "hits": {},
+      "status": 200,
+      "bytes": 58651,
+      "canonical": "https://sepahanfelez.ir/blog/میلگرد/میلگرد-و-انواع-استاندارهای-آن",
+      "robots": "index, follow",
+      "ld_json_blocks": 3
+    },
+    {
+      "url": "https://sepahanfelez.ir/blog/میلگرد/میلگرد-چیست",
+      "hits": {},
+      "status": 200,
+      "bytes": 54773,
+      "canonical": "https://sepahanfelez.ir/blog/میلگرد/میلگرد-چیست",
+      "robots": "index, follow",
+      "ld_json_blocks": 3
+    },
+    {
+      "url": "https://sepahanfelez.ir/blog/پایه-فنس/Fence-base",
+      "hits": {},
+      "status": 200,
+      "bytes": 54401,
+      "canonical": "https://sepahanfelez.ir/blog/پایه-فنس/Fence-base",
+      "robots": "index, follow",
+      "ld_json_blocks": 3
+    },
+    {
+      "url": "https://sepahanfelez.ir/blog/پشم-شیشه/glass-wool",
+      "hits": {},
+      "status": 200,
+      "bytes": 53364,
+      "canonical": "https://sepahanfelez.ir/blog/پشم-شیشه/glass-wool",
+      "robots": "index, follow",
+      "ld_json_blocks": 3
+    },
+    {
+      "url": "https://sepahanfelez.ir/category",
+      "hits": {},
+      "status": 200,
+      "bytes": 40077,
+      "canonical": "https://sepahanfelez.ir/category",
+      "robots": "index, follow",
+      "ld_json_blocks": 1
+    },
+    {
+      "url": "https://sepahanfelez.ir/category/توری-گابیون",
+      "hits": {},
+      "status": 200,
+      "bytes": 90485,
+      "canonical": "https://sepahanfelez.ir/category/توری-گابیون",
+      "robots": "index, follow",
+      "ld_json_blocks": 3
+    },
+    {
+      "url": "https://sepahanfelez.ir/category/سیم-خاردار",
+      "hits": {},
+      "status": 200,
+      "bytes": 75552,
+      "canonical": "https://sepahanfelez.ir/category/سیم-خاردار",
+      "robots": "index, follow",
+      "ld_json_blocks": 3
+    },
+    {
+      "url": "https://sepahanfelez.ir/category/سیم-خاردار/سیم-خاردار-حلقوی-90",
+      "hits": {},
+      "status": 200,
+      "bytes": 39255,
+      "canonical": "https://sepahanfelez.ir/category/سیم-خاردار/سیم-خاردار-حلقوی-90",
+      "robots": "index, follow",
+      "ld_json_blocks": 2
+    },
+    {
+      "url": "https://sepahanfelez.ir/category/توری-جوشی--گالوانیزه-رول",
+      "hits": {},
+      "status": 200,
+      "bytes": 86467,
+      "canonical": "https://sepahanfelez.ir/category/توری-جوشی--گالوانیزه-رول",
+      "robots": "index, follow",
+      "ld_json_blocks": 3
+    },
+    {
+      "url": "https://sepahanfelez.ir/category/توری-حصاری",
+      "hits": {},
+      "status": 200,
+      "bytes": 173846,
+      "canonical": "https://sepahanfelez.ir/category/توری-حصاری",
+      "robots": "index, follow",
+      "ld_json_blocks": 3
+    },
+    {
+      "url": "https://sepahanfelez.ir/category/توری-فرنگی",
+      "hits": {},
+      "status": 200,
+      "bytes": 77523,
+      "canonical": "https://sepahanfelez.ir/category/توری-فرنگی",
+      "robots": "index, follow",
+      "ld_json_blocks": 3
+    },
+    {
+      "url": "https://sepahanfelez.ir/category/توری-مرغی",
+      "hits": {},
+      "status": 200,
+      "bytes": 83366,
+      "canonical": "https://sepahanfelez.ir/category/توری-مرغی",
+      "robots": "index, follow",
+      "ld_json_blocks": 3
+    },
+    {
+      "url": "https://sepahanfelez.ir/category/توری-پرسی",
+      "hits": {},
+      "status": 200,
+      "bytes": 89479,
+      "canonical": "https://sepahanfelez.ir/category/توری-پرسی",
+      "robots": "index, follow",
+      "ld_json_blocks": 3
+    },
+    {
+      "url": "https://sepahanfelez.ir/category/توری-کششی(expanded-metal)",
+      "hits": {},
+      "status": 200,
+      "bytes": 70037,
+      "canonical": "https://sepahanfelez.ir/category/توری-کششی(expanded-metal)",
+      "robots": "index, follow",
+      "ld_json_blocks": 3
+    },
+    {
+      "url": "https://sepahanfelez.ir/category/توری-گابیون",
+      "hits": {},
+      "status": 200,
+      "bytes": 90485,
+      "canonical": "https://sepahanfelez.ir/category/توری-گابیون",
+      "robots": "index, follow",
+      "ld_json_blocks": 3
+    },
+    {
+      "url": "https://sepahanfelez.ir/category/سیم-خاردار",
+      "hits": {},
+      "status": 200,
+      "bytes": 75552,
+      "canonical": "https://sepahanfelez.ir/category/سیم-خاردار",
+      "robots": "index, follow",
+      "ld_json_blocks": 3
+    },
+    {
+      "url": "https://sepahanfelez.ir/category/سیم-خاردار/سیم-خاردار-حلقوی-60",
+      "hits": {},
+      "status": 200,
+      "bytes": 41511,
+      "canonical": "https://sepahanfelez.ir/category/سیم-خاردار/سیم-خاردار-حلقوی-60",
+      "robots": "index, follow",
+      "ld_json_blocks": 2
+    },
+    {
+      "url": "https://sepahanfelez.ir/category/سیم-خاردار/سیم-خاردار-حلقوی-90",
+      "hits": {},
+      "status": 200,
+      "bytes": 39255,
+      "canonical": "https://sepahanfelez.ir/category/سیم-خاردار/سیم-خاردار-حلقوی-90",
+      "robots": "index, follow",
+      "ld_json_blocks": 2
+    },
+    {
+      "url": "https://sepahanfelez.ir/category/سیم-سیاه-و-آرماتور-بندی",
+      "hits": {},
+      "status": 200,
+      "bytes": 84850,
+      "canonical": "https://sepahanfelez.ir/category/سیم-سیاه-و-آرماتور-بندی",
+      "robots": "index, follow",
+      "ld_json_blocks": 3
+    },
+    {
+      "url": "https://sepahanfelez.ir/category/مش-جوشی-یا-مش-آهنی",
+      "hits": {},
+      "status": 200,
+      "bytes": 77874,
+      "canonical": "https://sepahanfelez.ir/category/مش-جوشی-یا-مش-آهنی",
+      "robots": "index, follow",
+      "ld_json_blocks": 3
+    },
+    {
+      "url": "https://sepahanfelez.ir/contact",
+      "hits": {},
+      "status": 200,
+      "bytes": 37555,
+      "canonical": "https://sepahanfelez.ir/contact",
+      "robots": "index, follow",
+      "ld_json_blocks": 1
+    },
+    {
+      "url": "https://sepahanfelez.ir/price",
+      "hits": {},
+      "status": 200,
+      "bytes": 98244,
+      "canonical": "https://sepahanfelez.ir/price",
+      "robots": "index, follow",
+      "ld_json_blocks": 1
+    }
+  ],
+  "assets": {
+    "/robots.txt": {
+      "status": 200,
+      "traces": {},
+      "body": "User-agent: *\nAllow: /\n\nDisallow: /cart\nDisallow: /login\nDisallow: /register\nDisallow: /admin\nDisallow: /profile\nDisallow: /index.php\nDisallow: /*?zzz=\nDisallow: /*&\n\nSitemap: https://sepahanfelez.ir/sitemap.xml\n"
+    },
+    "/sitemap.xml": {
+      "status": 200,
+      "traces": {},
+      "body": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\" xmlns:xhtml=\"http://www.w3.org/1999/xhtml\" xmlns:image=\"http://www.google.com/schemas/sitemap-image/1.1\" xmlns:video=\"http://www.google.com/schemas/sitemap-video/1.1\">\n\t<url>\n\t<loc>https://sepahanfelez.ir</loc>\n\t\t<priority>1.0</priority>\n\t\t<lastmod>2026-08-06T00:00:00+04:30</lastmod>\n\t\t<changefreq>daily</changefreq>\n\t</url>\n\t<url>\n\t<loc>https://sepahanfelez.ir/price</loc>\n\t\t<priority>0.9</priority>\n\t\t<lastmod>2026-08-06T00:00:00+04:30</lastmod>\n\t\t<changefreq>daily</changefreq>\n\t</url>\n\t<url>\n\t<loc>https://sepahanfelez.ir/about</loc>\n\t\t<priority>0.6</priority>\n\t\t<lastmod>2026-08-06T00:00:00+04:30</lastmod>\n\t\t<changefreq>monthly</changefreq>\n\t</url>\n\t<url>\n\t<loc>https://sepahanfelez.ir/contact</loc>\n\t\t<priority>0.6</priority>\n\t\t<lastmod>2026-08-06T00:00:00+04:30</lastmod>\n\t\t<changefreq>monthly</changefreq>\n\t</url>\n\t<url>\n\t<loc>https://sepahanfelez.ir/category</loc>\n\t\t<priority>0.7</priority>\n\t\t<lastmod>2026-08-06T00:00:00+04:30</lastmod>\n\t\t<changefreq>weekly</changefreq>\n\t</url>\n\t<url>\n\t<loc>https://sepahanfelez.ir/blog</loc>\n\t\t<priority>0.7</priority>\n\t\t<lastmod>2026-08-06T00:00:00+04:30</lastmod>\n\t\t<changefreq>weekly</changefreq>\n\t</url>\n\t<url>\n\t<loc>https://sepahanfelez.ir/category/سیم-خاردار</loc>\n\t\t<priority>0.8</priority>\n\t\t<lastmod>2026-08-06T19:14:25+04:30</lastmod>\n\t\t<changefreq>daily</changefreq>\n\t</url>\n\t<url>\n\t<loc>https://sepahanfelez.ir/category/سیم-سیاه-و-آرماتور-بندی</loc>\n\t\t<priority>0.8</priority>\n\t\t<lastmod>2026-08-06T18:49:59+04:30</lastmod>\n\t\t<changefreq>daily</changefreq>\n\t</url>\n\t<url>\n\t<loc>https://sepahanfelez.ir/category/توری-مرغی</loc>\n\t\t<priority>0.8</priority>\n\t\t<lastmod>2026-08-06T18:50:02+04:30</lastmod>\n\t\t<changefreq>daily</changefreq>\n\t</url>\n\t<url>\n\t<loc>https://sepahanfelez.ir/category/توری-فرنگی</loc>\n\t\t<priority>0.8</priority>\n\t\t<lastmod>2026-08-06T18:50:07+04:30</lastmod>\n\t\t<changefreq>daily</changefreq>\n\t</url>\n\t<url>\n\t<loc>https://sepahanfelez.ir/category/توری-حصاری</loc>\n\t\t<priority>0.8</priority>\n\t\t<lastmod>2026-08-06T18:19:16+04:30</lastmod>\n\t\t<changefreq>daily</changefreq>\n\t</url>\n\t<url>\n\t<loc>https://sepahanfelez.ir/category/توری-پرسی</loc>\n\t\t<priority>0.8</priority>\n\t\t<lastmod>2026-08-06T18:50:12+04:30</lastmod>\n\t\t<changefreq>daily</changefreq>\n\t</url>\n\t<url>\n\t<loc>https://sepahanfelez.ir/category/توری-گابیون</loc>\n\t\t<priority>0.8</priority>\n\t\t<lastmod>2026-08-06T18:50:16+04:30</lastmod>\n\t\t<changefreq>daily</changefreq>\n\t</url>\n\t<url>\n\t<loc>https://sepahanfelez.ir/category/توری-کششی(expanded-metal)</loc>\n\t\t<priority>0.8</priority>\n\t\t<lastmod>2026-08-06T18:50:20+04:30</lastmod>\n\t\t<changefreq>daily</changefreq>\n\t</url>\n\t<url>\n\t<loc>https://sepahanfelez.ir/category/توری-جوشی--گالوانیزه-رول</loc>\n\t\t<priority>0.8</priority>\n\t\t<lastmod>2026-08-06T18:50:25+04:30</lastmod>\n\t\t<changefreq>daily</changefreq>\n\t</url>\n\t<url>\n\t<loc>https://sepahanfelez.ir/category/مش-جوشی-یا-مش-آهنی</loc>\n\t\t<priority>0.8</priority>\n\t\t<lastmod>2026-08-06T18:50:29+04:30</lastmod>\n\t\t<changefreq>daily</changefreq>\n\t</url>\n\t<url>\n\t<loc>https://sepahanfelez.ir/category/سیم-خاردار/سیم-خاردار-حلقوی-90</loc>\n\t\t<priority>0.7</priority>\n\t\t<lastmod>2026-08-06T19:14:25+04:30</lastmod>\n\t\t<changefreq>daily</changefreq>\n\t</url>\n\t<url>\n\t<loc>https://sepahanfelez.ir/category/سیم-خاردار/سیم-خاردار-حلقوی-60</loc>\n\t\t<priority>0.7</priority>\n\t\t<lastmod>2026-08-06T19:14:19+04:30</lastmod>\n\t\t<changefreq>daily</changefreq>\n\t</url>\n\t<url>\n\t<loc>https://sepahanfelez.ir/blog/Wires/چه-نوع-فنسی-بهتر-است</loc>\n\t\t<priority>0.7</priority>\n\t\t<lastmod>2026-08-06T22:24:20+04:30</lastmod>\n\t\t<changefreq>daily</changefreq>\n\t</url>\n\t<url>\n\t<loc>https://sepahanfelez.ir/blog/Wires/خرید-توری-حصاری-ارزان</loc>\n\t\t<priority>0.7</priority>\n\t\t<lastmod>2026-08-06T22:24:19+04:30</lastmod>\n\t\t<changefreq>daily</changefreq>\n\t</url>\n\t<url>\n\t<loc>https://sepahanfelez.ir/blog/net/خرید-توری-باغی-با-قیمت-مناسب</loc>\n\t\t<priority>0.7</priority>\n\t\t<lastmod>2026-08-06T22:24:21+"
+    },
+    "/llms.txt": {
+      "status": 404,
+      "traces": {},
+      "body": "<!DOCTYPE html>\n<html lang=\"en\">\n    <head>\n        <meta charset=\"utf-8\">\n        <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n\n        <title>Not Found</title>\n\n        <!-- Fonts -->\n        <link rel=\"preconnect\" href=\"https://fonts.gstatic.com\">\n        <link href=\"https://fonts.googleapis.com/css2?family=Nunito&display=swap\" rel=\"stylesheet\">\n\n        <style>\n            /*! normalize.css v8.0.1 | MIT License | github.com/necolas/normalize.css */html{line-height:1.15;-webkit-text-size-adjust:100%}body{margin:0}a{background-color:transparent}code{font-family:monospace,monospace;font-size:1em}[hidden]{display:none}html{font-family:system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;line-height:1.5}*,:after,:before{box-sizing:border-box;border:0 solid #e2e8f0}a{color:inherit;text-decoration:inherit}code{font-family:Menlo,Monaco,Consolas,Liberation Mono,Courier New,monospace}svg,video{display:block;vertical-align:middle}video{max-width:100%;height:auto}.bg-white{--bg-opacity:1;background-color:#fff;background-color:rgba(255,255,255,var(--bg-opacity))}.bg-gray-100{--bg-opacity:1;background-color:#f7fafc;background-color:rgba(247,250,252,var(--bg-opacity))}.border-gray-200{--border-opacity:1;border-color:#edf2f7;border-color:rgba(237,242,247,var(--border-opacity))}.border-gray-400{--border-opacity:1;border-color:#cbd5e0;border-color:rgba(203,213,224,var(--border-opacity))}.border-t{border-top-width:1px}.border-r{border-right-width:1px}.flex{display:flex}.grid{display:grid}.hidden{display:none}.items-center{align-items:center}.justify-center{justify-content:center}.font-semibold{font-weight:600}.h-5{height:1.25rem}.h-8{height:2rem}.h-16{height:4rem}.text-sm{font-size:.875rem}.text-lg{font-size:1.125rem}.leading-7{line-height:1.75rem}.mx-auto{margin-left:auto;margin-right:auto}.ml-1{margin-left:.25rem}.mt-2{margin-top:.5rem}.mr-2{margin-right:.5rem}.ml-2{margin-left:.5rem}.mt-4{margin-top:1rem}.ml-4{margin-left:1rem}.mt-8{margin-top:2rem}.ml-12{margin-left:3rem}.-mt-px{margin-top:-1px}.max-w-xl{max-width:36rem}.max-w-6xl{max-width:72rem}.min-h-screen{min-height:100vh}.overflow-hidden{overflow:hidden}.p-6{padding:1.5rem}.py-4{padding-top:1rem;padding-bottom:1rem}.px-4{padding-left:1rem;padding-right:1rem}.px-6{padding-left:1.5rem;padding-right:1.5rem}.pt-8{padding-top:2rem}.fixed{position:fixed}.relative{position:relative}.top-0{top:0}.right-0{right:0}.shadow{box-shadow:0 1px 3px 0 rgba(0,0,0,.1),0 1px 2px 0 rgba(0,0,0,.06)}.text-center{text-align:center}.text-gray-200{--text-opacity:1;color:#edf2f7;color:rgba(237,242,247,var(--text-opacity))}.text-gray-300{--text-opacity:1;color:#e2e8f0;color:rgba(226,232,240,var(--text-opacity))}.text-gray-400{--text-opacity:1;color:#cbd5e0;color:rgba(203,213,224,var(--text-opacity))}.text-gray-500{--text-opacity:1;color:#a0aec0;color:rgba(160,174,192,var(--text-opacity))}.text-gray-600{--text-opacity:1;color:#718096;color:rgba(113,128,150,var(--text-opacity))}.text-gray-700{--text-opacity:1;color:#4a5568;color:rgba(74,85,104,var(--text-opacity))}.text-gray-900{--text-opacity:1;color:#1a202c;color:rgba(26,32,44,var(--text-opacity))}.uppercase{text-transform:uppercase}.underline{text-decoration:underline}.antialiased{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}.tracking-wider{letter-spacing:.05em}.w-5{width:1.25rem}.w-8{width:2rem}.w-auto{width:auto}.grid-cols-1{grid-template-columns:repeat(1,minmax(0,1fr))}@-webkit-keyframes spin{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}@keyframes  spin{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}@-webkit-keyframes ping{0%{transform:scale(1);opacity:1}75%,to{transform:scale(2);opacity:0}}@keyframes  ping{0%{transform:scale(1);opacity:1}75%,to{transform:scale(2);opacity:0}}@-webkit-keyframes pulse{0%,to{opacity:1}50%{opacity:.5}}@keyframes  pulse{0%,to{opacity:1}50%{opacity:.5}}"
+    }
+  }
+}

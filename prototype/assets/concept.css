@@ -1,0 +1,1199 @@
+/* ==========================================================================
+   سپاهان فلز — کانسپت رابط کاربری  (prototype only, no framework)
+   --------------------------------------------------------------------------
+   اصول:
+   1. شماره تلفن پررنگ‌ترین عنصر هر صفحه است. رنگ قرمز برند فقط و فقط
+      برای «تماس» استفاده می‌شود تا یک معنی واحد داشته باشد.
+   2. جدول قیمت محتوای اصلی است، نه اسلایدر. بالای صفحه = قیمت.
+   3. مخاطب +۴۰ سال: متن پایه ۱۷px، اعداد جدول ۲۰px، هیچ لمسی زیر ۴۸px.
+   4. مینیمال و رسمی: بدون گرادیان، بدون سایه‌ی سنگین، یک رنگ تاکیدی.
+   ========================================================================== */
+
+/* ---------- فونت ---------- */
+@font-face{font-family:IranSans;font-display:swap;font-weight:300;
+  src:url('fonts/IRANSansWeb_FaNum_Light.woff2') format('woff2')}
+@font-face{font-family:IranSans;font-display:swap;font-weight:400;
+  src:url('fonts/IRANSansWeb_FaNum.woff2') format('woff2')}
+@font-face{font-family:IranSans;font-display:swap;font-weight:500;
+  src:url('fonts/IRANSansWeb_FaNum_Medium.woff2') format('woff2')}
+@font-face{font-family:IranSans;font-display:swap;font-weight:700;
+  src:url('fonts/IRANSansWeb_FaNum_Bold.woff2') format('woff2')}
+
+/* ---------- توکن‌ها ---------- */
+:root{
+  /* رنگ */
+  --ink:        #0B1220;   /* متن اصلی */
+  --ink-2:      #4A5568;   /* متن ثانویه */
+  --ink-3:      #6B7280;   /* متن کم‌اهمیت */
+  --steel:      #16324F;   /* سرصفحه، پاصفحه، عنوان‌ها */
+  --steel-2:    #1F4468;
+  --brand:      #B42332;   /* فقط «تماس» و لوگو */
+  --brand-dark: #8E1A26;
+  --brand-soft: #FDF2F3;
+  --up:         #0B7A4B;
+  --down:       #B42332;
+  --bg:         #FFFFFF;
+  --surface:    #F6F8FA;
+  --surface-2:  #EEF2F6;
+  --border:     #DDE3EA;
+  --border-2:   #C7D0DA;
+
+  /* فاصله ۴/۸ */
+  --s1:4px; --s2:8px; --s3:12px; --s4:16px; --s5:24px;
+  --s6:32px; --s7:48px; --s8:64px; --s9:96px;
+
+  /* تایپوگرافی — ثابت، مستقل از اسکیل چیدمان */
+  --t-xs:14px; --t-sm:15px; --t-base:17px; --t-lg:19px;
+  --t-xl:22px; --t-2xl:26px; --t-3xl:32px; --t-4xl:40px;
+
+  --radius:6px;
+  --radius-lg:10px;
+  --ring: 0 0 0 3px rgba(22,50,79,.35);
+  --shadow-1: 0 1px 2px rgba(11,18,32,.06), 0 1px 3px rgba(11,18,32,.06);
+  --shadow-2: 0 4px 12px rgba(11,18,32,.08);
+
+  --header-h: 112px;
+  --container: 1280px;
+}
+
+/* ---------- پایه ---------- */
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:IranSans, Tahoma, "Segoe UI", sans-serif;
+  font-size:var(--t-base); line-height:1.75; font-weight:400;
+  padding-bottom:0;
+}
+img{max-width:100%; height:auto; display:block}
+a{color:inherit; text-decoration:none}
+h1,h2,h3,h4{margin:0; line-height:1.4; font-weight:700; color:var(--steel)}
+p{margin:0}
+ul{margin:0; padding:0; list-style:none}
+button{font:inherit; cursor:pointer}
+.container{max-width:var(--container); margin-inline:auto; padding-inline:var(--s5)}
+.visually-hidden{position:absolute;width:1px;height:1px;padding:0;margin:-1px;
+  overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+
+/* اعداد جدولی — جلوگیری از جابه‌جایی ستون قیمت */
+.num{font-variant-numeric:tabular-nums; font-feature-settings:"tnum" 1; direction:ltr;
+  unicode-bidi:isolate; display:inline-block}
+
+:focus-visible{outline:3px solid var(--steel); outline-offset:2px; border-radius:3px}
+
+/* fixed + منفی از بالا، نه inset-inline منفی: در RTL یک offset افقی منفی
+   scrollWidth را بزرگ می‌کند و کل صفحه اسکرول افقی می‌گیرد. */
+.skip{position:fixed; inset-inline-start:var(--s4); top:-100px;
+  background:var(--steel); color:#fff; padding:var(--s3) var(--s5); z-index:999;
+  border-radius:0 0 var(--radius) var(--radius)}
+.skip:focus{top:0}
+
+/* ==========================================================================
+   ۱. نوار خدماتی بالا
+   ========================================================================== */
+.utilbar{background:var(--steel); color:#DCE5EF; font-size:var(--t-sm)}
+.utilbar .container{display:flex; align-items:center; justify-content:space-between;
+  gap:var(--s4); min-height:44px}
+.utilbar ul{display:flex; gap:var(--s5); flex-wrap:wrap}
+.utilbar li{display:flex; align-items:center; gap:var(--s2)}
+.utilbar a{display:inline-flex; align-items:center; gap:var(--s2); min-height:44px}
+.utilbar a:hover{color:#fff; text-decoration:underline}
+.utilbar svg{width:17px; height:17px; flex:none; opacity:.85}
+
+/* ==========================================================================
+   ۲. سرصفحه — بلوک تلفن بزرگ‌ترین عنصر است
+   ========================================================================== */
+.masthead{background:#fff; border-bottom:1px solid var(--border); position:relative; z-index:40}
+.masthead .container{display:grid; grid-template-columns:auto 1fr auto;
+  align-items:center; gap:var(--s5); padding-block:var(--s4)}
+
+.brand{display:flex; align-items:center; gap:var(--s3); min-height:56px}
+.brand .mark{width:52px; height:52px; flex:none}
+.brand .name{font-weight:700; font-size:var(--t-xl); color:var(--steel); line-height:1.2;
+  white-space:nowrap}
+.brand .sub{font-size:var(--t-xs); color:var(--ink-3); font-weight:400}
+
+/* جستجو */
+.search{position:relative; max-width:520px; width:100%}
+/* padding و موقعیت دکمه هر دو منطقی (inline-start/end) هستند. با
+   `padding:0 52px 0 16px` فاصله در RTL سمت راست می‌افتاد و دکمه که سمت چپ
+   است روی متن placeholder می‌نشست. */
+.search input{width:100%; height:56px;
+  padding-inline-start:var(--s4); padding-inline-end:52px;
+  border:1.5px solid var(--border-2); border-radius:var(--radius);
+  font:inherit; font-size:var(--t-base); background:var(--surface); color:var(--ink)}
+.search input::placeholder{color:var(--ink-3)}
+.search input:focus{background:#fff; border-color:var(--steel); outline:none; box-shadow:var(--ring)}
+.search button{position:absolute; inset-inline-end:6px; top:6px;
+  width:44px; height:44px; border:0; border-radius:var(--radius);
+  background:transparent; color:var(--steel); display:grid; place-items:center}
+.search button svg{width:22px;height:22px}
+
+/* ★ بلوک تماس — قلب طراحی */
+.callbox{
+  display:flex; align-items:center; gap:var(--s3);
+  border:2px solid var(--brand); border-radius:var(--radius-lg);
+  background:var(--brand-soft); padding:var(--s3) var(--s4);
+  min-height:76px; transition:background .18s ease, border-color .18s ease;
+}
+.callbox:hover{background:#fff; border-color:var(--brand-dark)}
+.callbox .icon{width:44px; height:44px; flex:none; border-radius:50%;
+  background:var(--brand); color:#fff; display:grid; place-items:center}
+.callbox .icon svg{width:24px; height:24px}
+.callbox .label{font-size:var(--t-xs); color:var(--brand-dark); font-weight:500;
+  letter-spacing:.01em; line-height:1.3}
+.callbox .number{font-size:var(--t-3xl); font-weight:700; color:var(--brand-dark);
+  line-height:1.15; letter-spacing:.01em; white-space:nowrap}
+.callbox .hint{font-size:var(--t-xs); color:var(--ink-2); line-height:1.3}
+
+/* ==========================================================================
+   ۳. منوی اصلی
+   ========================================================================== */
+.mainnav{background:var(--surface); border-bottom:1px solid var(--border);
+  position:sticky; top:0; z-index:30}
+.mainnav .container{display:flex; align-items:center; gap:var(--s2)}
+/* در دسکتاپ لینک‌ها فرزند مستقیم فلکس باشند؛ در موبایل با یک قانون display
+   پنهان می‌شوند — به همین دلیل اینجاست و نه به صورت inline style روی مارک‌آپ. */
+.mainnav .nav-scroll{display:contents}
+.mainnav a{display:inline-flex; align-items:center; min-height:52px;
+  padding:0 var(--s4); font-size:var(--t-base); font-weight:500; color:var(--steel);
+  border-bottom:3px solid transparent; white-space:nowrap}
+.mainnav a:hover{background:#fff; border-bottom-color:var(--border-2)}
+.mainnav a[aria-current="page"]{border-bottom-color:var(--brand); color:var(--brand-dark)}
+.mainnav .spacer{flex:1}
+.mainnav .nav-call{display:none}
+
+.burger{display:none; align-items:center; gap:var(--s2); min-height:52px;
+  padding:0 var(--s3); background:none; border:0; color:var(--steel); font-weight:500}
+.burger svg{width:26px;height:26px}
+
+/* ==========================================================================
+   ۴. تابلوی قیمت (هیرو)
+   ========================================================================== */
+.board{padding-block:var(--s6) var(--s5); background:#fff}
+.board-head{display:flex; align-items:flex-end; justify-content:space-between;
+  gap:var(--s5); flex-wrap:wrap; margin-bottom:var(--s5)}
+.board h1{font-size:var(--t-3xl); line-height:1.35; max-width:34ch}
+.board h1 span{color:var(--brand-dark)}
+.board .lede{color:var(--ink-2); font-size:var(--t-lg); margin-top:var(--s2); max-width:62ch}
+
+.stamp{display:inline-flex; align-items:center; gap:var(--s2);
+  background:var(--surface); border:1px solid var(--border); border-radius:999px;
+  padding:var(--s2) var(--s4); font-size:var(--t-sm); color:var(--ink-2)}
+.stamp .dot{width:9px; height:9px; border-radius:50%; background:var(--up); flex:none;
+  box-shadow:0 0 0 3px rgba(11,122,75,.18)}
+@media (prefers-reduced-motion:no-preference){
+  .stamp .dot{animation:pulse 2.4s ease-in-out infinite}
+  @keyframes pulse{0%,100%{box-shadow:0 0 0 3px rgba(11,122,75,.18)}
+                   50%{box-shadow:0 0 0 6px rgba(11,122,75,.06)}}
+}
+
+/* فیلتر دسته‌ها */
+.chips{display:flex; gap:var(--s2); flex-wrap:wrap; margin-bottom:var(--s5)}
+.chips a{display:inline-flex; align-items:center; gap:var(--s2); min-height:48px;
+  padding:0 var(--s4); border:1.5px solid var(--border-2); border-radius:var(--radius);
+  font-size:var(--t-sm); font-weight:500; color:var(--steel); background:#fff}
+.chips a:hover{border-color:var(--steel); background:var(--surface)}
+.chips a[aria-current]{background:var(--steel); border-color:var(--steel); color:#fff}
+.chips img{width:22px; height:22px; opacity:.8}
+.chips a[aria-current] img{filter:brightness(0) invert(1); opacity:1}
+/* «همه دسته‌ها» فقط در موبایل معنی دارد؛ در دسکتاپ هر ۱۴ چیپ جا می‌شوند. */
+.chips .more{display:none}
+
+/* ---------- جدول قیمت ---------- */
+/* overflow:hidden بود و در صفحه دسته با ۱۱ ستون، دو ستون آخر — از جمله
+   دکمه «استعلام تلفنی» که مهم‌ترین CTA صفحه است — را بی‌صدا می‌بُرید.
+   چون بریده می‌شد، اندازه‌گیری سرریز هم صفر گزارش می‌کرد و مشکل پنهان می‌ماند.
+   حالا visible است: اگر روزی جدول جا نشود، تست سرریز فوراً گیرش می‌اندازد. */
+.ptable-wrap{border:1px solid var(--border); border-radius:var(--radius-lg);
+  overflow:visible; box-shadow:var(--shadow-1)}
+.ptable-wrap > table{border-radius:var(--radius-lg) var(--radius-lg) 0 0}
+.ptable caption{border-radius:var(--radius-lg) var(--radius-lg) 0 0}
+table.ptable{width:100%; border-collapse:collapse; background:#fff}
+table.ptable caption{text-align:right; padding:var(--s4) var(--s5); background:var(--surface);
+  border-bottom:1px solid var(--border); font-weight:700; color:var(--steel);
+  font-size:var(--t-lg)}
+.ptable thead th{
+  background:var(--steel); color:#fff; font-size:var(--t-sm); font-weight:500;
+  text-align:right; padding:var(--s3) var(--s4); white-space:nowrap;
+  position:sticky; top:52px; z-index:10;
+}
+.ptable thead th.c{text-align:center}
+.ptable tbody td{padding:var(--s4); border-bottom:1px solid var(--border);
+  vertical-align:middle; font-size:var(--t-base)}
+.ptable tbody tr:nth-child(even) td{background:var(--surface)}
+.ptable tbody tr:hover td{background:#EDF3F9}
+.ptable tbody tr:last-child td{border-bottom:0}
+
+.p-name{font-weight:500; color:var(--steel); font-size:var(--t-lg); line-height:1.5}
+/* نام محصول لینک است و برای مخاطب +۴۰ باید ناحیه‌ی لمس واقعی داشته باشد،
+   نه فقط ارتفاع خط. inline-block + padding به ۴۴px می‌رساند. */
+.p-name a{display:inline-block; padding-block:var(--s2); min-height:44px}
+.p-name a:hover{text-decoration:underline; text-underline-offset:3px}
+.p-meta{font-size:var(--t-xs); color:var(--ink-3); margin-top:2px}
+
+.p-price{font-size:var(--t-2xl); font-weight:700; color:var(--ink); white-space:nowrap}
+.p-price .unit{font-size:var(--t-xs); font-weight:400; color:var(--ink-3); margin-inline-start:var(--s1)}
+
+.delta{display:inline-flex; align-items:center; gap:var(--s1); font-weight:500;
+  font-size:var(--t-base); white-space:nowrap}
+.delta svg{width:16px; height:16px; flex:none}
+.delta.up{color:var(--up)}
+.delta.down{color:var(--down)}
+.delta .word{font-size:var(--t-xs); color:var(--ink-3)}
+
+.p-when{font-size:var(--t-sm); color:var(--ink-2); white-space:nowrap}
+
+/* دکمه‌های اقدام در ردیف */
+.rowactions{display:flex; gap:var(--s2); justify-content:flex-end; align-items:center}
+.btn{display:inline-flex; align-items:center; justify-content:center; gap:var(--s2);
+  min-height:48px; padding:0 var(--s4); border-radius:var(--radius); border:1.5px solid transparent;
+  font-size:var(--t-sm); font-weight:500; white-space:nowrap;
+  transition:background .18s ease, border-color .18s ease, color .18s ease}
+.btn svg{width:19px; height:19px; flex:none}
+.btn-call{background:var(--brand); color:#fff; border-color:var(--brand)}
+.btn-call:hover{background:var(--brand-dark); border-color:var(--brand-dark)}
+.btn-ghost{background:#fff; color:var(--steel); border-color:var(--border-2)}
+.btn-ghost:hover{border-color:var(--steel); background:var(--surface)}
+.btn-lg{min-height:60px; font-size:var(--t-lg); padding:0 var(--s6); border-radius:var(--radius-lg)}
+.btn-icon{width:48px; padding:0}
+
+.tfoot{display:flex; align-items:center; justify-content:space-between; gap:var(--s4);
+  flex-wrap:wrap; padding:var(--s4) var(--s5); background:var(--surface);
+  border-top:1px solid var(--border)}
+.tfoot .note{font-size:var(--t-sm); color:var(--ink-2)}
+
+/* صفحه‌بندی */
+.pager{display:flex; gap:var(--s2); align-items:center; flex-wrap:wrap; justify-content:center}
+.pager a,.pager span{min-width:48px; min-height:48px; display:inline-grid; place-items:center;
+  border:1.5px solid var(--border-2); border-radius:var(--radius); font-size:var(--t-sm);
+  background:#fff; color:var(--steel); padding-inline:var(--s3)}
+.pager a:hover{border-color:var(--steel)}
+.pager [aria-current]{background:var(--steel); color:#fff; border-color:var(--steel)}
+.pager .off{opacity:.45}
+
+/* ==========================================================================
+   ۵. نوار تماس عرض کامل
+   ========================================================================== */
+.callband{background:var(--steel); color:#fff; padding-block:var(--s7); margin-block:var(--s8)}
+.callband .container{display:grid; grid-template-columns:1fr auto; gap:var(--s7);
+  align-items:center}
+.callband h2{color:#fff; font-size:var(--t-2xl); line-height:1.5}
+.callband p{color:#C3D2E2; font-size:var(--t-base); margin-top:var(--s3); max-width:60ch}
+.callband .lines{display:flex; gap:var(--s4); flex-wrap:wrap}
+.callband .line{background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.18);
+  border-radius:var(--radius-lg); padding:var(--s4) var(--s5); min-width:260px}
+.callband .line .label{font-size:var(--t-xs); color:#A9BED4}
+.callband .line .number{font-size:var(--t-3xl); font-weight:700; color:#fff; line-height:1.2;
+  display:block; margin-block:var(--s1)}
+.callband .line .who{font-size:var(--t-xs); color:#C3D2E2}
+.callband .line:hover{background:rgba(255,255,255,.13)}
+.callband .hours{display:inline-flex; align-items:center; gap:var(--s2); margin-top:var(--s4);
+  font-size:var(--t-sm); color:#C3D2E2}
+.callband .hours svg{width:18px;height:18px}
+
+/* ==========================================================================
+   ۶. شبکه‌ی دسته‌بندی‌ها
+   ========================================================================== */
+.section{padding-block:var(--s8)}
+.section-head{display:flex; align-items:baseline; justify-content:space-between;
+  gap:var(--s4); flex-wrap:wrap; margin-bottom:var(--s6);
+  border-bottom:2px solid var(--border); padding-bottom:var(--s3)}
+.section-head h2{font-size:var(--t-2xl)}
+.section-head a{color:var(--steel); font-size:var(--t-sm); font-weight:500;
+  display:inline-flex; align-items:center; gap:var(--s2); min-height:44px; padding-inline:var(--s2)}
+.section-head a:hover{text-decoration:underline; text-underline-offset:4px}
+
+.catgrid{display:grid; grid-template-columns:repeat(auto-fill,minmax(190px,1fr)); gap:var(--s4)}
+.catcard{border:1px solid var(--border); border-radius:var(--radius-lg); background:#fff;
+  padding:var(--s5) var(--s4); text-align:center; display:flex; flex-direction:column;
+  align-items:center; gap:var(--s3); min-height:160px; justify-content:center;
+  transition:border-color .18s ease, box-shadow .18s ease}
+.catcard:hover{border-color:var(--steel); box-shadow:var(--shadow-2)}
+.catcard .ic{width:48px; height:48px; color:var(--steel)}
+.catcard .t{font-weight:500; color:var(--steel); font-size:var(--t-base); line-height:1.4}
+.catcard .n{font-size:var(--t-xs); color:var(--ink-3)}
+
+/* ==========================================================================
+   ۷. نوار اعتماد
+   ========================================================================== */
+.trust{background:var(--surface); border-block:1px solid var(--border); padding-block:var(--s7)}
+.trustgrid{display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:var(--s5)}
+.trustitem{display:flex; align-items:flex-start; gap:var(--s3)}
+.trustitem svg{width:34px; height:34px; color:var(--steel); flex:none}
+.trustitem .t{font-weight:500; color:var(--steel); font-size:var(--t-base)}
+.trustitem .d{font-size:var(--t-sm); color:var(--ink-2); line-height:1.6}
+
+/* ==========================================================================
+   ۸. درباره / محتوا
+   ========================================================================== */
+.about{display:grid; grid-template-columns:1.1fr .9fr; gap:var(--s8); align-items:center}
+.about h2{font-size:var(--t-2xl); margin-bottom:var(--s4)}
+.about p{color:var(--ink-2); line-height:1.9; text-align:justify}
+.about img{border-radius:var(--radius-lg); border:1px solid var(--border)}
+
+.addresses{display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:var(--s4);
+  margin-top:var(--s6)}
+.addr{border:1px solid var(--border); border-radius:var(--radius); padding:var(--s4);
+  background:#fff}
+.addr .k{font-size:var(--t-xs); color:var(--ink-3); margin-bottom:var(--s1)}
+.addr .v{font-size:var(--t-sm); color:var(--ink); line-height:1.7}
+
+/* ==========================================================================
+   ۹. پاصفحه
+   ========================================================================== */
+footer.site{background:var(--steel); color:#C3D2E2; padding-block:var(--s8) var(--s5); margin-top:var(--s8)}
+footer.site h3{color:#fff; font-size:var(--t-lg); margin-bottom:var(--s4)}
+.fgrid{display:grid; grid-template-columns:1.2fr 1fr 1fr; gap:var(--s7)}
+.fgrid a:hover{color:#fff; text-decoration:underline}
+.fgrid li{margin-bottom:var(--s2)}
+.fgrid li a{display:inline-flex; align-items:center; gap:var(--s2); min-height:44px}
+.fcall{display:block; background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.2);
+  border-radius:var(--radius-lg); padding:var(--s4); margin-bottom:var(--s4)}
+.fcall .label{font-size:var(--t-xs); color:#A9BED4}
+.fcall .number{font-size:var(--t-2xl); font-weight:700; color:#fff; display:block}
+.fcall:hover{background:rgba(255,255,255,.13)}
+.newsletter{display:flex; gap:var(--s2); margin-top:var(--s3)}
+.newsletter input{flex:1; min-height:52px; border-radius:var(--radius); border:1px solid rgba(255,255,255,.25);
+  background:rgba(255,255,255,.06); color:#fff; padding:0 var(--s4); font:inherit; font-size:var(--t-sm)}
+.newsletter input::placeholder{color:#8FA6BF}
+.newsletter button{min-height:52px; padding:0 var(--s5); border:0; border-radius:var(--radius);
+  background:#fff; color:var(--steel); font-weight:500}
+.socials{display:flex; gap:var(--s2); margin-top:var(--s5)}
+.socials a{width:48px; height:48px; display:grid; place-items:center; border-radius:var(--radius);
+  border:1px solid rgba(255,255,255,.2)}
+.socials a:hover{background:rgba(255,255,255,.12)}
+.socials svg{width:22px;height:22px}
+.copyright{border-top:1px solid rgba(255,255,255,.14); margin-top:var(--s6);
+  padding-top:var(--s4); font-size:var(--t-sm); text-align:center; color:#A9BED4}
+
+/* ==========================================================================
+   ۱۰. نوار تماس چسبان موبایل  (بزرگ‌ترین اهرم افزایش زنگ‌خور)
+   ========================================================================== */
+.dock{display:none}
+
+/* ==========================================================================
+   ریسپانسیو
+   ========================================================================== */
+@media (max-width:1100px){
+  .masthead .container{grid-template-columns:auto 1fr; row-gap:var(--s4)}
+  .search{grid-column:1 / -1; max-width:none; order:3}
+  .callbox{order:2}
+  .callbox .number{font-size:var(--t-2xl)}
+  .about{grid-template-columns:1fr; gap:var(--s6)}
+  .callband .container{grid-template-columns:1fr}
+}
+
+@media (max-width:860px){
+  :root{--t-3xl:28px; --t-2xl:23px}
+  .container{padding-inline:var(--s4)}
+  .utilbar ul.util-left{display:none}
+  .masthead .container{grid-template-columns:1fr auto; padding-block:var(--s3)}
+  .brand .mark{width:44px;height:44px}
+  .brand .name{font-size:var(--t-lg)}
+  .brand .sub{display:none}
+  .callbox{padding:var(--s2) var(--s3); min-height:60px; gap:var(--s2)}
+  .callbox .icon{width:38px;height:38px}
+  .callbox .icon svg{width:20px;height:20px}
+  .callbox .hint{display:none}
+  .callbox .number{font-size:var(--t-xl)}
+
+
+  /* ۱۴ چیپ در ۳۷۵px پنج ردیف می‌شود و جدول قیمت را از دسترس اولین اسکرول
+     خارج می‌کند. شش دسته‌ی پرتردد می‌مانند و بقیه پشت یک لینک.
+     این قانون «محتوا-اولویت» است نه قانون سایز — به همین دلیل مجاز است
+     display را ست کند و کاملاً داخل max-query نگه داشته شده. */
+  .chips a:nth-of-type(n+8){display:none}
+  .chips a.more{display:inline-flex}
+
+  /* ⚠️ قوانین «اولویت محتوا»ی موبایل عمداً اینجا نیستند — بخش ۴۸ انتهای فایل.
+     دلیلش در همان‌جا نوشته شده و یک بار به‌صورت باگ دیده شد. */
+
+  .board{padding-top:var(--s5)}
+  .board h1{font-size:var(--t-2xl)}
+  .board .lede{font-size:var(--t-base)}
+  .section{padding-block:var(--s7)}
+  .callband{margin-block:var(--s7); padding-block:var(--s6)}
+  .callband .line{min-width:0; width:100%}
+  .fgrid{grid-template-columns:1fr; gap:var(--s6)}
+
+  /* ---- داک تماس چسبان ---- */
+  body{padding-bottom:80px}
+  .dock{display:grid; grid-template-columns:1fr auto auto; gap:1px;
+    position:fixed; inset-inline:0; bottom:0; z-index:60;
+    background:var(--border); border-top:1px solid var(--border);
+    box-shadow:0 -4px 16px rgba(11,18,32,.12)}
+  .dock a{display:flex; flex-direction:column; align-items:center; justify-content:center;
+    gap:2px; min-height:72px; background:#fff; color:var(--steel);
+    font-size:var(--t-xs); font-weight:500; padding-inline:var(--s4)}
+  .dock a svg{width:24px;height:24px}
+  .dock a.primary{background:var(--brand); color:#fff}
+  .dock a.primary .n{font-size:var(--t-lg); font-weight:700; line-height:1.2}
+  .dock a.primary .l{font-size:var(--t-xs); opacity:.92}
+}
+
+@media (max-width:420px){
+  :root{--t-base:16px; --t-lg:18px}
+  .callbox .label{display:none}
+  .callbox .number{font-size:var(--t-lg)}
+}
+
+@media (prefers-reduced-motion:reduce){
+  *{animation:none !important; transition:none !important}
+}
+
+/* ---------- چاپ ---------- */
+@media print{
+  .utilbar,.mainnav,.dock,.callband,.trust,.rowactions,footer.site,.search{display:none !important}
+  .ptable thead th{position:static; background:#eee !important; color:#000 !important;
+    -webkit-print-color-adjust:exact}
+  body{font-size:12px}
+}
+
+/* ==========================================================================
+   یادداشت طراحی (فقط در پروتوتایپ)
+   ========================================================================== */
+.note{border-inline-start:4px solid var(--steel); background:#F0F5FA; padding:var(--s4) var(--s5);
+  margin-block:var(--s5); border-radius:0 var(--radius) var(--radius) 0; font-size:var(--t-sm);
+  color:var(--ink-2)}
+.note b{color:var(--steel)}
+.note code{background:#fff; border:1px solid var(--border); border-radius:4px;
+  padding:1px 6px; font-family:ui-monospace,Menlo,Consolas,monospace; font-size:.9em;
+  direction:ltr; display:inline-block}
+
+/* ==========================================================================
+   نسخه ۲ — کامپوننت‌هایی که از تحلیل رقبا آمدند
+   هیچ‌کدام کپی بصری نیستند؛ فقط قابلیت‌اند. زبان طراحی همان می‌ماند:
+   سرمه‌ای فولادی برای ساختار، قرمز برند فقط برای تماس.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   ۱۱. تابلوی شاخص قیمت  ★ عنصر امضای برند
+   هیچ رقیبی این را ندارد. از جدول daily_avg_price که موجود و بلااستفاده است.
+   این چیزی است که «مرجع قیمت» بودن را نشان می‌دهد نه ادعا می‌کند.
+   -------------------------------------------------------------------------- */
+.index-board{border:1px solid var(--border); border-radius:var(--radius-lg);
+  background:var(--surface); overflow:hidden; margin-bottom:var(--s5)}
+.index-board .ib-head{display:flex; align-items:center; justify-content:space-between;
+  gap:var(--s4); flex-wrap:wrap; padding:var(--s4) var(--s5);
+  background:var(--steel); color:#fff}
+.index-board .ib-head h2{color:#fff; font-size:var(--t-lg); margin:0}
+.index-board .ib-head .sub{font-size:var(--t-xs); color:#A9BED4}
+.index-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(215px,1fr))}
+.ix{padding:var(--s4) var(--s5); border-inline-start:1px solid var(--border);
+  background:#fff; display:flex; flex-direction:column; gap:var(--s1)}
+.ix:first-child{border-inline-start:0}
+.ix .k{font-size:var(--t-sm); color:var(--ink-2); font-weight:500}
+.ix .v{font-size:var(--t-2xl); font-weight:700; color:var(--ink); line-height:1.2}
+.ix .v .u{font-size:var(--t-xs); font-weight:400; color:var(--ink-3)}
+.ix .d{display:flex; align-items:center; gap:var(--s2); font-size:var(--t-sm)}
+.ix .spark{margin-top:var(--s1)}
+.ix .range{font-size:var(--t-xs); color:var(--ink-3)}
+
+/* --------------------------------------------------------------------------
+   ۱۲. جدول با ستون‌های مشخصات فنی
+   داده از category->specs و product_spec_value می‌آید — هر دو موجودند و
+   امروز فقط در صفحه دسته‌بندی استفاده می‌شوند.
+   -------------------------------------------------------------------------- */
+.ptable td.spec, .ptable th.spec{text-align:center; white-space:nowrap;
+  font-variant-numeric:tabular-nums}
+.ptable td.spec{color:var(--ink-2); font-size:var(--t-sm)}
+.ptable th.spec{font-size:var(--t-xs)}
+.ptable .vat{font-size:var(--t-xs); color:var(--ink-3); display:block; font-weight:400}
+.ptable tfoot td{background:var(--surface-2); font-weight:500; padding:var(--s3) var(--s4);
+  border-top:2px solid var(--border-2)}
+
+/* حالت فشرده برای جدول‌های پرستون */
+.ptable.dense tbody td{padding:var(--s3) var(--s2)}
+.ptable.dense .p-price{font-size:var(--t-xl)}
+.ptable.dense .p-name{font-size:var(--t-base)}
+
+/* --------------------------------------------------------------------------
+   ۱۳. فیلتر مشخصات  (CategoryController امروز پیاده‌اش کرده)
+   -------------------------------------------------------------------------- */
+.specfilter{border:1px solid var(--border); border-radius:var(--radius-lg);
+  background:var(--surface); padding:var(--s4) var(--s5); margin-bottom:var(--s5)}
+.specfilter legend{font-size:var(--t-sm); font-weight:500; color:var(--steel);
+  padding:0; margin-bottom:var(--s3)}
+.specfilter .row{display:flex; gap:var(--s3); flex-wrap:wrap; align-items:flex-end}
+.specfilter .f{flex:1 1 160px; min-width:0}
+.specfilter label{display:block; font-size:var(--t-xs); color:var(--ink-2); margin-bottom:var(--s1)}
+.specfilter select{width:100%; min-height:52px; border-radius:var(--radius);
+  border:1.5px solid var(--border-2); background:#fff; padding:0 var(--s3);
+  font:inherit; font-size:var(--t-sm); color:var(--ink)}
+.specfilter select:focus{outline:none; border-color:var(--steel); box-shadow:var(--ring)}
+.specfilter .acts{display:flex; gap:var(--s2); flex:0 0 auto}
+
+/* --------------------------------------------------------------------------
+   ۱۴. نوار درخواست تماس  ★ اهرم مستقیم زنگ‌خور
+   ⚠️ بک‌اند: POST /collaboration پنج فیلد اجباری می‌خواهد (نام، نام‌خانوادگی،
+   تلفن، ایمیل، آدرس). این فرم دو فیلد دارد. یعنی یا اعتبارسنجی باید سبک شود
+   یا یک اندپوینت جدید لازم است. در گزارش علامت خورده.
+   -------------------------------------------------------------------------- */
+.callback{border:2px solid var(--brand); border-radius:var(--radius-lg);
+  background:var(--brand-soft); padding:var(--s5); margin-block:var(--s6);
+  display:grid; grid-template-columns:1fr auto; gap:var(--s5); align-items:center}
+.callback h3{color:var(--brand-dark); font-size:var(--t-xl); margin-bottom:var(--s2)}
+.callback p{color:var(--ink-2); font-size:var(--t-sm); max-width:52ch}
+.callback form{display:flex; gap:var(--s2); flex-wrap:wrap; align-items:flex-end}
+.callback .f{flex:1 1 170px}
+.callback label{display:block; font-size:var(--t-xs); color:var(--ink-2); margin-bottom:var(--s1)}
+.callback input{width:100%; min-height:56px; border-radius:var(--radius);
+  border:1.5px solid var(--border-2); background:#fff; padding:0 var(--s4);
+  font:inherit; font-size:var(--t-base)}
+.callback input:focus{outline:none; border-color:var(--brand); box-shadow:0 0 0 3px rgba(180,35,50,.25)}
+.callback .hint{font-size:var(--t-xs); color:var(--ink-3); margin-top:var(--s2)}
+
+/* --------------------------------------------------------------------------
+   ۱۵. کارت کارشناس فروش
+   ⚠️ بک‌اند: جدول ندارد. کامپوننت پیشنهادی §۴-و گزارش.
+   -------------------------------------------------------------------------- */
+.reps{display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:var(--s4)}
+.rep{border:1px solid var(--border); border-radius:var(--radius-lg); background:#fff;
+  padding:var(--s4); display:flex; gap:var(--s3); align-items:center}
+.rep .av{width:56px; height:56px; border-radius:50%; background:var(--surface-2);
+  display:grid; place-items:center; color:var(--steel); flex:none; font-weight:700;
+  font-size:var(--t-lg)}
+.rep .n{font-weight:500; color:var(--steel)}
+.rep .r{font-size:var(--t-xs); color:var(--ink-3)}
+.rep .lines{display:flex; gap:var(--s2); margin-top:var(--s2); flex-wrap:wrap}
+.rep .lines a{display:inline-flex; align-items:center; gap:var(--s1); min-height:44px;
+  padding:0 var(--s3); border-radius:var(--radius); border:1.5px solid var(--border-2);
+  font-size:var(--t-xs); font-weight:500; color:var(--steel)}
+.rep .lines a.call{background:var(--brand); border-color:var(--brand); color:#fff}
+.rep .lines a:hover{border-color:var(--steel)}
+.rep .lines a.call:hover{background:var(--brand-dark); border-color:var(--brand-dark)}
+.rep .lines svg{width:16px;height:16px}
+
+/* --------------------------------------------------------------------------
+   ۱۶. ویژگی‌ها و کاربردها  (features / usages — هر دو در بک‌اند موجودند)
+   -------------------------------------------------------------------------- */
+.specgrid{display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:var(--s4)}
+.speccard{border:1px solid var(--border); border-radius:var(--radius-lg); background:#fff;
+  padding:var(--s5) var(--s4)}
+.speccard h4{font-size:var(--t-base); margin-bottom:var(--s2); color:var(--steel)}
+.speccard p{font-size:var(--t-sm); color:var(--ink-2); line-height:1.7}
+.speccard svg{width:32px; height:32px; color:var(--steel); margin-bottom:var(--s3)}
+
+/* --------------------------------------------------------------------------
+   ۱۷. پرسش و پاسخ  (details/summary — بدون جاوااسکریپت، قابل دسترس)
+   -------------------------------------------------------------------------- */
+.faq{border:1px solid var(--border); border-radius:var(--radius-lg); overflow:hidden;
+  background:#fff}
+.faq details{border-bottom:1px solid var(--border)}
+.faq details:last-child{border-bottom:0}
+.faq summary{cursor:pointer; list-style:none; padding:var(--s4) var(--s5);
+  font-weight:500; color:var(--steel); font-size:var(--t-base); min-height:60px;
+  display:flex; align-items:center; justify-content:space-between; gap:var(--s4)}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:""; width:11px; height:11px; flex:none;
+  border-right:2.5px solid var(--ink-3); border-bottom:2.5px solid var(--ink-3);
+  transform:rotate(45deg); transition:transform .18s ease}
+.faq details[open] summary::after{transform:rotate(-135deg)}
+.faq summary:hover{background:var(--surface)}
+.faq .a{padding:0 var(--s5) var(--s5); color:var(--ink-2); line-height:1.9;
+  font-size:var(--t-sm)}
+
+/* --------------------------------------------------------------------------
+   ۱۸. نمودار  (اندپوینت‌های JSON موجودند و امروز بلااستفاده‌اند)
+   -------------------------------------------------------------------------- */
+.chartbox{border:1px solid var(--border); border-radius:var(--radius-lg); background:#fff;
+  padding:var(--s5)}
+.chartbox .ch-head{display:flex; align-items:center; justify-content:space-between;
+  gap:var(--s4); flex-wrap:wrap; margin-bottom:var(--s4)}
+.chartbox h3{font-size:var(--t-lg)}
+.rangetabs{display:flex; gap:var(--s1); background:var(--surface-2); padding:var(--s1);
+  border-radius:var(--radius)}
+.rangetabs a{min-height:44px; padding:0 var(--s4); display:inline-flex; align-items:center;
+  border-radius:calc(var(--radius) - 2px); font-size:var(--t-sm); color:var(--ink-2)}
+.rangetabs a[aria-current]{background:#fff; color:var(--steel); font-weight:500;
+  box-shadow:var(--shadow-1)}
+
+/* --------------------------------------------------------------------------
+   ۱۹. دیدگاه‌ها و پرسش مشتریان  (ProductComment — موجود، با پاسخ ادمین)
+   ⚠️ ستون امتیاز (rating) ندارد؛ نیازمند migration. در گزارش علامت خورده.
+   -------------------------------------------------------------------------- */
+.qa{border:1px solid var(--border); border-radius:var(--radius-lg); background:#fff;
+  padding:var(--s5)}
+.qa .item{padding-block:var(--s4); border-bottom:1px solid var(--border)}
+.qa .item:last-child{border-bottom:0}
+.qa .who{display:flex; align-items:center; gap:var(--s2); font-size:var(--t-sm);
+  color:var(--steel); font-weight:500}
+.qa .when{font-size:var(--t-xs); color:var(--ink-3); font-weight:400}
+.qa .body{margin-top:var(--s2); color:var(--ink-2); font-size:var(--t-sm); line-height:1.8}
+.qa .answer{margin-top:var(--s3); padding:var(--s3) var(--s4); background:var(--surface);
+  border-inline-start:3px solid var(--steel); border-radius:0 var(--radius) var(--radius) 0}
+.qa .answer .who{color:var(--brand-dark)}
+
+/* --------------------------------------------------------------------------
+   ۲۰. نوار خلاصه‌ی بارگیری و شرایط فروش
+   -------------------------------------------------------------------------- */
+.terms{display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:var(--s4);
+  border:1px solid var(--border); border-radius:var(--radius-lg); padding:var(--s4) var(--s5);
+  background:var(--surface)}
+.terms .t{display:flex; gap:var(--s3); align-items:flex-start}
+.terms svg{width:26px; height:26px; color:var(--steel); flex:none}
+.terms .k{font-size:var(--t-xs); color:var(--ink-3)}
+.terms .v{font-size:var(--t-sm); color:var(--ink); font-weight:500}
+
+/* --------------------------------------------------------------------------
+   ۲۱. برچسب وضعیت
+   -------------------------------------------------------------------------- */
+.tag{display:inline-flex; align-items:center; gap:var(--s1); border-radius:999px;
+  padding:3px var(--s3); font-size:var(--t-xs); font-weight:500; white-space:nowrap}
+.tag-live{background:#E7F5EE; color:var(--up)}
+.tag-call{background:var(--brand-soft); color:var(--brand-dark)}
+.tag-stale{background:#FEF6E7; color:#8A5A00}
+
+/* --------------------------------------------------------------------------
+   ریسپانسیو نسخه ۲
+   -------------------------------------------------------------------------- */
+@media (max-width:1100px){
+  .callback{grid-template-columns:1fr}
+}
+@media (max-width:860px){
+  .index-grid{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+  .ix{border-inline-start:0; border-bottom:1px solid var(--border)}
+  .specfilter .row{flex-direction:column; align-items:stretch}
+  .specfilter .acts .btn{width:100%}
+
+  /* در حالت کارت، ستون مشخصات هم مثل بقیه label می‌گیرد */
+  .ptable tbody td.spec{display:flex; text-align:right}
+  .ptable tfoot{display:block}
+  .ptable tfoot tr{display:block; border:1px solid var(--border);
+    border-radius:var(--radius-lg); overflow:hidden}
+  .ptable tfoot td{display:flex; justify-content:space-between; gap:var(--s4)}
+  .ptable tfoot td::before{content:attr(data-label); color:var(--ink-3); font-weight:400}
+}
+
+/* --------------------------------------------------------------------------
+   ۲۲. کارت دسته‌بندی — بازنگری
+   نسخه اول دوازده آیکون یکسان داشت که هیچ اطلاعاتی حمل نمی‌کردند. برای سایتی
+   که ادعای «مرجع قیمت» دارد، بازه‌ی قیمت همان دسته اطلاعات واقعی است.
+   -------------------------------------------------------------------------- */
+.catcard{align-items:stretch; text-align:right; justify-content:flex-start;
+  gap:var(--s2); min-height:0; padding:var(--s4) var(--s5)}
+.catcard .t{font-size:var(--t-lg); font-weight:700}
+.catcard .n{color:var(--ink-3)}
+.catcard .pr{margin-top:auto; padding-top:var(--s3); border-top:1px solid var(--border);
+  font-size:var(--t-sm); color:var(--ink-2); display:flex; align-items:baseline;
+  justify-content:space-between; gap:var(--s2);
+  /* بدون wrap، «تومان» در کارت ۱۹۰پیکسلی یک پیکسل بیرون می‌زد */
+  flex-wrap:wrap}
+.catcard .pr b{font-weight:700; color:var(--ink); font-size:var(--t-base)}
+.catcard .pr .u{font-size:var(--t-xs); color:var(--ink-3); font-weight:400}
+
+/* --------------------------------------------------------------------------
+   ۲۳. جدول پرستون — اولویت ستون‌ها به‌جای اسکرول
+   با ۱۱ ستون نام محصول در چهار خط می‌شکست. اولین راه‌حلی که زدم
+   `overflow:auto` روی wrapper بود — و آن `position:sticky` روی سر جدول را
+   می‌شکند، چون sticky به نزدیک‌ترین جد اسکرول‌شونده می‌چسبد نه به viewport.
+   راه درست: ستون‌های کم‌اولویت در عرض‌های میانی حذف شوند. سر جدول چسبان
+   می‌ماند، هیچ ناحیه‌ی اسکرول تودرتویی ساخته نمی‌شود، و صفحه هم سرریز نمی‌کند.
+   -------------------------------------------------------------------------- */
+.ptable .cell-name{min-width:195px}
+.ptable.dense th.spec, .ptable.dense td.spec{min-width:72px}
+
+/* بین ۸۶۱ تا ۱۲۰۰ پیکسل، دو ستون کم‌اولویت کنار می‌روند.
+   قانون «اولویت محتوا» است نه قانون سایز — و کاملاً داخل max-query. */
+/* بازه از ۱۰۲۵ (پایین‌تر از آن حالت کارت است) تا ۱۳۴۰. با ستون اقدام و
+   ستون مقایسه، جدول دسته زیر ۱۳۴۰ برای چهار ستون مشخصات جا ندارد. */
+@media (min-width:1025px) and (max-width:1340px){
+  .ptable .spec-lo{display:none}
+}
+
+
+/* --------------------------------------------------------------------------
+   ۲۴. نقطه‌شکست مستقل برای منو
+   منوی افقی با ۱۲ لینک nowrap حدود ۱۲۹۰px عرض می‌خواهد. چون قانون جمع‌شدن
+   داخل بلوک ۸۶۰px بود، بین ۸۶۱ تا ۱۳۲۰ صفحه تا ۳۸۳px اسکرول افقی می‌گرفت.
+   تست فقط روی ۱۴۴۰ و ۳۷۵ این باند را نشان نمی‌داد.
+   -------------------------------------------------------------------------- */
+@media (max-width:1420px){
+  .mainnav .nav-scroll{display:none}
+  .burger{display:inline-flex}
+  .mainnav .nav-call{display:inline-flex; margin-inline-start:auto}
+}
+
+
+/* --------------------------------------------------------------------------
+   ۲۵. جدول → کارت در ۱۰۲۴px، نه ۸۶۰px
+   با ستون‌های مشخصات، جدول حدود ۱۰۲۶px عرض لازم دارد. آستانه‌ی ۸۶۰ یعنی
+   بین ۸۶۱ تا ۱۰۲۴ جدول هنوز حالت جدولی داشت و ۱۹۰px از صفحه بیرون می‌زد.
+   این بلوک از بلوک موبایل جدا شد تا آستانه‌ی خودش را داشته باشد.
+   -------------------------------------------------------------------------- */
+@media (max-width:1024px){
+  /* ---- جدول → کارت ---- */
+  .ptable-wrap{border:0; box-shadow:none; overflow:visible}
+  .ptable, .ptable tbody, .ptable tr, .ptable td{display:block; width:100%}
+  /* وقتی table به block تبدیل می‌شود، caption دیگر عرض جدول را نمی‌گیرد و
+     در یک ستون باریک می‌پیچد. باید صریحاً block و تمام‌عرض شود. */
+  .ptable caption{display:block; width:100%; text-align:right;
+    border-radius:var(--radius-lg) var(--radius-lg) 0 0; border:1px solid var(--border);
+    margin-bottom:calc(var(--s1) * -1)}
+  /* display:none و نه clip: یک thead با عرض ۱px همچنان سلول‌های خودش را
+     نگه می‌دارد و صفحه اسکرول افقی می‌گیرد. عنوان ستون در حالت کارت از
+     data-label هر سلول می‌آید، پس چیزی از دست نمی‌رود. */
+  .ptable thead{display:none}
+  .ptable tbody tr{border:1px solid var(--border); border-radius:var(--radius-lg);
+    margin-bottom:var(--s4); overflow:hidden; background:#fff}
+  .ptable tbody tr:nth-child(even) td,
+  .ptable tbody tr:hover td{background:#fff}
+  .ptable tbody td{border-bottom:1px solid var(--surface-2); padding:var(--s3) var(--s4);
+    display:flex; align-items:center; justify-content:space-between; gap:var(--s4)}
+  .ptable tbody td::before{content:attr(data-label); font-size:var(--t-sm); color:var(--ink-3);
+    flex:none}
+  .ptable tbody td.cell-name{display:block; background:var(--surface); padding:var(--s4)}
+  .ptable tbody td.cell-name::before{display:none}
+  .ptable tbody td.cell-price{padding-block:var(--s4)}
+  .ptable tbody td.cell-act{display:block; border-bottom:0; padding:var(--s4)}
+  .ptable tbody td.cell-act::before{display:none}
+  .rowactions{flex-direction:column; align-items:stretch}
+  .rowactions .btn{width:100%; min-height:56px; font-size:var(--t-base)}
+  .rowactions .btn-icon{width:100%}
+}
+
+/* کد داخل یادداشت‌های پروتوتایپ در ۳۶۰px از صفحه بیرون می‌زد */
+.note code{max-width:100%; overflow-wrap:anywhere}
+
+/* در حالت کارت، min-width ستون نام بی‌معنی است و در ۸۶۱px یک پیکسل سرریز می‌ساخت */
+@media (max-width:1024px){
+  .ptable .cell-name{min-width:0}
+  .ptable.dense th.spec, .ptable.dense td.spec{min-width:0}
+}
+
+/* ==========================================================================
+   نسخه ۳ — تولیدکننده در برابر واسطه، و آنچه هیچ رقیبی ندارد
+   --------------------------------------------------------------------------
+   یافته‌ی محوری تحلیل رقبا: از یازده رقیب، ده‌تا واسطه‌اند. آهن ملل صریحاً
+   «۱۹ کارخانه» را منبع خود می‌نامد. سپاهان فلز خودش کارخانه است و این
+   بزرگ‌ترین تفاوت واقعی است — پس باید یک عنصر طراحی داشته باشد، نه یک جمله
+   در «درباره ما».
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   ۲۶. نوار تولیدکننده — عنصر امضای پوزیشنینگ
+   -------------------------------------------------------------------------- */
+.factorybar{background:var(--steel); color:#fff; border-bottom:3px solid var(--brand)}
+/* ۹۱px بود؛ چهار نوار پشت‌سرهم قبل از محتوا سنگین می‌شد. */
+.factorybar .container{display:flex; align-items:center; gap:var(--s5) var(--s6);
+  flex-wrap:wrap; padding-block:var(--s3)}
+.factorybar .lead{display:flex; align-items:center; gap:var(--s3); flex:1 1 320px}
+.factorybar .lead svg{width:30px; height:30px; flex:none; color:#fff}
+/* هر دو span بودند و بدون display:block روی یک خط می‌نشستند */
+.factorybar .lead .t{display:block; font-size:var(--t-base); font-weight:700; line-height:1.35}
+.factorybar .lead .s{display:block; font-size:var(--t-xs); color:#A9BED4; line-height:1.45}
+.factorybar ul{display:flex; gap:var(--s6); flex-wrap:wrap}
+.factorybar li{display:flex; flex-direction:column; gap:2px}
+.factorybar li .k{font-size:var(--t-xs); color:#A9BED4}
+.factorybar li .v{font-size:var(--t-sm); font-weight:700; color:#fff}
+
+/* نشان «تولید کارخانه ما» روی ردیف — از فیلد categories.our_product */
+.mine{display:inline-flex; align-items:center; gap:var(--s1); font-size:var(--t-xs);
+  font-weight:500; color:var(--steel); background:#E8EEF5; border:1px solid #CBD9E7;
+  border-radius:999px; padding:2px var(--s2); white-space:nowrap}
+.mine svg{width:13px; height:13px}
+
+/* --------------------------------------------------------------------------
+   ۲۷. ستاره و امتیاز  ⚠️ نیازمند ستون rating روی product_comments
+   -------------------------------------------------------------------------- */
+.stars{display:inline-flex; align-items:center; gap:1px; vertical-align:middle}
+.stars svg{width:15px; height:15px; color:#C7D0DA}
+.stars svg.on{color:#C9861A}
+.rating{display:inline-flex; align-items:center; gap:var(--s2); font-size:var(--t-xs);
+  color:var(--ink-3); white-space:nowrap}
+.rating b{color:var(--ink); font-weight:700; font-size:var(--t-sm)}
+.rating-big{display:flex; align-items:center; gap:var(--s4);
+  border:1px solid var(--border); border-radius:var(--radius-lg); background:var(--surface);
+  padding:var(--s4) var(--s5)}
+.rating-big .score{font-size:var(--t-4xl); font-weight:700; color:var(--steel); line-height:1}
+.rating-big .stars svg{width:20px; height:20px}
+.rating-big .n{font-size:var(--t-sm); color:var(--ink-2)}
+
+/* --------------------------------------------------------------------------
+   ۲۸. وضعیت موجودی — هیچ رقیبی نشان نمی‌دهد
+   -------------------------------------------------------------------------- */
+.stock{display:inline-flex; align-items:center; gap:var(--s1); font-size:var(--t-xs);
+  font-weight:500; white-space:nowrap}
+.stock::before{content:""; width:8px; height:8px; border-radius:50%; flex:none}
+.stock-in::before{background:var(--up)}       .stock-in{color:var(--up)}
+.stock-low::before{background:#B8791A}        .stock-low{color:#8A5A00}
+.stock-order::before{background:var(--ink-3)} .stock-order{color:var(--ink-2)}
+
+/* --------------------------------------------------------------------------
+   ۲۹. مقایسه‌ی محصولات — هیچ رقیبی ندارد
+   -------------------------------------------------------------------------- */
+.cmp-cell{text-align:center}
+.cmp-cell input{width:22px; height:22px; accent-color:var(--steel); cursor:pointer}
+.cmp-lab{display:inline-flex; align-items:center; justify-content:center;
+  min-width:44px; min-height:44px; cursor:pointer}
+.cmptray{position:fixed; inset-inline:0; bottom:0; z-index:55; background:var(--steel);
+  color:#fff; box-shadow:0 -6px 20px rgba(11,18,32,.22)}
+.cmptray .container{display:flex; align-items:center; gap:var(--s4);
+  padding-block:var(--s3); flex-wrap:wrap}
+.cmptray .picked{display:flex; gap:var(--s2); flex:1; flex-wrap:wrap}
+.cmptray .chip{background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.25);
+  border-radius:var(--radius); padding:var(--s2) var(--s3); font-size:var(--t-xs);
+  display:inline-flex; align-items:center; gap:var(--s2); min-height:44px}
+.cmptray .btn-ghost{background:#fff; border-color:#fff}
+
+/* --------------------------------------------------------------------------
+   ۳۰. ماشین‌حساب وزن و قیمت  ⚠️ نیازمند weight_per_unit عددی
+   -------------------------------------------------------------------------- */
+.calc{border:2px solid var(--steel); border-radius:var(--radius-lg); background:#fff;
+  overflow:hidden}
+.calc .ch{background:var(--steel); color:#fff; padding:var(--s3) var(--s5);
+  display:flex; align-items:center; gap:var(--s2); font-weight:500; font-size:var(--t-base)}
+.calc .ch svg{width:22px; height:22px}
+.calc .cb{padding:var(--s5)}
+.calc label{display:block; font-size:var(--t-xs); color:var(--ink-2); margin-bottom:var(--s1)}
+.calc select,.calc input{width:100%; min-height:56px; border-radius:var(--radius);
+  border:1.5px solid var(--border-2); background:#fff; padding:0 var(--s3);
+  font:inherit; font-size:var(--t-base); margin-bottom:var(--s4); color:var(--ink)}
+.calc select:focus,.calc input:focus{outline:none; border-color:var(--steel); box-shadow:var(--ring)}
+.calc .out{background:var(--surface); border:1px solid var(--border);
+  border-radius:var(--radius); padding:var(--s3) var(--s4); margin-bottom:var(--s3)}
+.calc .out .k{font-size:var(--t-xs); color:var(--ink-3)}
+.calc .out .v{font-size:var(--t-xl); font-weight:700; color:var(--steel); line-height:1.3}
+.calc .out.total{background:var(--brand-soft); border-color:var(--brand)}
+.calc .out.total .v{color:var(--brand-dark); font-size:var(--t-2xl)}
+.calc .tiers{border-top:1px solid var(--border); margin-top:var(--s4); padding-top:var(--s4)}
+.calc .tiers .k{font-size:var(--t-xs); color:var(--ink-3); margin-bottom:var(--s2)}
+.calc .tiers .row{display:flex; justify-content:space-between; gap:var(--s3);
+  font-size:var(--t-sm); padding-block:var(--s1); color:var(--ink-2)}
+.calc .tiers .row.on{color:var(--steel); font-weight:700}
+
+/* --------------------------------------------------------------------------
+   ۳۱. صفحه‌ی محصول — رقبا اینجا ضعیف‌ترین‌اند
+   -------------------------------------------------------------------------- */
+.prod{display:grid; grid-template-columns:1fr 380px; gap:var(--s7); align-items:start}
+.pricecard{border:2px solid var(--brand); border-radius:var(--radius-lg); overflow:hidden;
+  background:#fff}
+.pricecard .ph{background:var(--brand-soft); padding:var(--s5); border-bottom:1px solid #F2D8DB}
+.pricecard .k{font-size:var(--t-sm); color:var(--ink-2)}
+.pricecard .big{font-size:var(--t-4xl); font-weight:700; color:var(--ink); line-height:1.15;
+  margin-block:var(--s1)}
+.pricecard .u{font-size:var(--t-sm); color:var(--ink-3); font-weight:400}
+.pricecard .pb{padding:var(--s5); display:flex; flex-direction:column; gap:var(--s3)}
+.pricecard .rowk{display:flex; justify-content:space-between; gap:var(--s3);
+  font-size:var(--t-sm); padding-block:var(--s1); border-bottom:1px dashed var(--border)}
+.pricecard .rowk:last-of-type{border-bottom:0}
+.pricecard .rowk span:first-child{color:var(--ink-3)}
+.pricecard .rowk span:last-child{color:var(--ink); font-weight:500}
+
+.spectable{width:100%; border-collapse:collapse; border:1px solid var(--border);
+  border-radius:var(--radius-lg); overflow:hidden}
+.spectable th,.spectable td{padding:var(--s3) var(--s4); text-align:right;
+  border-bottom:1px solid var(--border); font-size:var(--t-base)}
+.spectable th{background:var(--surface); color:var(--ink-2); font-weight:400; width:44%}
+.spectable td{font-weight:500; color:var(--ink)}
+.spectable tr:last-child th,.spectable tr:last-child td{border-bottom:0}
+
+@media (max-width:1100px){ .prod{grid-template-columns:1fr} }
+
+/* --------------------------------------------------------------------------
+   ۳۲. جعبه‌ی سیاست بروزرسانی قیمت — پاسخ مستقیم به «۲ ماه پیش»
+   -------------------------------------------------------------------------- */
+.policy{display:flex; gap:var(--s4); align-items:flex-start; border:1px solid var(--border);
+  border-inline-start:4px solid var(--up); border-radius:var(--radius);
+  background:#F1F8F4; padding:var(--s4) var(--s5)}
+.policy svg{width:26px; height:26px; color:var(--up); flex:none}
+.policy .t{font-weight:500; color:var(--steel); font-size:var(--t-base)}
+.policy .d{font-size:var(--t-sm); color:var(--ink-2); line-height:1.7}
+
+/* --------------------------------------------------------------------------
+   ۳۳. ریال — عددها بزرگ‌اند، پس گروه‌بندی و هم‌ترازی مهم‌تر می‌شود
+   -------------------------------------------------------------------------- */
+.p-price{letter-spacing:-.01em}
+.ptable td.cell-price{white-space:nowrap}
+.riyal{font-size:var(--t-xs); font-weight:400; color:var(--ink-3); margin-inline-start:var(--s1)}
+
+@media (max-width:1024px){
+  .factorybar .container{gap:var(--s4)}
+  .factorybar ul{gap:var(--s5)}
+  .cmptray .container{padding-block:var(--s2)}
+}
+@media (max-width:860px){
+  .cmptray{bottom:80px}
+  .rating-big{flex-direction:column; align-items:flex-start; gap:var(--s2)}
+}
+
+
+/* --------------------------------------------------------------------------
+   ۳۴. چک‌باکس مقایسه — ناحیه لمس ۴۴px، ظاهر ۲۴px
+   ورودی خام ۲۲×۲۲ بود. برچسبِ دربرگیرنده ۴۴px بود ولی خودِ کنترل نه — و
+   برای مخاطب +۴۰ سال، ناحیه لمسِ خودِ کنترل است که اهمیت دارد.
+   -------------------------------------------------------------------------- */
+.cmp-cell input[type=checkbox]{
+  appearance:none; -webkit-appearance:none; margin:0;
+  width:44px; height:44px; cursor:pointer; border:0; background:transparent;
+  display:grid; place-content:center; border-radius:var(--radius);
+}
+.cmp-cell input[type=checkbox]::before{
+  content:""; width:24px; height:24px; border:2px solid var(--border-2);
+  border-radius:4px; background:#fff; transition:background .15s ease, border-color .15s ease;
+}
+.cmp-cell input[type=checkbox]:hover::before{border-color:var(--steel)}
+.cmp-cell input[type=checkbox]:checked::before{
+  background:var(--steel); border-color:var(--steel);
+  background-image:url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E");
+  background-size:17px; background-position:center; background-repeat:no-repeat;
+}
+.cmp-cell input[type=checkbox]:focus-visible{outline:3px solid var(--steel); outline-offset:1px}
+.cmp-lab{min-width:44px; min-height:44px}
+
+/* --------------------------------------------------------------------------
+   ۳۵. چیدمان بالای صفحه دسته  — عنوان و ماشین‌حساب کنار هم
+   این قانون قبلاً داخل <style> خودِ صفحه بود و هنگام بازتولید صفحه از بین
+   رفت، پس ماشین‌حساب تمام‌عرض زیر متن می‌افتاد. جایش اینجاست.
+   -------------------------------------------------------------------------- */
+.cat-hero{display:grid; grid-template-columns:minmax(0,1fr) 400px; gap:var(--s7);
+  align-items:start; margin-bottom:var(--s6)}
+.cat-hero .lede{margin-top:var(--s3)}
+.cat-hero .rating-big{max-width:440px}
+@media (max-width:1100px){
+  .cat-hero{grid-template-columns:1fr; gap:var(--s5)}
+  .cat-hero .rating-big{max-width:none}
+}
+
+/* ==========================================================================
+   نسخه ۴ — پاس‌کاری تمیزکاری و پرداخت
+   --------------------------------------------------------------------------
+   هدف: همان زبان طراحی، با انضباط بیشتر. هیچ رنگ یا فونت جدیدی اضافه نشد؛
+   فقط ریتم، عمق و جزئیاتی که تفاوت بین «درست» و «پرداخت‌شده» را می‌سازند.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   ۳۶. یادداشت‌های فنی — پیش‌فرض پنهان
+   این‌ها برای توسعه‌دهنده‌اند نه بازدیدکننده. وقتی باز باشند، هر چند صفحه
+   را با جعبه‌های آبی و کد قطع می‌کنند و طرح دیده نمی‌شود.
+   سوییچ کاملاً CSS است — بدون جاوااسکریپت.
+   -------------------------------------------------------------------------- */
+/* چک‌باکس دقیقاً روی برچسب می‌نشیند: هم شفاف است، هم خودش ناحیه‌ی لمس
+   کامل دارد — نه یک کنترل ۱×۱ که فقط برچسبش قابل کلیک باشد. */
+.notes-btn{position:relative}
+.notes-toggle{position:absolute; inset:0; width:100%; height:100%;
+  margin:0; opacity:0; cursor:pointer}
+body:has(.notes-toggle:not(:checked)) .note{display:none}
+.notes-toggle:focus-visible{outline:3px solid #fff; outline-offset:2px; border-radius:var(--radius)}
+
+/* --------------------------------------------------------------------------
+   ۳۷. نوار پروتوتایپ — بازطراحی
+   نسخه اول یک نوار قرمز پررنگ بود که با زبان طراحی نمی‌خواند و قرمزِ
+   «تماس» را هم رقیق می‌کرد. حالا سرمه‌ای با یک خط قرمز نازک.
+   -------------------------------------------------------------------------- */
+.pv-strip{background:var(--ink); color:#C3D2E2; border-bottom:2px solid var(--brand);
+  font-size:var(--t-xs)}
+.pv-strip .container{display:flex; align-items:center; justify-content:space-between;
+  gap:var(--s4); flex-wrap:wrap; min-height:46px}
+.pv-strip .who{display:inline-flex; align-items:center; gap:var(--s2)}
+.pv-strip .dotp{width:7px; height:7px; border-radius:50%; background:var(--brand); flex:none}
+.pv-strip a{color:#fff; text-decoration:underline; text-underline-offset:3px;
+  display:inline-flex; align-items:center; min-height:44px; padding-inline:2px}
+.pv-strip .notes-btn{display:inline-flex; align-items:center; gap:var(--s2);
+  min-height:46px;  /* ۴۴ + دو خط ۱px، تا خودِ input دقیقاً ۴۴ شود */ padding:0 var(--s3); border:1px solid rgba(255,255,255,.28);
+  border-radius:var(--radius); cursor:pointer; color:#C3D2E2; user-select:none;
+  transition:background .15s ease, color .15s ease}
+.pv-strip .notes-btn:hover{background:rgba(255,255,255,.12); color:#fff}
+.notes-btn:has(.notes-toggle:checked){background:#fff; color:var(--ink); border-color:#fff}
+
+/* --------------------------------------------------------------------------
+   ۳۸. ریتم عمودی یکسان
+   بخش‌ها با style درون‌خطی padding می‌گرفتند و فاصله‌ها ناهماهنگ شده بود.
+   -------------------------------------------------------------------------- */
+main > .container > .section,
+main .section{padding-block:var(--s8)}
+main .section + .section{padding-top:0}
+.section-head{margin-bottom:var(--s5)}
+/* لنگرها زیر منوی چسبان پنهان نشوند */
+[id]{scroll-margin-top:76px}
+
+/* --------------------------------------------------------------------------
+   ۳۹. جدول — پرداخت
+   -------------------------------------------------------------------------- */
+/* راه‌راه ملایم‌تر: کنتراست قبلی برای چشم خسته پرنویز بود */
+.ptable tbody tr:nth-child(even) td{background:#FBFCFD}
+.ptable tbody tr:hover td{background:#F2F7FB}
+/* شناسه‌ی بصری ردیفِ زیر نشانگر، بدون جابه‌جایی چیدمان */
+.ptable tbody tr{transition:box-shadow .15s ease}
+.ptable tbody tr:hover{box-shadow:inset 3px 0 0 0 var(--steel)}
+.ptable thead th{box-shadow:inset 0 -1px 0 rgba(255,255,255,.16)}
+.ptable caption{border-bottom:0}
+/* متای ردیف فشرده‌تر — سه خط بود، حالا نفس می‌کشد بدون بلندشدن */
+.p-meta{line-height:1.55; margin-top:3px}
+.p-meta + .p-meta{margin-top:var(--s1)}
+.cell-name{padding-block:var(--s4)}
+
+/* --------------------------------------------------------------------------
+   ۴۰. تابلوی شاخص — یک خط تاکیدی نازک بالای هر ستون
+   -------------------------------------------------------------------------- */
+.index-board{box-shadow:var(--shadow-1)}
+.ix{position:relative; transition:background .15s ease}
+.ix:hover{background:var(--surface)}
+.ix::before{content:""; position:absolute; inset-block-start:0; inset-inline:0;
+  height:2px; background:transparent; transition:background .15s ease}
+.ix:hover::before{background:var(--steel)}
+
+/* --------------------------------------------------------------------------
+   ۴۱. کارت دسته — بازه‌ی قیمت قهرمان کارت است
+   -------------------------------------------------------------------------- */
+.catcard{transition:border-color .15s ease, box-shadow .15s ease, transform .15s ease}
+.catcard:hover{transform:translateY(-2px)}
+@media (prefers-reduced-motion:reduce){ .catcard:hover{transform:none} }
+
+/* --------------------------------------------------------------------------
+   ۴۲. تایپوگرافی — جزئیات
+   -------------------------------------------------------------------------- */
+h1,h2,h3{text-wrap:balance}
+.lede{text-wrap:pretty}
+::selection{background:#16324F; color:#fff}
+/* عنوان‌های ستون مشخصات دو خطی‌اند؛ خط دوم نباید بچسبد */
+.ptable th.spec{line-height:1.45}
+
+/* --------------------------------------------------------------------------
+   ۴۳. حالت‌های تعاملی
+   -------------------------------------------------------------------------- */
+.btn:active{transform:translateY(1px)}
+@media (prefers-reduced-motion:reduce){ .btn:active{transform:none} }
+.faq summary:focus-visible{outline:3px solid var(--steel); outline-offset:-3px}
+a:focus-visible, .btn:focus-visible{outline:3px solid var(--steel); outline-offset:2px}
+.callband a:focus-visible, .utilbar a:focus-visible,
+footer.site a:focus-visible, .dock a:focus-visible{outline-color:#fff}
+
+/* --------------------------------------------------------------------------
+   ۴۵. نشان «الان پاسخگوییم» — وضعیت زنده‌ی خط فروش
+   --------------------------------------------------------------------------
+   از یازده رقیب، فقط آهن آنلاین چیزی شبیه این دارد («ساعت کاری امروز به پایان
+   رسیده است»). ارزشش این است که ساعت کاری را از یک جمله‌ی ایستا در فوتر به یک
+   وعده‌ی همین‌الان کنار خود شماره تبدیل می‌کند — و وقتی خط بسته است، به‌جای
+   اینکه بازدیدکننده بی‌صدا برود، به فرم «ما تماس می‌گیریم» هدایتش می‌کند.
+
+   ⚠️ پیاده‌سازی: این وضعیت باید در Blade و سمت سرور از `information.work_time`
+   محاسبه شود، نه با جاوااسکریپت. با JS یک لحظه حالت غلط رندر می‌شود و روی
+   کش صفحه هم قابل اتکا نیست. کش دو‌دقیقه‌ای فعلی برای این دقت کافی است.
+   -------------------------------------------------------------------------- */
+.livecall{display:inline-flex; align-items:center; gap:var(--s2); border-radius:999px;
+  padding:var(--s2) var(--s4); font-size:var(--t-sm); font-weight:500;
+  border:1px solid transparent; white-space:nowrap}
+.livecall .dotl{width:9px; height:9px; border-radius:50%; flex:none}
+.livecall.is-open{background:#EAF6F0; border-color:#B7DCC9; color:#0A5E3A}
+.livecall.is-open .dotl{background:var(--up); box-shadow:0 0 0 3px rgba(11,122,75,.18)}
+.livecall.is-shut{background:var(--surface); border-color:var(--border-2); color:var(--ink-2)}
+.livecall.is-shut .dotl{background:var(--ink-3)}
+@media (prefers-reduced-motion:no-preference){
+  .livecall.is-open .dotl{animation:pulse 2.4s ease-in-out infinite}
+}
+
+/* --------------------------------------------------------------------------
+   ۴۶. یادداشت تأیید قیمت — ضعف تازگی را به محرک تماس تبدیل می‌کند
+   --------------------------------------------------------------------------
+   الگو از آهن تخفیف: «به علت نوسانات لحظه‌ای بازار، تأیید قیمت‌ها از واحد
+   فروش الزامی است». آنها یک واقعیت بازار را به یک دلیل تماس تبدیل کرده‌اند.
+   برای ما دو کار هم‌زمان می‌کند: هم شرط فروش را صادقانه می‌گوید (قیمت مبنای
+   روز، بدون ارزش افزوده، درب کارخانه)، هم درست در لحظه‌ی تصمیم شماره می‌دهد.
+   عمداً زیر جدول نشسته، نه بالای آن — بالای جدول یک مانع است، زیر جدول یک قدم بعدی.
+   -------------------------------------------------------------------------- */
+.confirm-note{display:flex; gap:var(--s3); align-items:flex-start;
+  background:var(--brand-soft); border:1px solid #F0CFD3;
+  border-inline-start:4px solid var(--brand);
+  border-radius:var(--radius); padding:var(--s4); margin-top:var(--s5);
+  font-size:var(--t-sm); color:var(--ink-2); line-height:1.7}
+.confirm-note > svg{width:22px; height:22px; flex:none; color:var(--brand); margin-top:2px}
+.confirm-note b{color:var(--ink); font-weight:700}
+/* شماره داخل متن یک لینک تماس واقعی است و باید ناحیه‌ی لمس داشته باشد. */
+.confirm-note a[href^="tel:"]{display:inline-flex; align-items:center; gap:var(--s2);
+  min-height:44px; padding:0 var(--s3); margin-inline-start:var(--s2);
+  background:var(--brand); color:#fff; border-radius:var(--radius);
+  font-weight:700; font-size:var(--t-base); white-space:nowrap}
+.confirm-note a[href^="tel:"]:hover{background:var(--brand-dark)}
+.confirm-note a[href^="tel:"] svg{width:18px; height:18px}
+@media (max-width:600px){
+  .confirm-note{flex-direction:column}
+  .confirm-note a[href^="tel:"]{margin-inline-start:0; justify-content:center}
+}
+
+/* --------------------------------------------------------------------------
+   ۴۴. چاپ — خریدار این جدول را چاپ می‌کند و به دفتر می‌برد
+   -------------------------------------------------------------------------- */
+@media print{
+  .livecall{display:none !important}
+  .confirm-note{background:#fff !important; border:1px solid #000 !important}
+  .confirm-note a[href^="tel:"]{background:#fff !important; color:#000 !important;
+    border:1px solid #000; font-size:11px}
+  .pv-strip,.notes-toggle,.note{display:none !important}
+  .factorybar{background:#fff !important; color:#000 !important;
+    border-bottom:2px solid #000 !important}
+  .factorybar .lead .s,.factorybar li .k{color:#333 !important}
+  .factorybar li .v,.factorybar .lead .t{color:#000 !important}
+  .index-board .ib-head{background:#fff !important; color:#000 !important;
+    border-bottom:1px solid #000}
+  .index-board .ib-head h2,.index-board .ib-head .sub{color:#000 !important}
+  .ptable tbody tr{box-shadow:none !important}
+  .ptable tbody tr:nth-child(even) td{background:#fff !important}
+  .callback,.calc,.chartbox,.reps,.faq,.qa,.specgrid,.terms{display:none !important}
+  a[href^="tel:"]::after{content:" (" attr(href) ")"; font-size:.85em}
+  .section{padding-block:12pt !important}
+}
+
+/* --------------------------------------------------------------------------
+   ۴۷. زیرعنوان ستون قیمت — «بدون ارزش افزوده» در خودِ سربرگ
+   --------------------------------------------------------------------------
+   الگو از اصفهان آهن، که سربرگش «قیمت ریال با ٪۱۰ ارزش افزوده» است. تنها
+   رقیبی است که این را در سربرگ می‌گذارد و نه در پانوشت. تفاوتش این است که
+   خریدار در لحظه‌ی مقایسه‌ی دو عدد می‌داند دارد چه چیزی را با چه چیزی مقایسه
+   می‌کند — و یک تماس «قیمت با ارزش افزوده است؟» کمتر می‌شود.
+   در حالت کارت (زیر ۱۰۲۴px) سربرگ‌ها به data-label تبدیل می‌شوند و این
+   زیرعنوان دیده نمی‌شود؛ آنجا کار را یادداشت تأیید قیمت انجام می‌دهد.
+   -------------------------------------------------------------------------- */
+.ptable thead .th-sub{display:block; font-size:var(--t-xs); font-weight:400;
+  color:#B9C7D6; letter-spacing:0; margin-top:2px}
+
+/* --------------------------------------------------------------------------
+   ۴۸. اولویت محتوا در تای اول موبایل
+   --------------------------------------------------------------------------
+   اندازه‌گیری شد: H1 در ۳۷۵px روی ۶۲۱px می‌نشست. یعنی کل صفحه‌ی اول یک گوشی
+   صرف پنج نوار پشت‌سرهم می‌شد و بازدیدکننده‌ای که برای «قیمت» آمده بود، هیچ
+   قیمتی نمی‌دید. قوانین زیر «محتوا-اولویت»اند نه قانون سایز — به همان دلیلی
+   که قانون چیپ‌ها در بخش ۱۷ مجاز است — و کاملاً داخل یک max-query نگه داشته
+   شده‌اند. هیچ‌کدام روی دسکتاپ اثر ندارند و هیچ‌کدام یک نقطه‌ی تماس را حذف
+   نمی‌کنند.
+
+   ⚠️ چرا انتهای فایل و نه کنار بقیه‌ی قوانین موبایل:
+   نسخه‌ی اول همین بلوک داخل media query بخش ۱۷ (خط ~۴۰۰) نوشته شد و
+   `.nav-call{display:none}` و `.factorybar li{flex-direction:row}` هیچ اثری
+   نکردند — چون `.btn` و `.factorybar li` در بخش‌های ۲۶ و ۴۰ (خط ۷۷۱ به بعد)
+   تعریف شده‌اند و با تخصص برابر، قانونِ دیرتر برنده می‌شود. اندازه‌گیری این
+   را نشان نداد؛ فقط نگاه‌کردن به رندر ۳۷۵px نشانش داد. هر قانون محتوا-اولویتِ
+   جدید باید همین‌جا اضافه شود، بعد از تعریف همه‌ی کامپوننت‌ها.
+   -------------------------------------------------------------------------- */
+@media (max-width:860px){
+  /* ۱. نوار خدماتی: ساعت کاری حالا در نشان «الان پاسخگوییم» و در فوتر تکرار
+        شده؛ سبد استعلام و ناحیه کاربری در منوی همبرگری‌اند. ~۹۰px */
+  .utilbar{display:none}
+
+  /* ۲. جستجو: در ۳۷۵px یک ردیف کامل می‌گیرد و بین شماره تلفن و منو فاصله
+        می‌اندازد. جستجو در نوار منو در دسترس می‌ماند. ~۹۶px */
+  .masthead .search{display:none}
+
+  /* ۳. دکمه «تماس» نوار منو: بین باکس قرمز بالای صفحه و داک چسبان پایین،
+        سومین تکرار همان شماره در ۲۰۰px است. حذفش نقطه‌ی تماس کم نمی‌کند،
+        شلوغی کم می‌کند — و شلوغی برای مخاطب +۴۰ هزینه دارد. */
+  .mainnav .nav-call{display:none}
+
+  /* ۴. نوار تولیدکننده: چهار آمار در گرید دوردیفه ۲۴۵px می‌گرفت. جمله‌ی
+        «ما تولیدکننده‌ایم» که کل پوزیشنینگ است می‌ماند؛ دو آمار اول یک ردیف
+        افقی جمع‌وجور می‌شوند و دوتای بعدی در فوتر تکرار شده‌اند. ~۱۳۰px */
+  .factorybar .container{gap:var(--s2) var(--s4); padding-block:var(--s2)}
+  .factorybar .lead{flex:1 1 100%}
+  .factorybar .lead svg{width:24px; height:24px}
+  .factorybar .lead .t{font-size:var(--t-sm)}
+  .factorybar .lead .s{display:none}
+  .factorybar ul{gap:var(--s5); width:100%}
+  .factorybar li{flex-direction:row; align-items:baseline; gap:var(--s2)}
+  .factorybar li .k,.factorybar li .v{font-size:var(--t-xs)}
+  .factorybar li:nth-child(n+3){display:none}
+
+  /* ۵. نشان بروزرسانی و نشان پاسخگویی کنار هم، نه دو خط جدا. */
+  .board-head{gap:var(--s3)}
+  .board-head .stamp,.board-head .livecall{font-size:var(--t-xs); padding:var(--s2) var(--s3)}
+}

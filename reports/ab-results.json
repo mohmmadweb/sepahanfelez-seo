@@ -1,0 +1,923 @@
+{
+ "after": {
+  "mobile": {
+   "home.html": {
+    "htmlFontSize": "8px",
+    "bodyFontSize": "16.002px",
+    "scrollWidth": 375,
+    "horizontalOverflow": false,
+    "overflowing": 37,
+    "smallText": 4,
+    "smallBySize": {
+     "14.0": 2,
+     "12.7": 1,
+     "13.7": 1
+    },
+    "smallTaps": 12,
+    "totalTaps": 64,
+    "lowContrast": 3,
+    "lowContrastSample": [
+     {
+      "fg": "rgb(180, 35, 50)",
+      "bg": "rgb(180,35,50)",
+      "r": 1,
+      "fs": 22.9,
+      "t": "021-91326030"
+     },
+     {
+      "fg": "rgb(35, 207, 20)",
+      "bg": "rgb(255,255,255)",
+      "r": 2.1,
+      "fs": 16,
+      "t": "افزایش"
+     },
+     {
+      "fg": "rgb(255, 255, 255)",
+      "bg": "rgb(255,255,255)",
+      "r": 1,
+      "fs": 22.9,
+      "t": "اطلاعات تماس"
+     }
+    ]
+   },
+   "cat.html": {
+    "htmlFontSize": "8px",
+    "bodyFontSize": "16.002px",
+    "scrollWidth": 375,
+    "horizontalOverflow": false,
+    "overflowing": 236,
+    "smallText": 8,
+    "smallBySize": {
+     "12.7": 2,
+     "14.0": 3,
+     "11.3": 1,
+     "13.7": 2
+    },
+    "smallTaps": 38,
+    "totalTaps": 56,
+    "lowContrast": 6,
+    "lowContrastSample": [
+     {
+      "fg": "rgb(180, 35, 50)",
+      "bg": "rgb(180,35,50)",
+      "r": 1,
+      "fs": 22.9,
+      "t": "021-91326030"
+     },
+     {
+      "fg": "rgb(35, 207, 20)",
+      "bg": "rgb(243,243,243)",
+      "r": 1.89,
+      "fs": 14.9,
+      "t": "1,220,000 ریال"
+     },
+     {
+      "fg": "rgb(52, 152, 219)",
+      "bg": "rgb(255,255,255)",
+      "r": 3.15,
+      "fs": 16,
+      "t": "توری"
+     },
+     {
+      "fg": "rgb(52, 152, 219)",
+      "bg": "rgb(255,255,255)",
+      "r": 3.15,
+      "fs": 14,
+      "t": "ایجاد"
+     },
+     {
+      "fg": "rgb(231, 76, 60)",
+      "bg": "rgb(255,255,255)",
+      "r": 3.82,
+      "fs": 22,
+      "t": "خرید"
+     },
+     {
+      "fg": "rgb(231, 76, 60)",
+      "bg": "rgb(255,255,255)",
+      "r": 3.82,
+      "fs": 16,
+      "t": "02191326030"
+     }
+    ]
+   },
+   "about.html": {
+    "htmlFontSize": "8px",
+    "bodyFontSize": "16.002px",
+    "scrollWidth": 375,
+    "horizontalOverflow": false,
+    "overflowing": 28,
+    "smallText": 1,
+    "smallBySize": {
+     "13.7": 1
+    },
+    "smallTaps": 3,
+    "totalTaps": 19,
+    "lowContrast": 2,
+    "lowContrastSample": [
+     {
+      "fg": "rgb(180, 35, 50)",
+      "bg": "rgb(180,35,50)",
+      "r": 1,
+      "fs": 22.9,
+      "t": "021-91326030"
+     },
+     {
+      "fg": "rgb(255, 255, 255)",
+      "bg": "rgb(255,255,255)",
+      "r": 1,
+      "fs": 19.4,
+      "t": "مصطفی شیرزادی"
+     }
+    ]
+   },
+   "contact.html": {
+    "htmlFontSize": "8px",
+    "bodyFontSize": "16.002px",
+    "scrollWidth": 375,
+    "horizontalOverflow": false,
+    "overflowing": 27,
+    "smallText": 5,
+    "smallBySize": {
+     "14.0": 2,
+     "11.3": 1,
+     "12.7": 1,
+     "13.7": 1
+    },
+    "smallTaps": 10,
+    "totalTaps": 27,
+    "lowContrast": 1,
+    "lowContrastSample": [
+     {
+      "fg": "rgb(180, 35, 50)",
+      "bg": "rgb(180,35,50)",
+      "r": 1,
+      "fs": 22.9,
+      "t": "021-91326030"
+     }
+    ]
+   },
+   "price.html": {
+    "htmlFontSize": "8px",
+    "bodyFontSize": "16.002px",
+    "scrollWidth": 375,
+    "horizontalOverflow": false,
+    "overflowing": 28,
+    "smallText": 15,
+    "smallBySize": {
+     "13.7": 14,
+     "12.7": 1
+    },
+    "smallTaps": 26,
+    "totalTaps": 99,
+    "lowContrast": 3,
+    "lowContrastSample": [
+     {
+      "fg": "rgb(180, 35, 50)",
+      "bg": "rgb(180,35,50)",
+      "r": 1,
+      "fs": 22.9,
+      "t": "021-91326030"
+     },
+     {
+      "fg": "rgb(35, 207, 20)",
+      "bg": "rgb(255,255,255)",
+      "r": 2.1,
+      "fs": 16,
+      "t": "افزایش"
+     },
+     {
+      "fg": "rgb(108, 117, 125)",
+      "bg": "rgb(247,247,247)",
+      "r": 4.38,
+      "fs": 16,
+      "t": "صفحه قبل"
+     }
+    ]
+   },
+   "blog.html": {
+    "htmlFontSize": "8px",
+    "bodyFontSize": "16.002px",
+    "scrollWidth": 375,
+    "horizontalOverflow": false,
+    "overflowing": 28,
+    "smallText": 11,
+    "smallBySize": {
+     "12.7": 8,
+     "14.0": 2,
+     "13.7": 1
+    },
+    "smallTaps": 18,
+    "totalTaps": 40,
+    "lowContrast": 2,
+    "lowContrastSample": [
+     {
+      "fg": "rgb(180, 35, 50)",
+      "bg": "rgb(180,35,50)",
+      "r": 1,
+      "fs": 22.9,
+      "t": "021-91326030"
+     },
+     {
+      "fg": "rgb(119, 119, 119)",
+      "bg": "rgb(247,247,247)",
+      "r": 4.18,
+      "fs": 16,
+      "t": "23:21   27-فروردین-1401"
+     }
+    ]
+   }
+  },
+  "desktop": {
+   "home.html": {
+    "htmlFontSize": "10px",
+    "bodyFontSize": "16.002px",
+    "scrollWidth": 1440,
+    "horizontalOverflow": false,
+    "overflowing": 9,
+    "smallText": 1,
+    "smallBySize": {
+     "13.7": 1
+    },
+    "smallTaps": 27,
+    "totalTaps": 77,
+    "lowContrast": 3,
+    "lowContrastSample": [
+     {
+      "fg": "rgb(180, 35, 50)",
+      "bg": "rgb(180,35,50)",
+      "r": 1,
+      "fs": 22.9,
+      "t": "021-91326030"
+     },
+     {
+      "fg": "rgb(35, 207, 20)",
+      "bg": "rgb(255,255,255)",
+      "r": 2.1,
+      "fs": 16,
+      "t": "افزایش"
+     },
+     {
+      "fg": "rgb(255, 255, 255)",
+      "bg": "rgb(255,255,255)",
+      "r": 1,
+      "fs": 22.9,
+      "t": "اطلاعات تماس"
+     }
+    ]
+   },
+   "cat.html": {
+    "htmlFontSize": "10px",
+    "bodyFontSize": "16.002px",
+    "scrollWidth": 1440,
+    "horizontalOverflow": false,
+    "overflowing": 0,
+    "smallText": 2,
+    "smallBySize": {
+     "13.7": 2
+    },
+    "smallTaps": 41,
+    "totalTaps": 65,
+    "lowContrast": 6,
+    "lowContrastSample": [
+     {
+      "fg": "rgb(180, 35, 50)",
+      "bg": "rgb(180,35,50)",
+      "r": 1,
+      "fs": 22.9,
+      "t": "021-91326030"
+     },
+     {
+      "fg": "rgb(35, 207, 20)",
+      "bg": "rgb(243,243,243)",
+      "r": 1.89,
+      "fs": 14.9,
+      "t": "1,220,000 ریال"
+     },
+     {
+      "fg": "rgb(52, 152, 219)",
+      "bg": "rgb(255,255,255)",
+      "r": 3.15,
+      "fs": 16,
+      "t": "توری"
+     },
+     {
+      "fg": "rgb(52, 152, 219)",
+      "bg": "rgb(255,255,255)",
+      "r": 3.15,
+      "fs": 14,
+      "t": "ایجاد"
+     },
+     {
+      "fg": "rgb(231, 76, 60)",
+      "bg": "rgb(255,255,255)",
+      "r": 3.82,
+      "fs": 22,
+      "t": "خرید"
+     },
+     {
+      "fg": "rgb(231, 76, 60)",
+      "bg": "rgb(255,255,255)",
+      "r": 3.82,
+      "fs": 16,
+      "t": "02191326030"
+     }
+    ]
+   },
+   "about.html": {
+    "htmlFontSize": "10px",
+    "bodyFontSize": "16.002px",
+    "scrollWidth": 1440,
+    "horizontalOverflow": false,
+    "overflowing": 0,
+    "smallText": 1,
+    "smallBySize": {
+     "13.7": 1
+    },
+    "smallTaps": 6,
+    "totalTaps": 28,
+    "lowContrast": 2,
+    "lowContrastSample": [
+     {
+      "fg": "rgb(180, 35, 50)",
+      "bg": "rgb(180,35,50)",
+      "r": 1,
+      "fs": 22.9,
+      "t": "021-91326030"
+     },
+     {
+      "fg": "rgb(255, 255, 255)",
+      "bg": "rgb(255,255,255)",
+      "r": 1,
+      "fs": 19.4,
+      "t": "مصطفی شیرزادی"
+     }
+    ]
+   },
+   "contact.html": {
+    "htmlFontSize": "10px",
+    "bodyFontSize": "16.002px",
+    "scrollWidth": 1440,
+    "horizontalOverflow": false,
+    "overflowing": 0,
+    "smallText": 1,
+    "smallBySize": {
+     "13.7": 1
+    },
+    "smallTaps": 13,
+    "totalTaps": 36,
+    "lowContrast": 1,
+    "lowContrastSample": [
+     {
+      "fg": "rgb(180, 35, 50)",
+      "bg": "rgb(180,35,50)",
+      "r": 1,
+      "fs": 22.9,
+      "t": "021-91326030"
+     }
+    ]
+   },
+   "price.html": {
+    "htmlFontSize": "10px",
+    "bodyFontSize": "16.002px",
+    "scrollWidth": 1440,
+    "horizontalOverflow": false,
+    "overflowing": 0,
+    "smallText": 1,
+    "smallBySize": {
+     "13.7": 1
+    },
+    "smallTaps": 54,
+    "totalTaps": 108,
+    "lowContrast": 3,
+    "lowContrastSample": [
+     {
+      "fg": "rgb(180, 35, 50)",
+      "bg": "rgb(180,35,50)",
+      "r": 1,
+      "fs": 22.9,
+      "t": "021-91326030"
+     },
+     {
+      "fg": "rgb(35, 207, 20)",
+      "bg": "rgb(255,255,255)",
+      "r": 2.1,
+      "fs": 16,
+      "t": "افزایش"
+     },
+     {
+      "fg": "rgb(108, 117, 125)",
+      "bg": "rgb(247,247,247)",
+      "r": 4.38,
+      "fs": 16,
+      "t": "صفحه قبل"
+     }
+    ]
+   },
+   "blog.html": {
+    "htmlFontSize": "10px",
+    "bodyFontSize": "16.002px",
+    "scrollWidth": 1440,
+    "horizontalOverflow": false,
+    "overflowing": 0,
+    "smallText": 1,
+    "smallBySize": {
+     "13.7": 1
+    },
+    "smallTaps": 30,
+    "totalTaps": 49,
+    "lowContrast": 2,
+    "lowContrastSample": [
+     {
+      "fg": "rgb(180, 35, 50)",
+      "bg": "rgb(180,35,50)",
+      "r": 1,
+      "fs": 22.9,
+      "t": "021-91326030"
+     },
+     {
+      "fg": "rgb(119, 119, 119)",
+      "bg": "rgb(247,247,247)",
+      "r": 4.18,
+      "fs": 16,
+      "t": "23:21   27-فروردین-1401"
+     }
+    ]
+   }
+  }
+ },
+ "before": {
+  "mobile": {
+   "home.html": {
+    "htmlFontSize": "6px",
+    "bodyFontSize": "8.4px",
+    "scrollWidth": 375,
+    "horizontalOverflow": false,
+    "overflowing": 166,
+    "smallText": 143,
+    "smallBySize": {
+     "12.0": 13,
+     "8.4": 115,
+     "10.8": 10,
+     "11.3": 2,
+     "13.9": 1,
+     "10.1": 1,
+     "7.2": 1
+    },
+    "smallTaps": 71,
+    "totalTaps": 74,
+    "lowContrast": 3,
+    "lowContrastSample": [
+     {
+      "fg": "rgb(180, 35, 50)",
+      "bg": "rgb(180,35,50)",
+      "r": 1,
+      "fs": 12,
+      "t": "021-91326030"
+     },
+     {
+      "fg": "rgb(35, 207, 20)",
+      "bg": "rgb(255,255,255)",
+      "r": 2.1,
+      "fs": 8.4,
+      "t": "افزایش"
+     },
+     {
+      "fg": "rgb(255, 255, 255)",
+      "bg": "rgb(255,255,255)",
+      "r": 1,
+      "fs": 12,
+      "t": "اطلاعات تماس"
+     }
+    ]
+   },
+   "cat.html": {
+    "htmlFontSize": "6px",
+    "bodyFontSize": "8.4px",
+    "scrollWidth": 375,
+    "horizontalOverflow": false,
+    "overflowing": 208,
+    "smallText": 190,
+    "smallBySize": {
+     "12.0": 9,
+     "8.4": 45,
+     "10.8": 10,
+     "13.9": 1,
+     "9.6": 16,
+     "7.8": 101,
+     "10.1": 2,
+     "11.3": 3,
+     "8.8": 1,
+     "7.2": 2
+    },
+    "smallTaps": 62,
+    "totalTaps": 64,
+    "lowContrast": 6,
+    "lowContrastSample": [
+     {
+      "fg": "rgb(180, 35, 50)",
+      "bg": "rgb(180,35,50)",
+      "r": 1,
+      "fs": 12,
+      "t": "021-91326030"
+     },
+     {
+      "fg": "rgb(35, 207, 20)",
+      "bg": "rgb(243,243,243)",
+      "r": 1.89,
+      "fs": 7.8,
+      "t": "1,220,000 ریال"
+     },
+     {
+      "fg": "rgb(52, 152, 219)",
+      "bg": "rgb(255,255,255)",
+      "r": 3.15,
+      "fs": 16,
+      "t": "توری"
+     },
+     {
+      "fg": "rgb(52, 152, 219)",
+      "bg": "rgb(255,255,255)",
+      "r": 3.15,
+      "fs": 14,
+      "t": "ایجاد"
+     },
+     {
+      "fg": "rgb(231, 76, 60)",
+      "bg": "rgb(255,255,255)",
+      "r": 3.82,
+      "fs": 22,
+      "t": "خرید"
+     },
+     {
+      "fg": "rgb(231, 76, 60)",
+      "bg": "rgb(255,255,255)",
+      "r": 3.82,
+      "fs": 16,
+      "t": "02191326030"
+     }
+    ]
+   },
+   "about.html": {
+    "htmlFontSize": "6px",
+    "bodyFontSize": "8.4px",
+    "scrollWidth": 375,
+    "horizontalOverflow": false,
+    "overflowing": 28,
+    "smallText": 52,
+    "smallBySize": {
+     "12.0": 9,
+     "8.4": 24,
+     "10.8": 10,
+     "10.2": 8,
+     "7.2": 1
+    },
+    "smallTaps": 26,
+    "totalTaps": 27,
+    "lowContrast": 2,
+    "lowContrastSample": [
+     {
+      "fg": "rgb(180, 35, 50)",
+      "bg": "rgb(180,35,50)",
+      "r": 1,
+      "fs": 12,
+      "t": "021-91326030"
+     },
+     {
+      "fg": "rgb(255, 255, 255)",
+      "bg": "rgb(255,255,255)",
+      "r": 1,
+      "fs": 10.2,
+      "t": "مصطفی شیرزادی"
+     }
+    ]
+   },
+   "contact.html": {
+    "htmlFontSize": "6px",
+    "bodyFontSize": "8.4px",
+    "scrollWidth": 375,
+    "horizontalOverflow": false,
+    "overflowing": 28,
+    "smallText": 63,
+    "smallBySize": {
+     "12.0": 9,
+     "8.4": 39,
+     "10.8": 10,
+     "11.3": 2,
+     "8.8": 1,
+     "10.1": 1,
+     "7.2": 1
+    },
+    "smallTaps": 38,
+    "totalTaps": 40,
+    "lowContrast": 1,
+    "lowContrastSample": [
+     {
+      "fg": "rgb(180, 35, 50)",
+      "bg": "rgb(180,35,50)",
+      "r": 1,
+      "fs": 12,
+      "t": "021-91326030"
+     }
+    ]
+   },
+   "price.html": {
+    "htmlFontSize": "6px",
+    "bodyFontSize": "8.4px",
+    "scrollWidth": 375,
+    "horizontalOverflow": false,
+    "overflowing": 256,
+    "smallText": 189,
+    "smallBySize": {
+     "12.0": 9,
+     "8.4": 167,
+     "10.8": 10,
+     "13.9": 1,
+     "10.1": 1,
+     "7.2": 1
+    },
+    "smallTaps": 106,
+    "totalTaps": 107,
+    "lowContrast": 3,
+    "lowContrastSample": [
+     {
+      "fg": "rgb(180, 35, 50)",
+      "bg": "rgb(180,35,50)",
+      "r": 1,
+      "fs": 12,
+      "t": "021-91326030"
+     },
+     {
+      "fg": "rgb(35, 207, 20)",
+      "bg": "rgb(255,255,255)",
+      "r": 2.1,
+      "fs": 8.4,
+      "t": "افزایش"
+     },
+     {
+      "fg": "rgb(108, 117, 125)",
+      "bg": "rgb(247,247,247)",
+      "r": 4.38,
+      "fs": 8.4,
+      "t": "صفحه قبل"
+     }
+    ]
+   },
+   "blog.html": {
+    "htmlFontSize": "6px",
+    "bodyFontSize": "8.4px",
+    "scrollWidth": 375,
+    "horizontalOverflow": false,
+    "overflowing": 27,
+    "smallText": 102,
+    "smallBySize": {
+     "12.0": 13,
+     "8.4": 60,
+     "10.8": 10,
+     "10.1": 8,
+     "11.3": 2,
+     "9.0": 4,
+     "9.6": 4,
+     "7.2": 1
+    },
+    "smallTaps": 47,
+    "totalTaps": 48,
+    "lowContrast": 2,
+    "lowContrastSample": [
+     {
+      "fg": "rgb(180, 35, 50)",
+      "bg": "rgb(180,35,50)",
+      "r": 1,
+      "fs": 12,
+      "t": "021-91326030"
+     },
+     {
+      "fg": "rgb(119, 119, 119)",
+      "bg": "rgb(247,247,247)",
+      "r": 4.18,
+      "fs": 8.4,
+      "t": "23:21   27-فروردین-1401"
+     }
+    ]
+   }
+  },
+  "desktop": {
+   "home.html": {
+    "htmlFontSize": "10px",
+    "bodyFontSize": "14px",
+    "scrollWidth": 1440,
+    "horizontalOverflow": false,
+    "overflowing": 9,
+    "smallText": 1,
+    "smallBySize": {
+     "12.0": 1
+    },
+    "smallTaps": 49,
+    "totalTaps": 77,
+    "lowContrast": 3,
+    "lowContrastSample": [
+     {
+      "fg": "rgb(180, 35, 50)",
+      "bg": "rgb(180,35,50)",
+      "r": 1,
+      "fs": 20,
+      "t": "021-91326030"
+     },
+     {
+      "fg": "rgb(35, 207, 20)",
+      "bg": "rgb(255,255,255)",
+      "r": 2.1,
+      "fs": 14,
+      "t": "افزایش"
+     },
+     {
+      "fg": "rgb(255, 255, 255)",
+      "bg": "rgb(255,255,255)",
+      "r": 1,
+      "fs": 20,
+      "t": "اطلاعات تماس"
+     }
+    ]
+   },
+   "cat.html": {
+    "htmlFontSize": "10px",
+    "bodyFontSize": "14px",
+    "scrollWidth": 1440,
+    "horizontalOverflow": false,
+    "overflowing": 0,
+    "smallText": 103,
+    "smallBySize": {
+     "13.0": 101,
+     "12.0": 2
+    },
+    "smallTaps": 55,
+    "totalTaps": 65,
+    "lowContrast": 6,
+    "lowContrastSample": [
+     {
+      "fg": "rgb(180, 35, 50)",
+      "bg": "rgb(180,35,50)",
+      "r": 1,
+      "fs": 20,
+      "t": "021-91326030"
+     },
+     {
+      "fg": "rgb(35, 207, 20)",
+      "bg": "rgb(243,243,243)",
+      "r": 1.89,
+      "fs": 13,
+      "t": "1,220,000 ریال"
+     },
+     {
+      "fg": "rgb(52, 152, 219)",
+      "bg": "rgb(255,255,255)",
+      "r": 3.15,
+      "fs": 16,
+      "t": "توری"
+     },
+     {
+      "fg": "rgb(52, 152, 219)",
+      "bg": "rgb(255,255,255)",
+      "r": 3.15,
+      "fs": 14,
+      "t": "ایجاد"
+     },
+     {
+      "fg": "rgb(231, 76, 60)",
+      "bg": "rgb(255,255,255)",
+      "r": 3.82,
+      "fs": 22,
+      "t": "خرید"
+     },
+     {
+      "fg": "rgb(231, 76, 60)",
+      "bg": "rgb(255,255,255)",
+      "r": 3.82,
+      "fs": 16,
+      "t": "02191326030"
+     }
+    ]
+   },
+   "about.html": {
+    "htmlFontSize": "10px",
+    "bodyFontSize": "14px",
+    "scrollWidth": 1440,
+    "horizontalOverflow": false,
+    "overflowing": 0,
+    "smallText": 1,
+    "smallBySize": {
+     "12.0": 1
+    },
+    "smallTaps": 20,
+    "totalTaps": 28,
+    "lowContrast": 2,
+    "lowContrastSample": [
+     {
+      "fg": "rgb(180, 35, 50)",
+      "bg": "rgb(180,35,50)",
+      "r": 1,
+      "fs": 20,
+      "t": "021-91326030"
+     },
+     {
+      "fg": "rgb(255, 255, 255)",
+      "bg": "rgb(255,255,255)",
+      "r": 1,
+      "fs": 17,
+      "t": "مصطفی شیرزادی"
+     }
+    ]
+   },
+   "contact.html": {
+    "htmlFontSize": "10px",
+    "bodyFontSize": "14px",
+    "scrollWidth": 1440,
+    "horizontalOverflow": false,
+    "overflowing": 0,
+    "smallText": 1,
+    "smallBySize": {
+     "12.0": 1
+    },
+    "smallTaps": 32,
+    "totalTaps": 41,
+    "lowContrast": 1,
+    "lowContrastSample": [
+     {
+      "fg": "rgb(180, 35, 50)",
+      "bg": "rgb(180,35,50)",
+      "r": 1,
+      "fs": 20,
+      "t": "021-91326030"
+     }
+    ]
+   },
+   "price.html": {
+    "htmlFontSize": "10px",
+    "bodyFontSize": "14px",
+    "scrollWidth": 1440,
+    "horizontalOverflow": false,
+    "overflowing": 0,
+    "smallText": 1,
+    "smallBySize": {
+     "12.0": 1
+    },
+    "smallTaps": 85,
+    "totalTaps": 108,
+    "lowContrast": 3,
+    "lowContrastSample": [
+     {
+      "fg": "rgb(180, 35, 50)",
+      "bg": "rgb(180,35,50)",
+      "r": 1,
+      "fs": 20,
+      "t": "021-91326030"
+     },
+     {
+      "fg": "rgb(35, 207, 20)",
+      "bg": "rgb(255,255,255)",
+      "r": 2.1,
+      "fs": 14,
+      "t": "افزایش"
+     },
+     {
+      "fg": "rgb(108, 117, 125)",
+      "bg": "rgb(247,247,247)",
+      "r": 4.38,
+      "fs": 14,
+      "t": "صفحه قبل"
+     }
+    ]
+   },
+   "blog.html": {
+    "htmlFontSize": "10px",
+    "bodyFontSize": "14px",
+    "scrollWidth": 1440,
+    "horizontalOverflow": false,
+    "overflowing": 0,
+    "smallText": 1,
+    "smallBySize": {
+     "12.0": 1
+    },
+    "smallTaps": 40,
+    "totalTaps": 49,
+    "lowContrast": 2,
+    "lowContrastSample": [
+     {
+      "fg": "rgb(180, 35, 50)",
+      "bg": "rgb(180,35,50)",
+      "r": 1,
+      "fs": 20,
+      "t": "021-91326030"
+     },
+     {
+      "fg": "rgb(119, 119, 119)",
+      "bg": "rgb(247,247,247)",
+      "r": 4.18,
+      "fs": 14,
+      "t": "23:21   27-فروردین-1401"
+     }
+    ]
+   }
+  }
+ }
+}

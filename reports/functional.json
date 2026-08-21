@@ -1,0 +1,70 @@
+{
+ "jQuery loaded from the shared vendor bundle": {
+  "ok": false,
+  "detail": "version None"
+ },
+ "Slick (the slider plugin) registered on jQuery": {
+  "ok": false,
+  "detail": ""
+ },
+ "no uncaught JS errors on the home page": {
+  "ok": true,
+  "detail": ""
+ },
+ "home slider initialised": {
+  "ok": true,
+  "detail": "5 slides"
+ },
+ "the live clock advances": {
+  "ok": true,
+  "detail": "'22:49:05' -> '22:49:07'"
+ },
+ "mobile menu opens and is on screen": {
+  "ok": true,
+  "detail": "visibility visible -> visible, 18 links"
+ },
+ "no horizontal scroll after closing the menu": {
+  "ok": false,
+  "detail": "scrollWidth 379"
+ },
+ "brand mark visible in the mobile header": {
+  "ok": true,
+  "detail": "20x37 sepahanfelez-logo.svg?v=1786035240"
+ },
+ "price rows render as cards with the price on screen": {
+  "ok": true,
+  "detail": "20 rows, label shown: True, scrollWidth 379"
+ },
+ "buy button carries an accessible name": {
+  "ok": true,
+  "detail": "افزودن توری مش میلگرد 6 ساده چشمه 25*25 "
+ },
+ "add-to-cart form is intact (action + CSRF token)": {
+  "ok": true,
+  "detail": "https://sepahanfelez.ir/cart/222"
+ },
+ "login form has a real label": {
+  "ok": true,
+  "detail": "شماره موبایل"
+ },
+ "login input clears the 16px iOS-zoom threshold": {
+  "ok": true,
+  "detail": "16.002px"
+ },
+ "login submit is a 44px target": {
+  "ok": true,
+  "detail": "44px"
+ },
+ "login no longer loads the admin theme": {
+  "ok": true,
+  "detail": "page weight 32 KB"
+ },
+ "login shows the Sepahan Felez mark": {
+  "ok": true,
+  "detail": "sepahanfelez-logo-216.png?v=1786032573"
+ },
+ "no JS errors on the login page": {
+  "ok": true,
+  "detail": ""
+ }
+}

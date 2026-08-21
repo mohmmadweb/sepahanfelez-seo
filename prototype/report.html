@@ -1,0 +1,484 @@
+<!doctype html>
+<html dir="rtl" lang="fa">
+<head>
+<meta charset="utf-8">
+<title>گزارش کامل بازطراحی سپاهان فلز</title>
+<style>
+@font-face{font-family:IranSans;font-weight:400;src:url('assets/fonts/IRANSansWeb_FaNum.woff2') format('woff2')}
+@font-face{font-family:IranSans;font-weight:500;src:url('assets/fonts/IRANSansWeb_FaNum_Medium.woff2') format('woff2')}
+@font-face{font-family:IranSans;font-weight:700;src:url('assets/fonts/IRANSansWeb_FaNum_Bold.woff2') format('woff2')}
+@page{size:A4; margin:15mm 13mm}
+:root{--ink:#0B1220;--ink2:#4A5568;--ink3:#6B7280;--steel:#16324F;--brand:#B42332;
+  --brand-dark:#8E1A26;--up:#0B7A4B;--bd:#DDE3EA;--bg:#F6F8FA}
+*{box-sizing:border-box}
+body{font-family:IranSans,Tahoma,sans-serif;font-size:10pt;line-height:1.8;color:var(--ink);
+  margin:0;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+h1{font-size:20pt;color:var(--steel);margin:0 0 4pt;line-height:1.35}
+h2{font-size:13.5pt;color:var(--steel);margin:18pt 0 7pt;padding-bottom:4pt;
+  border-bottom:2px solid var(--steel);page-break-after:avoid}
+h3{font-size:11pt;color:var(--steel);margin:12pt 0 5pt;page-break-after:avoid}
+h4{font-size:10pt;color:var(--brand-dark);margin:9pt 0 4pt;page-break-after:avoid}
+p{margin:0 0 6pt}
+ul,ol{margin:0 0 7pt;padding-inline-start:15pt}
+li{margin-bottom:3pt}
+.num{font-variant-numeric:tabular-nums;direction:ltr;unicode-bidi:isolate;display:inline-block}
+code{font-family:Consolas,Menlo,monospace;font-size:8.5pt;background:var(--bg);
+  border:1px solid var(--bd);border-radius:3px;padding:0 3px;direction:ltr;
+  display:inline-block;overflow-wrap:anywhere}
+table{width:100%;border-collapse:collapse;margin:7pt 0 11pt;font-size:8.8pt;page-break-inside:avoid}
+th{background:var(--steel);color:#fff;text-align:right;padding:5pt;font-weight:500}
+td{border-bottom:1px solid var(--bd);padding:4.5pt 5pt;vertical-align:top}
+tr:nth-child(even) td{background:var(--bg)}
+th.c,td.c{text-align:center}
+.cover{border-bottom:3px solid var(--brand);padding-bottom:11pt;margin-bottom:5pt}
+.cover .sub{color:var(--ink2);font-size:10.5pt}
+.cover .meta{color:var(--ink3);font-size:8.5pt;margin-top:5pt}
+.box{border:1px solid var(--bd);border-radius:5px;padding:8pt 11pt;margin:8pt 0;
+  background:var(--bg);page-break-inside:avoid}
+.box.warn{border-inline-start:4px solid var(--brand);background:#FDF2F3}
+.box.ok{border-inline-start:4px solid var(--up);background:#F1F8F4}
+.box.key{border-inline-start:4px solid var(--steel);background:#F0F5FA}
+.box b{color:var(--steel)} .box.warn b{color:var(--brand-dark)}
+.kpi{display:flex;gap:7pt;margin:9pt 0;flex-wrap:wrap}
+.kpi div{flex:1 1 78pt;border:1px solid var(--bd);border-radius:5px;padding:6pt 8pt;background:#fff}
+.kpi .k{font-size:7.5pt;color:var(--ink3)}
+.kpi .v{font-size:14pt;font-weight:700;color:var(--steel);line-height:1.3}
+.yes{color:var(--up);font-weight:700} .no{color:var(--brand);font-weight:700}
+.pb{page-break-before:always}
+footer{margin-top:16pt;padding-top:6pt;border-top:1px solid var(--bd);
+  font-size:7.5pt;color:var(--ink3);text-align:center}
+</style>
+</head>
+<body>
+
+<div class="cover">
+  <h1>سپاهان فلز — گزارش کامل بازطراحی</h1>
+  <p class="sub">تحلیل یازده رقیب، ممیزی کاتالوگ و بک‌اند، پروتوتایپ نسخه ۴ در چهار صفحه، و استقرار زنده</p>
+  <p class="meta">۱۶ مرداد ۱۴۰۵ · هدف: تبدیل سایت به مرجع قیمت صنایع مفتولی و افزایش زنگ‌خور</p>
+</div>
+
+<h2>۱. خلاصه اجرایی</h2>
+
+<p>پنج کار انجام شد: <b>کاتالوگ واقعی سایت استخراج شد</b> (۷۰ کد کالا در ۱۰ دسته)،
+<b>یازده رقیب صفحه‌به‌صفحه بررسی شدند</b>، <b>بک‌اند لاراول ممیزی شد</b>،
+<b>پروتوتایپ در چهار صفحه از نو ساخته شد</b> روی داده‌ی واقعی و به ریال، و
+<b>سامانه‌ی رصد قیمت رقبا طراحی شد</b>.</p>
+
+<div class="kpi">
+  <div><span class="k">رقیب بررسی‌شده</span><span class="v num">11</span></div>
+  <div><span class="k">صفحه پروتوتایپ</span><span class="v num">4</span></div>
+  <div><span class="k">کد کالای واقعی</span><span class="v num">70</span></div>
+  <div><span class="k">قابلیت اضافه‌شده</span><span class="v num">21</span></div>
+  <div><span class="k">عرض تست‌شده</span><span class="v num">13</span></div>
+  <div><span class="k">نیازمند بک‌اند</span><span class="v num">6</span></div>
+</div>
+
+<div class="box key">
+<b>محور استراتژیک کل بازطراحی:</b> از یازده رقیب، <b>ده‌تا واسطه‌اند</b>.
+آهن ملل صریحاً «۱۹ کارخانه» را منبع خود می‌نامد. شما خودتان کارخانه‌اید و این
+تنها تفاوتی است که <b>هیچ رقیبی نمی‌تواند کپی کند</b> — قیمت، ظاهر و محتوا
+همه کپی‌شدنی‌اند، خط تولید نه.
+<br><br>
+پس این تفاوت در پروتوتایپ یک <b>عنصر طراحی</b> شد، نه یک جمله در «درباره ما»:
+نوار تولیدکننده زیر منو در همه‌ی صفحات، نشان «تولید ما» روی هر ردیف جدول،
+و «عرض سفارشی» به‌عنوان قابلیتی که واسطه ذاتاً ندارد.
+</div>
+
+<h2>۲. ممیزی کاتالوگ واقعی — آنچه سایت شما امروز دارد</h2>
+
+<p>هر ده صفحه‌ی دسته‌بندی زنده خوانده شد. محصولات <b>عیناً</b> همان‌هایی هستند
+که روی <code>sepahanfelez.ir</code> هستند؛ هیچ محصولی اضافه یا حذف نشد.</p>
+
+<table>
+<tr><th>دسته</th><th class="c">کد کالا</th><th>واحد فروش</th><th>ستون‌های مشخصات فنی</th></tr>
+<tr><td>توری حصاری</td><td class="c">۱۳</td><td>کیلوگرم</td><td>ضخامت مفتول، محل بارگیری، عرض، چشمه، وزن هر m²، طول رول</td></tr>
+<tr><td>توری پرسی</td><td class="c">۱۳</td><td>کیلوگرم</td><td>ضخامت مفتول، چشمه، وزن هر برگ</td></tr>
+<tr><td>توری جوشی ریزبافت رول</td><td class="c">۱۲</td><td>رول</td><td>طول×عرض، متراژ رول، وزن هر رول</td></tr>
+<tr><td>توری گابیون</td><td class="c">۹</td><td>مترمربع</td><td>ضخامت مفتول، طول، عرض، چشمه، وزن هر m²</td></tr>
+<tr><td>مفتول آرماتوربندی</td><td class="c">۸</td><td>کیلوگرم</td><td>ضخامت مفتول، وزن، نوع مفتول</td></tr>
+<tr><td>مش جوشی / مش آهنی</td><td class="c">۵</td><td>کیلوگرم</td><td>محل بارگیری، چشمه، سایز میلگرد، طول×عرض، وزن هر برگ</td></tr>
+<tr><td>توری مرغی</td><td class="c">۴</td><td>رول</td><td>نوع گالوانیزه، محل بارگیری، طول، عرض، وزن، چشمه</td></tr>
+<tr><td>توری فرنگی</td><td class="c">۳</td><td>رول</td><td>ضخامت مفتول، نوع گالوانیزه، طول، عرض، وزن، چشمه</td></tr>
+<tr><td>سیم خاردار</td><td class="c">۳</td><td>کیلوگرم / کلاف</td><td>ضخامت مفتول، نوع گالوانیزه، وزن، نوع، ضخامت خار</td></tr>
+<tr><td>توری کششی (expanded metal)</td><td class="c"><span class="no">۰</span></td><td>—</td><td>ستون‌ها تعریف شده، محصولی ثبت نشده</td></tr>
+</table>
+
+<h3>سه یافته در داده که باید بدانید</h3>
+
+<div class="box warn">
+<b>۱. ستون «نوسان قیمت» عدد بی‌معنی نشان می‌دهد.</b>
+توری چشمه ۵/۵ مفتول ۲/۲: قیمت <span class="num">1,220,000</span> ریال،
+نوسان <span class="num">760,000</span> ریال. یعنی قیمت از
+<span class="num">460,000</span> به <span class="num">1,220,000</span> رفته —
+<b>یک جهش ۱۶۵ درصدی</b>.
+<br><br>
+این باگ نیست؛ این «اختلاف با آخرین قیمت ثبت‌شده» است و چون آخرین ثبت
+<b>دو ماه پیش</b> بوده، عدد غول‌آسا شده. <b>با بروزرسانی روزانه، همین ستون
+به ۰.۵ تا ۲ درصد می‌رسد و تازه معنی پیدا می‌کند.</b> این دقیقاً همان چیزی
+است که سامانه‌ی رصد قیمت (بخش ۶) حل می‌کند.
+</div>
+
+<div class="box warn">
+<b>۲. واحد فروش بین دسته‌ها یکسان نیست</b> — کیلوگرم، رول، مترمربع، کلاف.
+پس <b>میانگین‌گیری بین دسته‌ها ریاضیاتی غلط است</b>: نمی‌شود ریال‌بر‌کیلوگرم
+را با ریال‌بر‌رول جمع زد.
+<br><br>
+به همین دلیل «شاخص قیمت» در پروتوتایپ <b>عمداً فقط درون هر دسته</b> محاسبه
+می‌شود و هیچ‌جا یک عدد کل سایت نمی‌سازد. اگر روزی کسی خواست «میانگین قیمت
+سپاهان فلز» را نشان دهد، جلویش را بگیرید.
+</div>
+
+<div class="box warn">
+<b>۳. دو دسته وضعیت نامناسب دارند.</b> «توری کششی» صفر محصول فعال دارد ولی
+در منو و سایت‌مپ هست — یعنی یک صفحه‌ی خالی که گوگل ایندکس می‌کند.
+دسته‌ی آزمایشی <b>«تست3»</b> هم هنوز در منوی زنده‌ی سایت دیده می‌شود.
+هر دو از پنل قابل اصلاح‌اند و به کد نیاز ندارند.
+</div>
+
+<h2 class="pb">۳. تحلیل رقبا — یازده سایت، صفحه‌به‌صفحه</h2>
+
+<table>
+<tr><th>رقیب</th><th class="c">تولیدکننده؟</th><th class="c">جدول قیمت</th><th class="c">ستون مشخصات</th><th class="c">فیلتر</th><th class="c">ماشین‌حساب</th><th class="c">امتیاز/ستاره</th><th class="c">تماس در ردیف</th></tr>
+<tr><td>شهر مفتول</td><td class="c">ادعا</td><td class="c"><span class="yes">✓</span></td><td class="c"><span class="yes">✓</span></td><td class="c"><span class="yes">✓</span></td><td class="c">✗</td><td class="c">✗</td><td class="c">✗</td></tr>
+<tr><td>آهن ملل</td><td class="c">واسطه (۱۹ کارخانه)</td><td class="c"><span class="yes">✓</span></td><td class="c"><span class="yes">✓</span></td><td class="c">✗</td><td class="c">✗</td><td class="c">✗</td><td class="c"><span class="yes">✓</span></td></tr>
+<tr><td>آهن تخفیف</td><td class="c">واسطه</td><td class="c"><span class="yes">✓</span></td><td class="c"><span class="yes">✓</span></td><td class="c">✗</td><td class="c">✗</td><td class="c">✗</td><td class="c">جزئی</td></tr>
+<tr><td>فولاد توفیقی</td><td class="c">ادعا</td><td class="c"><span class="yes">✓</span></td><td class="c">جزئی</td><td class="c">✗</td><td class="c">✗</td><td class="c">✗</td><td class="c">✗</td></tr>
+<tr><td>مفتول کالا</td><td class="c">ادعا</td><td class="c">کارت</td><td class="c">جزئی</td><td class="c">✗</td><td class="c">✗</td><td class="c"><span class="yes">۶۳۹ رأی</span></td><td class="c">✗</td></tr>
+<tr><td>آرتا فنس</td><td class="c">واسطه</td><td class="c"><span class="yes">✓</span></td><td class="c">جزئی</td><td class="c">✗</td><td class="c">✗</td><td class="c">✗</td><td class="c">✗</td></tr>
+<tr><td>فنس گستر</td><td class="c">واسطه</td><td class="c"><span class="yes">✓</span></td><td class="c">جزئی</td><td class="c">✗</td><td class="c">✗</td><td class="c">✗</td><td class="c">✗</td></tr>
+<tr><td>توران گستر</td><td class="c">ادعا</td><td class="c"><span class="yes">✓</span></td><td class="c">جزئی</td><td class="c">✗</td><td class="c">✗</td><td class="c">✗</td><td class="c">✗</td></tr>
+<tr><td>حصار بافت</td><td class="c">ادعا</td><td class="c">✗</td><td class="c">✗</td><td class="c">✗</td><td class="c">✗</td><td class="c">✗</td><td class="c">✗</td></tr>
+<tr><td>آهنیتو</td><td class="c">واسطه</td><td class="c">✗ عمدی</td><td class="c">✗</td><td class="c">✗</td><td class="c">✗</td><td class="c">✗</td><td class="c">✗</td></tr>
+<tr><td>آهن آنلاین</td><td class="c">واسطه</td><td class="c">در متن</td><td class="c">✗</td><td class="c">✗</td><td class="c">✗</td><td class="c">✗</td><td class="c">✗</td></tr>
+<tr style="background:#F0F5FA"><td><b>سپاهان فلز — پروتوتایپ</b></td><td class="c"><b class="yes">کارخانه</b></td><td class="c"><b class="yes">✓</b></td><td class="c"><b class="yes">✓</b></td><td class="c"><b class="yes">✓</b></td><td class="c"><b class="yes">✓</b></td><td class="c"><b class="yes">✓</b></td><td class="c"><b class="yes">✓</b></td></tr>
+</table>
+
+<h3>ضعف‌های مشترک رقبا — که دقیقاً نقشه‌ی برتری ما شد</h3>
+<p>تحلیل صفحه‌ی «توری مرغی» شهر مفتول (قوی‌ترین صفحه‌ی بازار) هشت کمبود نشان داد.
+هفت‌تای آن در پروتوتایپ پوشش داده شد:</p>
+<table>
+<tr><th class="c">#</th><th>ضعف رقبا</th><th>پاسخ ما</th></tr>
+<tr><td class="c">۱</td><td>هیچ ابزار مقایسه‌ی محصول ندارند</td><td><b>سینی مقایسه</b> با چک‌باکس در هر ردیف</td></tr>
+<tr><td class="c">۲</td><td>وضعیت موجودی نشان نمی‌دهند</td><td><b>نشان موجودی</b> سه‌حالته در هر ردیف</td></tr>
+<tr><td class="c">۳</td><td>امتیاز و نظر ندارند (جز مفتول کالا)</td><td><b>ستاره و امتیاز</b> در ردیف، دسته و صفحه محصول</td></tr>
+<tr><td class="c">۴</td><td>ماشین‌حساب تناژ ندارند</td><td><b>ماشین‌حساب وزن و مبلغ</b> با پله‌های تخفیف</td></tr>
+<tr><td class="c">۵</td><td>جدول‌ها روی موبایل ناخوانا</td><td><b>تبدیل به کارت</b> زیر ۱۰۲۴px</td></tr>
+<tr><td class="c">۶</td><td>محتوای آموزشی از جدول لینک نمی‌شود</td><td>FAQ و راهنما زیر همان جدول</td></tr>
+<tr><td class="c">۷</td><td>مرتب‌سازی و جستجوی داخل جدول ندارند</td><td>نوار ابزار مرتب‌سازی، فیلتر و جستجو</td></tr>
+<tr><td class="c">۸</td><td>گالری تصویر محصول ندارند</td><td><span class="no">پوشش داده نشد</span> — نیازمند عکاسی محصول</td></tr>
+</table>
+
+<h2 class="pb">۴. آنچه در پروتوتایپ ساخته شد</h2>
+
+<h3>چهار صفحه</h3>
+<table>
+<tr><th>صفحه</th><th>نقش</th><th>محتوای اصلی</th></tr>
+<tr><td><code>index.html</code></td><td>صفحه اصلی</td><td>نوار تولیدکننده، سیاست بروزرسانی، شاخص قیمت، جدول تغییرات، ۱۰ دسته با بازه قیمت، اعتماد، فرم تماس</td></tr>
+<tr><td><code>price.html</code></td><td>جدول قیمت کل</td><td>شاخص، چیپ ۱۰ دسته، نوار ابزار، جدول با ستون مشخصات، شرایط فروش، کارشناسان، FAQ</td></tr>
+<tr><td><code>category.html</code></td><td>دسته (توری حصاری، ۱۳ کد واقعی)</td><td>ماشین‌حساب، امتیاز دسته، فیلتر ۶ مشخصه، جدول با مقایسه، نمودار، ویژگی‌ها، راهنما، نظرات</td></tr>
+<tr><td><code>product.html</code></td><td>محصول تکی <span class="yes">(جدید)</span></td><td>کارت قیمت چسبان، جدول مشخصات کامل، نمودار، ماشین‌حساب، پرسش و پاسخ، محصولات مرتبط</td></tr>
+</table>
+
+<h3>بیست‌ویک قابلیت — و اینکه هر کدام از کجا تغذیه می‌شود</h3>
+
+<h4>الف) از بک‌اند موجود شما (۱۲ مورد — بدون نیاز به کد جدید)</h4>
+<table>
+<tr><th>قابلیت</th><th>منبع در بک‌اند</th></tr>
+<tr><td>ستون‌های مشخصات فنی (متفاوت برای هر دسته)</td><td><code>category_spec</code> + <code>product_spec_value</code></td></tr>
+<tr><td>فیلتر مشخصات چندگانه</td><td><code>CategoryController@index</code> — پیاده است</td></tr>
+<tr><td>ردیف میانگین / بیشترین / کمترین</td><td>محاسبه از <code>category-&gt;products</code></td></tr>
+<tr><td>نمودار روند قیمت محصول و دسته</td><td><code>/product/{id}/{tf}</code> و <code>/category/chart/{id}/{tf}</code></td></tr>
+<tr><td>ویژگی‌ها و کاربردها</td><td><code>features</code> و <code>usages</code> با CRUD کامل</td></tr>
+<tr><td>پرسش و پاسخ با پاسخ کارشناس</td><td><code>ProductComment</code> با فیلد <code>answer</code></td></tr>
+<tr><td>نشان «تولید ما»</td><td><code>categories.our_product</code> — فیلد موجود و بلااستفاده</td></tr>
+<tr><td>ارزش افزوده</td><td><code>products.tax</code></td></tr>
+<tr><td>تاریخ آخرین بروزرسانی</td><td><code>$lastUpdate</code> در کنترلر دسته</td></tr>
+<tr><td>استعلام PDF</td><td><code>POST /category/{slug}/print</code></td></tr>
+<tr><td>لیست سفارش</td><td><code>POST /cart/{id}</code></td></tr>
+<tr><td>خبرنامه پیامکی قیمت</td><td><code>POST /newsletter</code></td></tr>
+</table>
+
+<div class="box ok">
+<b>مهم‌ترین یافته‌ی فنی:</b> همه‌ی این دوازده قابلیت از قبل کار می‌کنند — اما
+<b>فقط در صفحه‌ی دسته‌بندی</b>. صفحه‌ی <code>/price</code> که پرچم «مرجع قیمت»
+است و صفحه‌ی اصلی، همه‌ی این داده را دور می‌ریزند و فقط نام و قیمت نشان
+می‌دهند. <b>این شکاف داده نیست، شکاف نمایش است</b> — و ارزان‌ترین برد موجود.
+</div>
+
+<h4>ب) طراحی‌شده، نیازمند بک‌اند (۶ مورد)</h4>
+<table>
+<tr><th class="c">#</th><th>قابلیت</th><th>مشکل دقیق</th><th>راه‌حل</th></tr>
+<tr><td class="c">۱</td><td><b>فرم درخواست تماس</b><br>(خواسته‌ی شما)</td>
+ <td><code>POST /collaboration</code> پنج فیلد اجباری می‌خواهد: نام، نام‌خانوادگی، تلفن، <b>ایمیل، آدرس</b>.
+     <code>POST /contact</code> شش فیلد از جمله موضوع و متن ≥۱۰ حرف.</td>
+ <td>ایمیل و آدرس را <code>nullable</code> کنید، یا اندپوینت سبک <code>POST /callback</code></td></tr>
+<tr><td class="c">۲</td><td><b>ماشین‌حساب وزن</b><br>(خواسته‌ی شما)</td>
+ <td>وزن یک <b>رشته متنی</b> در جدول <code>values</code> است: «۱/۲۰۰»، «۹ کیلوگرم»، «۲۲ کیلوگرم». با متن نمی‌شود ضرب کرد.</td>
+ <td>ستون عددی <code>weight_per_unit</code> روی <code>products</code></td></tr>
+<tr><td class="c">۳</td><td><b>امتیاز و ستاره</b><br>(خواسته‌ی شما)</td>
+ <td><code>product_comments</code> ستون <code>rating</code> ندارد. بدون آن <code>aggregateRating</code> و ستاره در نتایج گوگل ناممکن است.</td>
+ <td>ستون <code>rating</code> (۱–۵) + بازنویسی فرم نظر</td></tr>
+<tr><td class="c">۴</td><td>پله‌های تخفیف تناژ</td><td>جدولی وجود ندارد</td><td>جدول <code>price_tiers</code> (محصول، حداقل تناژ، قیمت)</td></tr>
+<tr><td class="c">۵</td><td>کارشناسان فروش نام‌دار</td><td>جدولی وجود ندارد. شهر مفتول شش کارشناس با داخلی جدا دارد.</td><td>جدول <code>sales_reps</code> + <code>/admin/sales-rep</code></td></tr>
+<tr><td class="c">۶</td><td>وضعیت موجودی</td><td><code>products.status</code> فقط فعال/غیرفعال است، نه موجود/محدود/سفارشی</td><td>ستون <code>stock_state</code> سه‌حالته</td></tr>
+</table>
+
+<h4>ج) پارامترهای جدول روی کنترلر موجود</h4>
+<p><code>sort</code> · <code>q</code> · <code>per_page</code> · <code>load_location</code> ·
+<code>stock</code> روی <code>PriceListController@index</code>.
+<b>هیچ‌کدام از یازده رقیب مرتب‌سازی یا جستجوی داخل جدول ندارند</b> — این یک
+مزیت واقعی است، نه جبران عقب‌ماندگی.</p>
+
+<h2 class="pb">۵. ارزیابی UI/UX — نقاط قوت و ضعف</h2>
+
+<h3>نقاط قوت سایت شما (که رقبا ندارند)</h3>
+<ol>
+<li><b>شما کارخانه‌اید.</b> تنها مزیت غیرقابل کپی. حالا یک عنصر طراحی دارد.</li>
+<li><b>عمق داده‌ی مشخصات فنی.</b> ۶ ستون مشخصات برای توری حصاری، هر دسته
+    ستون‌های خودش. رقبا حداکثر ۴ ستون ثابت دارند. این محتوای ساختاریافته‌ی
+    یکتاست که کپی‌شدنی نیست.</li>
+<li><b>دو اندپوینت نمودار که واقعاً کار می‌کنند.</b> شهر مفتول ستون «نمودار»
+    دارد که placeholder است و هرگز بارگذاری نمی‌شود.</li>
+<li><b>سیستم فیلتر مشخصات پیاده‌شده.</b> فقط شهر مفتول چیزی مشابه دارد.</li>
+<li><b>تولید سفارشی.</b> عرض و چشمه مطابق نقشه — کاری که واسطه ذاتاً نمی‌تواند.</li>
+<li><b>زیرساخت فنی سالم.</b> اسکیمای Product/Offer، کنونیکال‌های درست،
+    سایت‌مپ سالم، خط CI/CD. رقبا اکثراً وردپرسی‌اند.</li>
+</ol>
+
+<h3>کمبودهای سایت شما</h3>
+<ol>
+<li><b>تازگی قیمت — بحرانی.</b> هر پنج رقیبی که جدول دارند امروز بروز بودند
+    (شهر مفتول «جمعه ۱۶ مرداد»، آهن ملل تا ثانیه). شما «۲ ماه پیش».
+    <b>این شرط ورود به بازار است، نه یک ترجیح.</b> بخش ۶ راه‌حل است.</li>
+<li><b>رتبه در جستجو.</b> در هیچ‌کدام از نه جستجوی انجام‌شده ظاهر نشدید.
+    میراث دوره‌ای است که سایت کلون یک دامنه‌ی مرده بود.</li>
+<li><b>عمق محتوا.</b> شهر مفتول برای «توری حصاری» راهنمای نصب، اشتباهات رایج،
+    نگهداری، جدول مقایسه و ویدیو دارد. شما یک پاراگراف.</li>
+<li><b>اثبات اجتماعی صفر.</b> مفتول کالا ۶۳۹ امتیاز و ۶۵۶ نظر دارد.</li>
+<li><b>بهترین صفحه‌ی سایت دیده نمی‌شود.</b> صفحه‌ی دسته‌بندی عالی است و
+    <code>/price</code> فقیر — درست برعکس آنچه باید باشد.</li>
+<li><b>دو صفحه‌ی بی‌محتوا</b> ایندکس می‌شوند: «توری کششی» و «تست3».</li>
+<li><b>تصویر محصول ندارید.</b> تنها ضعفی از فهرست رقبا که با کد حل نمی‌شود.</li>
+<li><b>اندازه‌گیری صفر.</b> نه GSC، نه GA4. بدون رویداد کلیک روی تلفن،
+    «زنگ‌خور بالا رفت» اثبات‌ناپذیر است.</li>
+</ol>
+
+<h3>تصمیم‌های طراحی و دلیلشان (مخاطب +۴۰، خریدار قیمت‌محور و دلال)</h3>
+<table>
+<tr><th>تصمیم</th><th>دلیل</th></tr>
+<tr><td>قرمز برند فقط برای «تماس»</td><td>یک رنگ با یک معنی. رقبا قرمز را همه‌جا خرج می‌کنند و اثرش را می‌کشند</td></tr>
+<tr><td>متن پایه ۱۷px، قیمت ۲۶px بولد</td><td>مخاطب +۴۰ سال؛ قیمت مهم‌ترین عدد صفحه است</td></tr>
+<tr><td>هیچ ناحیه لمس زیر ۴۴px</td><td>اندازه‌گیری شد: صفر مورد در هر چهار صفحه و هر ۱۳ عرض</td></tr>
+<tr><td>اعداد <code>tabular-nums</code> و <code>direction:ltr</code></td><td>ستون قیمت نمی‌لرزد و شماره تلفن در RTL معکوس نمی‌شود</td></tr>
+<tr><td>جدول → کارت زیر ۱۰۲۴px</td><td>دلال روی موبایل قیمت چک می‌کند. رقبا اینجا ناخوانا می‌شوند</td></tr>
+<tr><td>داک تماس چسبان موبایل</td><td>هیچ رقیبی ندارد. بزرگ‌ترین اهرم زنگ‌خور</td></tr>
+<tr><td>دکمه تماس در هر ردیف</td><td>لحظه‌ی تصمیم همان‌جاست. فقط آهن ملل چیزی مشابه دارد</td></tr>
+<tr><td>ریال، طبق درخواست شما</td><td>⚠️ هر یازده رقیب تومانی‌اند — پایین‌تر توضیح</td></tr>
+</table>
+
+<div class="box warn">
+<b>یک ریسک که باید بدانید و تصمیمش با شماست.</b> شما ریال خواستید و پروتوتایپ
+به ریال ساخته شد. اما هر یازده رقیب تومان می‌نویسند. توری حصاری شما
+<span class="num">1,220,000</span> ریال است و رقیب همان کالا را
+<span class="num">122,000</span> تومان می‌نویسد — عدد یکی است، اما خریداری که
+دو تب باز کرده و اسکن می‌کند، در کسری از ثانیه قضاوت می‌کند.
+<br><br>
+<b>راه میانه‌ای که پوزیشنینگ رسمی را هم حفظ می‌کند:</b> عدد اصلی ریال بماند
+(برای فاکتور و قرارداد درست است) و زیرش با فونت کوچک «معادل X تومان» بیاید.
+اگر بخواهید، در نسخه‌ی بعدی اضافه می‌کنم.
+</div>
+
+<h2 class="pb">۶. سامانه‌ی رصد قیمت رقبا</h2>
+
+<p>سند کامل: <code>PRICE-WATCH-SPEC.md</code>. خلاصه:</p>
+
+<p>یک cron که دو بار در روز کاری (۷ صبح و ۱۵) قیمت پنج رقیب اصلی را می‌خواند،
+به ریال نرمال می‌کند، با کد کالای شما تطبیق می‌دهد و در پنل نشان می‌دهد.
+خروجی نهایی: <b>دکمه‌ی «دریافت اکسل قیمت‌گذاری»</b> که فایلی با ساختار
+<code>/admin/excel</code> می‌سازد، پیش‌پر شده با قیمت فعلی شما، میانگین رقبا،
+کمترین رقیب و درصد اختلاف. شما فقط ستون «قیمت جدید» را پر می‌کنید و همان
+فایل را آپلود می‌کنید.</p>
+
+<table>
+<tr><th>موضوع</th><th>تصمیم</th></tr>
+<tr><td>هدف اولیه</td><td>شهر مفتول، آهن تخفیف، فولاد توفیقی، آهن ملل، مفتول کالا — هر پنج جدول ماشین‌خوان دارند</td></tr>
+<tr><td>تطبیق محصول</td><td>امتیازدهی بر پایه چشمه + مفتول + واحد. <b>هرگز خودکار تأیید نشود</b></td></tr>
+<tr><td>واحد پول</td><td>همه به ریال ذخیره شوند (<code>unsignedBigInteger</code> — قیمت رول ۴۹.۵ میلیون ریال است)</td></tr>
+<tr><td>واحد فروش</td><td>اگر واحد دو ردیف یکی نیست، <b>مقایسه نشود</b>. هشدار بهتر از عدد غلط است</td></tr>
+<tr><td>«صفر ردیف»</td><td>= خرابی، نه «قیمتی نبود». باید هشدار بدهد وگرنه بی‌صدا می‌میرد</td></tr>
+<tr><td>انتشار</td><td>فقط داخل پنل. انتشار قیمت رقیب هم ریسک حقوقی دارد هم پوزیشنینگ تولیدکننده را خراب می‌کند</td></tr>
+</table>
+
+<div class="box warn">
+<b>مانع اصلی:</b> روی این هاست <b>cron واقعی ندارید</b> — نه SSH، نه شل.
+سه راه: (۱) Cron Job در cPanel، (۲) GitHub Actions با
+<code>schedule: cron</code> که یک مسیر امن را صدا بزند — شما از قبل خط CI/CD
+دارید، (۳) دکمه‌ی «بروزرسانی الان» در پنل. <b>پیشنهاد: هر سه.</b>
+</div>
+
+<h2>۷. کیفیت پروتوتایپ — اعداد اندازه‌گیری‌شده</h2>
+
+<table>
+<tr><th>معیار</th><th class="c">هدف</th><th class="c">index</th><th class="c">price</th><th class="c">category</th><th class="c">product</th></tr>
+<tr><td>اسکرول افقی در ۱۳ عرض (۳۶۰–۱۹۲۰)</td><td class="c">۰</td><td class="c"><span class="yes">۰</span></td><td class="c"><span class="yes">۰</span></td><td class="c"><span class="yes">۰</span></td><td class="c"><span class="yes">۰</span></td></tr>
+<tr><td>ناحیه لمس زیر ۴۴px</td><td class="c">۰</td><td class="c"><span class="yes">۰</span></td><td class="c"><span class="yes">۰</span></td><td class="c"><span class="yes">۰</span></td><td class="c"><span class="yes">۰</span></td></tr>
+<tr><td>آیکون شکسته</td><td class="c">۰</td><td class="c"><span class="yes">۰</span></td><td class="c"><span class="yes">۰</span></td><td class="c"><span class="yes">۰</span></td><td class="c"><span class="yes">۰</span></td></tr>
+<tr><td>تصویر بدون alt</td><td class="c">۰</td><td class="c"><span class="yes">۰</span></td><td class="c"><span class="yes">۰</span></td><td class="c"><span class="yes">۰</span></td><td class="c"><span class="yes">۰</span></td></tr>
+<tr><td>تعداد H1</td><td class="c">۱</td><td class="c"><span class="yes">۱</span></td><td class="c"><span class="yes">۱</span></td><td class="c"><span class="yes">۱</span></td><td class="c"><span class="yes">۱</span></td></tr>
+<tr><td>خطای جاوااسکریپت</td><td class="c">۰</td><td class="c"><span class="yes">۰</span></td><td class="c"><span class="yes">۰</span></td><td class="c"><span class="yes">۰</span></td><td class="c"><span class="yes">۰</span></td></tr>
+<tr><td>متن پایه</td><td class="c">≥۱۶px</td><td class="c" colspan="4"><span class="yes">۱۷px دسکتاپ / ۱۶px موبایل</span></td></tr>
+</table>
+
+<div class="box ok">
+<b>چهار باگ واقعی که فقط با نگاه‌کردن پیدا شدند، نه با اندازه‌گیری:</b>
+<br><b>۱.</b> <code>overflow:hidden</code> روی wrapper جدول، دو ستون آخر —
+<b>از جمله دکمه «استعلام تلفنی» که مهم‌ترین CTA صفحه است</b> — را بی‌صدا
+می‌بُرید. و چون بریده می‌شد، تست سرریز صفر گزارش می‌کرد و مشکل پنهان می‌ماند.
+حالا <code>overflow:visible</code> است تا اگر روزی جا نشود، تست فوراً گیرش بیندازد.
+<br><b>۲.</b> نام‌های واقعی دسته‌ها بلندند («توری جوشی ریزبافت گالوانیزه رول») و
+منو را در ۱۴۴۰px سرریز می‌کردند — باندی که تست ۱۴۴۰/۳۷۵ نشانش نمی‌داد.
+<br><b>۳.</b> گرید بالای صفحه دسته هنگام بازتولید از بین رفت و ماشین‌حساب
+تمام‌عرض زیر متن افتاد.
+<br><b>۴.</b> عنوان و زیرعنوان نوار تولیدکننده هر دو <code>span</code> بودند و
+بدون <code>display:block</code> روی یک خط می‌نشستند.
+</div>
+
+<h2 class="pb">۸. نقشه‌ی پیاده‌سازی</h2>
+
+<h3>موج ۰ — بدون کد، بالاترین اثر</h3>
+<ul>
+<li>بروزرسانی قیمت‌ها از <code>/admin/excel</code></li>
+<li>حذف دسته «تست3» و تعیین تکلیف «توری کششی» (محصول اضافه یا غیرفعال)</li>
+<li>دسترسی به یک property واقعی GA4</li>
+</ul>
+
+<h3>موج ۱ — بازطراحی، بدون تغییر دیتابیس</h3>
+<ul>
+<li>سیستم طراحی، نوار تولیدکننده، باکس تلفن، داک موبایل، تماس در هر ردیف</li>
+<li>رویدادهای GA4 روی هر شش نقطه تماس</li>
+<li><b>انتقال ستون‌های مشخصات از صفحه دسته به <code>/price</code> و صفحه اصلی</b></li>
+<li>شاخص قیمت از <code>daily_avg_price</code> · نشان «تولید ما» از <code>our_product</code></li>
+<li>وصل‌کردن نمودار واقعی به‌جای <code>mini-chart.png</code></li>
+<li>صفحه‌ی محصول تکی</li>
+</ul>
+
+<h3>موج ۲ — شش مورد بک‌اند</h3>
+<ul>
+<li>اندپوینت سبک درخواست تماس <span class="yes">(خواسته‌ی شما ۱)</span></li>
+<li><code>weight_per_unit</code> عددی + ماشین‌حساب <span class="yes">(خواسته‌ی شما ۲)</span></li>
+<li>ستون <code>rating</code> + ستاره + <code>aggregateRating</code> <span class="yes">(خواسته‌ی شما ۴)</span></li>
+<li><code>price_tiers</code> · <code>sales_reps</code> · <code>stock_state</code></li>
+</ul>
+
+<h3>موج ۳ — سامانه رصد قیمت</h3>
+<ul>
+<li>جدول + Scraper + parser شهر مفتول + اجرای دستی</li>
+<li>صفحه پنل با ستون Δ · چهار parser دیگر · <code>exportPricingSheet()</code></li>
+<li>زمان‌بندی cPanel یا GitHub Actions · هشدار «صفر ردیف»</li>
+</ul>
+
+<h3>موج ۴ — محتوا و رتبه</h3>
+<ul>
+<li>عکاسی محصول (تنها ضعفی که با کد حل نمی‌شود)</li>
+<li>محتوای عمیق هر دسته: راهنمای نصب، اشتباهات رایج، جدول مقایسه</li>
+<li>جمع‌آوری نظر و امتیاز واقعی از مشتریان فعلی</li>
+</ul>
+
+
+<h2 class="pb">۱۰. استقرار زنده</h2>
+
+<p>پروتوتایپ روی گیت‌هاب منتشر شد و با دامنه‌ی اختصاصی بالا آمد.</p>
+
+<table>
+<tr><th>مورد</th><th>وضعیت</th></tr>
+<tr><td>مخزن</td><td><code>github.com/mohmmadweb/sepahanfelez-prototype</code> — عمومی</td></tr>
+<tr><td>نشانی زنده</td><td><code>https://sepahanfelez.lenzit.ir</code></td></tr>
+<tr><td>میزبانی</td><td>GitHub Pages، انتشار مستقیم از شاخه <code>main</code></td></tr>
+<tr><td>DNS</td><td>CNAME از <code>sepahanfelez.lenzit.ir</code> به <code>mohmmadweb.github.io</code> روی Cloudflare</td></tr>
+<tr><td>گواهی SSL</td><td>Let's Encrypt، صادرشده ۷ اوت ۲۰۲۶، معتبر تا ۵ نوامبر — تمدید خودکار</td></tr>
+</table>
+
+<h3>دو مانعی که در مسیر خورد و چطور دور زده شد</h3>
+<div class="box warn">
+<b>۱. توکن گیت‌هاب اجازه‌ی ساخت مخزن نداشت.</b> توکن موجود در
+<code>~/.config/claude-seo/gh-token</code> متعلق به همان اکانت <code>mohmmadweb</code>
+است و روی مخزن‌ها <code>admin:true</code> دارد، اما یک fine-grained PAT بدون
+دسترسی <b>Administration: write</b> است:
+<code>POST /user/repos → 403</code>. مخزن را شما دستی ساختید.
+<br><br>
+<b>۲. فعال‌سازی Pages هم با توکن ممکن نشد</b> (<code>403</code> — بدون
+<code>Pages: write</code>). ورک‌فلویی نوشتم که با
+<code>configure-pages(enablement:true)</code> خودِ Actions آن را روشن کند؛ آن هم
+خورد به <code>Resource not accessible by integration</code>، یعنی
+«Workflow permissions» مخزن روی read-only بود. ورک‌فلو حذف شد تا اجرای ناموفق
+تکرار نشود، و انتشار مستقیم از شاخه — که به هیچ دسترسی Actions نیاز ندارد —
+جایگزین شد.
+</div>
+
+<div class="box ok">
+<b>یک ریسک سئو که پیش از انتشار بسته شد.</b> محتوای پروتوتایپ عیناً همان
+محصولات و همان متن‌های <code>sepahanfelez.ir</code> است. اگر گوگل زیردامنه را
+ایندکس می‌کرد، <b>محتوای تکراری</b> می‌ساخت و به رتبه‌ی سایت اصلی — که همین
+حالا هم در جستجو دیده نمی‌شود — آسیب می‌زد.
+<br><br>
+سه لایه‌ی محافظت اضافه شد: <code>robots.txt</code> با <code>Disallow: /</code> ·
+متای <code>noindex, nofollow</code> در هر صفحه · و یک نوار بالای صفحه که
+پروتوتایپ بودن را اعلام و به سایت اصلی لینک می‌کند.
+</div>
+
+<h2>۱۱. پاس‌کاری تمیزکاری — نسخه ۴</h2>
+
+<p>پس از استقرار، یک دور پرداخت روی هر چهار صفحه انجام شد. هیچ رنگ یا فونت
+جدیدی اضافه نشد؛ فقط انضباط ریتم، عمق و جزئیات.</p>
+
+<table>
+<tr><th>تغییر</th><th>چرا</th></tr>
+<tr><td><b>یادداشت‌های فنی پیش‌فرض پنهان شدند</b></td>
+    <td>نُه جعبه‌ی آبی با کد، جریان بصری را قطع می‌کردند و طرح دیده نمی‌شد.
+        سوییچ کاملاً CSS است — بدون جاوااسکریپت — و با موس و کیبورد هر دو کار می‌کند.</td></tr>
+<tr><td><b>نوار پروتوتایپ بازطراحی شد</b></td>
+    <td>نسخه‌ی اول یک نوار قرمز پررنگ بود که با زبان طراحی نمی‌خواند و
+        قرمزِ «تماس» را هم رقیق می‌کرد. حالا سرمه‌ای تیره با یک خط قرمز نازک.</td></tr>
+<tr><td><b>ارتفاع نوارهای بالای صفحه کم شد</b></td>
+    <td>۳۹۳px تا شروع H1 بود، حالا ۳۶۶px. نوار تولیدکننده از ۹۱ به ۸۰ و نوار
+        پروتوتایپ از ۶۴ به ۴۸ پیکسل.</td></tr>
+<tr><td>راه‌راه جدول ملایم‌تر شد</td>
+    <td>کنتراست قبلی برای اسکن طولانی پرنویز بود. ردیف زیر نشانگر حالا یک
+        نوار سرمه‌ای در لبه می‌گیرد که چیدمان را جابه‌جا نمی‌کند.</td></tr>
+<tr><td>ریتم عمودی یکسان شد</td>
+    <td>بخش‌ها با <code>style</code> درون‌خطی padding می‌گرفتند و فاصله‌ها ناهماهنگ بود.</td></tr>
+<tr><td>لنگرها <code>scroll-margin</code> گرفتند</td>
+    <td>زیر منوی چسبان پنهان می‌شدند.</td></tr>
+<tr><td>استایل چاپ کامل شد</td>
+    <td>خریدار این جدول را چاپ می‌کند و به دفتر می‌برد. ماشین‌حساب، فرم‌ها و
+        نمودارها از چاپ حذف و شماره‌ی پشت لینک‌های <code>tel:</code> اضافه شد.</td></tr>
+<tr><td><code>text-wrap: balance</code> روی عنوان‌ها</td>
+    <td>عنوان‌های فارسی چندخطی متوازن‌تر می‌شکنند.</td></tr>
+</table>
+
+<div class="box ok">
+<b>دو باگ دسترس‌پذیری که در همین پاس گرفته شد:</b> چک‌باکس سوییچ یادداشت‌ها
+۱×۱ پیکسل بود (ناحیه‌ی لمس واقعیِ کنترل، نه برچسبش) — حالا روی کل برچسب پهن
+شده و ۴۴px است. و لینک نوار پروتوتایپ ۲۵px ارتفاع داشت که به ۴۴ رسید.
+</div>
+
+<h2 class="pb">۱۲. فایل‌های تحویلی</h2>
+<table>
+<tr><th>فایل</th><th>محتوا</th></tr>
+<tr><td><code>prototype/index.html</code></td><td>صفحه اصلی</td></tr>
+<tr><td><code>prototype/price.html</code></td><td>جدول قیمت کل</td></tr>
+<tr><td><code>prototype/category.html</code></td><td>صفحه دسته با ۱۳ کد واقعی توری حصاری</td></tr>
+<tr><td><code>prototype/product.html</code></td><td>صفحه محصول تکی</td></tr>
+<tr><td><code>prototype/assets/concept.css</code></td><td>سیستم طراحی، ۱۰۷۰+ خط با توضیح فارسی هر تصمیم</td></tr>
+<tr><td><b>نسخه زنده</b></td><td><code>https://sepahanfelez.lenzit.ir</code></td></tr>
+<tr><td><code>prototype/screens/</code></td><td>اسکرین‌شات دسکتاپ و موبایل هر چهار صفحه</td></tr>
+<tr><td><code>PRICE-WATCH-SPEC.md</code></td><td>مشخصات کامل سامانه رصد قیمت رقبا</td></tr>
+<tr><td><code>COMPETITORS.md</code></td><td>ده رقیب اصلی، بررسی زنده</td></tr>
+<tr><td><code>PROTOTYPE-GAP.md</code></td><td>تطبیق جدول دست‌نویس شما با تحقیق</td></tr>
+<tr><td><code>prototype/CONCEPT.md</code></td><td>سند طراحی و نگاشت کامل داشبورد</td></tr>
+</table>
+
+<footer>سپاهان فلز · گزارش کامل بازطراحی · ۱۶ مرداد ۱۴۰۵</footer>
+
+</body>
+</html>

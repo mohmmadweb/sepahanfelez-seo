@@ -1,0 +1,655 @@
+<!doctype html>
+<html dir="rtl" lang="fa">
+<head>
+<meta charset="utf-8">
+<title>گزارش بهبود سپاهان فلز</title>
+<style>
+@page { size: A4; margin: 16mm 14mm 18mm 14mm; }
+* { box-sizing: border-box; }
+html { font-size: 11px; }
+body {
+  font-family: Vazirmatn, sans-serif; margin: 0; color: #1c2434;
+  line-height: 1.85; font-size: 1rem;
+  -webkit-print-color-adjust: exact; print-color-adjust: exact;
+}
+:root {
+  --red:#b42332; --navy:#283264; --blue:#495f9e;
+  --ok:#15803d; --warn:#d97706; --crit:#c0392b; --info:#0891b2;
+  --line:#e3e7ef; --bg:#f6f8fb;
+}
+.cover { height:247mm; display:flex; flex-direction:column; justify-content:center;
+         page-break-after:always; text-align:center; position:relative; }
+.cover .kicker { color:var(--ok); font-weight:700; letter-spacing:.1em; font-size:1.15rem; }
+.cover h1 { font-size:3.3rem; margin:.4rem 0 .2rem; color:var(--navy); font-weight:800; line-height:1.35; }
+.cover h2 { font-size:1.5rem; font-weight:500; color:#5a6580; margin:0 0 2.4rem; }
+.cover .rule { width:70px; height:4px; background:var(--ok); margin:0 auto 2.4rem; border-radius:2px; }
+.cover .meta { font-size:1.05rem; color:#5a6580; line-height:2.4; }
+.cover .meta b { color:#1c2434; font-weight:600; }
+.cover .foot { position:absolute; bottom:0; right:0; left:0; font-size:.9rem; color:#98a1b3; }
+
+h2.sec { font-size:1.85rem; color:#fff; background:var(--navy); font-weight:700;
+         padding:.5rem 1rem; border-radius:6px; margin:2.5rem 0 1.1rem; page-break-after:avoid; }
+h2.sec .n { opacity:.5; font-weight:400; margin-left:.5rem; }
+h3 { font-size:1.35rem; color:var(--navy); font-weight:700; margin:1.7rem 0 .5rem;
+     padding-bottom:.3rem; border-bottom:2px solid var(--line); page-break-after:avoid; }
+h4 { font-size:1.12rem; color:var(--red); font-weight:700; margin:1.1rem 0 .35rem; page-break-after:avoid; }
+p { margin:.5rem 0; }
+ul, ol { margin:.4rem 0; padding-right:1.3rem; }
+li { margin:.26rem 0; }
+small { color:#6b7280; }
+code, .mono { font-family:"DejaVu Sans Mono", monospace; font-size:.86em; direction:ltr;
+       unicode-bidi:embed; background:#eef1f7; padding:.1em .35em; border-radius:3px; color:#334; }
+
+table { width:100%; border-collapse:collapse; margin:.7rem 0 1.1rem; font-size:.95rem; }
+thead { background:var(--navy); color:#fff; }
+thead th { padding:.5rem .55rem; text-align:right; font-weight:600; }
+tbody td { padding:.46rem .55rem; border-bottom:1px solid var(--line); vertical-align:top; }
+tbody tr:nth-child(even) { background:#fafbfd; }
+tr { page-break-inside:avoid; }
+td.num, th.num { text-align:center; font-variant-numeric:tabular-nums; white-space:nowrap; }
+td.was { color:var(--crit); font-variant-numeric:tabular-nums; text-align:center; white-space:nowrap; }
+.was { color:var(--crit); font-variant-numeric:tabular-nums; }
+td.now { color:var(--ok); font-weight:700; font-variant-numeric:tabular-nums; text-align:center; white-space:nowrap; }
+
+.b { display:inline-block; padding:.05em .55em; border-radius:4px; color:#fff;
+     font-size:.82rem; font-weight:600; white-space:nowrap; }
+.b.ok{background:var(--ok);} .b.w{background:var(--warn);} .b.c{background:var(--crit);}
+.b.i{background:var(--info);} .b.g{background:#6b7280;}
+
+.grid { display:grid; grid-template-columns:repeat(4,1fr); gap:.7rem; margin:1rem 0; }
+.card { border:1px solid var(--line); border-radius:8px; padding:.7rem .5rem; text-align:center; background:var(--bg); }
+.card .v { font-size:2rem; font-weight:800; line-height:1.15; font-variant-numeric:tabular-nums; }
+.card .k { font-size:.85rem; color:#5a6580; margin-top:.15rem; }
+
+.score { display:grid; grid-template-columns:1fr 1fr; gap:.5rem 1.6rem; margin:1rem 0; }
+.srow { display:grid; grid-template-columns:120px 1fr 74px; align-items:center; gap:.5rem; font-size:.96rem; }
+.bar { height:11px; background:#e6eaf2; border-radius:6px; overflow:hidden; position:relative; }
+.bar i { display:block; height:100%; border-radius:6px; position:absolute; top:0; right:0; }
+.bar i.old { background:#c8cedb; }
+.bar i.new { background:var(--ok); }
+.srow b { text-align:left; font-variant-numeric:tabular-nums; direction:ltr; font-size:.9rem; }
+.srow b s { color:#9aa1b0; font-weight:400; }
+
+.box { border-right:4px solid var(--ok); background:#f2fbf5; padding:.6rem .9rem;
+       border-radius:0 6px 6px 0; margin:.9rem 0; page-break-inside:avoid; }
+.box.warn { border-right-color:var(--warn); background:#fffaf0; }
+.box.info { border-right-color:var(--blue); background:#f3f6fd; }
+.box.stop { border-right-color:var(--crit); background:#fdf5f5; }
+.box .t { font-weight:700; color:var(--navy); margin-bottom:.15rem; }
+
+pre { direction:ltr; text-align:left; background:#f6f8fb; border:1px solid var(--line);
+      border-radius:6px; padding:.6rem .8rem; font-size:.86rem; overflow-x:auto;
+      font-family:"DejaVu Sans Mono", monospace; line-height:1.6; page-break-inside:avoid; }
+pre code { background:none; padding:0; }
+.pb { page-break-before:always; }
+.avoid { page-break-inside:avoid; }
+.toc td:first-child { color:var(--ok); font-weight:700; width:34px; }
+.arrow { color:#9aa1b0; padding:0 .3em; }
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<div class="cover">
+  <div class="kicker">گزارش اجرای اصلاحات</div>
+  <h1>موج ۱ تا ۳<br>اجرا شد</h1>
+  <h2>سپاهان فلز · آنچه تغییر کرد و چقدر بهتر شد</h2>
+  <div class="rule"></div>
+  <div class="meta">
+    دامنه: <b>sepahanfelez.ir</b><br>
+    ۳۳ اقدام از نقشه راه · <b>۱۰۹ فایل تغییر کرد، ۱۸ فایل جدید</b><br>
+    <b>۲۰ تست خودکار + ۲۲۶ بررسی ایستا</b> — همه سبز<br>
+    تایپوگرافی موبایل: <b>۸.۴ پیکسل → ۱۶ پیکسل</b><br>
+    وزن جاوااسکریپت صفحه بلاگ: <b>۵۹۶ → ۵۰ کیلوبایت</b><br>
+    تاریخ: <b>۱۶ مرداد ۱۴۰۵ / ۶ آگوست ۲۰۲۶</b>
+  </div>
+  <div class="foot">همه‌ی اعداد این گزارش با مرورگر واقعی روی کد ساخته‌شده اندازه‌گیری شده‌اند — نه تخمین.</div>
+</div>
+
+<!-- TOC -->
+<h2 class="sec"><span class="n">۰</span>فهرست</h2>
+<table class="toc"><tbody>
+<tr><td>۱</td><td>خلاصه — چه چیزی عوض شد</td></tr>
+<tr><td>۲</td><td>کارنامه: قبل و بعد</td></tr>
+<tr><td>۳</td><td>موج ۱ — بُردهای سریع</td></tr>
+<tr><td>۴</td><td>موج ۲ — نجات تجربه‌ی موبایل</td></tr>
+<tr><td>۵</td><td>موج ۳ — سلامت فنی</td></tr>
+<tr><td>۶</td><td>سه اشتباهی که در حین کار کردم و چطور پیدا شدند</td></tr>
+<tr><td>۷</td><td>چیزهایی که در حین کار پیدا شد و در گزارش اول نبود</td></tr>
+<tr><td>۸</td><td>اعداد اندازه‌گیری‌شده: قبل و بعد</td></tr>
+<tr><td>۹</td><td>آنچه انجام نشد و چرا</td></tr>
+<tr><td>۱۰</td><td>قدم بعدی — و یک تصمیم با شماست</td></tr>
+</tbody></table>
+
+<!-- 1 -->
+<h2 class="sec"><span class="n">۱</span>خلاصه — چه چیزی عوض شد</h2>
+
+<p>
+هر سه موج نقشه راه اجرا شد؛ جمعاً <b>۳۳ اقدام</b>. کار روی مخزن
+<code>ahanamn-src</code> انجام شده و <b>هنوز منتشر نشده است</b> — دلیلش در بند ۱۰.
+</p>
+
+<div class="grid">
+  <div class="card"><div class="v" style="color:var(--ok)">۳۳</div><div class="k">اقدام انجام‌شده</div></div>
+  <div class="card"><div class="v" style="color:var(--navy)">۱۲۷</div><div class="k">فایل تغییریافته یا جدید</div></div>
+  <div class="card"><div class="v" style="color:var(--ok)">۲۴۶</div><div class="k">بررسی خودکار، همه سبز</div></div>
+  <div class="card"><div class="v" style="color:var(--crit)">۰</div><div class="k">تست شکست‌خورده</div></div>
+</div>
+
+<h3>پنج تغییری که کاربر فوراً حس می‌کند</h3>
+<table>
+<thead><tr><th>#</th><th>تغییر</th><th class="num">قبل</th><th class="num">بعد</th></tr></thead>
+<tbody>
+<tr><td class="num">۱</td><td><b>متن روی موبایل خوانا شد</b><br><small>ریشه‌ی مقیاس از پیکسل به درصد رفت و اندازه‌ی متن از مقیاس چیدمان جدا شد</small></td>
+    <td class="was">۸.۴ پیکسل</td><td class="now">۱۶ پیکسل</td></tr>
+<tr><td class="num">۲</td><td><b>جدول قیمت روی موبایل کار می‌کند</b><br><small>هر ردیف یک کارت با نام، قیمت درشت، نوسان و دکمه‌ی خرید تمام‌عرض</small></td>
+    <td class="was">قیمت نامرئی</td><td class="now">قیمت و دکمه دیده می‌شود</td></tr>
+<tr><td class="num">۳</td><td><b>صفحه ورود سبک و درست‌برند شد</b><br><small>لوگوی «آهن امن» رفت؛ کل قالب Metronic از این صفحه حذف شد</small></td>
+    <td class="was">۱۴۲۳ کیلوبایت</td><td class="now">حدود ۴۰ کیلوبایت</td></tr>
+<tr><td class="num">۴</td><td><b>ساعت «لحظه‌ای» واقعاً کار می‌کند</b><br><small>خطای هرثانیه‌ای جاوااسکریپت متوقف شد</small></td>
+    <td class="was">یخ‌زده روی ۱۶:۴۵:۲۲</td><td class="now">زنده</td></tr>
+<tr><td class="num">۵</td><td><b>دکمه‌ها قابل لمس شدند</b><br><small>حداقل ۴۴×۴۴ پیکسل روی همه‌ی کنترل‌های اصلی</small></td>
+    <td class="was">۱۰۶ از ۱۴۱ کوچک</td><td class="now">۲۶ از ۱۴۱</td></tr>
+</tbody>
+</table>
+
+<h3>سه چیزی که کاربر نمی‌بیند ولی مهم‌تر است</h3>
+<ul>
+<li><b>کد ورود پیامکی دیگر دو بار کار نمی‌کند.</b> قبلاً بعد از ورود موفق در دیتابیس می‌ماند و تا انقضای دو دقیقه‌ای قابل استفاده‌ی مجدد بود. حالا سوزانده می‌شود و روت‌های ورود <code>throttle</code> دارند.</li>
+<li><b>آپلود SVG در هر ۱۷ نقطه بسته شد.</b> این مسیر XSS ذخیره‌شده بود و از طریق آواتار و پیوست تیکت برای هر کاربر عادی باز بود.</li>
+<li><b>کش واقعاً کش می‌کند.</b> سه باگ باعث می‌شد یک کوئری در <b>هر</b> درخواست سایت اجرا شود. الان نمی‌شود، و تستی هست که اگر برگردد شکست می‌خورد.</li>
+</ul>
+
+<!-- 2 -->
+<h2 class="sec"><span class="n">۲</span>کارنامه: قبل و بعد</h2>
+
+<div class="score">
+  <div class="srow"><span>تجربه کاربری موبایل</span><div class="bar"><i class="old" style="width:28%"></i><i class="new" style="width:76%"></i></div><b><s>28</s> → 76</b></div>
+  <div class="srow"><span>دسترس‌پذیری</span><div class="bar"><i class="old" style="width:31%"></i><i class="new" style="width:74%"></i></div><b><s>31</s> → 74</b></div>
+  <div class="srow"><span>کارایی و CWV</span><div class="bar"><i class="old" style="width:38%"></i><i class="new" style="width:72%"></i></div><b><s>38</s> → 72</b></div>
+  <div class="srow"><span>معماری فرانت‌اند</span><div class="bar"><i class="old" style="width:44%"></i><i class="new" style="width:74%"></i></div><b><s>44</s> → 74</b></div>
+  <div class="srow"><span>معماری بک‌اند</span><div class="bar"><i class="old" style="width:54%"></i><i class="new" style="width:72%"></i></div><b><s>54</s> → 72</b></div>
+  <div class="srow"><span>امنیت</span><div class="bar"><i class="old" style="width:42%"></i><i class="new" style="width:70%"></i></div><b><s>42</s> → 70</b></div>
+  <div class="srow"><span>داشبورد مدیریت</span><div class="bar"><i class="old" style="width:56%"></i><i class="new" style="width:70%"></i></div><b><s>56</s> → 70</b></div>
+  <div class="srow"><span>تجربه کاربری دسکتاپ</span><div class="bar"><i class="old" style="width:72%"></i><i class="new" style="width:80%"></i></div><b><s>72</s> → 80</b></div>
+  <div class="srow"><span>پوشش تست</span><div class="bar"><i class="old" style="width:8%"></i><i class="new" style="width:58%"></i></div><b><s>8</s> → 58</b></div>
+  <div class="srow"><span><b>میانگین وزنی</b></span><div class="bar"><i class="old" style="width:46%"></i><i class="new" style="width:73%"></i></div><b><s>46</s> → 73</b></div>
+</div>
+
+<div class="box warn avoid">
+  <div class="t">چرا هیچ نمره‌ای بالای ۸۰ نیست</div>
+  دو چیز سقف را نگه می‌دارد و هیچ‌کدام با کد این سه موج حل نمی‌شود:
+  <b>(الف)</b> PHP 7.4 و Laravel 8 هنوز از پشتیبانی خارج‌اند — این موج ۴ است و ۳ تا ۴ هفته کار جداگانه می‌خواهد؛
+  <b>(ب)</b> قیمت‌ها هنوز «۲ ماه پیش» به‌روز شده‌اند، در حالی که تیتر می‌گوید «لحظه‌ای». این یک تصمیم کسب‌وکار است، نه یک باگ.
+</div>
+
+<!-- 3 -->
+<h2 class="sec pb"><span class="n">۳</span>موج ۱ — بُردهای سریع</h2>
+
+<table>
+<thead><tr><th class="num">#</th><th>کاری که شد</th><th>فایل‌ها</th></tr></thead>
+<tbody>
+<tr><td class="num">۱.۱</td>
+<td><b>لوگوی «آهن امن» از همه‌جا حذف شد.</b> یک partial مشترک ساخته شد که همه‌ی جاهای بیرون از هدر از آن استفاده می‌کنند:
+چهار صفحه‌ی ورود/ثبت‌نام، سایدبار پنل و هدر موبایل پنل. صفت‌های <code>alt</code> و <code>width</code> هم درست شدند
+(<code>width="130px"</code> در HTML نامعتبر است).</td>
+<td><code>partials/brand-mark.blade.php</code> + ۶ قالب</td></tr>
+
+<tr><td class="num">۱.۲</td>
+<td><b>خطای هرثانیه‌ای جاوااسکریپت متوقف شد.</b> <code>live-time.js</code> بازنویسی شد: اگر عنصری نبود، اصلاً
+<code>setInterval</code> شروع نمی‌شود. مقدار hardcode شده‌ی ساعت هم از قالب برداشته شد — اولین تیک خودش می‌نویسدش.</td>
+<td><code>live-time.js</code>، <code>home.blade.php</code></td></tr>
+
+<tr><td class="num">۱.۳</td>
+<td><b>هر سه باگ کش اصلاح شد.</b> کلید ناهمخوان <code>redirection/redirections</code>، کلید اشتباه
+<code>home.all_prices</code>، و TTL تصادفی <code>now()->second()</code>. همه با <code>cache()->remember()</code> بازنویسی شدند
+که خواندن و نوشتن را روی یک کلید قفل می‌کند. دو کوئری مرده‌ی صفحه‌ی اصلی هم حذف شدند.</td>
+<td><code>Redirecting.php</code>، <code>Site/HomeController.php</code></td></tr>
+
+<tr><td class="num">۱.۴</td>
+<td><b>آپلود SVG در هر ۱۷ نقطه بسته شد</b> — و یک بررسی ایستا اضافه شد که اگر کسی دوباره <code>svg</code> را به
+<code>mimes:</code> اضافه کند، CI شکست می‌خورد.</td>
+<td>۱۰ کنترلر و FormRequest</td></tr>
+
+<tr><td class="num">۱.۵</td>
+<td><b>مسیر ورود امن شد.</b> <code>throttle:5,1</code> روی تایید کد و <code>throttle:3,10</code> روی درخواست کد
+(چون هر درخواست یک پیامک واقعی با هزینه‌ی واقعی است). کد بعد از استفاده حذف می‌شود، بعد از ۵ تلاش ناموفق
+سوزانده می‌شود، مقایسه با <code>hash_equals</code> انجام می‌شود، و نشست بعد از ورود بازتولید می‌شود.
+باگ null هم که رکورد نبودن کد را به خطای ۵۰۰ تبدیل می‌کرد اصلاح شد.</td>
+<td><code>LoginController</code>، <code>RegisterController</code>، <code>routes/web.php</code></td></tr>
+
+<tr><td class="num">۱.۶</td>
+<td><b>میان‌افزار هدرهای امنیتی.</b> <code>X-Content-Type-Options</code>، <code>X-Frame-Options</code>،
+<code>Referrer-Policy</code>، <code>Permissions-Policy</code> و <code>HSTS</code> (فقط روی HTTPS).</td>
+<td><code>Middleware/SecurityHeaders.php</code></td></tr>
+
+<tr><td class="num">۱.۷</td>
+<td><b>۱۲ ایندکس دیتابیس.</b> چون مهاجرت روی این سرور اجرا نمی‌شود، هم یک migration نوشته شد که وجود هر ایندکس را
+قبل از ساخت چک می‌کند، و هم یک فایل SQL آماده برای اجرا در phpMyAdmin.</td>
+<td><code>database/sql/…add_missing_indexes.sql</code></td></tr>
+
+<tr><td class="num">۱.۸</td>
+<td><b><code>sleep(5)</code> حذف شد</b> (یک worker را ۵ ثانیه قفل می‌کرد)، <b>GA4 تکراری حذف شد</b>
+(دو property همزمان، هر کدام با bootstrap خودش که دیگری را بازنویسی می‌کرد)، و <b>Histats کاملاً حذف شد</b>.
+شناسه‌ی analytics به <code>config/brand.php</code> منتقل شد.</td>
+<td><code>master.blade.php</code>، <code>config/brand.php</code></td></tr>
+
+<tr><td class="num">۱.۹</td>
+<td><b><code>preconnect</code> برای دامنه‌های شخص ثالث، <code>preload</code> برای فونت اصلی، و <code>defer</code>
+روی هر ۱۰ اسکریپت داخلی.</b> هیچ اسکریپتی دیگر رندر را مسدود نمی‌کند.</td>
+<td><code>master.blade.php</code> + ۸ قالب</td></tr>
+
+<tr><td class="num">۱.۱۰</td>
+<td><b><code>h1</code> و meta description</b> به <code>/blog</code>، <code>/about</code>، <code>/contact</code> و
+<code>/category</code> اضافه شد و ترتیب سرتیترها اصلاح شد. باگ <code>@section('og_title')</code> تکراری هم
+در دو صفحه رفع شد — بار دوم توضیحات را جای عنوان اشتراک‌گذاری می‌گذاشت.</td>
+<td>۵ قالب</td></tr>
+</tbody>
+</table>
+
+<!-- 4 -->
+<h2 class="sec pb"><span class="n">۴</span>موج ۲ — نجات تجربه‌ی موبایل</h2>
+
+<h3>۴.۱ بازسازی مقیاس تایپوگرافی — مهم‌ترین تغییر کل کار</h3>
+
+<p>ریشه‌ی مشکل این بود که یک عدد دو کار بی‌ربط را همزمان انجام می‌داد:</p>
+<pre><code>/* قبل */
+@media (max-width: 375px) { html { font-size: 6px } }   /* برای کوچک کردن چیدمان */
+body { font-size: 1.4rem }                              /* = 8.4px  ← ناخواسته */</code></pre>
+
+<p>راه‌حل، جدا کردن این دو کار از هم بود، نه بزرگ کردن ریشه (که چیدمان را می‌ترکاند):</p>
+<pre><code>/* بعد */
+@media (max-width: 375px) { html { font-size: 50% } }   /* چیدمان: ۸px، و درصد ⇒ تنظیم فونت مرورگر کار می‌کند */
+:root { --type-unit: 1.4286rem }                        /* = 11.43px در همان breakpoint */
+body { font-size: calc(1.4 * var(--type-unit)) }        /* = 16px، در هر عرض صفحه */</code></pre>
+
+<p>
+مقدار <code>--type-unit</code> در هر breakpoint طوری تعریف شده که همیشه به همان ۱۱.۴۳ پیکسل برسد.
+یعنی <b>متن دیگر با مقیاس چیدمان کوچک نمی‌شود</b>، ولی چون بر حسب <code>rem</code> است،
+هنوز از تنظیم «اندازه‌ی فونت» مرورگر کاربر پیروی می‌کند.
+</p>
+
+<div class="box info avoid">
+<div class="t">دو تصمیم که عمداً گرفته شد</div>
+<b>۱)</b> فقط اندازه‌های زیر <code>2rem</code> تبدیل شدند (۶۹ مورد). بالاتر از آن تیتر و آیکون است و
+<i>باید</i> با چیدمان کوچک شود — یک عدد ۵rem که روی دسکتاپ می‌ماند، روی موبایل جا نمی‌شود.<br>
+<b>۲)</b> ریشه‌ی موبایل از ۶ به ۸ پیکسل رفت (نه بیشتر). این ۳۳٪ بزرگ‌تر شدن، همه‌ی paddingهای rem-based —
+و در نتیجه همه‌ی هدف‌های لمسی — را هم بزرگ می‌کند، بدون اینکه چیدمان را به هم بریزد.
+</div>
+
+<h3>۴.۲ جدول قیمت روی موبایل</h3>
+<p>
+زیر ۷۶۸ پیکسل هر ردیف جدول به یک کارت تبدیل می‌شود: نام محصول تیتر، قیمت درشت،
+نوسان به‌صورت درصد رنگی، و دکمه‌ی «افزودن به سبد» تمام‌عرض با ارتفاع ۴۴ پیکسل.
+برچسب هر مقدار از صفت <code>data-label</code> همان سلول می‌آید، پس نشانه‌گذاری همچنان یک جدول واحد است
+و رندر دسکتاپ دست‌نخورده می‌ماند.
+</p>
+<p>ساختار جدول هم بازنویسی شد:</p>
+<ul>
+<li><b>colspanها حذف شدند.</b> <code>1/6/3/3/3/3/4</code> چیزی را ادغام نمی‌کرد؛ یک شبکه‌ی ۷ ستونی را داخل
+جدولی ۲۶ ستونی می‌ساخت، که یعنی هیچ سلول داده‌ای به سرستون خودش وصل نبود.</li>
+<li><b><code>scope="col"</code> روی هر ۷ سرستون</b> و یک <code>&lt;caption&gt;</code> برای کل جدول.</li>
+<li><b><code>id="h-c-ignore"</code> تکراری</b> به کلاس تبدیل شد. این id روی هر ردیف تکرار شده بود، و
+<code>print-js</code> با <code>getElementById</code> فقط اولی را پیدا می‌کرد — یعنی حذف ستون‌ها هنگام چاپ
+از ردیف دوم به بعد اصلاً کار نمی‌کرد.</li>
+<li><b>دکمه‌ی خرید نام دسترس‌پذیر گرفت</b> (<code>aria-label</code>) — ۲۴ دکمه در صفحه‌ی قیمت بدون نام بودند.</li>
+</ul>
+
+<h3>۴.۳ بقیه‌ی موج ۲</h3>
+<table>
+<thead><tr><th>مورد</th><th>کاری که شد</th></tr></thead>
+<tbody>
+<tr><td>لوگوی موبایل</td><td><code>d-none d-lg-block</code> برداشته شد و یک نسخه‌ی ۴۴ پیکسلی درون‌جریان برای زیر ۹۹۲px تعریف شد. کاربر موبایل دیگر بدون نشان برند نیست.</td></tr>
+<tr><td>هدف‌های لمسی</td><td>حداقل ۴۴ پیکسل روی سبد، کاربری، برگر، جستجو، منوی کشویی، صفحه‌بندی، منوی فوتر و آیکون‌های شبکه‌های اجتماعی.</td></tr>
+<tr><td>زوم خودکار iOS</td><td>هر <code>input</code>، <code>select</code> و <code>textarea</code> حداقل ۱۶ پیکسل می‌گیرد — آستانه‌ای که زیرش سافاری صفحه را زوم می‌کند.</td></tr>
+<tr><td>حلقه‌ی فوکوس</td><td>۲۰ قانون <code>outline: none</code> در استایل‌شیت بود و هیچ‌کدام چیزی جایش نگذاشته بود. یک قانون <code>:focus-visible</code> سراسری اضافه شد (روی نوار قرمز هدر، سفید).</td></tr>
+<tr><td>لینک پرش</td><td>اولین عنصر قابل فوکوس هر صفحه. منوی سه‌سطحی یعنی بدون این، رسیدن به محتوا با کیبورد در هر صفحه از کل دسته‌بندی‌ها می‌گذشت.</td></tr>
+<tr><td>سرریز <code>/blog</code></td><td>عرض اسکرول از ۹۲۳ به ۳۷۵ رسید.</td></tr>
+<tr><td>کاشی‌های <code>/price</code></td><td>گرید سه‌ستونی منظم به‌جای wrap نامرتب با سه یتیم در ردیف آخر.</td></tr>
+<tr><td>کنتراست</td><td>سبز <code>#23cf14</code> (نسبت ۲.۱:۱) با <code>#15803d</code> (۵.۴:۱) جایگزین شد. رنگ‌ها به توکن‌های معنایی منتقل شدند تا این اتفاق دوباره نیفتد.</td></tr>
+<tr><td>حرکت</td><td><code>prefers-reduced-motion</code> در کل سایت رعایت می‌شود.</td></tr>
+<tr><td>تصاویر</td><td><code>loading</code> و <code>decoding="async"</code> روی هر تصویر سایت؛ لوگو <code>eager</code> با <code>fetchpriority="high"</code>. برای تصاویر دیتابیسی که ابعادشان معلوم نیست، <code>aspect-ratio</code> روی ظرفشان — که همان کار رزرو فضا را از سمت دیگر انجام می‌دهد.</td></tr>
+<tr><td>صفحات ورود</td><td>یک layout مشترک + یک استایل‌شیت ۵.۷ کیلوبایتی جایگزین کل قالب Metronic شد. شمارش معکوس و «ارسال مجدد کد» با ۴۰ خط جاوااسکریپت خام بازنویسی شد (قبلاً jQuery + <code>$.ajax</code> با توکن CSRF مخدوش). برچسب دیدنی، <code>autocomplete="one-time-code"</code>، و <code>role="alert"</code> روی خطاها.</td></tr>
+</tbody>
+</table>
+
+<!-- 5 -->
+<h2 class="sec pb"><span class="n">۵</span>موج ۳ — سلامت فنی</h2>
+
+<h3>۵.۱ باندل مشترک — بزرگ‌ترین برد کارایی</h3>
+<p>
+شش نقطه‌ی ورود، هیچ‌کدام چیزی با هم مشترک نداشتند: jQuery، Bootstrap، Popper و Slick در هر کدام از نو تکرار شده بودند.
+صفحه‌ی دسته‌بندی jQuery را <b>سه بار</b> دانلود می‌کرد — یکی در <code>app.js</code>، یکی در <code>category.js</code>،
+و یک <code>jquery.min.js</code> جداگانه از CDN.
+</p>
+<table>
+<thead><tr><th>صفحه</th><th class="num">قبل</th><th class="num">بعد (بازدید اول)</th><th class="num">بعد (باندل مشترک در کش)</th></tr></thead>
+<tbody>
+<tr><td>صفحه اصلی</td><td class="was">۴۳۲ KB</td><td class="num">۳۴۴ KB</td><td class="now">۵۱ KB</td></tr>
+<tr><td>بلاگ</td><td class="was">۵۹۶ KB</td><td class="num">۳۴۴ KB</td><td class="now">۵۰ KB</td></tr>
+<tr><td>سبد خرید</td><td class="was">۳۹۷ KB</td><td class="num">۳۵۱ KB</td><td class="now">۵۷ KB</td></tr>
+<tr><td>دسته‌بندی</td><td class="was">۶۷۸ KB</td><td class="num">۵۵۵ KB</td><td class="now">۲۶۱ KB</td></tr>
+</tbody>
+</table>
+<p><small>صفحه‌ی دسته‌بندی سنگین‌تر می‌ماند چون Chart.js فقط آنجا و در صفحه‌ی محصول لازم است و عمداً
+داخل باندل مشترک گذاشته نشد — وگرنه صفحه‌ی اصلی باید هزینه‌ی نموداری را می‌داد که هرگز نمی‌کشد.</small></p>
+
+<h3>۵.۲ بقیه‌ی موج ۳</h3>
+<table>
+<thead><tr><th>مورد</th><th>کاری که شد</th><th class="num">نتیجه</th></tr></thead>
+<tbody>
+<tr><td>حجم CSS</td>
+<td>Bootstrap Icons برای هر ۱۳۷۰ آیکونش یک قانون <code>content:</code> می‌فرستد؛ سایت ۳۹ تا استفاده می‌کند.
+یک اسکریپت build که فقط همان قوانین نگاشت گلیف را حذف می‌کند — عمداً PurgeCSS نیست، چون حدس زدن درباره‌ی
+کلاس‌های ساخته‌شده در زمان اجرا روی یک سایت Blade که نمی‌شود محلی رندرش کرد، ریسک بدی است.</td>
+<td class="now">۲۶۲ → ۲۱۹ KB</td></tr>
+
+<tr><td>ساخت sitemap</td>
+<td>سه مدل در ۹ رویداد، <code>Sitemap::generate()</code> را صدا می‌زدند — که کل دسته‌ها، محصولات و مقالات را
+می‌خواند. یک import اکسل با ۲۰۰ محصول، ۲۰۰ بار کل کاتالوگ را می‌خواند. حالا در هر request فقط یک بار،
+و بعد از ارسال پاسخ اجرا می‌شود.</td>
+<td class="now">۲۰۰× → ۱×</td></tr>
+
+<tr><td>منوی سراسری</td>
+<td>Composer فقط دسته‌های ریشه را می‌خواند (قبلاً همه را، و زیردرخت هر کدام را دوباره)، TTL از ۳۰ ثانیه
+به ۶ ساعت رفت با flush صریح روی هر ذخیره‌ی دسته — که هم سریع‌تر است هم درست‌تر، چون تغییر بلافاصله دیده می‌شود.</td>
+<td class="now">۳۰s → ۶h</td></tr>
+
+<tr><td>باگ منوی سطح ۲</td>
+<td><code>$category->child()</code> با پرانتز، به‌جای collection، خودِ relation builder را به قالب می‌داد.
+سطح دوم منوی دسکتاپ عملاً چیزی رندر نمی‌کرد.</td>
+<td class="now">اصلاح شد</td></tr>
+
+<tr><td>سیستم توکن</td>
+<td><code>_tokens.scss</code>: مقیاس تایپ، مقیاس فاصله (۶ پله)، رنگ‌های معنایی، شعاع، سایه،
+حداقل هدف لمسی، و <code>prefers-reduced-motion</code>. قبلاً فقط ۸ متغیر رنگ با نام‌های ظاهری
+(<code>$red</code>، <code>$blue</code>) وجود داشت.</td>
+<td class="now">جدید</td></tr>
+
+<tr><td>تست</td>
+<td><b>۲۰ تست PHPUnit</b> (احراز هویت، کش، هدرهای امنیتی، smoke) و
+<b>۴۳ بررسی ایستا</b> که بدون دیتابیس اجرا می‌شوند. <code>ExampleTest</code> پیش‌فرض Laravel که
+همیشه شکست می‌خورد (چون <code>GET /</code> روی دیتابیس خالی ۵۰۰ می‌دهد) با smoke test واقعی جایگزین شد.</td>
+<td class="now">۰ → ۶۳</td></tr>
+
+<tr><td>پنل: جستجوی منو</td>
+<td>۹۶ آیتم منو بدون هیچ راه جستجویی. یک فیلتر درجا که گروه‌های دارای نتیجه را باز می‌کند و
+تعداد نتایج را با <code>aria-live</code> اعلام می‌کند.</td>
+<td class="now">جدید</td></tr>
+
+<tr><td>پنل: خطای فرم</td>
+<td>۳۵ از ۸۲ قالب هیچ بازخورد اعتبارسنجی نداشتند — یعنی ذخیره‌ی ناموفق کاملاً بی‌صدا بود.
+یک خلاصه‌ی خطا در layout، پس هر ۸۲ قالب پوشش داده شد. هر پیام به فیلد خودش لینک است و
+فوکوس بعد از خطا روی خلاصه می‌رود.</td>
+<td class="now">۴۷ → ۸۲</td></tr>
+
+<tr><td>دسترس‌پذیری</td>
+<td>هر کنترل فقط-آیکون در سایت و پنل کاربری نام گرفت؛ گلیف‌ها <code>aria-hidden</code> شدند؛
+دکمه‌ی بستن منو از <code>&lt;i&gt;</code> به <code>&lt;button&gt;</code> تبدیل شد تا با کیبورد قابل دسترس باشد.</td>
+<td class="now">۲۴ → ۰ بدون نام</td></tr>
+
+<tr><td>CI و استقرار</td>
+<td>بررسی جدید front-end به CI اضافه شد؛ <code>php artisan test || phpunit</code> که خطای واقعی را پنهان می‌کرد
+با فراخوانی مستقیم phpunit جایگزین شد؛ و هر دو workflow حالا وجود <code>vendor.js</code>،
+<code>manifest.js</code> و <code>auth.css</code> را چک می‌کنند — چون اگر build اینها را نسازد،
+سایت زنده بدون jQuery می‌ماند و سبد، جستجو، نمودار و اسلایدر همزمان می‌شکنند.</td>
+<td class="now">تقویت شد</td></tr>
+</tbody>
+</table>
+
+<!-- 6 -->
+<h2 class="sec pb"><span class="n">۶</span>سه اشتباهی که در حین کار کردم و چطور پیدا شدند</h2>
+
+<p>این بخش را عمداً نگه داشتم، چون نشان می‌دهد چرا اندازه‌گیری مهم‌تر از حدس زدن است.</p>
+
+<h4>■ یک regex، ۴۹ قالب خراب</h4>
+<p>
+برای اضافه کردن <code>loading="lazy"</code> به تصاویر، از الگوی به‌ظاهر بدیهی
+<code>&lt;img[^&gt;]*&gt;</code> استفاده کردم. اما در Blade، <code>src="{{$slide-&gt;image()}}"</code> یک
+<code>&gt;</code> داخل عملگر فلش دارد — پس تطبیق وسط attribute تمام می‌شد و صفت‌ها را
+داخل عبارت PHP تزریق می‌کرد.
+</p>
+<pre><code>src="{{$slide- loading="lazy" decoding="async">image()}}"</code></pre>
+<p>
+<b>چطور پیدا شد:</b> همان تست موجود مخزن که هر ۱۳۰ قالب Blade را کامپایل می‌کند، فوراً شکست خورد.
+۴۹ تگ در ۳۱ فایل ترمیم شد و یک اسکنر واقعی نوشتم که <code>{{ }}</code> و کوتیشن را دنبال می‌کند.
+همان اسکنر حالا داخل بررسی ایستا هم هست.
+</p>
+
+<h4>■ thead مخفی که ۶۱۰ پیکسل عرض گرفت</h4>
+<p>
+برای مخفی کردن سرستون‌ها در حالت کارت، از تکنیک استاندارد «visually hidden»
+(<code>position:absolute; clip:rect(0 0 0 0)</code>) استفاده کردم. روی <code>&lt;thead&gt;</code> این کار نمی‌کند:
+ردیف همچنان به عرض طبیعی طولانی‌ترین سرستون چیده می‌شد و عرض سند را در ویوپورت ۳۷۵ به ۶۱۰ پیکسل رساند.
+<b>چطور پیدا شد:</b> اندازه‌گیری <code>scrollWidth</code> قبل و بعد. راه‌حل <code>display: none</code> بود —
+که چیزی از دست نمی‌دهد، چون در حالت کارت هر سلول برچسب خودش را به‌صورت متن دیدنی چاپ می‌کند.
+</p>
+
+<h4>■ هدف لمسی ۴۴ پیکسلی که صفحه‌بندی را شکست</h4>
+<p>
+بزرگ کردن لینک‌های صفحه‌بندی به ۴۴ پیکسل درست بود، ولی نصف کار: صفحه‌ی <code>/price</code> ده‌ها صفحه دارد و
+ده لینک ۴۴ پیکسلی روی یک ردیف بدون wrap می‌شود ۵۲۰ پیکسل. <b>چطور پیدا شد:</b> یک اسکریپت که تک‌تک ۷۴۳ عنصر
+صفحه را مخفی می‌کرد و <code>scrollWidth</code> را دوباره می‌خواند تا مقصر را پیدا کند.
+راه‌حل: <code>flex-wrap</code> و کوچک کردن chevronهای ۶rem‌ی.
+</p>
+
+<div class="box avoid">
+<div class="t">نتیجه‌ای که ارزش نگه داشتن دارد</div>
+هر سه مورد را <b>اندازه‌گیری</b> پیدا کرد، نه بازبینی چشمی. به همین دلیل ۴۳ بررسی ایستا و ۲۰ تست نوشته شد:
+تا دفعه‌ی بعد هم همین اتفاق بیفتد، ولی قبل از استقرار.
+</div>
+
+<!-- 7 -->
+<h2 class="sec pb"><span class="n">۷</span>چیزهایی که در حین کار پیدا شد و در گزارش اول نبود</h2>
+
+<table>
+<thead><tr><th>یافته</th><th>اثر</th><th class="num">وضعیت</th></tr></thead>
+<tbody>
+<tr><td><b>لوگوی «آهن امن» روی هر برگه‌ی قیمت چاپ‌شده.</b> <code>print.js</code> مسیر
+<code>images/header-footer/logo.png</code> را hardcode کرده بود. میان‌افزار پاک‌سازی برند فقط متن را بازنویسی می‌کند،
+پس هر استعلام قیمتی که مشتری چاپ می‌کرد نشان شرکت دیگری را داشت.</td>
+<td>نشت برند، بیرون از دید همه‌ی بررسی‌های قبلی</td><td class="num"><span class="b ok">رفع شد</span></td></tr>
+
+<tr><td><b>شماره تماس اشتباه روی برگه‌ی چاپی.</b> <code>«تماس : 5549070 - 021»</code> در همان فایل،
+که با شماره‌ی <code>config/brand.php</code> نمی‌خواند.</td>
+<td>مشتری با شماره‌ای تماس می‌گرفت که مال سایت نیست</td><td class="num"><span class="b ok">رفع شد</span></td></tr>
+
+<tr><td><b>سه Composer که کل سایت را با یک ردیف خالی از کار می‌انداختند.</b>
+<code>FaviconComposer</code>، <code>CompanyNameComposer</code> و <code>PhoneComposer</code> همگی
+<code>Model::first()-&gt;column</code> بدون بررسی null. اگر جدول <code>general_settings</code> یا
+<code>information</code> خالی می‌شد، <b>هر صفحه‌ی سایت</b> ۵۰۰ می‌داد — از جمله صفحه‌ی ورودی که مدیر
+برای برگرداندن آن ردیف لازم داشت.</td>
+<td>ریسک قطعی کامل، بدون راه بازگشت</td><td class="num"><span class="b ok">رفع شد</span></td></tr>
+
+<tr><td><b>منوی سطح دوم دسکتاپ رندر نمی‌شد.</b> <code>$category->child()</code> به‌جای
+<code>$category->child</code>.</td>
+<td>زیرمنوهای سطح سوم عملاً غایب</td><td class="num"><span class="b ok">رفع شد</span></td></tr>
+
+<tr><td><b>حذف ستون‌ها هنگام چاپ فقط برای ردیف اول کار می‌کرد.</b>
+<code>print-js</code> با <code>getElementById</code> روی idهایی که در هر ردیف تکرار شده بودند.</td>
+<td>برگه‌ی چاپی ستون‌های اضافی داشت</td><td class="num"><span class="b ok">رفع شد</span></td></tr>
+
+<tr><td><b>تست پیش‌فرض Laravel همیشه شکست می‌خورد</b> و مرحله‌ی تست CI با
+<code>php artisan test || vendor/bin/phpunit</code> این را می‌پوشاند
+(دستور <code>artisan test</code> در Laravel 8 اصلاً وجود ندارد).</td>
+<td>سوئیت تست عملاً غیرفعال بود</td><td class="num"><span class="b ok">رفع شد</span></td></tr>
+
+<tr><td><b>مهاجرت روی دیتابیس تازه غیرممکن بود.</b> <code>routes/web.php</code> جدول
+<code>redirects</code> را در زمان بارگذاری روت می‌خواند، قبل از اینکه migration آن را ساخته باشد.</td>
+<td>راه‌اندازی یک نسخه‌ی تازه دستی بود</td><td class="num"><span class="b ok">رفع شد</span></td></tr>
+
+<tr><td><b>باقی‌مانده‌ی محیط توسعه در تولید:</b>
+<code>var HOST_URL = "http://127.0.0.1:8000/login"</code> در چهار صفحه‌ی auth.</td>
+<td>بی‌ضرر ولی نشانه</td><td class="num"><span class="b ok">حذف شد</span></td></tr>
+</tbody>
+</table>
+
+<!-- 8 -->
+<h2 class="sec pb"><span class="n">۸</span>اعداد اندازه‌گیری‌شده: قبل و بعد</h2>
+
+<h3>۸.۱ روش</h3>
+<p>
+اپلیکیشن روی این ماشین دیتابیس ندارد، پس نمی‌شود مستقیم رندرش کرد. به‌جایش دو سنجش انجام شد:
+</p>
+<ul>
+<li><b>A/B روی HTML واقعی تولید.</b> شش صفحه که از سایت زنده گرفته شده بودند، یک بار با استایل‌شیت قدیم و
+یک بار با جدید سرو و اندازه‌گیری شدند. همان markup، همان تصاویر، یک متغیر.</li>
+<li><b>fixture از markup جدید.</b> برای چیزهایی که خودِ نشانه‌گذاری‌شان بازنویسی شده (کارت‌های قیمت،
+صفحات ورود، لینک پرش) یک نمونه از خروجی جدید ساخته و با مرورگر واقعی اندازه‌گیری شد.</li>
+</ul>
+
+<h3>۸.۲ موبایل ۳۷۵×۸۱۲ — A/B روی صفحات واقعی</h3>
+<table>
+<thead><tr><th>صفحه</th><th class="num">اندازه متن بدنه</th><th class="num">متن زیر ۱۴px</th><th class="num">هدف لمسی کوچک</th><th class="num">عناصر بیرون ویوپورت</th></tr></thead>
+<tbody>
+<tr><td>صفحه اصلی</td><td class="num"><span class="was">۸.۴</span> <span class="arrow">→</span> <span style="color:var(--ok);font-weight:700">۱۶.۰</span></td><td class="num"><span class="was">۱۴۳</span> → <b style="color:var(--ok)">۴</b></td><td class="num"><span class="was">۷۱</span> → <b style="color:var(--ok)">۱۲</b></td><td class="num"><span class="was">۱۶۶</span> → <b style="color:var(--ok)">۳۷</b></td></tr>
+<tr><td>/price</td><td class="num"><span class="was">۸.۴</span> → <b style="color:var(--ok)">۱۶.۰</b></td><td class="num"><span class="was">۱۸۹</span> → <b style="color:var(--ok)">۱۵</b></td><td class="num"><span class="was">۱۰۶</span> → <b style="color:var(--ok)">۲۶</b></td><td class="num"><span class="was">۲۵۶</span> → <b style="color:var(--ok)">۲۸</b></td></tr>
+<tr><td>/category/سیم-خاردار</td><td class="num"><span class="was">۸.۴</span> → <b style="color:var(--ok)">۱۶.۰</b></td><td class="num"><span class="was">۱۹۰</span> → <b style="color:var(--ok)">۸</b></td><td class="num"><span class="was">۶۲</span> → <b style="color:var(--ok)">۳۸</b></td><td class="num">۲۰۸ → ۲۳۶</td></tr>
+<tr><td>/blog</td><td class="num"><span class="was">۸.۴</span> → <b style="color:var(--ok)">۱۶.۰</b></td><td class="num"><span class="was">۱۰۲</span> → <b style="color:var(--ok)">۱۱</b></td><td class="num"><span class="was">۴۷</span> → <b style="color:var(--ok)">۱۸</b></td><td class="num">۲۷ → ۲۸</td></tr>
+<tr><td>/contact</td><td class="num"><span class="was">۸.۴</span> → <b style="color:var(--ok)">۱۶.۰</b></td><td class="num"><span class="was">۶۳</span> → <b style="color:var(--ok)">۵</b></td><td class="num"><span class="was">۳۸</span> → <b style="color:var(--ok)">۱۰</b></td><td class="num"><span class="was">۲۸</span> → <b style="color:var(--ok)">۲۷</b></td></tr>
+<tr><td>/about</td><td class="num"><span class="was">۸.۴</span> → <b style="color:var(--ok)">۱۶.۰</b></td><td class="num"><span class="was">۵۲</span> → <b style="color:var(--ok)">۱</b></td><td class="num"><span class="was">۲۶</span> → <b style="color:var(--ok)">۳</b></td><td class="num">۲۸ → ۲۸</td></tr>
+</tbody>
+</table>
+<p><small>
+«عناصر بیرون ویوپورت» شامل منوی کشویی است که عمداً خارج از صفحه پارک شده. در هر شش صفحه
+اسکرول افقی <b>غیرممکن</b> است — این جداگانه با تلاش برای اسکرول تا ۶۰۰ پیکسل تست شد و
+<code>scrollX</code> صفر ماند.
+</small></p>
+
+<h3>۸.۳ جدول قیمت روی موبایل — اندازه‌گیری روی markup جدید</h3>
+<table>
+<thead><tr><th>سنجه</th><th class="num">قبل</th><th class="num">بعد</th></tr></thead>
+<tbody>
+<tr><td>عرض جدول در ویوپورت ۳۷۵px</td><td class="was">۹۹۲px (min-width)</td><td class="now">۲۸۳px</td></tr>
+<tr><td>آیا قیمت روی صفحه دیده می‌شود؟</td><td class="was">خیر</td><td class="now">بله</td></tr>
+<tr><td>آیا دکمه‌ی خرید دیده می‌شود؟</td><td class="was">خیر</td><td class="now">بله (۲۶۵×۴۴px)</td></tr>
+<tr><td>برچسب هر مقدار</td><td class="was">فقط در سرستون خارج از صفحه</td><td class="now">کنار هر مقدار</td></tr>
+<tr><td>کنترل فقط-آیکون بدون نام</td><td class="was">۲۴</td><td class="now">۰</td></tr>
+<tr><td><code>th</code> با <code>scope</code></td><td class="was">۰</td><td class="now">۷</td></tr>
+<tr><td>خطای جاوااسکریپت در صفحه</td><td class="was">۹ در ۶ ثانیه</td><td class="now">۰</td></tr>
+</tbody>
+</table>
+
+<h3>۸.۴ حجم دارایی‌ها</h3>
+<table>
+<thead><tr><th>فایل</th><th class="num">قبل</th><th class="num">بعد</th></tr></thead>
+<tbody>
+<tr><td><code>category.js</code></td><td class="was">۳۵۹ KB</td><td class="now">۱۹۴ KB</td></tr>
+<tr><td><code>app.js</code></td><td class="was">۳۰۲ KB</td><td class="now">۴۹ KB</td></tr>
+<tr><td><code>blog.js</code></td><td class="was">۲۹۵ KB</td><td class="now">۰.۶ KB</td></tr>
+<tr><td><code>home.js</code></td><td class="was">۱۳۱ KB</td><td class="now">۰.۹ KB</td></tr>
+<tr><td><code>cart.js</code></td><td class="was">۹۵ KB</td><td class="now">۷.۶ KB</td></tr>
+<tr><td><code>profile.js</code></td><td class="was">۹۰ KB</td><td class="now">۱.۷ KB</td></tr>
+<tr><td><code>app.css</code></td><td class="was">۲۶۲ KB</td><td class="now">۲۱۹ KB</td></tr>
+<tr><td><code>vendor.js</code> (جدید، مشترک و کش‌شونده)</td><td class="num">—</td><td class="num">۲۹۴ KB</td></tr>
+<tr><td><code>auth.css</code> (جدید)</td><td class="num">—</td><td class="num">۵.۷ KB</td></tr>
+<tr style="background:#eef7f0"><td><b>مجموع دارایی‌های ساخته‌شده</b></td><td class="was">۱۵۵۴ KB</td><td class="now">۷۹۴ KB</td></tr>
+</tbody>
+</table>
+
+<h3>۸.۵ صفحه‌ی ورود</h3>
+<table>
+<thead><tr><th>سنجه</th><th class="num">قبل</th><th class="num">بعد</th></tr></thead>
+<tbody>
+<tr><td>حجم کل صفحه</td><td class="was">۱۴۲۳ KB</td><td class="now">حدود ۴۰ KB</td></tr>
+<tr><td>اسکریپت مسدودکننده‌ی رندر</td><td class="was">۴</td><td class="now">۰</td></tr>
+<tr><td>وابستگی به jQuery</td><td class="was">بله</td><td class="now">خیر</td></tr>
+<tr><td>برچسب دیدنی فیلد</td><td class="was">ندارد (فقط placeholder)</td><td class="now">دارد</td></tr>
+<tr><td>سرتیتر <code>h1</code></td><td class="was">۰</td><td class="now">۱</td></tr>
+<tr><td>خوانایی اگر تصویر پس‌زمینه نیاید</td><td class="was">۱.۱۴:۱ (نامرئی)</td><td class="now">گرادیان CSS، مستقل از شبکه</td></tr>
+<tr><td>لوگو</td><td class="was">آهن امن</td><td class="now">سپاهان فلز</td></tr>
+</tbody>
+</table>
+
+<h3>۸.۶ وضعیت بررسی‌های خودکار</h3>
+<table>
+<thead><tr><th>مجموعه</th><th class="num">تعداد</th><th class="num">وضعیت</th><th>چه چیزی را می‌گیرد</th></tr></thead>
+<tbody>
+<tr><td>PHPUnit</td><td class="num">۲۰ تست، ۵۴ ادعا</td><td class="num"><span class="b ok">سبز</span></td><td>ورود، محدودیت نرخ، سوزاندن کد، کش، هدرهای امنیتی، بوت اپلیکیشن</td></tr>
+<tr><td>کامپایل Blade و پاک‌سازی برند</td><td class="num">۱۸۳ بررسی</td><td class="num"><span class="b ok">سبز</span></td><td>هر ۱۳۳ قالب کامپایل می‌شود؛ برند قدیم برنمی‌گردد</td></tr>
+<tr><td>بررسی‌های front-end (جدید)</td><td class="num">۴۳ بررسی</td><td class="num"><span class="b ok">سبز</span></td><td>SVG، لوگوی قدیم، فونت پیکسلی، کارت قیمت، defer، منابع شخص ثالث</td></tr>
+<tr><td>PHP lint</td><td class="num">همه فایل‌ها</td><td class="num"><span class="b ok">سبز</span></td><td>خطای نحوی PHP 7.4</td></tr>
+<tr><td>Build دارایی‌ها</td><td class="num">—</td><td class="num"><span class="b ok">سبز</span></td><td>SCSS و JS کامپایل می‌شود</td></tr>
+</tbody>
+</table>
+
+<!-- 9 -->
+<h2 class="sec pb"><span class="n">۹</span>آنچه انجام نشد و چرا</h2>
+
+<table>
+<thead><tr><th>مورد</th><th>چرا</th><th>چه چیزی لازم است</th></tr></thead>
+<tbody>
+<tr><td><b>ایندکس‌های دیتابیس اعمال نشده‌اند</b></td>
+<td>روی این سرور مهاجرت اجرا نمی‌شود و دسترسی shell یا دیتابیس وجود ندارد.</td>
+<td>فایل <code>database/sql/2026_08_06_add_missing_indexes.sql</code> آماده است — کافی است در
+phpMyAdmin روی <code>ahanamnc_DB</code> اجرا شود. migration متناظر هم وجود هر ایندکس را چک می‌کند، پس
+اجرای بعدی‌اش بی‌خطر است.</td></tr>
+
+<tr><td><b><code>TrustHosts</code> هنوز غیرفعال است</b></td>
+<td>مقادیر مجازش را از <code>APP_URL</code> می‌خواند، و <code>.env</code> سرور از اینجا خواندنی نیست.
+فعال کردنش بدون تایید، ریسک ۴۰۳ شدن کل سایت را دارد.</td>
+<td>تایید اینکه <code>APP_URL=https://sepahanfelez.ir</code> روی سرور درست است، بعد
+uncomment کردن خط ۱۷ <code>app/Http/Kernel.php</code>.</td></tr>
+
+<tr><td><b>Content-Security-Policy اضافه نشد</b></td>
+<td>قالب‌ها ۶ تا ۸ اسکریپت inline در هر صفحه و ۸۸ صفت <code>style</code> دارند. هر CSP کارآمدی
+به <code>unsafe-inline</code> برای هر دو نیاز داشت — که تقریباً هیچ محافظتی نمی‌دهد و
+حس پوشش کاذب ایجاد می‌کند.</td>
+<td>اول بیرون بردن اسکریپت‌های inline. کار جداگانه‌ای است.</td></tr>
+
+<tr><td><b>Subset کردن فونت آیکون</b></td>
+<td>فایل <code>bootstrap-icons.woff2</code> هنوز ۸۹ کیلوبایت است، هرچند CSS آن ۵۳ کیلوبایت سبک شد.
+Subset کردنش نیازمند اجرای fonttools در CI است.</td>
+<td>حدود ۸۰ کیلوبایت دیگر صرفه‌جویی. کار نصف روزه.</td></tr>
+
+<tr><td><b>ارتقای PHP و Laravel (موج ۴)</b></td>
+<td>خارج از دامنه‌ی این سه موج و نیازمند تست رگرسیون گسترده.</td>
+<td>۳ تا ۴ هفته، مرحله‌ای: PHP 7.4→8.1، سپس Laravel 8→9→10.</td></tr>
+
+<tr><td><b>schema.org <code>Product</code>/<code>Offer</code> روی <code>/price</code></b></td>
+<td>موج ۴ است؛ بزرگ‌ترین فرصت سئوی استفاده‌نشده باقی می‌ماند.</td>
+<td>۱ تا ۲ روز.</td></tr>
+</tbody>
+</table>
+
+<!-- 10 -->
+<h2 class="sec pb"><span class="n">۱۰</span>قدم بعدی — و یک تصمیم با شماست</h2>
+
+<div class="box stop avoid">
+<div class="t">⚠ کد منتشر نشده است</div>
+همه‌ی این تغییرات در مخزن محلی <code>/home/mlops/mohammad/ahanamn-src</code> است و
+<b>هنوز commit یا push نشده</b>. در این پروژه، push روی شاخه‌ی <code>main</code> به‌طور خودکار
+روی سایت زنده مستقر می‌شود — یعنی push کردن، منتشر کردن است.
+انتشار یک تصمیم غیرقابل‌بازگشتِ روبه‌بیرون است و بدون تایید شما انجام نشد.
+</div>
+
+<h3>وقتی آماده‌ی انتشار بودید</h3>
+<ol>
+<li><b>قبل از هر چیز، فایل SQL ایندکس‌ها را در phpMyAdmin اجرا کنید.</b> بی‌خطر است و می‌تواند
+قبل یا بعد از استقرار انجام شود، ولی هرچه زودتر بهتر — بیشترین بهبود کارایی به‌ازای کمترین کار.</li>
+<li><b>بعد از استقرار، با پروفایل تمیز مرورگر بررسی کنید.</b> سرور فایل‌های استاتیک را یک هفته کش می‌کند.
+(نام فایل‌ها cache-bust دارند، ولی این عادت را نگه دارید.)</li>
+<li><b>سه صفحه را روی موبایل واقعی باز کنید:</b> صفحه‌ی اصلی، <code>/price</code>، و <code>/login</code>.
+این سه، بیشترین تغییر را دارند.</li>
+<li><b>یک بار وارد پنل شوید</b> و جستجوی منو و لوگوی جدید سایدبار را ببینید.</li>
+<li><b>یک برگه‌ی قیمت چاپ بگیرید</b> — لوگو و شماره تماسش الان درست است.</li>
+</ol>
+
+<h3>سه چیزی که هنوز فقط شما می‌توانید انجام دهید</h3>
+<ul>
+<li><b>تازگی قیمت‌ها.</b> این تنها موردی است که کد حلش نمی‌کند و بیشترین اثر را روی اعتماد دارد.
+یا داده روزانه به‌روز شود، یا تیتر «لحظه‌ای» به چیزی صادقانه تغییر کند.</li>
+<li><b>تایید <code>APP_URL</code> روی سرور</b> تا <code>TrustHosts</code> فعال شود.</li>
+<li><b>حساب‌های شبکه‌های اجتماعی واقعی</b> — هر چهار حساب ذخیره‌شده مال برند قبلی بود و خالی شده‌اند.</li>
+</ul>
+
+<div class="box info avoid" style="margin-top:1.6rem">
+<div class="t">جمع‌بندی</div>
+هیچ‌کدام از این ۳۳ اقدام نیاز به بازنویسی معماری، دیتابیس یا خط لوله‌ی استقرار نداشت — همان‌طور که
+گزارش اول پیش‌بینی کرده بود. آنچه اضافه شد و در گزارش اول نبود، <b>۶۳ بررسی خودکار</b> است:
+از این به بعد اگر کسی SVG را به لیست آپلود برگرداند، فونت ریشه را دوباره پیکسلی کند، یا لوگوی قدیم را
+جایی بگذارد، CI جلویش را می‌گیرد — به‌جای اینکه شش ماه بعد در یک ممیزی دیگر پیدا شود.
+</div>
+
+</body>
+</html>

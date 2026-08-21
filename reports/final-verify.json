@@ -1,0 +1,94 @@
+{
+ "mobile": {
+  "price.html": {
+   "bodyFontSize": "16.002px",
+   "scrollWidth": 375,
+   "canScrollX": false,
+   "smallText": 25,
+   "smallTaps": 2,
+   "totalTaps": 40,
+   "unnamedIconControls": 0,
+   "priceVisible": true,
+   "buyVisible": true,
+   "priceCellWidth": 281,
+   "tableWidth": 283,
+   "tableMinWidth": "0px",
+   "labelsRendered": true,
+   "skipLink": true,
+   "thScope": 7,
+   "caption": true,
+   "inputFontSizes": [
+    "16.002px"
+   ],
+   "pageErrors": []
+  },
+  "login.html": {
+   "bodyFontSize": "20.0025px",
+   "scrollWidth": 375,
+   "canScrollX": false,
+   "smallText": 0,
+   "smallTaps": 0,
+   "totalTaps": 4,
+   "unnamedIconControls": 0,
+   "priceVisible": false,
+   "buyVisible": false,
+   "priceCellWidth": null,
+   "tableWidth": null,
+   "tableMinWidth": null,
+   "labelsRendered": null,
+   "skipLink": false,
+   "thScope": 0,
+   "caption": false,
+   "inputFontSizes": [
+    "20.0025px"
+   ],
+   "pageErrors": []
+  }
+ },
+ "desktop": {
+  "price.html": {
+   "bodyFontSize": "16.002px",
+   "scrollWidth": 1440,
+   "canScrollX": false,
+   "smallText": 4,
+   "smallTaps": 5,
+   "totalTaps": 43,
+   "unnamedIconControls": 0,
+   "priceVisible": true,
+   "buyVisible": true,
+   "priceCellWidth": 172,
+   "tableWidth": 1205,
+   "tableMinWidth": "992px",
+   "labelsRendered": false,
+   "skipLink": true,
+   "thScope": 7,
+   "caption": true,
+   "inputFontSizes": [
+    "16.002px"
+   ],
+   "pageErrors": []
+  },
+  "login.html": {
+   "bodyFontSize": "16.002px",
+   "scrollWidth": 1440,
+   "canScrollX": false,
+   "smallText": 0,
+   "smallTaps": 0,
+   "totalTaps": 4,
+   "unnamedIconControls": 0,
+   "priceVisible": false,
+   "buyVisible": false,
+   "priceCellWidth": null,
+   "tableWidth": null,
+   "tableMinWidth": null,
+   "labelsRendered": null,
+   "skipLink": false,
+   "thScope": 0,
+   "caption": false,
+   "inputFontSizes": [
+    "16.002px"
+   ],
+   "pageErrors": []
+  }
+ }
+}

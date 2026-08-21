@@ -1,0 +1,292 @@
+<!doctype html>
+<html dir="rtl" lang="fa">
+<head>
+<meta charset="utf-8">
+<title>گزارش نهایی استقرار — سپاهان فلز</title>
+<style>
+@page { size: A4; margin: 16mm 14mm 18mm 14mm; }
+* { box-sizing: border-box; }
+html { font-size: 11px; }
+body { font-family: Vazirmatn, sans-serif; margin:0; color:#1c2434; line-height:1.85; font-size:1rem;
+       -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+:root { --navy:#283264; --red:#b42332; --ok:#15803d; --warn:#d97706; --crit:#c0392b; --blue:#495f9e; --line:#e3e7ef; --bg:#f6f8fb; }
+
+.cover { height:247mm; display:flex; flex-direction:column; justify-content:center; page-break-after:always; text-align:center; position:relative; }
+.cover .kicker { color:var(--ok); font-weight:700; letter-spacing:.1em; font-size:1.15rem; }
+.cover h1 { font-size:3.2rem; margin:.4rem 0 .2rem; color:var(--navy); font-weight:800; line-height:1.35; }
+.cover h2 { font-size:1.45rem; font-weight:500; color:#5a6580; margin:0 0 2.4rem; }
+.cover .rule { width:70px; height:4px; background:var(--ok); margin:0 auto 2.4rem; border-radius:2px; }
+.cover .meta { font-size:1.05rem; color:#5a6580; line-height:2.4; }
+.cover .meta b { color:#1c2434; font-weight:600; }
+.cover .foot { position:absolute; bottom:0; right:0; left:0; font-size:.9rem; color:#98a1b3; }
+
+h2.sec { font-size:1.8rem; color:#fff; background:var(--navy); font-weight:700; padding:.5rem 1rem;
+         border-radius:6px; margin:2.4rem 0 1.1rem; page-break-after:avoid; }
+h2.sec .n { opacity:.5; font-weight:400; margin-left:.5rem; }
+h3 { font-size:1.32rem; color:var(--navy); font-weight:700; margin:1.6rem 0 .5rem; padding-bottom:.3rem;
+     border-bottom:2px solid var(--line); page-break-after:avoid; }
+h4 { font-size:1.1rem; color:var(--red); font-weight:700; margin:1.1rem 0 .35rem; page-break-after:avoid; }
+p { margin:.5rem 0; } ul,ol { margin:.4rem 0; padding-right:1.3rem; } li { margin:.26rem 0; }
+small { color:#6b7280; }
+code { font-family:"DejaVu Sans Mono",monospace; font-size:.86em; direction:ltr; unicode-bidi:embed;
+       background:#eef1f7; padding:.1em .35em; border-radius:3px; color:#334; }
+table { width:100%; border-collapse:collapse; margin:.7rem 0 1.1rem; font-size:.95rem; }
+thead { background:var(--navy); color:#fff; }
+thead th { padding:.5rem .55rem; text-align:right; font-weight:600; }
+tbody td { padding:.46rem .55rem; border-bottom:1px solid var(--line); vertical-align:top; }
+tbody tr:nth-child(even) { background:#fafbfd; }
+tr { page-break-inside:avoid; }
+td.num,th.num { text-align:center; font-variant-numeric:tabular-nums; white-space:nowrap; }
+.was { color:var(--crit); font-variant-numeric:tabular-nums; }
+.now { color:var(--ok); font-weight:700; font-variant-numeric:tabular-nums; }
+.b { display:inline-block; padding:.05em .55em; border-radius:4px; color:#fff; font-size:.82rem; font-weight:600; white-space:nowrap; }
+.b.ok{background:var(--ok);} .b.w{background:var(--warn);} .b.c{background:var(--crit);} .b.g{background:#6b7280;}
+.grid { display:grid; grid-template-columns:repeat(4,1fr); gap:.7rem; margin:1rem 0; }
+.card { border:1px solid var(--line); border-radius:8px; padding:.7rem .5rem; text-align:center; background:var(--bg); }
+.card .v { font-size:1.95rem; font-weight:800; line-height:1.15; font-variant-numeric:tabular-nums; }
+.card .k { font-size:.84rem; color:#5a6580; margin-top:.15rem; }
+.box { border-right:4px solid var(--ok); background:#f2fbf5; padding:.6rem .9rem; border-radius:0 6px 6px 0;
+       margin:.9rem 0; page-break-inside:avoid; }
+.box.warn{border-right-color:var(--warn);background:#fffaf0;}
+.box.info{border-right-color:var(--blue);background:#f3f6fd;}
+.box.stop{border-right-color:var(--crit);background:#fdf5f5;}
+.box .t { font-weight:700; color:var(--navy); margin-bottom:.15rem; }
+pre { direction:ltr; text-align:left; background:#f6f8fb; border:1px solid var(--line); border-radius:6px;
+      padding:.6rem .8rem; font-size:.86rem; overflow-x:auto; font-family:"DejaVu Sans Mono",monospace;
+      line-height:1.6; page-break-inside:avoid; }
+.pb { page-break-before:always; }
+</style>
+</head>
+<body>
+
+<div class="cover">
+  <div class="kicker">گزارش نهایی</div>
+  <h1>موج ۱ تا ۴<br>روی سایت زنده</h1>
+  <h2>سپاهان فلز · آنچه مستقر شد، آنچه شکستم، و آنچه مانده</h2>
+  <div class="rule"></div>
+  <div class="meta">
+    دامنه: <b>sepahanfelez.ir</b><br>
+    ۵ کامیت مستقرشده · <b>۱۴۲ فایل</b><br>
+    <b>۳۴ تست + ۶۱ گارد ایستا + ۱۸۳ بررسی قالب</b> — همه سبز<br>
+    تأیید زنده: <b>۱۰ صفحه × ۲ دستگاه × ۷ عرض</b><br>
+    تاریخ: <b>۱۶ مرداد ۱۴۰۵ / ۶ آگوست ۲۰۲۶</b>
+  </div>
+  <div class="foot">همه‌ی اعداد از سایت زنده خوانده شده‌اند، بعد از استقرار.</div>
+</div>
+
+<!-- 1 -->
+<h2 class="sec"><span class="n">۱</span>خلاصه</h2>
+
+<p>
+هر چهار موج اجرا و مستقر شد. در این مسیر <b>سه رگرسیون ساختم</b> که مالک سایت
+قبل از من دیدشان — بخش ۴ درباره‌ی همان‌هاست، چون درس‌شان از خودِ اصلاحات مهم‌تر است.
+</p>
+
+<div class="grid">
+  <div class="card"><div class="v" style="color:var(--ok)">۳۷</div><div class="k">اقدام مستقرشده</div></div>
+  <div class="card"><div class="v" style="color:var(--navy)">۱۴۲</div><div class="k">فایل تغییریافته</div></div>
+  <div class="card"><div class="v" style="color:var(--ok)">۲۷۸</div><div class="k">بررسی خودکار، همه سبز</div></div>
+  <div class="card"><div class="v" style="color:var(--crit)">۰</div><div class="k">خطای JS روی سایت</div></div>
+</div>
+
+<h3>وضعیت زنده، اندازه‌گیری‌شده بعد از استقرار</h3>
+<table>
+<thead><tr><th>سنجه (موبایل ۳۷۵px)</th><th class="num">قبل</th><th class="num">بعد</th></tr></thead>
+<tbody>
+<tr><td>اندازه متن بدنه</td><td class="num was">۸.۴px</td><td class="num now">۱۶px</td></tr>
+<tr><td>ارتفاع هدر</td><td class="num was">۲۶۲px</td><td class="num now">۴۹px</td></tr>
+<tr><td>متن زیر ۱۴px — صفحه اصلی</td><td class="num was">۱۳۷</td><td class="num now">۳۴</td></tr>
+<tr><td>متن زیر ۱۴px — <code>/about</code></td><td class="num was">۵۱</td><td class="num now">۲</td></tr>
+<tr><td>هدف لمسی زیر ۴۴px — <code>/price</code></td><td class="num was">۹۲</td><td class="num now">۵</td></tr>
+<tr><td>کنترل فقط‌آیکون بدون نام — <code>/price</code></td><td class="num was">۲۴</td><td class="num now">۳</td></tr>
+<tr><td>خطای JS در هر صفحه</td><td class="num was">۸ تا ۱۰</td><td class="num now">۰</td></tr>
+<tr><td>وزن صفحه ورود</td><td class="num was">۱۴۲۳ KB</td><td class="num now">۸۹ KB</td></tr>
+<tr><td>جاوااسکریپت صفحه بلاگ (با کش vendor)</td><td class="num was">۵۹۶ KB</td><td class="num now">۵۰ KB</td></tr>
+<tr><td>ساعت «لحظه‌ای»</td><td class="num was">یخ‌زده</td><td class="num now">تیک می‌زند</td></tr>
+</tbody>
+</table>
+
+<h3>عملکرد — تست‌شده روی سایت واقعی، نه فقط کد وضعیت</h3>
+<table>
+<thead><tr><th>چه چیزی</th><th class="num">نتیجه</th></tr></thead>
+<tbody>
+<tr><td>منوی همبرگری موبایل باز/بسته می‌شود</td><td class="num"><span class="b ok">۱۸ لینک</span></td></tr>
+<tr><td>همبرگر روی دسکتاپ مخفی است</td><td class="num"><span class="b ok">۱۰۲۴ و ۱۴۴۰</span></td></tr>
+<tr><td>جستجوی زنده</td><td class="num"><span class="b ok">۷ نتیجه</span></td></tr>
+<tr><td>اسلایدر صفحه اصلی</td><td class="num"><span class="b ok">۵ اسلاید</span></td></tr>
+<tr><td>افزودن به سبد (فرم + توکن CSRF + POST)</td><td class="num"><span class="b ok">سالم</span></td></tr>
+<tr><td>کارت‌های قیمت موبایل، قیمت و دکمه روی صفحه</td><td class="num"><span class="b ok">۲۰ ردیف</span></td></tr>
+<tr><td>شمارش معکوس صفحه تأیید کد</td><td class="num"><span class="b ok">۰۱:۵۹ ← ۰۱:۵۶</span></td></tr>
+<tr><td>فیلترها و نمودار صفحه دسته</td><td class="num"><span class="b ok">۷ فیلتر</span></td></tr>
+<tr><td>مسیرهای پنل مدیریت و پنل کاربری</td><td class="num"><span class="b ok">۳۰۲، بدون ۵۰۰</span></td></tr>
+<tr><td>منابع خراب در ۱۰ صفحه × ۲ دستگاه</td><td class="num"><span class="b w">۲ (مشکل داده)</span></td></tr>
+</tbody>
+</table>
+
+<!-- 2 -->
+<h2 class="sec"><span class="n">۲</span>موج ۴ — اسکیمای محصول</h2>
+
+<p>
+سه صفحه هیچ نشانه‌ای منتشر نمی‌کردند که روی‌شان محصول هست. بدترینش صفحه‌ی محصول بود:
+<code>Schema::render($product->schema_tag)</code> بدون fallback صدا زده می‌شد، و تگ ذخیره‌شده
+هیچ‌وقت معتبر نیست — پس <b>هیچ اسکیمایی منتشر نمی‌شد</b>.
+</p>
+
+<table>
+<thead><tr><th>صفحه</th><th class="num">قبل</th><th class="num">بعد</th></tr></thead>
+<tbody>
+<tr><td>صفحه محصول</td><td class="num was">هیچ</td><td class="num now">Product + Offer + Brand</td></tr>
+<tr><td>صفحه دسته‌بندی</td><td class="num was">CollectionPage</td><td class="num now">+ ItemList با Product و Offer</td></tr>
+<tr><td><code>/price</code></td><td class="num was">هیچ</td><td class="num"><span class="b w">در راه</span></td></tr>
+</tbody>
+</table>
+
+<p>
+صفحات دسته‌بندی را عمداً اضافه کردم چون <b>آن‌ها هستند که رتبه می‌گیرند</b> — «قیمت سیم خاردار»
+روی دسته‌بندی می‌نشیند، نه روی <code>/price</code>.
+</p>
+
+<h3>بیشتر کار، درباره‌ی چیزهایی است که <i>نگفتم</i></h3>
+<table>
+<thead><tr><th>مورد</th><th>تصمیم</th><th>چرا</th></tr></thead>
+<tbody>
+<tr><td><code>priceCurrency</code></td><td class="num"><b>IRR</b></td><td>سایت به ریال است. <code>IRT</code> (تومان) اصلاً کد ISO 4217 نیست — اشتباهش قیمت را یک‌دهم اعلام می‌کرد و هیچ‌چیزی در خط لوله نمی‌گرفتش</td></tr>
+<tr><td>محصول بدون قیمت</td><td class="num">بدون <code>offers</code></td><td>ردیف‌های «تماس بگیرید» صفر ذخیره می‌شوند؛ offer صفر هم نامعتبر است هم دروغ</td></tr>
+<tr><td><code>aggregateRating</code></td><td class="num">حذف</td><td>نظر هست ولی امتیاز نیست. ساختنش manual action می‌آورد</td></tr>
+<tr><td><code>priceValidUntil</code></td><td class="num">حذف</td><td>تاریخ گذشته → گوگل offer را دور می‌اندازد؛ تاریخ آینده → ادعایی که پشتش نیست</td></tr>
+<tr><td><code>shippingDetails</code></td><td class="num">حذف</td><td>تأمین‌کننده‌ی B2B است و با تلفن قیمت می‌دهد؛ سیاست منتشرشده‌ای نیست که به آن استناد شود</td></tr>
+<tr><td><code>name</code></td><td class="num">فقط عنوان محصول</td><td>سلول «{دسته} {محصول}» چاپ می‌کند و خیلی عنوان‌ها با نام دسته شروع می‌شوند → «سیم خاردار سیم خاردار حلقوی ۹۰» تیتر نتیجه‌ی جستجو می‌شد</td></tr>
+<tr><td><code>itemListOrder</code></td><td class="num">حذف</td><td>لیست بر اساس زمان آخرین تغییر قیمت مرتب است، که رتبه‌بندی نیست</td></tr>
+</tbody>
+</table>
+
+<div class="box avoid">
+<div class="t">نمی‌تواند صفحه‌ای را از کار بیندازد</div>
+هر سه بلاک داخل <code>Schema::safely()</code> ساخته می‌شوند. یک throw داخل <code>@php</code> یعنی
+<b>۵۰۰</b>، نه یک <code>&lt;script&gt;</code> غایب — و اینها سه تا از پربازدیدترین مسیرهای سایت‌اند.
+اگر هر گاردی اشتباه از آب دربیاید، هزینه‌اش «اسکیما منتشر نشد» است، نه «صفحه از کار افتاد».
+</div>
+
+<!-- 3 -->
+<h2 class="sec pb"><span class="n">۳</span>سه رگرسیونی که ساختم</h2>
+
+<p>مالک سایت هر سه را قبل از من دید. این بخش مهم‌تر از بقیه‌ی گزارش است.</p>
+
+<h4>■ منوی موبایل نامرئی باز می‌شد</h4>
+<p>
+به <code>#sideMenu</code> وقتی بسته است <code>visibility: hidden</code> دادم و برگرداندنش را به کلاسی
+سپردم که <code>sidemenu.js</code> اضافه می‌کند. <b>آن کلاس هرگز به سرور نرسید</b>: <code>webpack.mix.js</code>
+اصلاً این فایل را build نمی‌کند — یک کپی دستی است، و باید باشد، چون هدر <code>openNav()</code> را از
+<code>onclick</code> درون‌خطی صدا می‌زند و webpack آن تابع را scope می‌کرد. CSS رفت، JS نرفت.
+</p>
+<p>
+و بدترین بخشش: آن قانون دنبال عددی بود که کاربر نمی‌بیند (<code>scrollWidth</code>)، و سرریز واقعی
+هم مال ردیف صفحه‌بندی بود. <b>ناوبری سالم را برای بهتر کردن یک عدد نامرئی شکستم.</b>
+</p>
+
+<h4>■ همبرگر روی دسکتاپ</h4>
+<p>
+بلوک هدف‌های لمسی، <code>.navbar-toggler</code> را کنار <code>.cart</code> و <code>.user</code> گذاشته بود
+و به همه‌شان <code>display: inline-flex</code> داد. آن بلوک scope ندارد و آخر import می‌شود، پس
+<code>@media (min-width:993px){ display:none }</code> را شکست داد.
+<b>تغییر اندازه نباید قابلیت دیده شدن را عوض کند.</b>
+</p>
+
+<h4>■ هدر موبایل ۲۶۲ پیکسل</h4>
+<p>
+<code>position: static</code> لوگو را از موقعیت‌دهی absolute دسکتاپ بیرون آورد و چون آن anchor اولین
+فرزند <code>&lt;header&gt;</code> است، <b>بالای</b> نوار قرمز چید. و <code>height: 4.4rem</code> به
+<code>.logo.big-logo</code> باخت (دو کلاس از یکی قوی‌تر است) → ۲۰۰ پیکسل رندر شد.
+</p>
+
+<div class="box stop avoid">
+<div class="t">درس مشترک</div>
+هر سه با <b>باز کردن سایت در ۳۷۵ پیکسل و نگاه کردن</b> پیدا می‌شد. من اندازه‌ی فونت، جعبه‌ی هدف لمسی
+و عرض اسکرول را سنجیدم و هیچ‌وقت به خود هدر نگاه نکردم.
+<b>اندازه‌گیری جای نگاه کردن را نمی‌گیرد.</b>
+</div>
+
+<h3>و سه هشدار کاذب که خودم دادم</h3>
+<p>در تست عملکردی سه «شکست» گزارش کردم که هیچ‌کدام باگ سایت نبود:</p>
+<table>
+<thead><tr><th>گزارش من</th><th>واقعیت</th></tr></thead>
+<tbody>
+<tr><td><code>window.jQuery</code> تعریف نشده</td><td>باندل درست است؛ jQuery داخل ماژول‌ها تزریق می‌شود. اسلایدر با ۵ اسلاید کار می‌کند</td></tr>
+<tr><td>جستجو ۰ نتیجه</td><td>آرتیفکت ابزار تست — تایپ فارسی رویداد <code>keyup</code> تولید نمی‌کند. با رویداد واقعی: ۷ نتیجه</td></tr>
+<tr><td>صفحه ورود بدون برچسب</td><td>selector من ورودی مخفی CSRF را گرفته بود</td></tr>
+</tbody>
+</table>
+<p>و سه بار هم مارکر اشتباه انتخاب کردم و «مستقر شد» گزارش دادم در حالی که نشده بود.</p>
+
+<!-- 4 -->
+<h2 class="sec"><span class="n">۴</span>گاردهای جدید</h2>
+<p>هر رگرسیون یک گارد گرفت، تا همان الگو دوباره تکرار نشود:</p>
+<table>
+<thead><tr><th>گارد</th><th>چه چیزی را می‌گیرد</th></tr></thead>
+<tbody>
+<tr><td>همگامی <code>sidemenu.js</code></td><td>واگرایی فایل منبع و فایل کپی‌شده — همان چیزی که منو را نامرئی کرد</td></tr>
+<tr><td>قانون <code>display</code> برای toggler</td><td>هر قانونی برای همبرگر بیرون از media query</td></tr>
+<tr><td>ستون‌های <code>PriceListController</code></td><td><code>slug</code>، <code>image</code> و <code>status</code> — بدون‌شان اسکیما بی‌صدا خالی می‌ماند</td></tr>
+<tr><td><code>Schema::safely</code> روی هر سه قالب</td><td>اینکه اسکیما هرگز نتواند صفحه را ۵۰۰ کند</td></tr>
+<tr><td>ارز <code>IRR</code> و نبودِ <code>aggregateRating</code></td><td>ادعای اضافه در داده‌ی ساختاریافته</td></tr>
+</tbody>
+</table>
+<p>جمعاً <b>۶۱ گارد ایستا</b> که بدون دیتابیس اجرا می‌شوند، به‌علاوه <b>۳۴ تست</b> و <b>۱۸۳ بررسی قالب</b>.</p>
+
+<!-- 5 -->
+<h2 class="sec"><span class="n">۵</span>آنچه با شماست</h2>
+
+<table>
+<thead><tr><th>کار</th><th>چرا من نمی‌توانم</th><th class="num">اثر</th></tr></thead>
+<tbody>
+<tr><td><b>اجرای فایل SQL ایندکس‌ها در phpMyAdmin</b><br><small><code>database/sql/2026_08_06_add_missing_indexes.sql</code></small></td>
+<td>مهاجرت روی این سرور اجرا نمی‌شود؛ نه shell هست نه دسترسی دیتابیس</td>
+<td class="num"><span class="b w">زیاد</span></td></tr>
+
+<tr><td><b>سوئیچ PHP به ۸.۱ در cPanel</b><br><small>MultiPHP Manager → دامنه → PHP 8.1</small></td>
+<td>یک dropdown در سی‌پنل است؛ توکن API یک GitHub Secret است که من ندارم</td>
+<td class="num"><span class="b w">زیاد</span></td></tr>
+
+<tr><td><b>تأیید <code>APP_URL</code> روی سرور</b></td>
+<td><code>.env</code> سرور از اینجا خواندنی نیست؛ فعال کردن <code>TrustHosts</code> بدون آن، ریسک ۴۰۳ شدن سایت دارد</td>
+<td class="num"><span class="b g">متوسط</span></td></tr>
+
+<tr><td><b>تصویر مقاله «توری صفحات فلزی» و محصول «سیم خاردار سوزنی ۹۰»</b></td>
+<td><code>public_html/images/</code> بیرون از چیزی است که خط لوله اجازه‌ی نوشتن دارد</td>
+<td class="num"><span class="b g">کم</span></td></tr>
+
+<tr><td><b>تازگی قیمت‌ها</b></td>
+<td>تصمیم کسب‌وکار است، نه باگ</td>
+<td class="num"><span class="b w">زیاد</span></td></tr>
+</tbody>
+</table>
+
+<div class="box warn avoid">
+<div class="t">ترتیب ارتقای PHP — حیاتی است</div>
+<pre>✅ امن:    سرور 7.4 → 8.1، در حالی که vendor روی 7.4 pin مانده
+❌ مرگبار: deploy کردن vendor ای که برای 8.1 حل شده، روی سرور 7.4</pre>
+حالت دوم دقیقاً همان چیزی است که ۶ آگوست این سایت را کشت (<code>ramsey/uuid</code>، هر درخواست با
+parse error مرد قبل از اینکه Laravel لاگ کند). پس: <b>اول سوئیچ سی‌پنل، تأیید، و تازه بعداً
+composer</b>. تا وقتی سرور روی ۸.۱ تأیید نشده، <code>config.platform.php</code> دست نمی‌خورد.
+<br><br>
+شواهد آمادگی: <b>۷۸۶۱ فایل vendor صفر خطای نحوی زیر ۸.۱</b>، <b>۳۴ تست پاس زیر ۸.۱</b>،
+محدودیت Laravel 8 برابر <code>^7.3|^8.0</code>. ولی حتماً <b>۸.۱، نه بالاتر</b> — ۸.۲ خاصیت‌های
+داینامیک را deprecate کرد و Laravel 8 به آن‌ها تکیه دارد.
+<br><br>
+و بدانید تست‌ها <b>سبد خرید، ثبت سفارش، درگاه پرداخت، ایمپورت اکسل و پنل مدیریت را پوشش نمی‌دهند</b> —
+بعد از سوئیچ، این پنج مسیر را دستی چک کنید.
+</div>
+
+<div class="box info avoid">
+<div class="t">درباره‌ی خط لوله‌ی استقرار</div>
+استقرارها بین <b>۱۷ تا بیش از ۵۰ دقیقه</b> طول کشیدند و یک بار کاملاً متوقف ماند تا دستی اجرا شد.
+دلیل محتملش در خودِ HANDOFF نوشته شده: cPanel API بعد از چند هزار درخواست نرخ را محدود می‌کند و
+به‌جای JSON یک صفحه‌ی HTML برمی‌گرداند. اگر آپلودکننده به آن بخورد، job معلق می‌ماند و چون
+<code>cancel-in-progress: false</code> است، هر push بعدی پشتش صف می‌کشد.
+<br><br>
+<b>اگر استقراری بیش از ۲۰ دقیقه طول کشید:</b> تب Actions → اجرای معلق را Cancel کنید → بعد
+Run workflow. و درخواست SSH از 7hostir همچنان بزرگ‌ترین ساده‌سازی ممکن برای این پروژه است.
+</div>
+
+</body>
+</html>

@@ -1,0 +1,2679 @@
+{
+ "https://sepahanfelez.ir/": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/",
+  "len": 74317,
+  "ct": "text/html",
+  "ttfb": 1.2,
+  "title": "سپاهان فلز | تولید کننده انواع مفتول‌ های صنعتی و ساختمانی | سپاهان فلز",
+  "desc": "شرکت رادمان جاده ابریشم تنها نماینده رسمی شرکت صنایع مفتولی طلوع سپاهان با نام تجاری سپاهان فلز| تولید و عرضه کلیه محصولات صنایع مفتولی",
+  "canonical": "",
+  "robots": "index",
+  "h1": [
+   "شرکت صنایع مفتولی طلوع سپاهان | سایت سپاهان فلز"
+  ],
+  "ldjson": 0,
+  "words": 783,
+  "imgs": 52,
+  "noalt": 2,
+  "ext": [
+   "ahanamn.com",
+   "ahanamn.org",
+   "wa.me",
+   "www.aparat.com",
+   "www.instagram.com",
+   "www.linkedin.com"
+  ]
+ },
+ "https://sepahanfelez.ir/cart": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/login",
+  "len": 6605,
+  "ct": "text/html",
+  "ttfb": 0.27,
+  "title": "ورود به پنل",
+  "desc": null,
+  "canonical": "MISSING",
+  "robots": "noindex",
+  "h1": [],
+  "ldjson": 0,
+  "words": 13,
+  "imgs": 1,
+  "noalt": 1,
+  "ext": []
+ },
+ "https://sepahanfelez.ir/login": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/login",
+  "len": 6605,
+  "ct": "text/html",
+  "ttfb": 0.27,
+  "title": "ورود به پنل",
+  "desc": null,
+  "canonical": "MISSING",
+  "robots": "noindex",
+  "h1": [],
+  "ldjson": 0,
+  "words": 13,
+  "imgs": 1,
+  "noalt": 1,
+  "ext": []
+ },
+ "https://sepahanfelez.ir/category/سیم-سیاه-و-آرماتور-بندی": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/category/%D8%B3%DB%8C%D9%85-%D8%B3%DB%8C%D8%A7%D9%87-%D9%88-%D8%A2%D8%B1%D9%85%D8%A7%D8%AA%D9%88%D8%B1-%D8%A8%D9%86%D8%AF%DB%8C",
+  "len": 82550,
+  "ct": "text/html",
+  "ttfb": 0.34,
+  "title": "مفتول آرماتوربندی برای ساختمان مناسب برای بتن | مفتول سیاه با انعطاف پذیری بالا",
+  "desc": "انواع مفتول آرماتوربندی سیاه با ضخامت‌های مختلف. خرید مفتول آرماتوربندی با بهترین قیمت بازار. فروش سیم آرماتوربندی به صورت عمده و جزئی. #قیمت_مفتول_آرماتوربندی #خرید_مفتول #مفتول_سیاه",
+  "canonical": "https://ahanamn.com/category/%D8%B3%DB%8C%D9%85-%D8%B3%DB%8C%D8%A7%D9%87-%D9%88-%D8%A2%D8%B1%D9%85%D8%A7%D8%AA%D9%88%D8%B1-%D8%A8%D9%86%D8%AF%DB%8C",
+  "robots": "index",
+  "h1": [
+   "مفتول آرماتوربندی"
+  ],
+  "ldjson": 1,
+  "words": 2086,
+  "imgs": 33,
+  "noalt": 2,
+  "ext": [
+   "wa.me",
+   "www.aparat.com",
+   "www.instagram.com",
+   "www.linkedin.com"
+  ]
+ },
+ "https://sepahanfelez.ir/category/توری-مرغی": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/category/%D8%AA%D9%88%D8%B1%DB%8C-%D9%85%D8%B1%D8%BA%DB%8C",
+  "len": 80869,
+  "ct": "text/html",
+  "ttfb": 0.4,
+  "title": "توری مرغی برای حصارکشی | قیمت مناسب از تولید کننده بخرید",
+  "desc": "توری مرغی مرغوب با قیمت کارخانه! حصارکشی محکم و با دوام با توری مرغی باکیفیت از آهن امن. انواع توری مرغی با ابعاد و مش بندی مختلف. خرید توری مرغی با بهترین قیمت را از ما بخواهید. #توری_مرغی #قیمت_توری_مرغی #حصارکشی",
+  "canonical": "https://ahanamn.com/category/%D8%AA%D9%88%D8%B1%DB%8C-%D9%85%D8%B1%D8%BA%DB%8C",
+  "robots": "index",
+  "h1": [
+   "توری مرغی"
+  ],
+  "ldjson": 1,
+  "words": 2288,
+  "imgs": 35,
+  "noalt": 2,
+  "ext": [
+   "wa.me",
+   "www.aparat.com",
+   "www.instagram.com",
+   "www.linkedin.com"
+  ]
+ },
+ "https://sepahanfelez.ir/category/توری-فرنگی": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/category/%D8%AA%D9%88%D8%B1%DB%8C-%D9%81%D8%B1%D9%86%DA%AF%DB%8C",
+  "len": 75050,
+  "ct": "text/html",
+  "ttfb": 0.3,
+  "title": "خرید توری فرنگی تحویل فوری | قیمت توری فرنگی به ازای متر",
+  "desc": "توری فرنگی با کیفیت بالا برای مصارف صنعتی و ساختمانی. مقاوم در برابر زنگ زدگی و خوردگی. قیمت توری فرنگی به ازای متر  با چشمه های مختلف با توجه به ابعاد و جنس. #توری_فرنگی_گالوانیزه #کیفیت_بالا #قیمت_توری",
+  "canonical": "https://ahanamn.com/category/%D8%AA%D9%88%D8%B1%DB%8C-%D9%81%D8%B1%D9%86%DA%AF%DB%8C",
+  "robots": "index",
+  "h1": [
+   "توری فرنگی"
+  ],
+  "ldjson": 1,
+  "words": 1860,
+  "imgs": 33,
+  "noalt": 2,
+  "ext": [
+   "wa.me",
+   "www.aparat.com",
+   "www.instagram.com",
+   "www.linkedin.com"
+  ]
+ },
+ "https://sepahanfelez.ir/category/توری-حصاری": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/category/%D8%AA%D9%88%D8%B1%DB%8C-%D8%AD%D8%B5%D8%A7%D8%B1%DB%8C",
+  "len": 172519,
+  "ct": "text/html",
+  "ttfb": 0.49,
+  "title": "توری حصاری | فروش عمده و جزئی فنس، خرید فوری",
+  "desc": "توری حصاری با بهترین کیفیت و قیمت در آهن امن | راهنمای جامع خرید توری حصاری، شامل انواع، کاربردها و نکات مهم قبل از خرید را در این مقاله بخوانید و انتخابی مطمئن داشته باشید.",
+  "canonical": "https://ahanamn.com/category/توری-حصاری",
+  "robots": "index",
+  "h1": [
+   "توری حصاری"
+  ],
+  "ldjson": 1,
+  "words": 2010,
+  "imgs": 33,
+  "noalt": 4,
+  "ext": [
+   "wa.me",
+   "www.aparat.com",
+   "www.instagram.com",
+   "www.linkedin.com"
+  ]
+ },
+ "https://sepahanfelez.ir/category/توری-پرسی": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/category/%D8%AA%D9%88%D8%B1%DB%8C-%D9%BE%D8%B1%D8%B3%DB%8C",
+  "len": 87517,
+  "ct": "text/html",
+  "ttfb": 0.42,
+  "title": "قیمت توری پرسی | انواع فنس مشبک با بهترین قیمت برای حفاظت",
+  "desc": "توری پرسی، انتخابی ایده‌آل برای حصارکشی و امنیت. مقاوم در برابر خوردگی و زنگ زدگی. خرید توری پرسی با نصب آسان و سریع. #توری_پرسی #حصارکشی #قیمت_توری_پرس",
+  "canonical": "https://ahanamn.com/category/%D8%AA%D9%88%D8%B1%DB%8C-%D9%BE%D8%B1%D8%B3%DB%8C",
+  "robots": "index",
+  "h1": [
+   "توری پرسی"
+  ],
+  "ldjson": 1,
+  "words": 1888,
+  "imgs": 33,
+  "noalt": 2,
+  "ext": [
+   "wa.me",
+   "www.aparat.com",
+   "www.instagram.com",
+   "www.linkedin.com"
+  ]
+ },
+ "https://sepahanfelez.ir/category/توری-گابیون": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/category/%D8%AA%D9%88%D8%B1%DB%8C-%DA%AF%D8%A7%D8%A8%DB%8C%D9%88%D9%86",
+  "len": 88635,
+  "ct": "text/html",
+  "ttfb": 1.13,
+  "title": "قیمت توری گابیون | فروش انواع توری گابیون سنگ چین با عمر طولانی",
+  "desc": "قیمت توری گابیون | خرید انواع توری گابیون سنگ چین با بهترین قیمت. ساخت دیوار حائل باکیفیت و مقاوم با توری گابیون.",
+  "canonical": "https://ahanamn.com/category/%D8%AA%D9%88%D8%B1%DB%8C-%DA%AF%D8%A7%D8%A8%DB%8C%D9%88%D9%86",
+  "robots": "noindex, nofollow",
+  "h1": [
+   "توری گابیون"
+  ],
+  "ldjson": 1,
+  "words": 2290,
+  "imgs": 32,
+  "noalt": 2,
+  "ext": [
+   "wa.me",
+   "www.aparat.com",
+   "www.instagram.com",
+   "www.linkedin.com"
+  ]
+ },
+ "https://sepahanfelez.ir/category/توری-کششی(expanded-metal)": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/category/%D8%AA%D9%88%D8%B1%DB%8C-%DA%A9%D8%B4%D8%B4%DB%8C(expanded-metal)",
+  "len": 66936,
+  "ct": "text/html",
+  "ttfb": 0.36,
+  "title": "قیمت توری لوزی گالوانیزه | توری کششی ضد زنگ و بادوام",
+  "desc": "توری لوزی گالوانیزه؛ مقاوم و بادوام برای مصارف صنعتی و ساختمانی. انواع توری لوزی استیل و آهنی با سایز و وزن مختلف. قیمت توری لوزی اکسپندد متال مناسب و کیفیت تضمینی. #توری_لوزی #گالوانیزه #توری_کششی",
+  "canonical": "https://ahanamn.com/category/%D8%AA%D9%88%D8%B1%DB%8C-%DA%A9%D8%B4%D8%B4%DB%8C(expanded-metal)",
+  "robots": "index",
+  "h1": [
+   "توری کششی(expanded metal)"
+  ],
+  "ldjson": 0,
+  "words": 1898,
+  "imgs": 32,
+  "noalt": 2,
+  "ext": [
+   "wa.me",
+   "www.aparat.com",
+   "www.instagram.com",
+   "www.linkedin.com"
+  ]
+ },
+ "https://sepahanfelez.ir/category/توری-جوشی--گالوانیزه-رول": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/category/%D8%AA%D9%88%D8%B1%DB%8C-%D8%AC%D9%88%D8%B4%DB%8C--%DA%AF%D8%A7%D9%84%D9%88%D8%A7%D9%86%DB%8C%D8%B2%D9%87-%D8%B1%D9%88%D9%84",
+  "len": 83698,
+  "ct": "text/html",
+  "ttfb": 0.4,
+  "title": "قیمت توری مش سبک گالوانیزه | بهترین قیمت برای مصارف صنعتی و ساختمانی",
+  "desc": "توری مش سبک گالوانیزه؛ قیمت مناسب برای مصارف صنعتی و ساختمانی. انواع توری مش با چشمه‌های مختلف و ضخامت متفاوت. بهترین قیمت توری مش را از ما بخواهید. #توری_مش_سبک #گالوانیزه #قیمت_توری_مش",
+  "canonical": "https://ahanamn.com/category/%D8%AA%D9%88%D8%B1%DB%8C-%D8%AC%D9%88%D8%B4%DB%8C--%DA%AF%D8%A7%D9%84%D9%88%D8%A7%D9%86%DB%8C%D8%B2%D9%87-%D8%B1%D9%88%D9%84",
+  "robots": "index",
+  "h1": [
+   "توری جوشی ریزبافت گالوانیزه رول"
+  ],
+  "ldjson": 0,
+  "words": 1879,
+  "imgs": 29,
+  "noalt": 2,
+  "ext": [
+   "wa.me",
+   "www.aparat.com",
+   "www.instagram.com",
+   "www.linkedin.com"
+  ]
+ },
+ "https://sepahanfelez.ir/category/مش-جوشی-یا-مش-آهنی": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/category/%D9%85%D8%B4-%D8%AC%D9%88%D8%B4%DB%8C-%DB%8C%D8%A7-%D9%85%D8%B4-%D8%A2%D9%87%D9%86%DB%8C",
+  "len": 75021,
+  "ct": "text/html",
+  "ttfb": 0.4,
+  "title": "توری جوشی برای ساختمان | قیمت و فروش انواع مش آهنی با گالوانیزه گرم",
+  "desc": "توری جوشی؛ مقاوم و بادوام برای ساختمان سازی. انواع مش آهنی با گالوانیزه گرم برای تقویت بتن و ساخت سازه های فلزی. قیمت توری جوشی مناسب و کیفیت تضمینی. #توری_جوشی #مش_آهنی #گالوانیزه_گرم",
+  "canonical": "https://ahanamn.com/category/%D8%AA%D9%88%D8%B1%DB%8C-%D8%AC%D9%88%D8%B4%DB%8C-%DB%8C%D8%A7-%D9%85%D8%B4-%D8%A2%D9%87%D9%86%DB%8C",
+  "robots": "index",
+  "h1": [
+   "مش جوشی یا مش آهنی"
+  ],
+  "ldjson": 0,
+  "words": 1906,
+  "imgs": 29,
+  "noalt": 2,
+  "ext": [
+   "wa.me",
+   "www.aparat.com",
+   "www.instagram.com",
+   "www.linkedin.com"
+  ]
+ },
+ "https://sepahanfelez.ir/category/سیم-خاردار": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/category/%D8%B3%DB%8C%D9%85-%D8%AE%D8%A7%D8%B1%D8%AF%D8%A7%D8%B1",
+  "len": 72553,
+  "ct": "text/html",
+  "ttfb": 0.35,
+  "title": "تولید و فروش سیم خاردار برای حصارکشی | خرید به قیمت کارخانه",
+  "desc": "سیم خاردار با کیفیت، مستقیم از کارخانه! حصارکشی امن و مطمئن با سیم خاردار گالوانیزه. انواع سیم خاردار با قیمت روز و مناسب. تولید و فروش سیم خاردار به صورت عمده و جزئی. #سیم_خاردار #قیمت_سیم_خاردار #تولید_سیم_خاردار",
+  "canonical": "https://ahanamn.com/category/%D8%B3%DB%8C%D9%85-%D8%AE%D8%A7%D8%B1%D8%AF%D8%A7%D8%B1",
+  "robots": "noindex, nofollow",
+  "h1": [
+   "سیم خاردار"
+  ],
+  "ldjson": 0,
+  "words": 1782,
+  "imgs": 30,
+  "noalt": 2,
+  "ext": [
+   "wa.me",
+   "www.aparat.com",
+   "www.instagram.com",
+   "www.linkedin.com"
+  ]
+ },
+ "https://sepahanfelez.ir/blog": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/blog",
+  "len": 57217,
+  "ct": "text/html",
+  "ttfb": 0.35,
+  "title": "لیست مقالات بلاگ . sepahanfelez.ir",
+  "desc": "",
+  "canonical": "",
+  "robots": "index",
+  "h1": [],
+  "ldjson": 0,
+  "words": 650,
+  "imgs": 42,
+  "noalt": 2,
+  "ext": [
+   "wa.me",
+   "www.aparat.com",
+   "www.instagram.com",
+   "www.linkedin.com"
+  ]
+ },
+ "https://sepahanfelez.ir/about": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/about",
+  "len": 46672,
+  "ct": "text/html",
+  "ttfb": 0.32,
+  "title": "درباره ما",
+  "desc": "",
+  "canonical": "",
+  "robots": "index",
+  "h1": [],
+  "ldjson": 0,
+  "words": 487,
+  "imgs": 37,
+  "noalt": 2,
+  "ext": [
+   "videojs.com",
+   "wa.me",
+   "www.aparat.com",
+   "www.instagram.com",
+   "www.linkedin.com"
+  ]
+ },
+ "https://sepahanfelez.ir/contact": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/contact",
+  "len": 37093,
+  "ct": "text/html",
+  "ttfb": 0.3,
+  "title": "تماس با ما",
+  "desc": "",
+  "canonical": "",
+  "robots": "index",
+  "h1": [],
+  "ldjson": 0,
+  "words": 359,
+  "imgs": 28,
+  "noalt": 2,
+  "ext": [
+   "wa.me",
+   "www.aparat.com",
+   "www.instagram.com",
+   "www.linkedin.com"
+  ]
+ },
+ "https://sepahanfelez.ir/category/%D9%85%D8%B4-%D8%AC%D9%88%D8%B4%DB%8C-%DB%8C%D8%A7-%D9%85%D8%B4-%D8%A2%D9%87%D9%86%DB%8C": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/category/%D9%85%D8%B4-%D8%AC%D9%88%D8%B4%DB%8C-%DB%8C%D8%A7-%D9%85%D8%B4-%D8%A2%D9%87%D9%86%DB%8C",
+  "len": 75021,
+  "ct": "text/html",
+  "ttfb": 0.38,
+  "title": "توری جوشی برای ساختمان | قیمت و فروش انواع مش آهنی با گالوانیزه گرم",
+  "desc": "توری جوشی؛ مقاوم و بادوام برای ساختمان سازی. انواع مش آهنی با گالوانیزه گرم برای تقویت بتن و ساخت سازه های فلزی. قیمت توری جوشی مناسب و کیفیت تضمینی. #توری_جوشی #مش_آهنی #گالوانیزه_گرم",
+  "canonical": "https://ahanamn.com/category/%D8%AA%D9%88%D8%B1%DB%8C-%D8%AC%D9%88%D8%B4%DB%8C-%DB%8C%D8%A7-%D9%85%D8%B4-%D8%A2%D9%87%D9%86%DB%8C",
+  "robots": "index",
+  "h1": [
+   "مش جوشی یا مش آهنی"
+  ],
+  "ldjson": 0,
+  "words": 1906,
+  "imgs": 29,
+  "noalt": 2,
+  "ext": [
+   "wa.me",
+   "www.aparat.com",
+   "www.instagram.com",
+   "www.linkedin.com"
+  ]
+ },
+ "https://sepahanfelez.ir/category/%D8%AA%D9%88%D8%B1%DB%8C-%D9%BE%D8%B1%D8%B3%DB%8C": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/category/%D8%AA%D9%88%D8%B1%DB%8C-%D9%BE%D8%B1%D8%B3%DB%8C",
+  "len": 87517,
+  "ct": "text/html",
+  "ttfb": 0.35,
+  "title": "قیمت توری پرسی | انواع فنس مشبک با بهترین قیمت برای حفاظت",
+  "desc": "توری پرسی، انتخابی ایده‌آل برای حصارکشی و امنیت. مقاوم در برابر خوردگی و زنگ زدگی. خرید توری پرسی با نصب آسان و سریع. #توری_پرسی #حصارکشی #قیمت_توری_پرس",
+  "canonical": "https://ahanamn.com/category/%D8%AA%D9%88%D8%B1%DB%8C-%D9%BE%D8%B1%D8%B3%DB%8C",
+  "robots": "index",
+  "h1": [
+   "توری پرسی"
+  ],
+  "ldjson": 1,
+  "words": 1888,
+  "imgs": 33,
+  "noalt": 2,
+  "ext": [
+   "wa.me",
+   "www.aparat.com",
+   "www.instagram.com",
+   "www.linkedin.com"
+  ]
+ },
+ "https://sepahanfelez.ir/category/%D8%AA%D9%88%D8%B1%DB%8C-%D8%AD%D8%B5%D8%A7%D8%B1%DB%8C": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/category/%D8%AA%D9%88%D8%B1%DB%8C-%D8%AD%D8%B5%D8%A7%D8%B1%DB%8C",
+  "len": 172519,
+  "ct": "text/html",
+  "ttfb": 0.55,
+  "title": "توری حصاری | فروش عمده و جزئی فنس، خرید فوری",
+  "desc": "توری حصاری با بهترین کیفیت و قیمت در آهن امن | راهنمای جامع خرید توری حصاری، شامل انواع، کاربردها و نکات مهم قبل از خرید را در این مقاله بخوانید و انتخابی مطمئن داشته باشید.",
+  "canonical": "https://ahanamn.com/category/توری-حصاری",
+  "robots": "index",
+  "h1": [
+   "توری حصاری"
+  ],
+  "ldjson": 1,
+  "words": 2010,
+  "imgs": 33,
+  "noalt": 4,
+  "ext": [
+   "wa.me",
+   "www.aparat.com",
+   "www.instagram.com",
+   "www.linkedin.com"
+  ]
+ },
+ "https://sepahanfelez.ir/price": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/price",
+  "len": 97775,
+  "ct": "text/html",
+  "ttfb": 1.46,
+  "title": "قیمت آهن لحظه ای | بروزرسانی روزانه توسط سپاهان فلز",
+  "desc": "صفحه قیمت ها | قیمت لحظه ای آهن در سایت سپاهان فلز سایت فروشگاهی شرکت صنایع مفتولی طلوع سپاهان تولید و عرضه کلیه محصولات صنایع مفتولی",
+  "canonical": "",
+  "robots": "index",
+  "h1": [
+   "جدول تغییرات لحظه ای"
+  ],
+  "ldjson": 0,
+  "words": 806,
+  "imgs": 62,
+  "noalt": 2,
+  "ext": [
+   "wa.me",
+   "www.aparat.com",
+   "www.instagram.com",
+   "www.linkedin.com"
+  ]
+ },
+ "https://sepahanfelez.ir/blog/Wires": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/blog/Wires",
+  "len": 70835,
+  "ct": "text/html",
+  "ttfb": 0.28,
+  "title": "قیمت سیم مفتول | بروزترین لیست قیمت انواع مفتول آهنی و فولادی",
+  "desc": "قیمت سیم مفتول امروز چقدر است؟ لیست کامل و به‌روز قیمت انواع سیم مفتول آهنی و فولادی. خرید آنلاین آسان و سریع. #سیم_مفتول #قیمت_سیم #خرید_آنلاین",
+  "canonical": "",
+  "robots": "index",
+  "h1": [
+   "مقالات"
+  ],
+  "ldjson": 0,
+  "words": 1145,
+  "imgs": 52,
+  "noalt": 26,
+  "ext": [
+   "wa.me",
+   "www.aparat.com",
+   "www.instagram.com",
+   "www.linkedin.com"
+  ]
+ },
+ "https://sepahanfelez.ir/blog/Wires/%DA%86%D9%87-%D9%86%D9%88%D8%B9-%D9%81%D9%86%D8%B3%DB%8C-%D8%A8%D9%87%D8%AA%D8%B1-%D8%A7%D8%B3%D8%AA": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/blog/Wires/%DA%86%D9%87-%D9%86%D9%88%D8%B9-%D9%81%D9%86%D8%B3%DB%8C-%D8%A8%D9%87%D8%AA%D8%B1-%D8%A7%D8%B3%D8%AA",
+  "len": 136846,
+  "ct": "text/html",
+  "ttfb": 0.41,
+  "title": "چه نوع فنسی بهتر است | آهن امن",
+  "desc": "آیا قصد دارید فنس بخرید اما نمی دانید که چه نوع فنسی بهتر است؟ آهن امن بهترین مرجع برای بالابردن اطلاعات شما درباره توری ها",
+  "canonical": "",
+  "robots": "index",
+  "h1": [
+   "چه نوع فنسی بهتر است"
+  ],
+  "ldjson": 0,
+  "words": 1608,
+  "imgs": 35,
+  "noalt": 4,
+  "ext": [
+   "wa.me",
+   "www.aparat.com",
+   "www.instagram.com",
+   "www.linkedin.com"
+  ]
+ },
+ "https://sepahanfelez.ir/register": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/register",
+  "len": 7099,
+  "ct": "text/html",
+  "ttfb": 0.27,
+  "title": "ثبت نام",
+  "desc": null,
+  "canonical": "MISSING",
+  "robots": "noindex",
+  "h1": [],
+  "ldjson": 0,
+  "words": 16,
+  "imgs": 1,
+  "noalt": 1,
+  "ext": []
+ },
+ "https://sepahanfelez.ir/category": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/category",
+  "len": 39092,
+  "ct": "text/html",
+  "ttfb": 0.37,
+  "title": "لیست دسته بندی ها",
+  "desc": "",
+  "canonical": "",
+  "robots": "index",
+  "h1": [
+   "لیست دسته بندی ها"
+  ],
+  "ldjson": 0,
+  "words": 348,
+  "imgs": 42,
+  "noalt": 16,
+  "ext": [
+   "wa.me",
+   "www.aparat.com",
+   "www.instagram.com",
+   "www.linkedin.com"
+  ]
+ },
+ "https://sepahanfelez.ir/blog/Wires/black-annealed-wire": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/blog/Wires/black-annealed-wire",
+  "len": 54031,
+  "ct": "text/html",
+  "ttfb": 0.38,
+  "title": "سیم مفتول سیاه چیست ؟ با سیم آرماتوربندی چه تفاوتی دارد؟",
+  "desc": "صنایع مفتولی طلوع سپاهان بهترین تولید کننده سیم مفتول سیاه و آرماتوربندی است که میتواند بهترین کیفیت را با بهترین امکانات به مشتری های خود ارائه دهد!02155449070 با اهن امن همراه باشید",
+  "canonical": "",
+  "robots": "index",
+  "h1": [
+   "آشنایی با سیم مفتول سیاه و سیم آرماتوربندی!"
+  ],
+  "ldjson": 0,
+  "words": 1283,
+  "imgs": 33,
+  "noalt": 2,
+  "ext": [
+   "ahanamn.com",
+   "wa.me",
+   "www.aparat.com",
+   "www.instagram.com",
+   "www.linkedin.com"
+  ]
+ },
+ "https://sepahanfelez.ir/blog/Wires/Black-wire": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/blog/Wires/Black-wire",
+  "len": 51719,
+  "ct": "text/html",
+  "ttfb": 1.16,
+  "title": "سیم سیاه آرماتوربندی چیست؟چه کاربردی دارد و چگونه تولید می شود؟",
+  "desc": "سیم سیاه را با نام هایی همچون مفتول آنیل شده ، پخته و سیم آرماتور نیز می شناسیم. سیم مفتول سیاه را می توانیم به عنوان مفتول مادر در صنعت نامید. تولید انواع محصولات مفتولی تا ساختمان سازی بکار گرفته می شود.",
+  "canonical": "",
+  "robots": "index",
+  "h1": [
+   "سیم سیاه آرماتوربندی چیست؟چه کاربردی دارد و چگونه تولید می شود؟"
+  ],
+  "ldjson": 0,
+  "words": 1055,
+  "imgs": 33,
+  "noalt": 2,
+  "ext": [
+   "ahanamn.com",
+   "wa.me",
+   "www.aparat.com",
+   "www.instagram.com",
+   "www.linkedin.com"
+  ]
+ },
+ "https://sepahanfelez.ir/blog/net/Chicken--wire--netting": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/blog/net/Chicken--wire--netting",
+  "len": 51394,
+  "ct": "text/html",
+  "ttfb": 0.41,
+  "title": "توری مرغی چیست؟ کاربردهای متنوع آن در صنعت و کشاورزی",
+  "desc": "توری مرغی چیست و چه کاربردی دارد؟ فرآیند تولید توری مرغی به چه شکل است؟",
+  "canonical": "",
+  "robots": "index",
+  "h1": [
+   "توری مرغی چیست و چه کاربردی دارد؟"
+  ],
+  "ldjson": 0,
+  "words": 1133,
+  "imgs": 33,
+  "noalt": 2,
+  "ext": [
+   "ahanamn.com",
+   "wa.me",
+   "www.aparat.com",
+   "www.instagram.com",
+   "www.linkedin.com"
+  ]
+ },
+ "https://sepahanfelez.ir/blog/net/Poultry-lace": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/blog/net/Poultry-lace",
+  "len": 53710,
+  "ct": "text/html",
+  "ttfb": 0.3,
+  "title": "توری فرنگی مرغی چیست؟ همه چیز درباره انواع و کاربردهای آن",
+  "desc": "توری فرنگی مرغی چیست؟ همه چیز درباره این محصول کاربردی؛ از تعریف تا انواع مختلف و کاربردهای گسترده آن در صنایع مختلف. #توری_فرنگی_مرغی #کاربرد_توری_مرغی #انواع_توری",
+  "canonical": "",
+  "robots": "index",
+  "h1": [
+   "توری فرنگی مرغی چیست ؟"
+  ],
+  "ldjson": 0,
+  "words": 1386,
+  "imgs": 33,
+  "noalt": 2,
+  "ext": [
+   "ahanamn.com",
+   "wa.me",
+   "www.aparat.com",
+   "www.instagram.com",
+   "www.linkedin.com"
+  ]
+ },
+ "https://sepahanfelez.ir/blog/net/%D8%AA%D9%88%D8%B1%DB%8C-%D9%85%D8%B1%D8%BA%DB%8C-%DA%AF%D8%A7%D9%84%D9%88%D8%A7%D9%86%DB%8C%D8%B2%D9%87": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/blog/net/%D8%AA%D9%88%D8%B1%DB%8C-%D9%85%D8%B1%D8%BA%DB%8C-%DA%AF%D8%A7%D9%84%D9%88%D8%A7%D9%86%DB%8C%D8%B2%D9%87",
+  "len": 72683,
+  "ct": "text/html",
+  "ttfb": 0.38,
+  "title": "توری مرغی گالوانیزه در 4 سایز مختلف | آهن امن",
+  "desc": "توری مرغی گالوانیزه | آهن امن بزرگترین تامین کننده توری مرغی و فروش آن به صورت آنلاین در کشور | همراه با قیمت آنلاین",
+  "canonical": "",
+  "robots": "index",
+  "h1": [
+   "توری مرغی گالوانیزه"
+  ],
+  "ldjson": 0,
+  "words": 1604,
+  "imgs": 35,
+  "noalt": 4,
+  "ext": [
+   "wa.me",
+   "www.aparat.com",
+   "www.instagram.com",
+   "www.linkedin.com"
+  ]
+ },
+ "https://sepahanfelez.ir/blog/net/The-price-of-lace": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/blog/net/The-price-of-lace",
+  "len": 53231,
+  "ct": "text/html",
+  "ttfb": 0.42,
+  "title": "عوامل موثر بر قیمت توری فرنگی",
+  "desc": "امروزه توری فرنگی را با نام هگزاگونال میشناسند همانطورکه درمقاله قبل (توری فرنگی مرغی چیست؟)",
+  "canonical": "",
+  "robots": "index",
+  "h1": [
+   "عوامل موثر بر قیمت توری فرنگی"
+  ],
+  "ldjson": 0,
+  "words": 1388,
+  "imgs": 33,
+  "noalt": 2,
+  "ext": [
+   "ahanamn.com",
+   "wa.me",
+   "www.aparat.com",
+   "www.instagram.com",
+   "www.linkedin.com"
+  ]
+ },
+ "https://sepahanfelez.ir/blog/net/chain-wire-fence": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/blog/net/chain-wire-fence",
+  "len": 52558,
+  "ct": "text/html",
+  "ttfb": 0.37,
+  "title": "راهنمای خرید توری حصاری: بررسی مزایا و معایب انواع فنس",
+  "desc": "توری حصاری که با نام هایی مانند فنس ، حصار یا chain wire fence. انواع توری حصاری به لحاظ جنس مفتول به",
+  "canonical": "",
+  "robots": "index",
+  "h1": [
+   "بررسی مزایا و معایب انواع فنس"
+  ],
+  "ldjson": 0,
+  "words": 1240,
+  "imgs": 33,
+  "noalt": 2,
+  "ext": [
+   "ahanamn.com",
+   "wa.me",
+   "www.aparat.com",
+   "www.instagram.com",
+   "www.linkedin.com"
+  ]
+ },
+ "https://sepahanfelez.ir/blog/net/%D8%AE%D8%B1%DB%8C%D8%AF-%D8%AA%D9%88%D8%B1%DB%8C-%D8%A8%D8%A7%D8%BA%DB%8C-%D8%A8%D8%A7-%D9%82%DB%8C%D9%85%D8%AA-%D9%85%D9%86%D8%A7%D8%B3%D8%A8": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/blog/net/%D8%AE%D8%B1%DB%8C%D8%AF-%D8%AA%D9%88%D8%B1%DB%8C-%D8%A8%D8%A7%D8%BA%DB%8C-%D8%A8%D8%A7-%D9%82%DB%8C%D9%85%D8%AA-%D9%85%D9%86%D8%A7%D8%B3%D8%A8",
+  "len": 131785,
+  "ct": "text/html",
+  "ttfb": 0.36,
+  "title": "خرید توری باغی با قیمت مناسب - آهن امن",
+  "desc": "",
+  "canonical": "",
+  "robots": "index",
+  "h1": [
+   "خرید توری باغی با قیمت مناسب"
+  ],
+  "ldjson": 0,
+  "words": 1505,
+  "imgs": 35,
+  "noalt": 4,
+  "ext": [
+   "ahanamn.com",
+   "wa.me",
+   "www.aparat.com",
+   "www.instagram.com",
+   "www.linkedin.com"
+  ]
+ },
+ "https://sepahanfelez.ir/blog/Wires/%D8%AE%D8%B1%DB%8C%D8%AF-%D8%AA%D9%88%D8%B1%DB%8C-%D8%AD%D8%B5%D8%A7%D8%B1%DB%8C-%D8%A7%D8%B1%D8%B2%D8%A7%D9%86": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/blog/Wires/%D8%AE%D8%B1%DB%8C%D8%AF-%D8%AA%D9%88%D8%B1%DB%8C-%D8%AD%D8%B5%D8%A7%D8%B1%DB%8C-%D8%A7%D8%B1%D8%B2%D8%A7%D9%86",
+  "len": 156713,
+  "ct": "text/html",
+  "ttfb": 0.36,
+  "title": "خرید توری حصاری ارزان | آهن امن",
+  "desc": "خرید توری حصاری ارزان می تواند دغدغه ای برای بسیاری از افرادی باشد که در جستجوی امنیت و تعیین مرز های ملک خود هستند| آهن امن بهترین انتخاب برای شما خواهد بود",
+  "canonical": "",
+  "robots": "index",
+  "h1": [
+   "خرید توری حصاری ارزان"
+  ],
+  "ldjson": 0,
+  "words": 1805,
+  "imgs": 35,
+  "noalt": 4,
+  "ext": [
+   "ahanamn.com",
+   "fa.wikipedia.org",
+   "wa.me",
+   "www.aparat.com",
+   "www.instagram.com",
+   "www.linkedin.com"
+  ]
+ },
+ "https://sepahanfelez.ir/blog/net/Woven-Wire-Mesh": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/blog/net/Woven-Wire-Mesh",
+  "len": 56163,
+  "ct": "text/html",
+  "ttfb": 0.38,
+  "title": "توری پرسی چیست و فرآیند تولید آن به چه شکل است؟",
+  "desc": "توری های پرسی یا به انگلیسی Woven Wire Mesh ، محبوبیتی خاص در بین مردم برای اجرای طرح‌های ساختمانی",
+  "canonical": "",
+  "robots": "index",
+  "h1": [
+   "توری پرسی چیست؟"
+  ],
+  "ldjson": 0,
+  "words": 1636,
+  "imgs": 33,
+  "noalt": 2,
+  "ext": [
+   "wa.me",
+   "www.aparat.com",
+   "www.instagram.com",
+   "www.linkedin.com"
+  ]
+ },
+ "https://sepahanfelez.ir/blog/net/Price-of-press-netting": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/blog/net/Price-of-press-netting",
+  "len": 52975,
+  "ct": "text/html",
+  "ttfb": 0.36,
+  "title": "چه عواملی بر قیمت توری پرسی تاثیر می گذارد؟",
+  "desc": "قیمت توری پرسی به نوع، جنس و ضخامت مفتول، اندازه چشمه‌ها و نوع بافت آن وابسته است.برای استعلام و پیگیری از قیمت این محصول می‌توانید با شماره 021-55449070 تماس بگیرید.",
+  "canonical": "",
+  "robots": "index",
+  "h1": [
+   "چه عواملی بر قیمت توری پرسی تاثیر می گذارد؟",
+   "قیمت توری پرسی"
+  ],
+  "ldjson": 0,
+  "words": 1217,
+  "imgs": 33,
+  "noalt": 2,
+  "ext": [
+   "ahanamn.com",
+   "wa.me",
+   "www.aparat.com",
+   "www.instagram.com",
+   "www.linkedin.com"
+  ]
+ },
+ "https://sepahanfelez.ir/blog/net/Gabion": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/blog/net/Gabion",
+  "len": 51128,
+  "ct": "text/html",
+  "ttfb": 0.35,
+  "title": "گابیون چیست؟ همه کاربردهای درباره توری سنگی گابیون را یک جا بخوانید",
+  "desc": "مزایای استفاده از گابیون در پروژه‌های عمرانی. مقاومت بالا، سازگاری با محیط زیست و زیبایی بصری. کاربردهای متنوع گابیون را بشناسید. #گابیون #مزایای_گابیون #محیط_زیست",
+  "canonical": "",
+  "robots": "index",
+  "h1": [
+   "توری گابیون چیست؟"
+  ],
+  "ldjson": 0,
+  "words": 1109,
+  "imgs": 33,
+  "noalt": 2,
+  "ext": [
+   "ahanamn.com",
+   "wa.me",
+   "www.aparat.com",
+   "www.instagram.com",
+   "www.linkedin.com"
+  ]
+ },
+ "https://sepahanfelez.ir/blog/net/Expanded-Metal": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/blog/net/Expanded-Metal",
+  "len": 53846,
+  "ct": "text/html",
+  "ttfb": 0.36,
+  "title": "توری کششی (Expanded Metal) چیست و چه کاربردی دارد؟",
+  "desc": "ممکن است که برای شما هم پیش امده باشد که از بین تنوع زیاد توری ها کدام را باید استفاده کنیم در عین حال کاربردی و هزینه کمتری برایمان داشته باشد مانند توری کششی.",
+  "canonical": "",
+  "robots": "index",
+  "h1": [
+   "توری کششی (Expanded Metal) چیست و چه کاربردی دارد؟"
+  ],
+  "ldjson": 0,
+  "words": 1554,
+  "imgs": 33,
+  "noalt": 2,
+  "ext": [
+   "ahanamn.com",
+   "wa.me",
+   "www.aparat.com",
+   "www.instagram.com",
+   "www.linkedin.com"
+  ]
+ },
+ "https://sepahanfelez.ir/blog/%D8%AA%D9%88%D8%B1%DB%8C-%D9%85%D8%B4/WELDED-WIRE-MESH": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/blog/%D8%AA%D9%88%D8%B1%DB%8C-%D9%85%D8%B4/WELDED-WIRE-MESH",
+  "len": 48907,
+  "ct": "text/html",
+  "ttfb": 0.39,
+  "title": "توری مش گالوانیزه یا توری مشی چه کاربردی دارد؟",
+  "desc": "راهنمای کامل توری مش گالوانیزه. بررسی انواع، مشخصات فنی و کاربردهای متنوع توری مش در صنعت ساختمان و صنایع دیگر. #توری_مش #گالوانیزه #کاربرد_توری_مش",
+  "canonical": "",
+  "robots": "index",
+  "h1": [
+   "بررسی کابردهای توری مش گالوانیزه: از تقویت بتن تا حصارکشی‌های مقاوم"
+  ],
+  "ldjson": 0,
+  "words": 1014,
+  "imgs": 31,
+  "noalt": 2,
+  "ext": [
+   "ahanamn.com",
+   "wa.me",
+   "www.aparat.com",
+   "www.instagram.com",
+   "www.linkedin.com"
+  ]
+ },
+ "https://sepahanfelez.ir/blog/%D8%AA%D9%88%D8%B1%DB%8C-%D9%85%D8%B4/Welded-Wire-Reinforcement": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/blog/%D8%AA%D9%88%D8%B1%DB%8C-%D9%85%D8%B4/Welded-Wire-Reinforcement",
+  "len": 52430,
+  "ct": "text/html",
+  "ttfb": 0.4,
+  "title": "قیمت توری مش (مش فلزی)-خرید توری مش ارزان در آهن امن",
+  "desc": "توری مش چیست ؟قیمت توری مش رولی چند است ؟مش فلزی را چگونه تهیه کنیم ؟- آهن امن",
+  "canonical": "",
+  "robots": "index",
+  "h1": [
+   "توری مش یا توری جوشی چیست؟",
+   "توری مش چیست؟"
+  ],
+  "ldjson": 0,
+  "words": 1603,
+  "imgs": 31,
+  "noalt": 2,
+  "ext": [
+   "wa.me",
+   "www.aparat.com",
+   "www.instagram.com",
+   "www.linkedin.com"
+  ]
+ },
+ "https://sepahanfelez.ir/category/%D8%B3%DB%8C%D9%85-%D8%AE%D8%A7%D8%B1%D8%AF%D8%A7%D8%B1/%D8%B3%DB%8C%D9%85-%D8%AE%D8%A7%D8%B1%D8%AF%D8%A7%D8%B1-%D8%AD%D9%84%D9%82%D9%88%DB%8C-60": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/category/%D8%B3%DB%8C%D9%85-%D8%AE%D8%A7%D8%B1%D8%AF%D8%A7%D8%B1/%D8%B3%DB%8C%D9%85-%D8%AE%D8%A7%D8%B1%D8%AF%D8%A7%D8%B1-%D8%AD%D9%84%D9%82%D9%88%DB%8C-60",
+  "len": 39139,
+  "ct": "text/html",
+  "ttfb": 0.33,
+  "title": "خرید و قیمت سیم خاردار حلقوی 60",
+  "desc": "سیم خاردار حلقوی 60 دارای خارهای حلقوی با فاصله 60 میلیمتر از یکدیگر است، استعلام قیمت و خرید سیم خاردار حلقوی 60 در وبسایت آهن امن.",
+  "canonical": "",
+  "robots": "index",
+  "h1": [
+   "سیم خاردار سوزنی قطر 60 سانتی متر"
+  ],
+  "ldjson": 0,
+  "words": 563,
+  "imgs": 29,
+  "noalt": 2,
+  "ext": [
+   "wa.me",
+   "www.aparat.com",
+   "www.instagram.com",
+   "www.linkedin.com"
+  ]
+ },
+ "https://sepahanfelez.ir/category/%D8%B3%DB%8C%D9%85-%D8%AE%D8%A7%D8%B1%D8%AF%D8%A7%D8%B1/%D8%B3%DB%8C%D9%85-%D8%AE%D8%A7%D8%B1%D8%AF%D8%A7%D8%B1-%D8%AD%D9%84%D9%82%D9%88%DB%8C-90": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/category/%D8%B3%DB%8C%D9%85-%D8%AE%D8%A7%D8%B1%D8%AF%D8%A7%D8%B1/%D8%B3%DB%8C%D9%85-%D8%AE%D8%A7%D8%B1%D8%AF%D8%A7%D8%B1-%D8%AD%D9%84%D9%82%D9%88%DB%8C-90",
+  "len": 37034,
+  "ct": "text/html",
+  "ttfb": 0.29,
+  "title": "سیم خاردار حلقوی ۹۰",
+  "desc": "استعلام قیمت سیم خاردار حلقوی ۹۰ در آهن امن، برای خرید و کسب اطلاعات درباره سیم خاردار حلقوی ۹۰ با قیمت پایین از تولید کننده روی لینک کلیک کنید.",
+  "canonical": "https://ahanamn.com/category/%D8%B3%DB%8C%D9%85-%D8%AE%D8%A7%D8%B1%D8%AF%D8%A7%D8%B1/%D8%B3%DB%8C%D9%85-%D8%AE%D8%A7%D8%B1%D8%AF%D8%A7%D8%B1-%D8%AD%D9%84%D9%82%D9%88%DB%8C-90",
+  "robots": "noindex, nofollow",
+  "h1": [
+   "سیم خاردار سوزنی قطر 90 سانتی متر"
+  ],
+  "ldjson": 0,
+  "words": 349,
+  "imgs": 29,
+  "noalt": 2,
+  "ext": [
+   "wa.me",
+   "www.aparat.com",
+   "www.instagram.com",
+   "www.linkedin.com"
+  ]
+ },
+ "https://sepahanfelez.ir/blog/barbed-wire/Barbed-wire": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/blog/barbed-wire/Barbed-wire",
+  "len": 49228,
+  "ct": "text/html",
+  "ttfb": 0.35,
+  "title": "قیمت انواع سیم خاردار خطی، حلقوی و تبری - اهن امن",
+  "desc": "سیم خاردار خطی، حلقوی و تبری برای ارزان قیمت تر بودن از گالوانیزه گرم تهیه می شوند. سیم خاردار برای حفاظت از محیط در اطراف منطقه ای کشیده میشود. سیم خاردار ارزان در آهن امن",
+  "canonical": "",
+  "robots": "index",
+  "h1": [
+   "انواع سیم خاردار خطی، حلقوی و تبری و کاربرد آن",
+   "تعریف سیم خاردار"
+  ],
+  "ldjson": 0,
+  "words": 1300,
+  "imgs": 30,
+  "noalt": 2,
+  "ext": [
+   "wa.me",
+   "www.aparat.com",
+   "www.instagram.com",
+   "www.linkedin.com"
+  ]
+ },
+ "https://sepahanfelez.ir/blog/net/What-is-barbed-wire": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/blog/net/What-is-barbed-wire",
+  "len": 50035,
+  "ct": "text/html",
+  "ttfb": 0.36,
+  "title": "سیم خاردار چیست + فرآیند تولید آن | آهن امن",
+  "desc": "هر آن چیز که باید درباره ی سیم خاردار و روش تولید و مراحل ساخت آن باید بدانید. آشنایی با کاربرد سیم خاردار و مراحل تولید Barbed wire در سایت آهن امن",
+  "canonical": "",
+  "robots": "index",
+  "h1": [
+   "سیم خاردار چیست؟"
+  ],
+  "ldjson": 0,
+  "words": 936,
+  "imgs": 36,
+  "noalt": 2,
+  "ext": [
+   "ahanamn.com",
+   "wa.me",
+   "www.aparat.com",
+   "www.instagram.com",
+   "www.linkedin.com"
+  ]
+ },
+ "https://sepahanfelez.ir/blog/%D9%85%DB%8C%D9%84%DA%AF%D8%B1%D8%AF/%D9%85%DB%8C%D9%84%DA%AF%D8%B1%D8%AF-%D9%88-%D8%A7%D9%86%D9%88%D8%A7%D8%B9-%D8%A7%D8%B3%D8%AA%D8%A7%D9%86%D8%AF%D8%A7%D8%B1%D9%87%D8%A7%DB%8C-%D8%A2%D9%86": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/blog/%D9%85%DB%8C%D9%84%DA%AF%D8%B1%D8%AF/%D9%85%DB%8C%D9%84%DA%AF%D8%B1%D8%AF-%D9%88-%D8%A7%D9%86%D9%88%D8%A7%D8%B9-%D8%A7%D8%B3%D8%AA%D8%A7%D9%86%D8%AF%D8%A7%D8%B1%D9%87%D8%A7%DB%8C-%D8%A2%D9%86",
+  "len": 54727,
+  "ct": "text/html",
+  "ttfb": 0.34,
+  "title": "استانداردهای میلگرد: کدام نوع میلگرد برای پروژه شما مناسب است؟",
+  "desc": "کدام میلگرد برای پروژه شما مناسب است؟ راهنمای کامل استانداردهای میلگرد، از A1 تا A4. انتخاب درست میلگرد بر اساس کاربرد و مقاومت. #استاندارد_میلگرد #میلگرد_A1 #میلگرد_A2 #میلگرد_A3 #میلگرد_A4",
+  "canonical": "",
+  "robots": "index",
+  "h1": [
+   "میلگرد و انواع استاندارهای آن",
+   "میلگرد و تاریخچه استفاده از آن در سازه ها"
+  ],
+  "ldjson": 0,
+  "words": 1532,
+  "imgs": 32,
+  "noalt": 2,
+  "ext": [
+   "ahanamn.com",
+   "wa.me",
+   "www.aparat.com",
+   "www.instagram.com",
+   "www.linkedin.com"
+  ]
+ },
+ "https://sepahanfelez.ir/blog/Wires/%D9%85%D8%AD%D8%A7%D8%B3%D8%A8%D9%87-%D9%88%D8%B2%D9%86-%D9%85%D9%81%D8%AA%D9%88%D9%84-%DA%AF%D8%A7%D9%84%D9%88%D8%A7%D9%86%DB%8C%D8%B2%D9%87": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/blog/Wires/%D9%85%D8%AD%D8%A7%D8%B3%D8%A8%D9%87-%D9%88%D8%B2%D9%86-%D9%85%D9%81%D8%AA%D9%88%D9%84-%DA%AF%D8%A7%D9%84%D9%88%D8%A7%D9%86%DB%8C%D8%B2%D9%87",
+  "len": 62214,
+  "ct": "text/html",
+  "ttfb": 0.34,
+  "title": "محاسبه وزن مفتول گالوانیزه شاخه ای، کلاف و متری + جدول",
+  "desc": "وزن مفتول گالوانیزه به چه صورت محاسبه می شود؟ هر کیلو سیم مفتول چند متر است؟ برای پاسخ سوالات و مشاهده فرمول و جدول محاسبه وزن سیم مفتول گالوانیزه کلیک کنید.",
+  "canonical": "",
+  "robots": "index",
+  "h1": [
+   "محاسبه وزن مفتول گالوانیزه"
+  ],
+  "ldjson": 1,
+  "words": 1642,
+  "imgs": 35,
+  "noalt": 2,
+  "ext": [
+   "ahanamn.com",
+   "wa.me",
+   "www.aparat.com",
+   "www.instagram.com",
+   "www.linkedin.com"
+  ]
+ },
+ "https://sepahanfelez.ir/blog/%D8%AA%D9%88%D8%B1%DB%8C-%D9%85%D8%B4": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/blog/%D8%AA%D9%88%D8%B1%DB%8C-%D9%85%D8%B4",
+  "len": 43101,
+  "ct": "text/html",
+  "ttfb": 0.26,
+  "title": "توری مش پیست|قیمت و خرید و فروش توری مش - صنایع مفتولی طلوع سپاهان",
+  "desc": "توری مش (توری فلزی جوشی ) به مفتول درجه یک جوشی گفته می شود.تورید کننده انواع توری مش در ایران - برای خرید و مشاوره توری مش با شماره 02191326030 تماس بگیرید.",
+  "canonical": "",
+  "robots": "index",
+  "h1": [
+   "مقالات"
+  ],
+  "ldjson": 0,
+  "words": 448,
+  "imgs": 40,
+  "noalt": 14,
+  "ext": [
+   "wa.me",
+   "www.aparat.com",
+   "www.instagram.com",
+   "www.linkedin.com"
+  ]
+ },
+ "https://sepahanfelez.ir/blog/Wires/%D8%AA%D9%81%D8%A7%D9%88%D8%AA-%DA%AF%D8%A7%D9%84%D9%88%D8%A7%D9%86%DB%8C%D8%B2%D9%87-%D8%B3%D8%B1%D8%AF-%D9%88-%DA%AF%D8%B1%D9%85": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/blog/Wires/%D8%AA%D9%81%D8%A7%D9%88%D8%AA-%DA%AF%D8%A7%D9%84%D9%88%D8%A7%D9%86%DB%8C%D8%B2%D9%87-%D8%B3%D8%B1%D8%AF-%D9%88-%DA%AF%D8%B1%D9%85",
+  "len": 60480,
+  "ct": "text/html",
+  "ttfb": 0.36,
+  "title": "تفاوت سیم مفتول گالوانیزه سرد و گرم",
+  "desc": "مهم ترین تفاوت سیم مفتول گالوانیزه سرد و گرم چیست؟ | آشنایی با مراحل گالوانیزه کردن مفتول به روش های گرم و سرد | مفتول گالوانیزه سرد بهتر است یا گرم؟",
+  "canonical": "",
+  "robots": "index",
+  "h1": [
+   "تفاوت سیم مفتول گالوانیزه سرد و گرم"
+  ],
+  "ldjson": 0,
+  "words": 1614,
+  "imgs": 38,
+  "noalt": 2,
+  "ext": [
+   "ahanamn.com",
+   "wa.me",
+   "www.aparat.com",
+   "www.instagram.com",
+   "www.linkedin.com"
+  ]
+ },
+ "https://sepahanfelez.ir/blog/net": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/blog/net",
+  "len": 65934,
+  "ct": "text/html",
+  "ttfb": 0.38,
+  "title": "قیمت توری گالوانیزه | خرید توری گالوانیزه مقاوم در برابر زنگ‌زدگی با کاربرد ساختمانی",
+  "desc": "قیمت توری گالوانیزه به‌روز و ارزان. خرید انواع توری گالوانیزه با کیفیت بالا برای ساختمان‌سازی. مقاومت در برابر زنگ‌زدگی تضمین شده. #توری_گالوانیزه #قیمت_توری #ساختمان_سازی",
+  "canonical": "",
+  "robots": "index",
+  "h1": [
+   "مقالات"
+  ],
+  "ldjson": 0,
+  "words": 1059,
+  "imgs": 51,
+  "noalt": 25,
+  "ext": [
+   "wa.me",
+   "www.aparat.com",
+   "www.instagram.com",
+   "www.linkedin.com"
+  ]
+ },
+ "https://sepahanfelez.ir/price?category=1": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/price?category=1",
+  "len": 98862,
+  "ct": "text/html",
+  "ttfb": 0.28,
+  "title": "قیمت آهن لحظه ای | بروزرسانی روزانه توسط سپاهان فلز",
+  "desc": "صفحه قیمت ها | قیمت لحظه ای آهن در سایت سپاهان فلز سایت فروشگاهی شرکت صنایع مفتولی طلوع سپاهان تولید و عرضه کلیه محصولات صنایع مفتولی",
+  "canonical": "",
+  "robots": "index",
+  "h1": [
+   "جدول تغییرات لحظه ای"
+  ],
+  "ldjson": 0,
+  "words": 765,
+  "imgs": 62,
+  "noalt": 2,
+  "ext": [
+   "wa.me",
+   "www.aparat.com",
+   "www.instagram.com",
+   "www.linkedin.com"
+  ]
+ },
+ "https://sepahanfelez.ir/price?category=2": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/price?category=2",
+  "len": 97409,
+  "ct": "text/html",
+  "ttfb": 0.37,
+  "title": "قیمت آهن لحظه ای | بروزرسانی روزانه توسط سپاهان فلز",
+  "desc": "صفحه قیمت ها | قیمت لحظه ای آهن در سایت سپاهان فلز سایت فروشگاهی شرکت صنایع مفتولی طلوع سپاهان تولید و عرضه کلیه محصولات صنایع مفتولی",
+  "canonical": "",
+  "robots": "index",
+  "h1": [
+   "جدول تغییرات لحظه ای"
+  ],
+  "ldjson": 0,
+  "words": 793,
+  "imgs": 62,
+  "noalt": 2,
+  "ext": [
+   "wa.me",
+   "www.aparat.com",
+   "www.instagram.com",
+   "www.linkedin.com"
+  ]
+ },
+ "https://sepahanfelez.ir/price?category=3": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/price?category=3",
+  "len": 40536,
+  "ct": "text/html",
+  "ttfb": 0.28,
+  "title": "قیمت آهن لحظه ای | بروزرسانی روزانه توسط سپاهان فلز",
+  "desc": "صفحه قیمت ها | قیمت لحظه ای آهن در سایت سپاهان فلز سایت فروشگاهی شرکت صنایع مفتولی طلوع سپاهان تولید و عرضه کلیه محصولات صنایع مفتولی",
+  "canonical": "",
+  "robots": "index",
+  "h1": [
+   "جدول تغییرات لحظه ای"
+  ],
+  "ldjson": 0,
+  "words": 364,
+  "imgs": 42,
+  "noalt": 2,
+  "ext": [
+   "wa.me",
+   "www.aparat.com",
+   "www.instagram.com",
+   "www.linkedin.com"
+  ]
+ },
+ "https://sepahanfelez.ir/price?category=4": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/price?category=4",
+  "len": 99958,
+  "ct": "text/html",
+  "ttfb": 0.38,
+  "title": "قیمت آهن لحظه ای | بروزرسانی روزانه توسط سپاهان فلز",
+  "desc": "صفحه قیمت ها | قیمت لحظه ای آهن در سایت سپاهان فلز سایت فروشگاهی شرکت صنایع مفتولی طلوع سپاهان تولید و عرضه کلیه محصولات صنایع مفتولی",
+  "canonical": "",
+  "robots": "index",
+  "h1": [
+   "جدول تغییرات لحظه ای"
+  ],
+  "ldjson": 0,
+  "words": 872,
+  "imgs": 62,
+  "noalt": 2,
+  "ext": [
+   "wa.me",
+   "www.aparat.com",
+   "www.instagram.com",
+   "www.linkedin.com"
+  ]
+ },
+ "https://sepahanfelez.ir/price?category=5": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/price?category=5",
+  "len": 40536,
+  "ct": "text/html",
+  "ttfb": 0.32,
+  "title": "قیمت آهن لحظه ای | بروزرسانی روزانه توسط سپاهان فلز",
+  "desc": "صفحه قیمت ها | قیمت لحظه ای آهن در سایت سپاهان فلز سایت فروشگاهی شرکت صنایع مفتولی طلوع سپاهان تولید و عرضه کلیه محصولات صنایع مفتولی",
+  "canonical": "",
+  "robots": "index",
+  "h1": [
+   "جدول تغییرات لحظه ای"
+  ],
+  "ldjson": 0,
+  "words": 364,
+  "imgs": 42,
+  "noalt": 2,
+  "ext": [
+   "wa.me",
+   "www.aparat.com",
+   "www.instagram.com",
+   "www.linkedin.com"
+  ]
+ },
+ "https://sepahanfelez.ir/price?category=6": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/price?category=6",
+  "len": 40536,
+  "ct": "text/html",
+  "ttfb": 0.31,
+  "title": "قیمت آهن لحظه ای | بروزرسانی روزانه توسط سپاهان فلز",
+  "desc": "صفحه قیمت ها | قیمت لحظه ای آهن در سایت سپاهان فلز سایت فروشگاهی شرکت صنایع مفتولی طلوع سپاهان تولید و عرضه کلیه محصولات صنایع مفتولی",
+  "canonical": "",
+  "robots": "index",
+  "h1": [
+   "جدول تغییرات لحظه ای"
+  ],
+  "ldjson": 0,
+  "words": 364,
+  "imgs": 42,
+  "noalt": 2,
+  "ext": [
+   "wa.me",
+   "www.aparat.com",
+   "www.instagram.com",
+   "www.linkedin.com"
+  ]
+ },
+ "https://sepahanfelez.ir/price?category=7": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/price?category=7",
+  "len": 40536,
+  "ct": "text/html",
+  "ttfb": 0.3,
+  "title": "قیمت آهن لحظه ای | بروزرسانی روزانه توسط سپاهان فلز",
+  "desc": "صفحه قیمت ها | قیمت لحظه ای آهن در سایت سپاهان فلز سایت فروشگاهی شرکت صنایع مفتولی طلوع سپاهان تولید و عرضه کلیه محصولات صنایع مفتولی",
+  "canonical": "",
+  "robots": "index",
+  "h1": [
+   "جدول تغییرات لحظه ای"
+  ],
+  "ldjson": 0,
+  "words": 364,
+  "imgs": 42,
+  "noalt": 2,
+  "ext": [
+   "wa.me",
+   "www.aparat.com",
+   "www.instagram.com",
+   "www.linkedin.com"
+  ]
+ },
+ "https://sepahanfelez.ir/price?category=8": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/price?category=8",
+  "len": 40536,
+  "ct": "text/html",
+  "ttfb": 0.33,
+  "title": "قیمت آهن لحظه ای | بروزرسانی روزانه توسط سپاهان فلز",
+  "desc": "صفحه قیمت ها | قیمت لحظه ای آهن در سایت سپاهان فلز سایت فروشگاهی شرکت صنایع مفتولی طلوع سپاهان تولید و عرضه کلیه محصولات صنایع مفتولی",
+  "canonical": "",
+  "robots": "index",
+  "h1": [
+   "جدول تغییرات لحظه ای"
+  ],
+  "ldjson": 0,
+  "words": 364,
+  "imgs": 42,
+  "noalt": 2,
+  "ext": [
+   "wa.me",
+   "www.aparat.com",
+   "www.instagram.com",
+   "www.linkedin.com"
+  ]
+ },
+ "https://sepahanfelez.ir/price?category=9": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/price?category=9",
+  "len": 40536,
+  "ct": "text/html",
+  "ttfb": 0.34,
+  "title": "قیمت آهن لحظه ای | بروزرسانی روزانه توسط سپاهان فلز",
+  "desc": "صفحه قیمت ها | قیمت لحظه ای آهن در سایت سپاهان فلز سایت فروشگاهی شرکت صنایع مفتولی طلوع سپاهان تولید و عرضه کلیه محصولات صنایع مفتولی",
+  "canonical": "",
+  "robots": "index",
+  "h1": [
+   "جدول تغییرات لحظه ای"
+  ],
+  "ldjson": 0,
+  "words": 364,
+  "imgs": 42,
+  "noalt": 2,
+  "ext": [
+   "wa.me",
+   "www.aparat.com",
+   "www.instagram.com",
+   "www.linkedin.com"
+  ]
+ },
+ "https://sepahanfelez.ir/price?category=10": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/price?category=10",
+  "len": 40537,
+  "ct": "text/html",
+  "ttfb": 0.63,
+  "title": "قیمت آهن لحظه ای | بروزرسانی روزانه توسط سپاهان فلز",
+  "desc": "صفحه قیمت ها | قیمت لحظه ای آهن در سایت سپاهان فلز سایت فروشگاهی شرکت صنایع مفتولی طلوع سپاهان تولید و عرضه کلیه محصولات صنایع مفتولی",
+  "canonical": "",
+  "robots": "index",
+  "h1": [
+   "جدول تغییرات لحظه ای"
+  ],
+  "ldjson": 0,
+  "words": 364,
+  "imgs": 42,
+  "noalt": 2,
+  "ext": [
+   "wa.me",
+   "www.aparat.com",
+   "www.instagram.com",
+   "www.linkedin.com"
+  ]
+ },
+ "https://sepahanfelez.ir/price?category=11": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/price?category=11",
+  "len": 40537,
+  "ct": "text/html",
+  "ttfb": 0.31,
+  "title": "قیمت آهن لحظه ای | بروزرسانی روزانه توسط سپاهان فلز",
+  "desc": "صفحه قیمت ها | قیمت لحظه ای آهن در سایت سپاهان فلز سایت فروشگاهی شرکت صنایع مفتولی طلوع سپاهان تولید و عرضه کلیه محصولات صنایع مفتولی",
+  "canonical": "",
+  "robots": "index",
+  "h1": [
+   "جدول تغییرات لحظه ای"
+  ],
+  "ldjson": 0,
+  "words": 364,
+  "imgs": 42,
+  "noalt": 2,
+  "ext": [
+   "wa.me",
+   "www.aparat.com",
+   "www.instagram.com",
+   "www.linkedin.com"
+  ]
+ },
+ "https://sepahanfelez.ir/price?category=12": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/price?category=12",
+  "len": 40537,
+  "ct": "text/html",
+  "ttfb": 0.27,
+  "title": "قیمت آهن لحظه ای | بروزرسانی روزانه توسط سپاهان فلز",
+  "desc": "صفحه قیمت ها | قیمت لحظه ای آهن در سایت سپاهان فلز سایت فروشگاهی شرکت صنایع مفتولی طلوع سپاهان تولید و عرضه کلیه محصولات صنایع مفتولی",
+  "canonical": "",
+  "robots": "index",
+  "h1": [
+   "جدول تغییرات لحظه ای"
+  ],
+  "ldjson": 0,
+  "words": 364,
+  "imgs": 42,
+  "noalt": 2,
+  "ext": [
+   "wa.me",
+   "www.aparat.com",
+   "www.instagram.com",
+   "www.linkedin.com"
+  ]
+ },
+ "https://sepahanfelez.ir/price?category=13": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/price?category=13",
+  "len": 40537,
+  "ct": "text/html",
+  "ttfb": 0.31,
+  "title": "قیمت آهن لحظه ای | بروزرسانی روزانه توسط سپاهان فلز",
+  "desc": "صفحه قیمت ها | قیمت لحظه ای آهن در سایت سپاهان فلز سایت فروشگاهی شرکت صنایع مفتولی طلوع سپاهان تولید و عرضه کلیه محصولات صنایع مفتولی",
+  "canonical": "",
+  "robots": "index",
+  "h1": [
+   "جدول تغییرات لحظه ای"
+  ],
+  "ldjson": 0,
+  "words": 364,
+  "imgs": 42,
+  "noalt": 2,
+  "ext": [
+   "wa.me",
+   "www.aparat.com",
+   "www.instagram.com",
+   "www.linkedin.com"
+  ]
+ },
+ "https://sepahanfelez.ir/price?category=14": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/price?category=14",
+  "len": 40537,
+  "ct": "text/html",
+  "ttfb": 0.34,
+  "title": "قیمت آهن لحظه ای | بروزرسانی روزانه توسط سپاهان فلز",
+  "desc": "صفحه قیمت ها | قیمت لحظه ای آهن در سایت سپاهان فلز سایت فروشگاهی شرکت صنایع مفتولی طلوع سپاهان تولید و عرضه کلیه محصولات صنایع مفتولی",
+  "canonical": "",
+  "robots": "index",
+  "h1": [
+   "جدول تغییرات لحظه ای"
+  ],
+  "ldjson": 0,
+  "words": 364,
+  "imgs": 42,
+  "noalt": 2,
+  "ext": [
+   "wa.me",
+   "www.aparat.com",
+   "www.instagram.com",
+   "www.linkedin.com"
+  ]
+ },
+ "https://sepahanfelez.ir/category/%D8%AA%D9%88%D8%B1%DB%8C-%DA%AF%D8%A7%D8%A8%DB%8C%D9%88%D9%86": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/category/%D8%AA%D9%88%D8%B1%DB%8C-%DA%AF%D8%A7%D8%A8%DB%8C%D9%88%D9%86",
+  "len": 88635,
+  "ct": "text/html",
+  "ttfb": 0.64,
+  "title": "قیمت توری گابیون | فروش انواع توری گابیون سنگ چین با عمر طولانی",
+  "desc": "قیمت توری گابیون | خرید انواع توری گابیون سنگ چین با بهترین قیمت. ساخت دیوار حائل باکیفیت و مقاوم با توری گابیون.",
+  "canonical": "https://ahanamn.com/category/%D8%AA%D9%88%D8%B1%DB%8C-%DA%AF%D8%A7%D8%A8%DB%8C%D9%88%D9%86",
+  "robots": "noindex, nofollow",
+  "h1": [
+   "توری گابیون"
+  ],
+  "ldjson": 1,
+  "words": 2290,
+  "imgs": 32,
+  "noalt": 2,
+  "ext": [
+   "wa.me",
+   "www.aparat.com",
+   "www.instagram.com",
+   "www.linkedin.com"
+  ]
+ },
+ "https://sepahanfelez.ir/category/%D8%AA%D9%88%D8%B1%DB%8C-%D8%AC%D9%88%D8%B4%DB%8C--%DA%AF%D8%A7%D9%84%D9%88%D8%A7%D9%86%DB%8C%D8%B2%D9%87-%D8%B1%D9%88%D9%84": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/category/%D8%AA%D9%88%D8%B1%DB%8C-%D8%AC%D9%88%D8%B4%DB%8C--%DA%AF%D8%A7%D9%84%D9%88%D8%A7%D9%86%DB%8C%D8%B2%D9%87-%D8%B1%D9%88%D9%84",
+  "len": 83698,
+  "ct": "text/html",
+  "ttfb": 0.35,
+  "title": "قیمت توری مش سبک گالوانیزه | بهترین قیمت برای مصارف صنعتی و ساختمانی",
+  "desc": "توری مش سبک گالوانیزه؛ قیمت مناسب برای مصارف صنعتی و ساختمانی. انواع توری مش با چشمه‌های مختلف و ضخامت متفاوت. بهترین قیمت توری مش را از ما بخواهید. #توری_مش_سبک #گالوانیزه #قیمت_توری_مش",
+  "canonical": "https://ahanamn.com/category/%D8%AA%D9%88%D8%B1%DB%8C-%D8%AC%D9%88%D8%B4%DB%8C--%DA%AF%D8%A7%D9%84%D9%88%D8%A7%D9%86%DB%8C%D8%B2%D9%87-%D8%B1%D9%88%D9%84",
+  "robots": "index",
+  "h1": [
+   "توری جوشی ریزبافت گالوانیزه رول"
+  ],
+  "ldjson": 0,
+  "words": 1879,
+  "imgs": 29,
+  "noalt": 2,
+  "ext": [
+   "wa.me",
+   "www.aparat.com",
+   "www.instagram.com",
+   "www.linkedin.com"
+  ]
+ },
+ "https://sepahanfelez.ir/price?page=2": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/price?page=2",
+  "len": 100474,
+  "ct": "text/html",
+  "ttfb": 0.41,
+  "title": "قیمت آهن لحظه ای | بروزرسانی روزانه توسط سپاهان فلز",
+  "desc": "صفحه قیمت ها | قیمت لحظه ای آهن در سایت سپاهان فلز سایت فروشگاهی شرکت صنایع مفتولی طلوع سپاهان تولید و عرضه کلیه محصولات صنایع مفتولی",
+  "canonical": "",
+  "robots": "index",
+  "h1": [
+   "جدول تغییرات لحظه ای"
+  ],
+  "ldjson": 0,
+  "words": 851,
+  "imgs": 62,
+  "noalt": 2,
+  "ext": [
+   "wa.me",
+   "www.aparat.com",
+   "www.instagram.com",
+   "www.linkedin.com"
+  ]
+ },
+ "https://sepahanfelez.ir/price?page=3": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/price?page=3",
+  "len": 98503,
+  "ct": "text/html",
+  "ttfb": 0.36,
+  "title": "قیمت آهن لحظه ای | بروزرسانی روزانه توسط سپاهان فلز",
+  "desc": "صفحه قیمت ها | قیمت لحظه ای آهن در سایت سپاهان فلز سایت فروشگاهی شرکت صنایع مفتولی طلوع سپاهان تولید و عرضه کلیه محصولات صنایع مفتولی",
+  "canonical": "",
+  "robots": "index",
+  "h1": [
+   "جدول تغییرات لحظه ای"
+  ],
+  "ldjson": 0,
+  "words": 775,
+  "imgs": 62,
+  "noalt": 2,
+  "ext": [
+   "wa.me",
+   "www.aparat.com",
+   "www.instagram.com",
+   "www.linkedin.com"
+  ]
+ },
+ "https://sepahanfelez.ir/price?page=4": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/price?page=4",
+  "len": 98181,
+  "ct": "text/html",
+  "ttfb": 0.38,
+  "title": "قیمت آهن لحظه ای | بروزرسانی روزانه توسط سپاهان فلز",
+  "desc": "صفحه قیمت ها | قیمت لحظه ای آهن در سایت سپاهان فلز سایت فروشگاهی شرکت صنایع مفتولی طلوع سپاهان تولید و عرضه کلیه محصولات صنایع مفتولی",
+  "canonical": "",
+  "robots": "index",
+  "h1": [
+   "جدول تغییرات لحظه ای"
+  ],
+  "ldjson": 0,
+  "words": 783,
+  "imgs": 62,
+  "noalt": 2,
+  "ext": [
+   "wa.me",
+   "www.aparat.com",
+   "www.instagram.com",
+   "www.linkedin.com"
+  ]
+ },
+ "https://sepahanfelez.ir/price?page=5": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/price?page=5",
+  "len": 97987,
+  "ct": "text/html",
+  "ttfb": 0.35,
+  "title": "قیمت آهن لحظه ای | بروزرسانی روزانه توسط سپاهان فلز",
+  "desc": "صفحه قیمت ها | قیمت لحظه ای آهن در سایت سپاهان فلز سایت فروشگاهی شرکت صنایع مفتولی طلوع سپاهان تولید و عرضه کلیه محصولات صنایع مفتولی",
+  "canonical": "",
+  "robots": "index",
+  "h1": [
+   "جدول تغییرات لحظه ای"
+  ],
+  "ldjson": 0,
+  "words": 804,
+  "imgs": 62,
+  "noalt": 2,
+  "ext": [
+   "wa.me",
+   "www.aparat.com",
+   "www.instagram.com",
+   "www.linkedin.com"
+  ]
+ },
+ "https://sepahanfelez.ir/price?page=6": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/price?page=6",
+  "len": 99831,
+  "ct": "text/html",
+  "ttfb": 0.35,
+  "title": "قیمت آهن لحظه ای | بروزرسانی روزانه توسط سپاهان فلز",
+  "desc": "صفحه قیمت ها | قیمت لحظه ای آهن در سایت سپاهان فلز سایت فروشگاهی شرکت صنایع مفتولی طلوع سپاهان تولید و عرضه کلیه محصولات صنایع مفتولی",
+  "canonical": "",
+  "robots": "index",
+  "h1": [
+   "جدول تغییرات لحظه ای"
+  ],
+  "ldjson": 0,
+  "words": 838,
+  "imgs": 62,
+  "noalt": 2,
+  "ext": [
+   "wa.me",
+   "www.aparat.com",
+   "www.instagram.com",
+   "www.linkedin.com"
+  ]
+ },
+ "https://sepahanfelez.ir/price?page=17": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/price?page=17",
+  "len": 98159,
+  "ct": "text/html",
+  "ttfb": 0.35,
+  "title": "قیمت آهن لحظه ای | بروزرسانی روزانه توسط سپاهان فلز",
+  "desc": "صفحه قیمت ها | قیمت لحظه ای آهن در سایت سپاهان فلز سایت فروشگاهی شرکت صنایع مفتولی طلوع سپاهان تولید و عرضه کلیه محصولات صنایع مفتولی",
+  "canonical": "",
+  "robots": "index",
+  "h1": [
+   "جدول تغییرات لحظه ای"
+  ],
+  "ldjson": 0,
+  "words": 807,
+  "imgs": 62,
+  "noalt": 2,
+  "ext": [
+   "wa.me",
+   "www.aparat.com",
+   "www.instagram.com",
+   "www.linkedin.com"
+  ]
+ },
+ "https://sepahanfelez.ir/price?page=18": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/price?page=18",
+  "len": 64831,
+  "ct": "text/html",
+  "ttfb": 0.34,
+  "title": "قیمت آهن لحظه ای | بروزرسانی روزانه توسط سپاهان فلز",
+  "desc": "صفحه قیمت ها | قیمت لحظه ای آهن در سایت سپاهان فلز سایت فروشگاهی شرکت صنایع مفتولی طلوع سپاهان تولید و عرضه کلیه محصولات صنایع مفتولی",
+  "canonical": "",
+  "robots": "index",
+  "h1": [
+   "جدول تغییرات لحظه ای"
+  ],
+  "ldjson": 0,
+  "words": 543,
+  "imgs": 50,
+  "noalt": 2,
+  "ext": [
+   "wa.me",
+   "www.aparat.com",
+   "www.instagram.com",
+   "www.linkedin.com"
+  ]
+ },
+ "https://sepahanfelez.ir/blog/Wires/%D8%B3%DB%8C%D9%85-%D9%85%D9%81%D8%AA%D9%88%D9%84-%D8%A7%D8%B2-%DA%A9%D8%AC%D8%A7-%D8%A8%D8%AE%D8%B1%D9%85%D8%9F": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/blog/Wires/%D8%B3%DB%8C%D9%85-%D9%85%D9%81%D8%AA%D9%88%D9%84-%D8%A7%D8%B2-%DA%A9%D8%AC%D8%A7-%D8%A8%D8%AE%D8%B1%D9%85%D8%9F",
+  "len": 66992,
+  "ct": "text/html",
+  "ttfb": 0.3,
+  "title": "سیم مفتول از کجا بخرم؟ راهنمایی خرید سیم مفتول | آهن امن",
+  "desc": "سیم مفتول نازک از کجا بخرم؟ | راهنمای خرید سیم مفتول | روش تولید سیم مفتول نازک و ضخیم | نحوه عرضه سیم مفتول نازک و ضخیم | کاربردهای سیم مفتول نازک و ضخیم",
+  "canonical": "",
+  "robots": "index",
+  "h1": [
+   "سیم مفتول از کجا بخرم؟"
+  ],
+  "ldjson": 2,
+  "words": 1966,
+  "imgs": 37,
+  "noalt": 2,
+  "ext": [
+   "ahanamn.com",
+   "wa.me",
+   "www.aparat.com",
+   "www.instagram.com",
+   "www.linkedin.com"
+  ]
+ },
+ "https://sepahanfelez.ir/blog/Wires/%D8%B3%DB%8C%D9%85-%D9%85%D9%81%D8%AA%D9%88%D9%84-%DA%86%DB%8C%D8%B3%D8%AA-%D9%88-%D8%B1%D9%88%D8%B4-%D8%AA%D9%88%D9%84%DB%8C%D8%AF-%D8%A2%D9%86": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/blog/Wires/%D8%B3%DB%8C%D9%85-%D9%85%D9%81%D8%AA%D9%88%D9%84-%DA%86%DB%8C%D8%B3%D8%AA-%D9%88-%D8%B1%D9%88%D8%B4-%D8%AA%D9%88%D9%84%DB%8C%D8%AF-%D8%A2%D9%86",
+  "len": 59307,
+  "ct": "text/html",
+  "ttfb": 0.84,
+  "title": "سیم مفتول چیست و روش تولید آن چگونه است؟ | آهن امن",
+  "desc": "سیم مفتول چیست؟ | نحوه تولید سیم مفتول چگونه است؟ | معرفی و مقایسه روش های تولید فابریک و غیرفابریک | شرح عملیات زنگ زدایی، کشش و آنیل سیم مفتول در آهن امن",
+  "canonical": "",
+  "robots": "index",
+  "h1": [
+   "سیم مفتول چیست و روش تولید آن"
+  ],
+  "ldjson": 2,
+  "words": 1545,
+  "imgs": 33,
+  "noalt": 2,
+  "ext": [
+   "ahanamn.com",
+   "wa.me",
+   "www.aparat.com",
+   "www.instagram.com",
+   "www.linkedin.com"
+  ]
+ },
+ "https://sepahanfelez.ir/blog/Wires/%D9%85%D8%B9%D8%B1%D9%81%DB%8C-%D8%A7%D9%86%D9%88%D8%A7%D8%B9-%D8%B3%DB%8C%D9%85-%D9%85%D9%81%D8%AA%D9%88%D9%84": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/blog/Wires/%D9%85%D8%B9%D8%B1%D9%81%DB%8C-%D8%A7%D9%86%D9%88%D8%A7%D8%B9-%D8%B3%DB%8C%D9%85-%D9%85%D9%81%D8%AA%D9%88%D9%84",
+  "len": 64264,
+  "ct": "text/html",
+  "ttfb": 0.3,
+  "title": "انواع سیم مفتول چیست و کاربرد هر کدام کدامند؟",
+  "desc": "انواع سیم مفتول و کاربرد هر کدام | جنس سیم مفتول از چیست؟ | چند نوع سیم مفتول داریم و کاربرد هر کدام برای چیست؟ | کاربرد سیم مفتول بر حسب سایز و نحوه تولید",
+  "canonical": "",
+  "robots": "index",
+  "h1": [
+   "معرفی انواع سیم مفتول"
+  ],
+  "ldjson": 1,
+  "words": 1752,
+  "imgs": 36,
+  "noalt": 2,
+  "ext": [
+   "ahanamn.com",
+   "wa.me",
+   "www.aparat.com",
+   "www.instagram.com",
+   "www.linkedin.com"
+  ]
+ },
+ "https://sepahanfelez.ir/blog/Wires/%D8%AA%D8%B4%D8%AE%DB%8C%D8%B5-%DA%AF%D8%A7%D9%84%D9%88%D8%A7%D9%86%DB%8C%D8%B2%D9%87-%DA%AF%D8%B1%D9%85-%D9%88-%D8%B3%D8%B1%D8%AF": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/blog/Wires/%D8%AA%D8%B4%D8%AE%DB%8C%D8%B5-%DA%AF%D8%A7%D9%84%D9%88%D8%A7%D9%86%DB%8C%D8%B2%D9%87-%DA%AF%D8%B1%D9%85-%D9%88-%D8%B3%D8%B1%D8%AF",
+  "len": 58778,
+  "ct": "text/html",
+  "ttfb": 0.57,
+  "title": "چگونه مفتول گالوانیزه گرم را از سرد تشخیص دهیم؟",
+  "desc": "نحوه تشخیص مفتول گالوانیزه گرم وگالوانیزه سرد | آیا مفتول گالوانیزه گرم نسبت به مفتول گالوانیزه سرد برتری دارد؟ | تشخیص گالوانیزه سرد و گرم به روش آسان",
+  "canonical": "",
+  "robots": "index",
+  "h1": [
+   "نحوه تشخیص مفتول گالوانیزه گرم و مفتول گالوانیزه سرد"
+  ],
+  "ldjson": 1,
+  "words": 1587,
+  "imgs": 35,
+  "noalt": 2,
+  "ext": [
+   "ahanamn.com",
+   "wa.me",
+   "www.aparat.com",
+   "www.instagram.com",
+   "www.linkedin.com"
+  ]
+ },
+ "https://sepahanfelez.ir/blog/Wires/%D9%85%D9%81%D8%AA%D9%88%D9%84-%DA%AF%D8%A7%D9%84%D9%88%D8%A7%D9%86%DB%8C%D8%B2%D9%87-%DA%86%DB%8C%D8%B3%D8%AA%D8%9F": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/blog/Wires/%D9%85%D9%81%D8%AA%D9%88%D9%84-%DA%AF%D8%A7%D9%84%D9%88%D8%A7%D9%86%DB%8C%D8%B2%D9%87-%DA%86%DB%8C%D8%B3%D8%AA%D8%9F",
+  "len": 64078,
+  "ct": "text/html",
+  "ttfb": 0.34,
+  "title": "مفتول گالوانیزه چیست؟ چه کاربردی دارد؟ | آهن امن",
+  "desc": "مفتول گالوانیزه چیست؟ | مفتول گالوانیزه در کجا کاربرد دارد؟ | همه آنچه که باید درباره سیم مفتول گالوانیزه، انواع و کاربرد آن بدانید + عکس و مشخصات",
+  "canonical": "",
+  "robots": "index",
+  "h1": [
+   "مفتول گالوانیزه چیست؟ انواع و کاربرد آن"
+  ],
+  "ldjson": 0,
+  "words": 1697,
+  "imgs": 33,
+  "noalt": 2,
+  "ext": [
+   "ahanamn.com",
+   "wa.me",
+   "www.aparat.com",
+   "www.instagram.com",
+   "www.linkedin.com"
+  ]
+ },
+ "https://sepahanfelez.ir/blog/Wires/Types-of-profiles": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/blog/Wires/Types-of-profiles",
+  "len": 50666,
+  "ct": "text/html",
+  "ttfb": 0.36,
+  "title": "با انواع پروفیا و استفاده آن در صنعت آشنا شوید - صنایع مفتولی طلوع سپاهان",
+  "desc": "",
+  "canonical": "",
+  "robots": "index",
+  "h1": [
+   "انواع پروفیل و کاربردهای آن در صنعت"
+  ],
+  "ldjson": 0,
+  "words": 1060,
+  "imgs": 33,
+  "noalt": 2,
+  "ext": [
+   "ahanamn.com",
+   "wa.me",
+   "www.aparat.com",
+   "www.instagram.com",
+   "www.linkedin.com"
+  ]
+ },
+ "https://sepahanfelez.ir/blog/Wires/Profile": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/blog/Wires/Profile",
+  "len": 57398,
+  "ct": "text/html",
+  "ttfb": 0.37,
+  "title": "پروفیل چیست ؟استفاده پروفیل در صنایع ساختمانی -صنایع مفتولی طلوع سپاهان",
+  "desc": "",
+  "canonical": "",
+  "robots": "index",
+  "h1": [
+   "پروفیل چیست و چه کاربرهایی دارد ؟"
+  ],
+  "ldjson": 0,
+  "words": 1812,
+  "imgs": 33,
+  "noalt": 2,
+  "ext": [
+   "wa.me",
+   "www.aparat.com",
+   "www.instagram.com",
+   "www.linkedin.com"
+  ]
+ },
+ "https://sepahanfelez.ir/blog/Wires/rabitz-metal": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/blog/Wires/rabitz-metal",
+  "len": 50039,
+  "ct": "text/html",
+  "ttfb": 0.31,
+  "title": "رابیتس چیست؟برای نصب رابیتس چه کاری باید بکنیم؟کاربرد رابیتس چیست؟- فروشگاه آهن امن",
+  "desc": "",
+  "canonical": "",
+  "robots": "index",
+  "h1": [
+   "رابیتس چیست؟ از آن چه استفاده ای می کنند؟"
+  ],
+  "ldjson": 0,
+  "words": 1080,
+  "imgs": 33,
+  "noalt": 2,
+  "ext": [
+   "wa.me",
+   "www.aparat.com",
+   "www.instagram.com",
+   "www.linkedin.com"
+  ]
+ },
+ "https://sepahanfelez.ir/blog/Wires/galvanized-wire": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/blog/Wires/galvanized-wire",
+  "len": 67059,
+  "ct": "text/html",
+  "ttfb": 0.38,
+  "title": "همه چیز در مورد مفتول گالوانیزه.تولید و کاربرد آن",
+  "desc": "مفتول گالوانیزه چیست؟ | مفتول گالوانیزه در کجا کاربرد دارد؟ | همه آنچه که باید درباره سیم مفتول گالوانیزه، انواع و کاربرد آن بدانید + عکس و مشخصات",
+  "canonical": "",
+  "robots": "index",
+  "h1": [
+   "مفتول گالوانیزه چیست؟ تولید و کاربرد آن"
+  ],
+  "ldjson": 0,
+  "words": 1990,
+  "imgs": 33,
+  "noalt": 2,
+  "ext": [
+   "wa.me",
+   "www.aparat.com",
+   "www.instagram.com",
+   "www.linkedin.com"
+  ]
+ },
+ "https://sepahanfelez.ir/blog/Wires?page=2": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/blog/Wires?page=2",
+  "len": 44557,
+  "ct": "text/html",
+  "ttfb": 0.32,
+  "title": "قیمت سیم مفتول | بروزترین لیست قیمت انواع مفتول آهنی و فولادی",
+  "desc": "قیمت سیم مفتول امروز چقدر است؟ لیست کامل و به‌روز قیمت انواع سیم مفتول آهنی و فولادی. خرید آنلاین آسان و سریع. #سیم_مفتول #قیمت_سیم #خرید_آنلاین",
+  "canonical": "",
+  "robots": "index",
+  "h1": [
+   "مقالات"
+  ],
+  "ldjson": 0,
+  "words": 469,
+  "imgs": 40,
+  "noalt": 14,
+  "ext": [
+   "wa.me",
+   "www.aparat.com",
+   "www.instagram.com",
+   "www.linkedin.com"
+  ]
+ },
+ "https://sepahanfelez.ir/blog/Wires/Production-of-galvanized-wire": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/blog/Wires/Production-of-galvanized-wire",
+  "len": 57891,
+  "ct": "text/html",
+  "ttfb": 0.33,
+  "title": "روش تهیه و تولید سیم مفتول گالوانیزه چیست؟",
+  "desc": "روش تهیه و تولید سیم مفتول گالوانیزه چیست؟ | تولید مفتول گالوانیزه سفید اینگونه است که در گالوانیزه کردن به روش گرم، فولادی که عاری از هر‌گونه زنگ‌زدگی است",
+  "canonical": "",
+  "robots": "index",
+  "h1": [
+   "روش تهیه و تولید سیم مفتول گالوانیزه چیست؟"
+  ],
+  "ldjson": 0,
+  "words": 1743,
+  "imgs": 33,
+  "noalt": 2,
+  "ext": [
+   "ahanamn.com",
+   "bit.do",
+   "bit.ly",
+   "cutt.ly",
+   "is.gd",
+   "u.to",
+   "wa.me",
+   "www.aparat.com",
+   "www.instagram.com",
+   "www.linkedin.com"
+  ]
+ },
+ "https://sepahanfelez.ir/category/مفتول-گالوانیزه": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/category/%D9%85%D9%81%D8%AA%D9%88%D9%84-%DA%AF%D8%A7%D9%84%D9%88%D8%A7%D9%86%DB%8C%D8%B2%D9%87",
+  "len": 87449,
+  "ct": "text/html",
+  "ttfb": 0.75,
+  "title": "قیمت مفتول گالوانیزه، خرید سیم مفتول گالوانیزه",
+  "desc": "خرید و فروش و تولید مفتول گالوانیزه، بررسی قیمت سیم مفتول گالوانیزه گرم و ثبت سفارش خرید مفتول گالوانیزه در تهران در وبسایت آهن امن.",
+  "canonical": "https://ahanamn.com/category/%D9%85%D9%81%D8%AA%D9%88%D9%84-%DA%AF%D8%A7%D9%84%D9%88%D8%A7%D9%86%DB%8C%D8%B2%D9%87",
+  "robots": "noindex, nofollow",
+  "h1": [
+   "مفتول گالوانیزه"
+  ],
+  "ldjson": 1,
+  "words": 1611,
+  "imgs": 34,
+  "noalt": 2,
+  "ext": [
+   "ahanamn.com",
+   "wa.me",
+   "www.aparat.com",
+   "www.instagram.com",
+   "www.linkedin.com"
+  ]
+ },
+ "https://sepahanfelez.ir/category/رابیتس-مسعود": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/category/%D8%B1%D8%A7%D8%A8%DB%8C%D8%AA%D8%B3-%D9%85%D8%B3%D8%B9%D9%88%D8%AF",
+  "len": 48716,
+  "ct": "text/html",
+  "ttfb": 1.0,
+  "title": "",
+  "desc": "",
+  "canonical": "",
+  "robots": "noindex, nofollow",
+  "h1": [
+   "رابیتس مسعود"
+  ],
+  "ldjson": 0,
+  "words": 534,
+  "imgs": 29,
+  "noalt": 2,
+  "ext": [
+   "wa.me",
+   "www.aparat.com",
+   "www.instagram.com",
+   "www.linkedin.com"
+  ]
+ },
+ "https://sepahanfelez.ir/category/رابیتس-متفرقه": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/category/%D8%B1%D8%A7%D8%A8%DB%8C%D8%AA%D8%B3-%D9%85%D8%AA%D9%81%D8%B1%D9%82%D9%87",
+  "len": 58604,
+  "ct": "text/html",
+  "ttfb": 0.35,
+  "title": "",
+  "desc": "",
+  "canonical": "",
+  "robots": "noindex, nofollow",
+  "h1": [
+   "رابیتس متفرقه"
+  ],
+  "ldjson": 0,
+  "words": 1411,
+  "imgs": 29,
+  "noalt": 2,
+  "ext": [
+   "wa.me",
+   "www.aparat.com",
+   "www.instagram.com",
+   "www.linkedin.com"
+  ]
+ },
+ "https://sepahanfelez.ir/category/سیم-خاردار/سیم-خاردار-حلقوی-60": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/category/%D8%B3%DB%8C%D9%85-%D8%AE%D8%A7%D8%B1%D8%AF%D8%A7%D8%B1/%D8%B3%DB%8C%D9%85-%D8%AE%D8%A7%D8%B1%D8%AF%D8%A7%D8%B1-%D8%AD%D9%84%D9%82%D9%88%DB%8C-60",
+  "len": 39139,
+  "ct": "text/html",
+  "ttfb": 0.31,
+  "title": "خرید و قیمت سیم خاردار حلقوی 60",
+  "desc": "سیم خاردار حلقوی 60 دارای خارهای حلقوی با فاصله 60 میلیمتر از یکدیگر است، استعلام قیمت و خرید سیم خاردار حلقوی 60 در وبسایت آهن امن.",
+  "canonical": "",
+  "robots": "index",
+  "h1": [
+   "سیم خاردار سوزنی قطر 60 سانتی متر"
+  ],
+  "ldjson": 0,
+  "words": 563,
+  "imgs": 29,
+  "noalt": 2,
+  "ext": [
+   "wa.me",
+   "www.aparat.com",
+   "www.instagram.com",
+   "www.linkedin.com"
+  ]
+ },
+ "https://sepahanfelez.ir/category/سیم-خاردار/سیم-خاردار-حلقوی-90": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/category/%D8%B3%DB%8C%D9%85-%D8%AE%D8%A7%D8%B1%D8%AF%D8%A7%D8%B1/%D8%B3%DB%8C%D9%85-%D8%AE%D8%A7%D8%B1%D8%AF%D8%A7%D8%B1-%D8%AD%D9%84%D9%82%D9%88%DB%8C-90",
+  "len": 37034,
+  "ct": "text/html",
+  "ttfb": 0.31,
+  "title": "سیم خاردار حلقوی ۹۰",
+  "desc": "استعلام قیمت سیم خاردار حلقوی ۹۰ در آهن امن، برای خرید و کسب اطلاعات درباره سیم خاردار حلقوی ۹۰ با قیمت پایین از تولید کننده روی لینک کلیک کنید.",
+  "canonical": "https://ahanamn.com/category/%D8%B3%DB%8C%D9%85-%D8%AE%D8%A7%D8%B1%D8%AF%D8%A7%D8%B1/%D8%B3%DB%8C%D9%85-%D8%AE%D8%A7%D8%B1%D8%AF%D8%A7%D8%B1-%D8%AD%D9%84%D9%82%D9%88%DB%8C-90",
+  "robots": "noindex, nofollow",
+  "h1": [
+   "سیم خاردار سوزنی قطر 90 سانتی متر"
+  ],
+  "ldjson": 0,
+  "words": 349,
+  "imgs": 29,
+  "noalt": 2,
+  "ext": [
+   "wa.me",
+   "www.aparat.com",
+   "www.instagram.com",
+   "www.linkedin.com"
+  ]
+ },
+ "https://sepahanfelez.ir/blog/barbed-wire": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/blog/barbed-wire",
+  "len": 40966,
+  "ct": "text/html",
+  "ttfb": 0.3,
+  "title": "سیم خاردار|قیمت انواع سیم خاردار خطی و حلقوی -",
+  "desc": "سیم خاردار از مفتول گالوانیزه تهیه می شود و انواع مختلفی دارد انواع سیم خاردار تبری،سوزنی،تیغی لیست قیمت و مشخصات فنی در آهن امن 02191326030",
+  "canonical": "",
+  "robots": "index",
+  "h1": [
+   "مقالات"
+  ],
+  "ldjson": 0,
+  "words": 416,
+  "imgs": 39,
+  "noalt": 13,
+  "ext": [
+   "wa.me",
+   "www.aparat.com",
+   "www.instagram.com",
+   "www.linkedin.com"
+  ]
+ },
+ "https://sepahanfelez.ir/blog/%D9%85%DB%8C%D9%84%DA%AF%D8%B1%D8%AF": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/blog/%D9%85%DB%8C%D9%84%DA%AF%D8%B1%D8%AF",
+  "len": 43686,
+  "ct": "text/html",
+  "ttfb": 0.35,
+  "title": "میلگرد|قیمت روز میلگرد|نمودار قیمت میلگرد- صنایع مفتولی طلوع سپاهان",
+  "desc": "قیمت روز میلگرد در بازار ایران و خرید محصولات تولید شدهاز صنایع مفتولی سپاهان را در سایت اهن امن تهیه کنید .تماس با آهن امن 021-91326030",
+  "canonical": "",
+  "robots": "index",
+  "h1": [
+   "مقالات"
+  ],
+  "ldjson": 0,
+  "words": 468,
+  "imgs": 40,
+  "noalt": 14,
+  "ext": [
+   "wa.me",
+   "www.aparat.com",
+   "www.instagram.com",
+   "www.linkedin.com"
+  ]
+ },
+ "https://sepahanfelez.ir/blog/%D9%85%DB%8C%D9%84%DA%AF%D8%B1%D8%AF/%D9%85%DB%8C%D9%84%DA%AF%D8%B1%D8%AF-%DA%86%DB%8C%D8%B3%D8%AA": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/blog/%D9%85%DB%8C%D9%84%DA%AF%D8%B1%D8%AF/%D9%85%DB%8C%D9%84%DA%AF%D8%B1%D8%AF-%DA%86%DB%8C%D8%B3%D8%AA",
+  "len": 51749,
+  "ct": "text/html",
+  "ttfb": 0.35,
+  "title": "میلگرد چیست|انواع میلگرد از نظر شکل ظاهری-صنایع مفتولی طلوع سپاهان",
+  "desc": "",
+  "canonical": "",
+  "robots": "index",
+  "h1": [
+   "میلگرد چیست؟چه نکاتی باید در مورد میلگرد بدانید؟",
+   "میلگرد چیست؟چه نکاتی باید در مورد میلگرد بدانید؟"
+  ],
+  "ldjson": 0,
+  "words": 1298,
+  "imgs": 32,
+  "noalt": 3,
+  "ext": [
+   "ahanamn.com",
+   "wa.me",
+   "www.aparat.com",
+   "www.instagram.com",
+   "www.linkedin.com"
+  ]
+ },
+ "https://sepahanfelez.ir/blog/net/%D8%AA%D9%88%D8%B1%DB%8C-%D8%AD%D8%B5%D8%A7%D8%B1%DB%8C-%DB%8C%D8%A7-%D9%81%D9%86%D8%B3-%DA%86%DB%8C%D8%B3%D8%AA": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/blog/net/%D8%AA%D9%88%D8%B1%DB%8C-%D8%AD%D8%B5%D8%A7%D8%B1%DB%8C-%DB%8C%D8%A7-%D9%81%D9%86%D8%B3-%DA%86%DB%8C%D8%B3%D8%AA",
+  "len": 55379,
+  "ct": "text/html",
+  "ttfb": 0.77,
+  "title": "توری حصاری (فنس): محافظی امن و بادوام برای محیط شما | انواع و کاربردها",
+  "desc": "\"توری حصاری؛ پاسخگوی همه نیازهای حصارکشی. انواع توری حصاری با طرح‌ها و رنگ‌های متنوع برای مصارف مختلف. از توری حصاری برای محصور کردن ویلا، باغ، کارخانه و... استفاده کنید. #توری_حصاری #حصارکشی #انواع_توری_حصاری\n\n\"",
+  "canonical": "",
+  "robots": "index",
+  "h1": [
+   "توری حصاری یا فنس چیست؟"
+  ],
+  "ldjson": 0,
+  "words": 1343,
+  "imgs": 33,
+  "noalt": 2,
+  "ext": [
+   "wa.me",
+   "www.aparat.com",
+   "www.instagram.com",
+   "www.linkedin.com"
+  ]
+ },
+ "https://sepahanfelez.ir/blog/net/%D8%AA%D9%88%D8%B1%DB%8C-%D8%A2%D9%87%D9%86%DB%8C-%DA%86%DB%8C%D8%B3%D8%AA%D8%9F": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/blog/net/%D8%AA%D9%88%D8%B1%DB%8C-%D8%A2%D9%87%D9%86%DB%8C-%DA%86%DB%8C%D8%B3%D8%AA%D8%9F",
+  "len": 55236,
+  "ct": "text/html",
+  "ttfb": 0.36,
+  "title": "تولید توری آهنی چیست | از کارخانه تا کارگاه شما، بررسی انواع و کاربردها",
+  "desc": "تولید توری آهنی از صفر تا صد. بررسی کامل مراحل تولید توری آهنی و کاربردهای متنوع آن در صنایع مختلف. از کارخانه تا کارگاه شما، بهترین کیفیت توری آهنی را تهیه کنید. #تولید_توری_آهنی #انواع_توری_آهنی #کاربرد_توری_آهنی",
+  "canonical": "",
+  "robots": "index",
+  "h1": [
+   "توری آهنی چیست؟"
+  ],
+  "ldjson": 0,
+  "words": 1363,
+  "imgs": 33,
+  "noalt": 2,
+  "ext": [
+   "wa.me",
+   "www.aparat.com",
+   "www.instagram.com",
+   "www.linkedin.com"
+  ]
+ },
+ "https://sepahanfelez.ir/category/%D8%B3%DB%8C%D9%85-%D8%B3%DB%8C%D8%A7%D9%87-%D9%88-%D8%A2%D8%B1%D9%85%D8%A7%D8%AA%D9%88%D8%B1-%D8%A8%D9%86%D8%AF%DB%8C": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/category/%D8%B3%DB%8C%D9%85-%D8%B3%DB%8C%D8%A7%D9%87-%D9%88-%D8%A2%D8%B1%D9%85%D8%A7%D8%AA%D9%88%D8%B1-%D8%A8%D9%86%D8%AF%DB%8C",
+  "len": 82550,
+  "ct": "text/html",
+  "ttfb": 0.39,
+  "title": "مفتول آرماتوربندی برای ساختمان مناسب برای بتن | مفتول سیاه با انعطاف پذیری بالا",
+  "desc": "انواع مفتول آرماتوربندی سیاه با ضخامت‌های مختلف. خرید مفتول آرماتوربندی با بهترین قیمت بازار. فروش سیم آرماتوربندی به صورت عمده و جزئی. #قیمت_مفتول_آرماتوربندی #خرید_مفتول #مفتول_سیاه",
+  "canonical": "https://ahanamn.com/category/%D8%B3%DB%8C%D9%85-%D8%B3%DB%8C%D8%A7%D9%87-%D9%88-%D8%A2%D8%B1%D9%85%D8%A7%D8%AA%D9%88%D8%B1-%D8%A8%D9%86%D8%AF%DB%8C",
+  "robots": "index",
+  "h1": [
+   "مفتول آرماتوربندی"
+  ],
+  "ldjson": 1,
+  "words": 2086,
+  "imgs": 33,
+  "noalt": 2,
+  "ext": [
+   "wa.me",
+   "www.aparat.com",
+   "www.instagram.com",
+   "www.linkedin.com"
+  ]
+ },
+ "https://sepahanfelez.ir/price?page=10": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/price?page=10",
+  "len": 100030,
+  "ct": "text/html",
+  "ttfb": 0.39,
+  "title": "قیمت آهن لحظه ای | بروزرسانی روزانه توسط سپاهان فلز",
+  "desc": "صفحه قیمت ها | قیمت لحظه ای آهن در سایت سپاهان فلز سایت فروشگاهی شرکت صنایع مفتولی طلوع سپاهان تولید و عرضه کلیه محصولات صنایع مفتولی",
+  "canonical": "",
+  "robots": "index",
+  "h1": [
+   "جدول تغییرات لحظه ای"
+  ],
+  "ldjson": 0,
+  "words": 841,
+  "imgs": 62,
+  "noalt": 2,
+  "ext": [
+   "wa.me",
+   "www.aparat.com",
+   "www.instagram.com",
+   "www.linkedin.com"
+  ]
+ },
+ "https://sepahanfelez.ir/price?page=11": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/price?page=11",
+  "len": 98488,
+  "ct": "text/html",
+  "ttfb": 0.33,
+  "title": "قیمت آهن لحظه ای | بروزرسانی روزانه توسط سپاهان فلز",
+  "desc": "صفحه قیمت ها | قیمت لحظه ای آهن در سایت سپاهان فلز سایت فروشگاهی شرکت صنایع مفتولی طلوع سپاهان تولید و عرضه کلیه محصولات صنایع مفتولی",
+  "canonical": "",
+  "robots": "index",
+  "h1": [
+   "جدول تغییرات لحظه ای"
+  ],
+  "ldjson": 0,
+  "words": 773,
+  "imgs": 62,
+  "noalt": 2,
+  "ext": [
+   "wa.me",
+   "www.aparat.com",
+   "www.instagram.com",
+   "www.linkedin.com"
+  ]
+ },
+ "https://sepahanfelez.ir/category/%D8%B3%DB%8C%D9%85-%D8%AE%D8%A7%D8%B1%D8%AF%D8%A7%D8%B1": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/category/%D8%B3%DB%8C%D9%85-%D8%AE%D8%A7%D8%B1%D8%AF%D8%A7%D8%B1",
+  "len": 72553,
+  "ct": "text/html",
+  "ttfb": 0.45,
+  "title": "تولید و فروش سیم خاردار برای حصارکشی | خرید به قیمت کارخانه",
+  "desc": "سیم خاردار با کیفیت، مستقیم از کارخانه! حصارکشی امن و مطمئن با سیم خاردار گالوانیزه. انواع سیم خاردار با قیمت روز و مناسب. تولید و فروش سیم خاردار به صورت عمده و جزئی. #سیم_خاردار #قیمت_سیم_خاردار #تولید_سیم_خاردار",
+  "canonical": "https://ahanamn.com/category/%D8%B3%DB%8C%D9%85-%D8%AE%D8%A7%D8%B1%D8%AF%D8%A7%D8%B1",
+  "robots": "noindex, nofollow",
+  "h1": [
+   "سیم خاردار"
+  ],
+  "ldjson": 0,
+  "words": 1782,
+  "imgs": 30,
+  "noalt": 2,
+  "ext": [
+   "wa.me",
+   "www.aparat.com",
+   "www.instagram.com",
+   "www.linkedin.com"
+  ]
+ },
+ "https://sepahanfelez.ir/price?page=1": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/price?page=1",
+  "len": 97782,
+  "ct": "text/html",
+  "ttfb": 0.37,
+  "title": "قیمت آهن لحظه ای | بروزرسانی روزانه توسط سپاهان فلز",
+  "desc": "صفحه قیمت ها | قیمت لحظه ای آهن در سایت سپاهان فلز سایت فروشگاهی شرکت صنایع مفتولی طلوع سپاهان تولید و عرضه کلیه محصولات صنایع مفتولی",
+  "canonical": "",
+  "robots": "index",
+  "h1": [
+   "جدول تغییرات لحظه ای"
+  ],
+  "ldjson": 0,
+  "words": 806,
+  "imgs": 62,
+  "noalt": 2,
+  "ext": [
+   "wa.me",
+   "www.aparat.com",
+   "www.instagram.com",
+   "www.linkedin.com"
+  ]
+ },
+ "https://sepahanfelez.ir/category/%D8%AA%D9%88%D8%B1%DB%8C-%D9%85%D8%B1%D8%BA%DB%8C": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/category/%D8%AA%D9%88%D8%B1%DB%8C-%D9%85%D8%B1%D8%BA%DB%8C",
+  "len": 80869,
+  "ct": "text/html",
+  "ttfb": 0.38,
+  "title": "توری مرغی برای حصارکشی | قیمت مناسب از تولید کننده بخرید",
+  "desc": "توری مرغی مرغوب با قیمت کارخانه! حصارکشی محکم و با دوام با توری مرغی باکیفیت از آهن امن. انواع توری مرغی با ابعاد و مش بندی مختلف. خرید توری مرغی با بهترین قیمت را از ما بخواهید. #توری_مرغی #قیمت_توری_مرغی #حصارکشی",
+  "canonical": "https://ahanamn.com/category/%D8%AA%D9%88%D8%B1%DB%8C-%D9%85%D8%B1%D8%BA%DB%8C",
+  "robots": "index",
+  "h1": [
+   "توری مرغی"
+  ],
+  "ldjson": 1,
+  "words": 2288,
+  "imgs": 35,
+  "noalt": 2,
+  "ext": [
+   "wa.me",
+   "www.aparat.com",
+   "www.instagram.com",
+   "www.linkedin.com"
+  ]
+ },
+ "https://sepahanfelez.ir/category/%D8%AA%D9%88%D8%B1%DB%8C-%D9%81%D8%B1%D9%86%DA%AF%DB%8C": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/category/%D8%AA%D9%88%D8%B1%DB%8C-%D9%81%D8%B1%D9%86%DA%AF%DB%8C",
+  "len": 75050,
+  "ct": "text/html",
+  "ttfb": 0.36,
+  "title": "خرید توری فرنگی تحویل فوری | قیمت توری فرنگی به ازای متر",
+  "desc": "توری فرنگی با کیفیت بالا برای مصارف صنعتی و ساختمانی. مقاوم در برابر زنگ زدگی و خوردگی. قیمت توری فرنگی به ازای متر  با چشمه های مختلف با توجه به ابعاد و جنس. #توری_فرنگی_گالوانیزه #کیفیت_بالا #قیمت_توری",
+  "canonical": "https://ahanamn.com/category/%D8%AA%D9%88%D8%B1%DB%8C-%D9%81%D8%B1%D9%86%DA%AF%DB%8C",
+  "robots": "index",
+  "h1": [
+   "توری فرنگی"
+  ],
+  "ldjson": 1,
+  "words": 1860,
+  "imgs": 33,
+  "noalt": 2,
+  "ext": [
+   "wa.me",
+   "www.aparat.com",
+   "www.instagram.com",
+   "www.linkedin.com"
+  ]
+ },
+ "https://sepahanfelez.ir/category/%D9%85%D9%81%D8%AA%D9%88%D9%84-%DA%AF%D8%A7%D9%84%D9%88%D8%A7%D9%86%DB%8C%D8%B2%D9%87": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/category/%D9%85%D9%81%D8%AA%D9%88%D9%84-%DA%AF%D8%A7%D9%84%D9%88%D8%A7%D9%86%DB%8C%D8%B2%D9%87",
+  "len": 87449,
+  "ct": "text/html",
+  "ttfb": 0.44,
+  "title": "قیمت مفتول گالوانیزه، خرید سیم مفتول گالوانیزه",
+  "desc": "خرید و فروش و تولید مفتول گالوانیزه، بررسی قیمت سیم مفتول گالوانیزه گرم و ثبت سفارش خرید مفتول گالوانیزه در تهران در وبسایت آهن امن.",
+  "canonical": "https://ahanamn.com/category/%D9%85%D9%81%D8%AA%D9%88%D9%84-%DA%AF%D8%A7%D9%84%D9%88%D8%A7%D9%86%DB%8C%D8%B2%D9%87",
+  "robots": "noindex, nofollow",
+  "h1": [
+   "مفتول گالوانیزه"
+  ],
+  "ldjson": 1,
+  "words": 1611,
+  "imgs": 34,
+  "noalt": 2,
+  "ext": [
+   "ahanamn.com",
+   "wa.me",
+   "www.aparat.com",
+   "www.instagram.com",
+   "www.linkedin.com"
+  ]
+ },
+ "https://sepahanfelez.ir/price?page=7": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/price?page=7",
+  "len": 99136,
+  "ct": "text/html",
+  "ttfb": 0.42,
+  "title": "قیمت آهن لحظه ای | بروزرسانی روزانه توسط سپاهان فلز",
+  "desc": "صفحه قیمت ها | قیمت لحظه ای آهن در سایت سپاهان فلز سایت فروشگاهی شرکت صنایع مفتولی طلوع سپاهان تولید و عرضه کلیه محصولات صنایع مفتولی",
+  "canonical": "",
+  "robots": "index",
+  "h1": [
+   "جدول تغییرات لحظه ای"
+  ],
+  "ldjson": 0,
+  "words": 788,
+  "imgs": 62,
+  "noalt": 2,
+  "ext": [
+   "wa.me",
+   "www.aparat.com",
+   "www.instagram.com",
+   "www.linkedin.com"
+  ]
+ },
+ "https://sepahanfelez.ir/price?page=16": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/price?page=16",
+  "len": 98110,
+  "ct": "text/html",
+  "ttfb": 0.35,
+  "title": "قیمت آهن لحظه ای | بروزرسانی روزانه توسط سپاهان فلز",
+  "desc": "صفحه قیمت ها | قیمت لحظه ای آهن در سایت سپاهان فلز سایت فروشگاهی شرکت صنایع مفتولی طلوع سپاهان تولید و عرضه کلیه محصولات صنایع مفتولی",
+  "canonical": "",
+  "robots": "index",
+  "h1": [
+   "جدول تغییرات لحظه ای"
+  ],
+  "ldjson": 0,
+  "words": 807,
+  "imgs": 62,
+  "noalt": 2,
+  "ext": [
+   "wa.me",
+   "www.aparat.com",
+   "www.instagram.com",
+   "www.linkedin.com"
+  ]
+ },
+ "https://sepahanfelez.ir/price?page=13": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/price?page=13",
+  "len": 100646,
+  "ct": "text/html",
+  "ttfb": 0.24,
+  "title": "قیمت آهن لحظه ای | بروزرسانی روزانه توسط سپاهان فلز",
+  "desc": "صفحه قیمت ها | قیمت لحظه ای آهن در سایت سپاهان فلز سایت فروشگاهی شرکت صنایع مفتولی طلوع سپاهان تولید و عرضه کلیه محصولات صنایع مفتولی",
+  "canonical": "",
+  "robots": "index",
+  "h1": [
+   "جدول تغییرات لحظه ای"
+  ],
+  "ldjson": 0,
+  "words": 830,
+  "imgs": 62,
+  "noalt": 2,
+  "ext": [
+   "wa.me",
+   "www.aparat.com",
+   "www.instagram.com",
+   "www.linkedin.com"
+  ]
+ },
+ "https://sepahanfelez.ir/price?page=14": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/price?page=14",
+  "len": 97501,
+  "ct": "text/html",
+  "ttfb": 0.86,
+  "title": "قیمت آهن لحظه ای | بروزرسانی روزانه توسط سپاهان فلز",
+  "desc": "صفحه قیمت ها | قیمت لحظه ای آهن در سایت سپاهان فلز سایت فروشگاهی شرکت صنایع مفتولی طلوع سپاهان تولید و عرضه کلیه محصولات صنایع مفتولی",
+  "canonical": "",
+  "robots": "index",
+  "h1": [
+   "جدول تغییرات لحظه ای"
+  ],
+  "ldjson": 0,
+  "words": 771,
+  "imgs": 62,
+  "noalt": 2,
+  "ext": [
+   "wa.me",
+   "www.aparat.com",
+   "www.instagram.com",
+   "www.linkedin.com"
+  ]
+ },
+ "https://sepahanfelez.ir/price?page=15": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/price?page=15",
+  "len": 98442,
+  "ct": "text/html",
+  "ttfb": 0.35,
+  "title": "قیمت آهن لحظه ای | بروزرسانی روزانه توسط سپاهان فلز",
+  "desc": "صفحه قیمت ها | قیمت لحظه ای آهن در سایت سپاهان فلز سایت فروشگاهی شرکت صنایع مفتولی طلوع سپاهان تولید و عرضه کلیه محصولات صنایع مفتولی",
+  "canonical": "",
+  "robots": "index",
+  "h1": [
+   "جدول تغییرات لحظه ای"
+  ],
+  "ldjson": 0,
+  "words": 810,
+  "imgs": 62,
+  "noalt": 2,
+  "ext": [
+   "wa.me",
+   "www.aparat.com",
+   "www.instagram.com",
+   "www.linkedin.com"
+  ]
+ },
+ "https://sepahanfelez.ir/blog/Wires?page=1": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/blog/Wires?page=1",
+  "len": 70842,
+  "ct": "text/html",
+  "ttfb": 1.17,
+  "title": "قیمت سیم مفتول | بروزترین لیست قیمت انواع مفتول آهنی و فولادی",
+  "desc": "قیمت سیم مفتول امروز چقدر است؟ لیست کامل و به‌روز قیمت انواع سیم مفتول آهنی و فولادی. خرید آنلاین آسان و سریع. #سیم_مفتول #قیمت_سیم #خرید_آنلاین",
+  "canonical": "",
+  "robots": "index",
+  "h1": [
+   "مقالات"
+  ],
+  "ldjson": 0,
+  "words": 1145,
+  "imgs": 52,
+  "noalt": 26,
+  "ext": [
+   "wa.me",
+   "www.aparat.com",
+   "www.instagram.com",
+   "www.linkedin.com"
+  ]
+ },
+ "https://sepahanfelez.ir/category/%D9%85%D9%81%D8%AA%D9%88%D9%84-%DA%AF%D8%A7%D9%84%D9%88%D8%A7%D9%86%DB%8C%D8%B2%D9%87/%D9%85%D9%81%D8%AA%D9%88%D9%84-%DA%AF%D8%A7%D9%84%D9%88%D8%A7%D9%86%DB%8C%D8%B2%D9%87-%DA%AF%D8%B1%D9%85-%D8%B3%D8%A7%DB%8C%D8%B2-0.50": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/category/%D9%85%D9%81%D8%AA%D9%88%D9%84-%DA%AF%D8%A7%D9%84%D9%88%D8%A7%D9%86%DB%8C%D8%B2%D9%87/%D9%85%D9%81%D8%AA%D9%88%D9%84-%DA%AF%D8%A7%D9%84%D9%88%D8%A7%D9%86%DB%8C%D8%B2%D9%87-%DA%AF%D8%B1%D9%85-%D8%B3%D8%A7%DB%8C%D8%B2-0.50",
+  "len": 45040,
+  "ct": "text/html",
+  "ttfb": 0.31,
+  "title": "قیمت و خرید مفتول گالوانیزه گرم سایز 0/50 | آهن امن",
+  "desc": "مفتول گالوانیزه گرم یکی از محصولات مهم و پرکاربرد در صنایع مختلف است که به دلیل ویژگی‌های منحصر به فرد و کاربردهای گسترده‌ای که دارد، اهمیت زیادی پیدا کرده...",
+  "canonical": "",
+  "robots": "noindex, nofollow",
+  "h1": [
+   "مفتول گالوانیزه گرم سایز 0/50"
+  ],
+  "ldjson": 0,
+  "words": 1059,
+  "imgs": 29,
+  "noalt": 2,
+  "ext": [
+   "wa.me",
+   "www.aparat.com",
+   "www.instagram.com",
+   "www.linkedin.com"
+  ]
+ },
+ "https://sepahanfelez.ir/price?page=9": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/price?page=9",
+  "len": 98223,
+  "ct": "text/html",
+  "ttfb": 0.6,
+  "title": "قیمت آهن لحظه ای | بروزرسانی روزانه توسط سپاهان فلز",
+  "desc": "صفحه قیمت ها | قیمت لحظه ای آهن در سایت سپاهان فلز سایت فروشگاهی شرکت صنایع مفتولی طلوع سپاهان تولید و عرضه کلیه محصولات صنایع مفتولی",
+  "canonical": "",
+  "robots": "index",
+  "h1": [
+   "جدول تغییرات لحظه ای"
+  ],
+  "ldjson": 0,
+  "words": 811,
+  "imgs": 62,
+  "noalt": 2,
+  "ext": [
+   "wa.me",
+   "www.aparat.com",
+   "www.instagram.com",
+   "www.linkedin.com"
+  ]
+ },
+ "https://sepahanfelez.ir/price?page=12": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/price?page=12",
+  "len": 98286,
+  "ct": "text/html",
+  "ttfb": 0.45,
+  "title": "قیمت آهن لحظه ای | بروزرسانی روزانه توسط سپاهان فلز",
+  "desc": "صفحه قیمت ها | قیمت لحظه ای آهن در سایت سپاهان فلز سایت فروشگاهی شرکت صنایع مفتولی طلوع سپاهان تولید و عرضه کلیه محصولات صنایع مفتولی",
+  "canonical": "",
+  "robots": "index",
+  "h1": [
+   "جدول تغییرات لحظه ای"
+  ],
+  "ldjson": 0,
+  "words": 798,
+  "imgs": 62,
+  "noalt": 2,
+  "ext": [
+   "wa.me",
+   "www.aparat.com",
+   "www.instagram.com",
+   "www.linkedin.com"
+  ]
+ },
+ "https://sepahanfelez.ir/price?page=8": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/price?page=8",
+  "len": 97888,
+  "ct": "text/html",
+  "ttfb": 1.07,
+  "title": "قیمت آهن لحظه ای | بروزرسانی روزانه توسط سپاهان فلز",
+  "desc": "صفحه قیمت ها | قیمت لحظه ای آهن در سایت سپاهان فلز سایت فروشگاهی شرکت صنایع مفتولی طلوع سپاهان تولید و عرضه کلیه محصولات صنایع مفتولی",
+  "canonical": "",
+  "robots": "index",
+  "h1": [
+   "جدول تغییرات لحظه ای"
+  ],
+  "ldjson": 0,
+  "words": 776,
+  "imgs": 62,
+  "noalt": 2,
+  "ext": [
+   "wa.me",
+   "www.aparat.com",
+   "www.instagram.com",
+   "www.linkedin.com"
+  ]
+ },
+ "https://sepahanfelez.ir/category/مفتول-گالوانیزه/مفتول-گالوانیزه-گرم-سایز-0.50": {
+  "status": 200,
+  "final": "https://sepahanfelez.ir/category/%D9%85%D9%81%D8%AA%D9%88%D9%84-%DA%AF%D8%A7%D9%84%D9%88%D8%A7%D9%86%DB%8C%D8%B2%D9%87/%D9%85%D9%81%D8%AA%D9%88%D9%84-%DA%AF%D8%A7%D9%84%D9%88%D8%A7%D9%86%DB%8C%D8%B2%D9%87-%DA%AF%D8%B1%D9%85-%D8%B3%D8%A7%DB%8C%D8%B2-0.50",
+  "len": 45040,
+  "ct": "text/html",
+  "ttfb": 0.33,
+  "title": "قیمت و خرید مفتول گالوانیزه گرم سایز 0/50 | آهن امن",
+  "desc": "مفتول گالوانیزه گرم یکی از محصولات مهم و پرکاربرد در صنایع مختلف است که به دلیل ویژگی‌های منحصر به فرد و کاربردهای گسترده‌ای که دارد، اهمیت زیادی پیدا کرده...",
+  "canonical": "",
+  "robots": "noindex, nofollow",
+  "h1": [
+   "مفتول گالوانیزه گرم سایز 0/50"
+  ],
+  "ldjson": 0,
+  "words": 1059,
+  "imgs": 29,
+  "noalt": 2,
+  "ext": [
+   "wa.me",
+   "www.aparat.com",
+   "www.instagram.com",
+   "www.linkedin.com"
+  ]
+ }
+}

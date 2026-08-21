@@ -1,0 +1,8805 @@
+{
+ "mobile": {
+  "/": {
+   "htmlFontSize": "6px",
+   "bodyFontSize": "8.4px",
+   "scrollWidth": 375,
+   "viewportWidth": 375,
+   "horizontalOverflow": false,
+   "overflowingCount": 167,
+   "overflowingSample": [
+    {
+     "tag": "div",
+     "cls": "",
+     "right": 735,
+     "left": 375,
+     "w": 360
+    },
+    {
+     "tag": "div",
+     "cls": "closeBtn",
+     "right": 411,
+     "left": 393,
+     "w": 18
+    },
+    {
+     "tag": "i",
+     "cls": "bi bi-x-lg",
+     "right": 411,
+     "left": 393,
+     "w": 18
+    },
+    {
+     "tag": "ul",
+     "cls": "",
+     "right": 717,
+     "left": 393,
+     "w": 324
+    },
+    {
+     "tag": "li",
+     "cls": "",
+     "right": 717,
+     "left": 393,
+     "w": 324
+    },
+    {
+     "tag": "a",
+     "cls": "",
+     "right": 717,
+     "left": 393,
+     "w": 324
+    },
+    {
+     "tag": "li",
+     "cls": "",
+     "right": 717,
+     "left": 393,
+     "w": 324
+    },
+    {
+     "tag": "a",
+     "cls": "dropdown-btn d-flex align-items-center gap-2",
+     "right": 717,
+     "left": 393,
+     "w": 324
+    },
+    {
+     "tag": "img",
+     "cls": "",
+     "right": 717,
+     "left": 687,
+     "w": 30
+    },
+    {
+     "tag": "i",
+     "cls": "bi bi-caret-left-fill me-auto",
+     "right": 405,
+     "left": 393,
+     "w": 12
+    },
+    {
+     "tag": "li",
+     "cls": "",
+     "right": 717,
+     "left": 393,
+     "w": 324
+    },
+    {
+     "tag": "a",
+     "cls": "dropdown-btn d-flex align-items-center gap-2",
+     "right": 717,
+     "left": 393,
+     "w": 324
+    }
+   ],
+   "smallTextCount": 137,
+   "smallTextSample": [
+    {
+     "tag": "a",
+     "fs": 12,
+     "cls": "",
+     "text": "021-91326030"
+    },
+    {
+     "tag": "p",
+     "fs": 8.4,
+     "cls": "",
+     "text": "ناحیه ی کاربری"
+    },
+    {
+     "tag": "a",
+     "fs": 8.4,
+     "cls": "",
+     "text": "صفحه اصلی"
+    },
+    {
+     "tag": "a",
+     "fs": 8.4,
+     "cls": "",
+     "text": "سیم و مفتول"
+    },
+    {
+     "tag": "a",
+     "fs": 8.4,
+     "cls": "",
+     "text": "توری"
+    },
+    {
+     "tag": "a",
+     "fs": 8.4,
+     "cls": "",
+     "text": "توری مش"
+    },
+    {
+     "tag": "a",
+     "fs": 8.4,
+     "cls": "",
+     "text": "سیم خاردار"
+    },
+    {
+     "tag": "a",
+     "fs": 8.4,
+     "cls": "",
+     "text": "مجله سپاهان فلز"
+    },
+    {
+     "tag": "a",
+     "fs": 8.4,
+     "cls": "",
+     "text": "درباره ما"
+    },
+    {
+     "tag": "a",
+     "fs": 8.4,
+     "cls": "",
+     "text": "تماس با ما"
+    },
+    {
+     "tag": "a",
+     "fs": 12,
+     "cls": "",
+     "text": "صفحه اصلی"
+    },
+    {
+     "tag": "a",
+     "fs": 12,
+     "cls": "dropdown-btn d-flex align-items-center g",
+     "text": "سیم و مفتول"
+    },
+    {
+     "tag": "a",
+     "fs": 10.8,
+     "cls": "dropdown-btn d-flex",
+     "text": "مفتول گالوانیزه"
+    },
+    {
+     "tag": "a",
+     "fs": 10.8,
+     "cls": "",
+     "text": "مفتول آرماتوربندی"
+    },
+    {
+     "tag": "a",
+     "fs": 12,
+     "cls": "dropdown-btn d-flex align-items-center g",
+     "text": "توری"
+    }
+   ],
+   "smallTextBySize": {
+    "12": 12,
+    "8.4": 113,
+    "10.8": 10,
+    "11.3": 1,
+    "7.2": 1
+   },
+   "totalInteractive": 106,
+   "smallTapTargets": 63,
+   "smallTapSample": [
+    {
+     "tag": "a",
+     "w": 15,
+     "h": 26,
+     "cls": "cart",
+     "text": ""
+    },
+    {
+     "tag": "a",
+     "w": 72,
+     "h": 26,
+     "cls": "user",
+     "text": "ناحیه ی کاربری"
+    },
+    {
+     "tag": "div",
+     "w": 36,
+     "h": 27,
+     "cls": "navbar-toggler",
+     "text": ""
+    },
+    {
+     "tag": "input",
+     "w": 24,
+     "h": 24,
+     "cls": "searchInput",
+     "text": ""
+    },
+    {
+     "tag": "button",
+     "w": 24,
+     "h": 24,
+     "cls": "searchBtn",
+     "text": ""
+    },
+    {
+     "tag": "a",
+     "w": 324,
+     "h": 20,
+     "cls": "",
+     "text": "صفحه اصلی"
+    },
+    {
+     "tag": "a",
+     "w": 324,
+     "h": 20,
+     "cls": "dropdown-btn d-flex align-items-center g",
+     "text": "سیم و مفتول"
+    },
+    {
+     "tag": "a",
+     "w": 324,
+     "h": 20,
+     "cls": "dropdown-btn d-flex align-items-center g",
+     "text": "توری"
+    },
+    {
+     "tag": "a",
+     "w": 324,
+     "h": 20,
+     "cls": "dropdown-btn d-flex align-items-center g",
+     "text": "توری مش"
+    },
+    {
+     "tag": "a",
+     "w": 324,
+     "h": 20,
+     "cls": "",
+     "text": "سیم خاردار"
+    },
+    {
+     "tag": "a",
+     "w": 324,
+     "h": 20,
+     "cls": "",
+     "text": "مجله سپاهان فلز"
+    },
+    {
+     "tag": "a",
+     "w": 324,
+     "h": 20,
+     "cls": "",
+     "text": "درباره ما"
+    },
+    {
+     "tag": "a",
+     "w": 324,
+     "h": 20,
+     "cls": "",
+     "text": "تماس با ما"
+    },
+    {
+     "tag": "button",
+     "w": 12,
+     "h": 12,
+     "cls": "",
+     "text": "1"
+    },
+    {
+     "tag": "button",
+     "w": 12,
+     "h": 12,
+     "cls": "",
+     "text": "2"
+    }
+   ],
+   "imgTotal": 54,
+   "imgNoAlt": 1,
+   "imgEmptyAlt": 1,
+   "imgNoDims": 29,
+   "imgNoLazy": 10,
+   "imgNoDimsSample": [
+    {
+     "src": "factory.png",
+     "w": 0
+    },
+    {
+     "src": "factory.png",
+     "w": 0
+    },
+    {
+     "src": "factory.png",
+     "w": 0
+    },
+    {
+     "src": "711838karkhane-sanaye-maftuli-sepahanfelez.jpg",
+     "w": 357
+    },
+    {
+     "src": "842987tori-joshi-galvanize-sepahanfelez.jpg",
+     "w": 357
+    },
+    {
+     "src": "711838karkhane-sanaye-maftuli-sepahanfelez.jpg",
+     "w": 357
+    },
+    {
+     "src": "842987tori-joshi-galvanize-sepahanfelez.jpg",
+     "w": 357
+    },
+    {
+     "src": "711838karkhane-sanaye-maftuli-sepahanfelez.jpg",
+     "w": 357
+    },
+    {
+     "src": "mini-chart.png",
+     "w": 136
+    },
+    {
+     "src": "mini-chart.png",
+     "w": 136
+    }
+   ],
+   "imgFormats": {
+    "svg": 3,
+    "webp": 1,
+    "jpg": 11,
+    "png": 39
+   },
+   "headings": [
+    {
+     "lvl": 2,
+     "text": "قیمت لحظه ای"
+    },
+    {
+     "lvl": 3,
+     "text": "درباره ما"
+    },
+    {
+     "lvl": 1,
+     "text": "شرکت صنایع مفتولی طلوع سپاهان | سایت سپاهان فلز"
+    },
+    {
+     "lvl": 3,
+     "text": "دانش نامه"
+    },
+    {
+     "lvl": 2,
+     "text": "چه نوع فنسی بهت..."
+    },
+    {
+     "lvl": 3,
+     "text": "محصول\n                                                به سبد"
+    }
+   ],
+   "h1Count": 1,
+   "headingSkips": [
+    "h1→h3"
+   ],
+   "formFields": 2,
+   "fieldsNoLabel": 1,
+   "fieldsPlaceholderOnly": 0,
+   "fieldsNoAutocomplete": 1,
+   "fieldTypes": [
+    {
+     "t": "text",
+     "name": "",
+     "ph": ""
+    },
+    {
+     "t": "text",
+     "name": "mobile",
+     "ph": "مثال : 09389611983"
+    }
+   ],
+   "langAttr": "fa",
+   "dirAttr": "rtl",
+   "skipLink": false,
+   "landmarks": {
+    "main": 0,
+    "nav": 1,
+    "header": 1,
+    "footer": 1,
+    "aside": 0
+   },
+   "iconOnlyNoLabel": 16,
+   "iconOnlySample": [
+    {
+     "tag": "a",
+     "cls": "cart"
+    },
+    {
+     "tag": "button",
+     "cls": "searchBtn"
+    },
+    {
+     "tag": "button",
+     "cls": "landing-prev slick-arrow"
+    },
+    {
+     "tag": "button",
+     "cls": "landing-next slick-arrow"
+    },
+    {
+     "tag": "button",
+     "cls": "border-0 mx-auto"
+    },
+    {
+     "tag": "button",
+     "cls": "border-0 mx-auto"
+    },
+    {
+     "tag": "button",
+     "cls": "border-0 mx-auto"
+    },
+    {
+     "tag": "button",
+     "cls": "border-0 mx-auto"
+    },
+    {
+     "tag": "button",
+     "cls": "border-0 mx-auto"
+    },
+    {
+     "tag": "button",
+     "cls": "border-0 mx-auto"
+    }
+   ],
+   "tabbable": 8,
+   "lowContrastPairs": 3,
+   "lowContrastSample": [
+    {
+     "fg": "rgb(180, 35, 50)",
+     "bg": "rgb(180,35,50)",
+     "ratio": 1,
+     "need": 4.5,
+     "fs": 12,
+     "text": "021-91326030"
+    },
+    {
+     "fg": "rgb(35, 207, 20)",
+     "bg": "rgb(255,255,255)",
+     "ratio": 2.1,
+     "need": 4.5,
+     "fs": 8.4,
+     "text": "افزایش"
+    },
+    {
+     "fg": "rgb(255, 255, 255)",
+     "bg": "rgb(255,255,255)",
+     "ratio": 1,
+     "need": 4.5,
+     "fs": 12,
+     "text": "اطلاعات تماس"
+    }
+   ],
+   "tableCount": 1,
+   "tableInfo": [
+    {
+     "rows": 11,
+     "cols": 8,
+     "w": 992,
+     "minW": "992px",
+     "caption": false,
+     "thead": true,
+     "scope": 0
+    }
+   ],
+   "stylesheets": [
+    "app.css?v=1786020965"
+   ],
+   "scripts": [
+    {
+     "src": "?v=1a&pid=5200&site=1&l=https%3A%2F%2Fsepahan",
+     "async": true,
+     "defer": false,
+     "third": false
+    },
+    {
+     "src": "js?id=G-FPYB89P985&cx=c&gtm=4e6850",
+     "async": true,
+     "defer": false,
+     "third": true
+    },
+    {
+     "src": "js15_as.js",
+     "async": true,
+     "defer": false,
+     "third": true
+    },
+    {
+     "src": "js?id=G-4G781JNM07",
+     "async": true,
+     "defer": false,
+     "third": true
+    },
+    {
+     "src": "analytics.js",
+     "async": true,
+     "defer": false,
+     "third": true
+    },
+    {
+     "src": "fugB8i",
+     "async": true,
+     "defer": false,
+     "third": true
+    },
+    {
+     "src": "app.js?v=1786011687",
+     "async": false,
+     "defer": false,
+     "third": false
+    },
+    {
+     "src": "sidemenu.js?v=1786011689",
+     "async": false,
+     "defer": false,
+     "third": false
+    },
+    {
+     "src": "home.js",
+     "async": false,
+     "defer": false,
+     "third": false
+    },
+    {
+     "src": "js?id=G-FPYB89P985",
+     "async": true,
+     "defer": false,
+     "third": true
+    },
+    {
+     "src": "0.php?4920158&@f16&@g1&@h1&@i1&@j178604034408",
+     "async": true,
+     "defer": false,
+     "third": false
+    },
+    {
+     "src": "mm.js",
+     "async": true,
+     "defer": false,
+     "third": true
+    }
+   ],
+   "inlineScripts": 6,
+   "preconnect": [],
+   "title": "سپاهان فلز | تولید کننده انواع مفتول‌های صنعتی و ساختمانی",
+   "metaDesc": "شرکت رادمان جاده ابریشم تنها نماینده رسمی شرکت صنایع مفتولی طلوع سپاهان با نام تجاری سپاهان فلز| تولید و عرضه کلیه محصولات صنایع مفتولی",
+   "canonical": "https://sepahanfelez.ir/",
+   "robots": "index, follow",
+   "jsonLd": [
+    "Organization"
+   ],
+   "domNodes": 601,
+   "perf": {
+    "cls": 0.408,
+    "lcp": 2428,
+    "lcpEl": "IMG.",
+    "longTasks": 8,
+    "longTaskTime": 1586,
+    "shifts": [
+     {
+      "v": 0.29,
+      "src": [
+       "DIV.container",
+       "DIV.about-us-wrapper",
+       "TR."
+      ]
+     },
+     {
+      "v": 0.118,
+      "src": [
+       "DIV.container",
+       "DIV.about-us-wrapper"
+      ]
+     }
+    ],
+    "ttfb": 1540,
+    "domContentLoaded": 2144,
+    "loadEvent": 2802,
+    "resourceCount": 44,
+    "totalTransferKB": 1166,
+    "byTypeKB": {
+     "link": 38,
+     "script": 134,
+     "img": 811,
+     "css": 183,
+     "fetch": 0
+    },
+    "heaviest": [
+     {
+      "u": "8490chain-link-fence.jpg",
+      "kb": 217,
+      "ms": 296
+     },
+     {
+      "u": "711838karkhane-sanaye-maftuli-sepahanfelez.jp",
+      "kb": 122,
+      "ms": 258
+     },
+     {
+      "u": "694148884139530447about-us.jpg",
+      "kb": 120,
+      "ms": 256
+     },
+     {
+      "u": "842987tori-joshi-galvanize-sepahanfelez.jpg",
+      "kb": 118,
+      "ms": 255
+     },
+     {
+      "u": "app.js",
+      "kb": 93,
+      "ms": 300
+     },
+     {
+      "u": "bootstrap-icons.woff2",
+      "kb": 89,
+      "ms": 409
+     },
+     {
+      "u": "995796instagram.jpg",
+      "kb": 57,
+      "ms": 238
+     },
+     {
+      "u": "270133%D9%85%D9%81%D8%AA%D9%88%D9%84%20%20-%2",
+      "kb": 53,
+      "ms": 380
+     },
+     {
+      "u": "439764telegram.jpg",
+      "kb": 52,
+      "ms": 235
+     },
+     {
+      "u": "home.js",
+      "kb": 40,
+      "ms": 380
+     },
+     {
+      "u": "app.css",
+      "kb": 38,
+      "ms": 200
+     },
+     {
+      "u": "IRANSansWeb_FaNum_Light.woff2",
+      "kb": 32,
+      "ms": 380
+     }
+    ]
+   },
+   "consoleIssues": [
+    "pageerror: Cannot set properties of null (setting 'textContent')",
+    "pageerror: Cannot set properties of null (setting 'textContent')",
+    "pageerror: Cannot set properties of null (setting 'textContent')",
+    "pageerror: Cannot set properties of null (setting 'textContent')",
+    "pageerror: Cannot set properties of null (setting 'textContent')",
+    "pageerror: Cannot set properties of null (setting 'textContent')",
+    "pageerror: Cannot set properties of null (setting 'textContent')",
+    "pageerror: Cannot set properties of null (setting 'textContent')",
+    "pageerror: Cannot set properties of null (setting 'textContent')"
+   ],
+   "consoleIssueCount": 9
+  },
+  "/price": {
+   "htmlFontSize": "6px",
+   "bodyFontSize": "8.4px",
+   "scrollWidth": 375,
+   "viewportWidth": 375,
+   "horizontalOverflow": false,
+   "overflowingCount": 256,
+   "overflowingSample": [
+    {
+     "tag": "div",
+     "cls": "",
+     "right": 735,
+     "left": 375,
+     "w": 360
+    },
+    {
+     "tag": "div",
+     "cls": "closeBtn",
+     "right": 411,
+     "left": 393,
+     "w": 18
+    },
+    {
+     "tag": "i",
+     "cls": "bi bi-x-lg",
+     "right": 411,
+     "left": 393,
+     "w": 18
+    },
+    {
+     "tag": "ul",
+     "cls": "",
+     "right": 717,
+     "left": 393,
+     "w": 324
+    },
+    {
+     "tag": "li",
+     "cls": "",
+     "right": 717,
+     "left": 393,
+     "w": 324
+    },
+    {
+     "tag": "a",
+     "cls": "",
+     "right": 717,
+     "left": 393,
+     "w": 324
+    },
+    {
+     "tag": "li",
+     "cls": "",
+     "right": 717,
+     "left": 393,
+     "w": 324
+    },
+    {
+     "tag": "a",
+     "cls": "dropdown-btn d-flex align-items-center gap-2",
+     "right": 717,
+     "left": 393,
+     "w": 324
+    },
+    {
+     "tag": "img",
+     "cls": "",
+     "right": 717,
+     "left": 687,
+     "w": 30
+    },
+    {
+     "tag": "i",
+     "cls": "bi bi-caret-left-fill me-auto",
+     "right": 405,
+     "left": 393,
+     "w": 12
+    },
+    {
+     "tag": "li",
+     "cls": "",
+     "right": 717,
+     "left": 393,
+     "w": 324
+    },
+    {
+     "tag": "a",
+     "cls": "dropdown-btn d-flex align-items-center gap-2",
+     "right": 717,
+     "left": 393,
+     "w": 324
+    }
+   ],
+   "smallTextCount": 185,
+   "smallTextSample": [
+    {
+     "tag": "a",
+     "fs": 12,
+     "cls": "",
+     "text": "021-91326030"
+    },
+    {
+     "tag": "p",
+     "fs": 8.4,
+     "cls": "",
+     "text": "ناحیه ی کاربری"
+    },
+    {
+     "tag": "a",
+     "fs": 8.4,
+     "cls": "",
+     "text": "صفحه اصلی"
+    },
+    {
+     "tag": "a",
+     "fs": 8.4,
+     "cls": "",
+     "text": "سیم و مفتول"
+    },
+    {
+     "tag": "a",
+     "fs": 8.4,
+     "cls": "",
+     "text": "توری"
+    },
+    {
+     "tag": "a",
+     "fs": 8.4,
+     "cls": "",
+     "text": "توری مش"
+    },
+    {
+     "tag": "a",
+     "fs": 8.4,
+     "cls": "",
+     "text": "سیم خاردار"
+    },
+    {
+     "tag": "a",
+     "fs": 8.4,
+     "cls": "",
+     "text": "مجله سپاهان فلز"
+    },
+    {
+     "tag": "a",
+     "fs": 8.4,
+     "cls": "",
+     "text": "درباره ما"
+    },
+    {
+     "tag": "a",
+     "fs": 8.4,
+     "cls": "",
+     "text": "تماس با ما"
+    },
+    {
+     "tag": "a",
+     "fs": 12,
+     "cls": "",
+     "text": "صفحه اصلی"
+    },
+    {
+     "tag": "a",
+     "fs": 12,
+     "cls": "dropdown-btn d-flex align-items-center g",
+     "text": "سیم و مفتول"
+    },
+    {
+     "tag": "a",
+     "fs": 10.8,
+     "cls": "dropdown-btn d-flex",
+     "text": "مفتول گالوانیزه"
+    },
+    {
+     "tag": "a",
+     "fs": 10.8,
+     "cls": "",
+     "text": "مفتول آرماتوربندی"
+    },
+    {
+     "tag": "a",
+     "fs": 12,
+     "cls": "dropdown-btn d-flex align-items-center g",
+     "text": "توری"
+    }
+   ],
+   "smallTextBySize": {
+    "12": 9,
+    "8.4": 165,
+    "10.8": 10,
+    "7.2": 1
+   },
+   "totalInteractive": 141,
+   "smallTapTargets": 92,
+   "smallTapSample": [
+    {
+     "tag": "a",
+     "w": 15,
+     "h": 26,
+     "cls": "cart",
+     "text": ""
+    },
+    {
+     "tag": "a",
+     "w": 72,
+     "h": 26,
+     "cls": "user",
+     "text": "ناحیه ی کاربری"
+    },
+    {
+     "tag": "div",
+     "w": 36,
+     "h": 27,
+     "cls": "navbar-toggler",
+     "text": ""
+    },
+    {
+     "tag": "input",
+     "w": 24,
+     "h": 24,
+     "cls": "searchInput",
+     "text": ""
+    },
+    {
+     "tag": "button",
+     "w": 24,
+     "h": 24,
+     "cls": "searchBtn",
+     "text": ""
+    },
+    {
+     "tag": "a",
+     "w": 324,
+     "h": 20,
+     "cls": "",
+     "text": "صفحه اصلی"
+    },
+    {
+     "tag": "a",
+     "w": 324,
+     "h": 20,
+     "cls": "dropdown-btn d-flex align-items-center g",
+     "text": "سیم و مفتول"
+    },
+    {
+     "tag": "a",
+     "w": 324,
+     "h": 20,
+     "cls": "dropdown-btn d-flex align-items-center g",
+     "text": "توری"
+    },
+    {
+     "tag": "a",
+     "w": 324,
+     "h": 20,
+     "cls": "dropdown-btn d-flex align-items-center g",
+     "text": "توری مش"
+    },
+    {
+     "tag": "a",
+     "w": 324,
+     "h": 20,
+     "cls": "",
+     "text": "سیم خاردار"
+    },
+    {
+     "tag": "a",
+     "w": 324,
+     "h": 20,
+     "cls": "",
+     "text": "مجله سپاهان فلز"
+    },
+    {
+     "tag": "a",
+     "w": 324,
+     "h": 20,
+     "cls": "",
+     "text": "درباره ما"
+    },
+    {
+     "tag": "a",
+     "w": 324,
+     "h": 20,
+     "cls": "",
+     "text": "تماس با ما"
+    },
+    {
+     "tag": "a",
+     "w": 216,
+     "h": 14,
+     "cls": "border-0",
+     "text": "مش جوشی یا مش آهنی توری مش میل"
+    },
+    {
+     "tag": "a",
+     "w": 136,
+     "h": 14,
+     "cls": "border-0",
+     "text": ""
+    }
+   ],
+   "imgTotal": 61,
+   "imgNoAlt": 1,
+   "imgEmptyAlt": 1,
+   "imgNoDims": 38,
+   "imgNoLazy": 44,
+   "imgNoDimsSample": [
+    {
+     "src": "factory.png",
+     "w": 0
+    },
+    {
+     "src": "factory.png",
+     "w": 0
+    },
+    {
+     "src": "factory.png",
+     "w": 0
+    },
+    {
+     "src": "270133%D9%85%D9%81%D8%AA%D9%88%D9%84%20%20-%20%20I",
+     "w": 124
+    },
+    {
+     "src": "841951%D8%AA%D9%88%D8%B1%DB%8C%20%20-%20%20Icon%20",
+     "w": 124
+    },
+    {
+     "src": "254325389666%D9%BE%D8%A7%DB%8C%D9%87-%D9%81%D9%86%",
+     "w": 124
+    },
+    {
+     "src": "638219%D9%85%D8%B4%20%20-%20%20Icon%20pack.png",
+     "w": 124
+    },
+    {
+     "src": "985532%D8%B3%DB%8C%D9%85%20%D8%AE%D8%A7%D8%B1%D8%A",
+     "w": 124
+    },
+    {
+     "src": "863937%D8%B1%D8%A7%D8%A8%DB%8C%D8%AA%D8%B3%20%20-%",
+     "w": 124
+    },
+    {
+     "src": "925714%D8%A7%D9%84%DA%A9%D8%AA%D8%B1%D9%88%D8%AF%2",
+     "w": 124
+    }
+   ],
+   "imgFormats": {
+    "svg": 2,
+    "webp": 1,
+    "jpg": 3,
+    "png": 55
+   },
+   "headings": [
+    {
+     "lvl": 1,
+     "text": "جدول تغییرات لحظه ای"
+    },
+    {
+     "lvl": 3,
+     "text": "محصول\n                                                به سبد"
+    }
+   ],
+   "h1Count": 1,
+   "headingSkips": [
+    "h1→h3"
+   ],
+   "formFields": 2,
+   "fieldsNoLabel": 1,
+   "fieldsPlaceholderOnly": 0,
+   "fieldsNoAutocomplete": 1,
+   "fieldTypes": [
+    {
+     "t": "text",
+     "name": "",
+     "ph": ""
+    },
+    {
+     "t": "text",
+     "name": "mobile",
+     "ph": "مثال : 09389611983"
+    }
+   ],
+   "langAttr": "fa",
+   "dirAttr": "rtl",
+   "skipLink": false,
+   "landmarks": {
+    "main": 1,
+    "nav": 2,
+    "header": 1,
+    "footer": 1,
+    "aside": 0
+   },
+   "iconOnlyNoLabel": 24,
+   "iconOnlySample": [
+    {
+     "tag": "a",
+     "cls": "cart"
+    },
+    {
+     "tag": "button",
+     "cls": "searchBtn"
+    },
+    {
+     "tag": "button",
+     "cls": "border-0 bg-white mx-auto"
+    },
+    {
+     "tag": "button",
+     "cls": "border-0 bg-white mx-auto"
+    },
+    {
+     "tag": "button",
+     "cls": "border-0 bg-white mx-auto"
+    },
+    {
+     "tag": "button",
+     "cls": "border-0 bg-white mx-auto"
+    },
+    {
+     "tag": "button",
+     "cls": "border-0 bg-white mx-auto"
+    },
+    {
+     "tag": "button",
+     "cls": "border-0 bg-white mx-auto"
+    },
+    {
+     "tag": "button",
+     "cls": "border-0 bg-white mx-auto"
+    },
+    {
+     "tag": "button",
+     "cls": "border-0 bg-white mx-auto"
+    }
+   ],
+   "tabbable": 1,
+   "lowContrastPairs": 3,
+   "lowContrastSample": [
+    {
+     "fg": "rgb(180, 35, 50)",
+     "bg": "rgb(180,35,50)",
+     "ratio": 1,
+     "need": 4.5,
+     "fs": 12,
+     "text": "021-91326030"
+    },
+    {
+     "fg": "rgb(35, 207, 20)",
+     "bg": "rgb(255,255,255)",
+     "ratio": 2.1,
+     "need": 4.5,
+     "fs": 8.4,
+     "text": "افزایش"
+    },
+    {
+     "fg": "rgb(108, 117, 125)",
+     "bg": "rgb(247,247,247)",
+     "ratio": 4.38,
+     "need": 4.5,
+     "fs": 8.4,
+     "text": "صفحه قبل"
+    }
+   ],
+   "tableCount": 1,
+   "tableInfo": [
+    {
+     "rows": 21,
+     "cols": 7,
+     "w": 992,
+     "minW": "992px",
+     "caption": false,
+     "thead": true,
+     "scope": 0
+    }
+   ],
+   "stylesheets": [
+    "app.css?v=1786020965"
+   ],
+   "scripts": [
+    {
+     "src": "?v=1a&pid=5200&site=1&l=https%3A%2F%2Fsepahan",
+     "async": true,
+     "defer": false,
+     "third": false
+    },
+    {
+     "src": "js?id=G-FPYB89P985&cx=c&gtm=4e6850",
+     "async": true,
+     "defer": false,
+     "third": true
+    },
+    {
+     "src": "js15_as.js",
+     "async": true,
+     "defer": false,
+     "third": true
+    },
+    {
+     "src": "js?id=G-4G781JNM07",
+     "async": true,
+     "defer": false,
+     "third": true
+    },
+    {
+     "src": "analytics.js",
+     "async": true,
+     "defer": false,
+     "third": true
+    },
+    {
+     "src": "?_a=v&_h=sepahanfelez.ir&_ss=1x00pevnjc&_pv=2",
+     "async": true,
+     "defer": true,
+     "third": false
+    },
+    {
+     "src": "fugB8i",
+     "async": true,
+     "defer": false,
+     "third": true
+    },
+    {
+     "src": "app.js?v=1786011687",
+     "async": false,
+     "defer": false,
+     "third": false
+    },
+    {
+     "src": "sidemenu.js?v=1786011689",
+     "async": false,
+     "defer": false,
+     "third": false
+    },
+    {
+     "src": "print.js",
+     "async": false,
+     "defer": false,
+     "third": false
+    },
+    {
+     "src": "js?id=G-FPYB89P985",
+     "async": true,
+     "defer": false,
+     "third": true
+    },
+    {
+     "src": "0.php?4920158&@f16&@g0&@h2&@i1&@j178604035397",
+     "async": true,
+     "defer": false,
+     "third": false
+    },
+    {
+     "src": "mm.js",
+     "async": true,
+     "defer": false,
+     "third": true
+    }
+   ],
+   "inlineScripts": 6,
+   "preconnect": [],
+   "title": "قیمت آهن لحظه ای | بروزرسانی روزانه توسط سپاهان فلز",
+   "metaDesc": "صفحه قیمت ها | قیمت لحظه ای آهن در سایت سپاهان فلز سایت فروشگاهی شرکت صنایع مفتولی طلوع سپاهان تولید و عرضه کلیه محصولات صنایع مفتولی",
+   "canonical": "https://sepahanfelez.ir/price",
+   "robots": "index, follow",
+   "jsonLd": [
+    "Organization"
+   ],
+   "domNodes": 785,
+   "perf": {
+    "cls": 0.726,
+    "lcp": 740,
+    "lcpEl": "IMG.",
+    "longTasks": 5,
+    "longTaskTime": 363,
+    "shifts": [
+     {
+      "v": 0.726,
+      "src": [
+       "DIV.tab-pane",
+       "DIV.col-lg-1",
+       "DIV.col-lg-1"
+      ]
+     }
+    ],
+    "ttfb": 448,
+    "domContentLoaded": 728,
+    "loadEvent": 1194,
+    "resourceCount": 40,
+    "totalTransferKB": 25,
+    "byTypeKB": {
+     "link": 0,
+     "script": 6,
+     "img": 19,
+     "css": 0,
+     "fetch": 0
+    },
+    "heaviest": [
+     {
+      "u": "print.js",
+      "kb": 6,
+      "ms": 140
+     },
+     {
+      "u": "972833%D9%88%D8%A7%D8%AA%D8%B1%D8%A7%D8%B3%D8",
+      "kb": 3,
+      "ms": 144
+     },
+     {
+      "u": "142822%D9%85%DB%8C%D9%84%20%DA%AF%D8%B1%D8%AF",
+      "kb": 3,
+      "ms": 151
+     },
+     {
+      "u": "254325389666%D9%BE%D8%A7%DB%8C%D9%87-%D9%81%D",
+      "kb": 2,
+      "ms": 149
+     },
+     {
+      "u": "925714%D8%A7%D9%84%DA%A9%D8%AA%D8%B1%D9%88%D8",
+      "kb": 2,
+      "ms": 147
+     },
+     {
+      "u": "863937%D8%B1%D8%A7%D8%A8%DB%8C%D8%AA%D8%B3%20",
+      "kb": 2,
+      "ms": 150
+     },
+     {
+      "u": "404176%D8%A7%D8%B3%D9%BE%DB%8C%D8%B3%D8%B1%20",
+      "kb": 2,
+      "ms": 145
+     },
+     {
+      "u": "572219%D9%BE%D8%B4%D9%85%20%D8%B4%DB%8C%D8%B4",
+      "kb": 2,
+      "ms": 151
+     },
+     {
+      "u": "546667%D8%AE%D8%A7%D9%85%D9%88%D8%AA%20%20-%2",
+      "kb": 1,
+      "ms": 147
+     },
+     {
+      "u": "323332%D8%AA%DB%8C%D8%B1%20%20%D8%A2%D9%87%D9",
+      "kb": 1,
+      "ms": 150
+     },
+     {
+      "u": "824374%D9%88%D8%B1%D9%82%20%D9%81%D9%84%D8%B2",
+      "kb": 1,
+      "ms": 152
+     },
+     {
+      "u": "app.css",
+      "kb": 0,
+      "ms": 8
+     }
+    ]
+   },
+   "consoleIssues": [
+    "pageerror: Cannot set properties of null (setting 'textContent')",
+    "pageerror: Cannot set properties of null (setting 'textContent')",
+    "pageerror: Cannot set properties of null (setting 'textContent')",
+    "pageerror: Cannot set properties of null (setting 'textContent')",
+    "pageerror: Cannot set properties of null (setting 'textContent')",
+    "pageerror: Cannot set properties of null (setting 'textContent')",
+    "pageerror: Cannot set properties of null (setting 'textContent')",
+    "pageerror: Cannot set properties of null (setting 'textContent')"
+   ],
+   "consoleIssueCount": 8
+  },
+  "/blog": {
+   "htmlFontSize": "6px",
+   "bodyFontSize": "8.4px",
+   "scrollWidth": 923,
+   "viewportWidth": 375,
+   "horizontalOverflow": true,
+   "overflowingCount": 35,
+   "overflowingSample": [
+    {
+     "tag": "div",
+     "cls": "",
+     "right": 735,
+     "left": 375,
+     "w": 360
+    },
+    {
+     "tag": "div",
+     "cls": "closeBtn",
+     "right": 411,
+     "left": 393,
+     "w": 18
+    },
+    {
+     "tag": "i",
+     "cls": "bi bi-x-lg",
+     "right": 411,
+     "left": 393,
+     "w": 18
+    },
+    {
+     "tag": "ul",
+     "cls": "",
+     "right": 717,
+     "left": 393,
+     "w": 324
+    },
+    {
+     "tag": "li",
+     "cls": "",
+     "right": 717,
+     "left": 393,
+     "w": 324
+    },
+    {
+     "tag": "a",
+     "cls": "",
+     "right": 717,
+     "left": 393,
+     "w": 324
+    },
+    {
+     "tag": "li",
+     "cls": "",
+     "right": 717,
+     "left": 393,
+     "w": 324
+    },
+    {
+     "tag": "a",
+     "cls": "dropdown-btn d-flex align-items-center gap-2",
+     "right": 717,
+     "left": 393,
+     "w": 324
+    },
+    {
+     "tag": "img",
+     "cls": "",
+     "right": 717,
+     "left": 687,
+     "w": 30
+    },
+    {
+     "tag": "i",
+     "cls": "bi bi-caret-left-fill me-auto",
+     "right": 405,
+     "left": 393,
+     "w": 12
+    },
+    {
+     "tag": "li",
+     "cls": "",
+     "right": 717,
+     "left": 393,
+     "w": 324
+    },
+    {
+     "tag": "a",
+     "cls": "dropdown-btn d-flex align-items-center gap-2",
+     "right": 717,
+     "left": 393,
+     "w": 324
+    }
+   ],
+   "smallTextCount": 93,
+   "smallTextSample": [
+    {
+     "tag": "a",
+     "fs": 12,
+     "cls": "",
+     "text": "021-91326030"
+    },
+    {
+     "tag": "p",
+     "fs": 8.4,
+     "cls": "",
+     "text": "ناحیه ی کاربری"
+    },
+    {
+     "tag": "a",
+     "fs": 8.4,
+     "cls": "",
+     "text": "صفحه اصلی"
+    },
+    {
+     "tag": "a",
+     "fs": 8.4,
+     "cls": "",
+     "text": "سیم و مفتول"
+    },
+    {
+     "tag": "a",
+     "fs": 8.4,
+     "cls": "",
+     "text": "توری"
+    },
+    {
+     "tag": "a",
+     "fs": 8.4,
+     "cls": "",
+     "text": "توری مش"
+    },
+    {
+     "tag": "a",
+     "fs": 8.4,
+     "cls": "",
+     "text": "سیم خاردار"
+    },
+    {
+     "tag": "a",
+     "fs": 8.4,
+     "cls": "",
+     "text": "مجله سپاهان فلز"
+    },
+    {
+     "tag": "a",
+     "fs": 8.4,
+     "cls": "",
+     "text": "درباره ما"
+    },
+    {
+     "tag": "a",
+     "fs": 8.4,
+     "cls": "",
+     "text": "تماس با ما"
+    },
+    {
+     "tag": "a",
+     "fs": 12,
+     "cls": "",
+     "text": "صفحه اصلی"
+    },
+    {
+     "tag": "a",
+     "fs": 12,
+     "cls": "dropdown-btn d-flex align-items-center g",
+     "text": "سیم و مفتول"
+    },
+    {
+     "tag": "a",
+     "fs": 10.8,
+     "cls": "dropdown-btn d-flex",
+     "text": "مفتول گالوانیزه"
+    },
+    {
+     "tag": "a",
+     "fs": 10.8,
+     "cls": "",
+     "text": "مفتول آرماتوربندی"
+    },
+    {
+     "tag": "a",
+     "fs": 12,
+     "cls": "dropdown-btn d-flex align-items-center g",
+     "text": "توری"
+    }
+   ],
+   "smallTextBySize": {
+    "9": 4,
+    "12": 13,
+    "8.4": 57,
+    "10.8": 10,
+    "10.1": 4,
+    "9.6": 4,
+    "7.2": 1
+   },
+   "totalInteractive": 82,
+   "smallTapTargets": 48,
+   "smallTapSample": [
+    {
+     "tag": "a",
+     "w": 15,
+     "h": 26,
+     "cls": "cart",
+     "text": ""
+    },
+    {
+     "tag": "a",
+     "w": 72,
+     "h": 26,
+     "cls": "user",
+     "text": "ناحیه ی کاربری"
+    },
+    {
+     "tag": "div",
+     "w": 36,
+     "h": 27,
+     "cls": "navbar-toggler",
+     "text": ""
+    },
+    {
+     "tag": "input",
+     "w": 24,
+     "h": 24,
+     "cls": "searchInput",
+     "text": ""
+    },
+    {
+     "tag": "button",
+     "w": 24,
+     "h": 24,
+     "cls": "searchBtn",
+     "text": ""
+    },
+    {
+     "tag": "a",
+     "w": 324,
+     "h": 20,
+     "cls": "",
+     "text": "صفحه اصلی"
+    },
+    {
+     "tag": "a",
+     "w": 324,
+     "h": 20,
+     "cls": "dropdown-btn d-flex align-items-center g",
+     "text": "سیم و مفتول"
+    },
+    {
+     "tag": "a",
+     "w": 324,
+     "h": 20,
+     "cls": "dropdown-btn d-flex align-items-center g",
+     "text": "توری"
+    },
+    {
+     "tag": "a",
+     "w": 324,
+     "h": 20,
+     "cls": "dropdown-btn d-flex align-items-center g",
+     "text": "توری مش"
+    },
+    {
+     "tag": "a",
+     "w": 324,
+     "h": 20,
+     "cls": "",
+     "text": "سیم خاردار"
+    },
+    {
+     "tag": "a",
+     "w": 324,
+     "h": 20,
+     "cls": "",
+     "text": "مجله سپاهان فلز"
+    },
+    {
+     "tag": "a",
+     "w": 324,
+     "h": 20,
+     "cls": "",
+     "text": "درباره ما"
+    },
+    {
+     "tag": "a",
+     "w": 324,
+     "h": 20,
+     "cls": "",
+     "text": "تماس با ما"
+    },
+    {
+     "tag": "a",
+     "w": 151,
+     "h": 20,
+     "cls": "",
+     "text": "خرید توری باغی با قیمت مناسب"
+    },
+    {
+     "tag": "a",
+     "w": 93,
+     "h": 20,
+     "cls": "",
+     "text": "توری مرغی گالوانیزه"
+    }
+   ],
+   "imgTotal": 42,
+   "imgNoAlt": 1,
+   "imgEmptyAlt": 1,
+   "imgNoDims": 19,
+   "imgNoLazy": 25,
+   "imgNoDimsSample": [
+    {
+     "src": "factory.png",
+     "w": 0
+    },
+    {
+     "src": "factory.png",
+     "w": 0
+    },
+    {
+     "src": "factory.png",
+     "w": 0
+    },
+    {
+     "src": "8735steel-bars.jpg",
+     "w": 144
+    },
+    {
+     "src": "8497maftool-3.jpg",
+     "w": 144
+    },
+    {
+     "src": "3223simkhardar1-.jpg",
+     "w": 144
+    },
+    {
+     "src": "8735%D8%AA%D9%88%D8%B1%DB%8C-%D9%85%D8%B4-%DB%8C%D",
+     "w": 144
+    },
+    {
+     "src": "8490chain-link-fence.jpg",
+     "w": 0
+    },
+    {
+     "src": "4479link_fencing_2.jpg",
+     "w": 0
+    },
+    {
+     "src": "2712GDN-119_Steel_Fruit_Cage_with_Butterfly_Net_8.",
+     "w": 0
+    }
+   ],
+   "imgFormats": {
+    "svg": 2,
+    "webp": 2,
+    "jpg": 16,
+    "png": 22
+   },
+   "headings": [
+    {
+     "lvl": 3,
+     "text": "میلگرد و انواع استاندارهای آن"
+    },
+    {
+     "lvl": 3,
+     "text": "محاسبه وزن مفتول گالوانیزه"
+    },
+    {
+     "lvl": 3,
+     "text": "سیم خاردار چیست؟"
+    },
+    {
+     "lvl": 3,
+     "text": "توری مش یا توری جوشی چیست؟"
+    },
+    {
+     "lvl": 3,
+     "text": "چه نوع فنسی بهتر است"
+    },
+    {
+     "lvl": 3,
+     "text": "خرید توری حصاری ارزان"
+    },
+    {
+     "lvl": 3,
+     "text": "خرید توری باغی با قیمت مناسب"
+    },
+    {
+     "lvl": 3,
+     "text": "توری مرغی گالوانیزه"
+    },
+    {
+     "lvl": 2,
+     "text": "سیم و مفتول"
+    },
+    {
+     "lvl": 2,
+     "text": "سایر مطالب"
+    }
+   ],
+   "h1Count": 0,
+   "headingSkips": [],
+   "formFields": 2,
+   "fieldsNoLabel": 1,
+   "fieldsPlaceholderOnly": 0,
+   "fieldsNoAutocomplete": 1,
+   "fieldTypes": [
+    {
+     "t": "text",
+     "name": "",
+     "ph": ""
+    },
+    {
+     "t": "text",
+     "name": "mobile",
+     "ph": "مثال : 09389611983"
+    }
+   ],
+   "langAttr": "fa",
+   "dirAttr": "rtl",
+   "skipLink": false,
+   "landmarks": {
+    "main": 1,
+    "nav": 1,
+    "header": 1,
+    "footer": 1,
+    "aside": 0
+   },
+   "iconOnlyNoLabel": 4,
+   "iconOnlySample": [
+    {
+     "tag": "a",
+     "cls": "cart"
+    },
+    {
+     "tag": "button",
+     "cls": "searchBtn"
+    },
+    {
+     "tag": "a",
+     "cls": "whatsapp-btn"
+    },
+    {
+     "tag": "a",
+     "cls": ""
+    }
+   ],
+   "tabbable": 0,
+   "lowContrastPairs": 2,
+   "lowContrastSample": [
+    {
+     "fg": "rgb(180, 35, 50)",
+     "bg": "rgb(180,35,50)",
+     "ratio": 1,
+     "need": 4.5,
+     "fs": 12,
+     "text": "021-91326030"
+    },
+    {
+     "fg": "rgb(119, 119, 119)",
+     "bg": "rgb(247,247,247)",
+     "ratio": 4.18,
+     "need": 4.5,
+     "fs": 8.4,
+     "text": "23:21   27-فروردین-1401"
+    }
+   ],
+   "tableCount": 0,
+   "tableInfo": [],
+   "stylesheets": [
+    "app.css?v=1786020965"
+   ],
+   "scripts": [
+    {
+     "src": "?v=1a&pid=5200&site=1&l=https%3A%2F%2Fsepahan",
+     "async": true,
+     "defer": false,
+     "third": false
+    },
+    {
+     "src": "js?id=G-FPYB89P985&cx=c&gtm=4e6850",
+     "async": true,
+     "defer": false,
+     "third": true
+    },
+    {
+     "src": "js15_as.js",
+     "async": true,
+     "defer": false,
+     "third": true
+    },
+    {
+     "src": "js?id=G-4G781JNM07",
+     "async": true,
+     "defer": false,
+     "third": true
+    },
+    {
+     "src": "analytics.js",
+     "async": true,
+     "defer": false,
+     "third": true
+    },
+    {
+     "src": "?_a=v&_h=sepahanfelez.ir&_ss=1x00pevnjc&_pv=3",
+     "async": true,
+     "defer": true,
+     "third": false
+    },
+    {
+     "src": "fugB8i",
+     "async": true,
+     "defer": false,
+     "third": true
+    },
+    {
+     "src": "app.js?v=1786011687",
+     "async": false,
+     "defer": false,
+     "third": false
+    },
+    {
+     "src": "sidemenu.js?v=1786011689",
+     "async": false,
+     "defer": false,
+     "third": false
+    },
+    {
+     "src": "blog.js",
+     "async": false,
+     "defer": false,
+     "third": false
+    },
+    {
+     "src": "js?id=G-FPYB89P985",
+     "async": true,
+     "defer": false,
+     "third": true
+    },
+    {
+     "src": "0.php?4920158&@f16&@g0&@h3&@i1&@j178604036402",
+     "async": true,
+     "defer": false,
+     "third": false
+    },
+    {
+     "src": "mm.js",
+     "async": true,
+     "defer": false,
+     "third": true
+    }
+   ],
+   "inlineScripts": 6,
+   "preconnect": [],
+   "title": "لیست مقالات بلاگ . sepahanfelez.ir",
+   "metaDesc": null,
+   "canonical": "https://sepahanfelez.ir/blog",
+   "robots": "index, follow",
+   "jsonLd": [
+    "Organization"
+   ],
+   "domNodes": 468,
+   "perf": {
+    "cls": 0,
+    "lcp": 1020,
+    "lcpEl": "DIV.card",
+    "longTasks": 7,
+    "longTaskTime": 495,
+    "shifts": [],
+    "ttfb": 363,
+    "domContentLoaded": 844,
+    "loadEvent": 1195,
+    "resourceCount": 46,
+    "totalTransferKB": 1849,
+    "byTypeKB": {
+     "link": 0,
+     "script": 89,
+     "img": 1109,
+     "css": 651,
+     "fetch": 0
+    },
+    "heaviest": [
+     {
+      "u": "2712GDN-119_Steel_Fruit_Cage_with_Butterfly_N",
+      "kb": 549,
+      "ms": 678
+     },
+     {
+      "u": "2712GDN-119_Steel_Fruit_Cage_with_Butterfly_N",
+      "kb": 361,
+      "ms": 627
+     },
+     {
+      "u": "4479link_fencing_2.jpg",
+      "kb": 156,
+      "ms": 603
+     },
+     {
+      "u": "8490chain-link-fence.jpg",
+      "kb": 155,
+      "ms": 557
+     },
+     {
+      "u": "4479link_fencing_2.jpg",
+      "kb": 135,
+      "ms": 555
+     },
+     {
+      "u": "8735steel-bars.jpg",
+      "kb": 92,
+      "ms": 585
+     },
+     {
+      "u": "blog.js",
+      "kb": 89,
+      "ms": 309
+     },
+     {
+      "u": "3011toori-morghi.jpg",
+      "kb": 60,
+      "ms": 514
+     },
+     {
+      "u": "3223simkhardar1-.jpg",
+      "kb": 41,
+      "ms": 503
+     },
+     {
+      "u": "8497maftool-3.jpg",
+      "kb": 38,
+      "ms": 498
+     },
+     {
+      "u": "8735%D8%AA%D9%88%D8%B1%DB%8C-%D9%85%D8%B4-%DB",
+      "kb": 34,
+      "ms": 500
+     },
+     {
+      "u": "1950%D8%AE%D8%A7%D9%85%D9%88%D8%AA-%DA%86%DB%",
+      "kb": 31,
+      "ms": 500
+     }
+    ]
+   },
+   "consoleIssues": [
+    "pageerror: Cannot set properties of null (setting 'textContent')",
+    "pageerror: Cannot set properties of null (setting 'textContent')",
+    "pageerror: Cannot set properties of null (setting 'textContent')",
+    "pageerror: Cannot set properties of null (setting 'textContent')",
+    "pageerror: Cannot set properties of null (setting 'textContent')",
+    "pageerror: Cannot set properties of null (setting 'textContent')",
+    "pageerror: Cannot set properties of null (setting 'textContent')",
+    "pageerror: Cannot set properties of null (setting 'textContent')"
+   ],
+   "consoleIssueCount": 8
+  },
+  "/about": {
+   "htmlFontSize": "6px",
+   "bodyFontSize": "8.4px",
+   "scrollWidth": 375,
+   "viewportWidth": 375,
+   "horizontalOverflow": false,
+   "overflowingCount": 27,
+   "overflowingSample": [
+    {
+     "tag": "div",
+     "cls": "",
+     "right": 735,
+     "left": 375,
+     "w": 360
+    },
+    {
+     "tag": "div",
+     "cls": "closeBtn",
+     "right": 411,
+     "left": 393,
+     "w": 18
+    },
+    {
+     "tag": "i",
+     "cls": "bi bi-x-lg",
+     "right": 411,
+     "left": 393,
+     "w": 18
+    },
+    {
+     "tag": "ul",
+     "cls": "",
+     "right": 717,
+     "left": 393,
+     "w": 324
+    },
+    {
+     "tag": "li",
+     "cls": "",
+     "right": 717,
+     "left": 393,
+     "w": 324
+    },
+    {
+     "tag": "a",
+     "cls": "",
+     "right": 717,
+     "left": 393,
+     "w": 324
+    },
+    {
+     "tag": "li",
+     "cls": "",
+     "right": 717,
+     "left": 393,
+     "w": 324
+    },
+    {
+     "tag": "a",
+     "cls": "dropdown-btn d-flex align-items-center gap-2",
+     "right": 717,
+     "left": 393,
+     "w": 324
+    },
+    {
+     "tag": "img",
+     "cls": "",
+     "right": 717,
+     "left": 687,
+     "w": 30
+    },
+    {
+     "tag": "i",
+     "cls": "bi bi-caret-left-fill me-auto",
+     "right": 405,
+     "left": 393,
+     "w": 12
+    },
+    {
+     "tag": "li",
+     "cls": "",
+     "right": 717,
+     "left": 393,
+     "w": 324
+    },
+    {
+     "tag": "a",
+     "cls": "dropdown-btn d-flex align-items-center gap-2",
+     "right": 717,
+     "left": 393,
+     "w": 324
+    }
+   ],
+   "smallTextCount": 51,
+   "smallTextSample": [
+    {
+     "tag": "a",
+     "fs": 12,
+     "cls": "",
+     "text": "021-91326030"
+    },
+    {
+     "tag": "p",
+     "fs": 8.4,
+     "cls": "",
+     "text": "ناحیه ی کاربری"
+    },
+    {
+     "tag": "a",
+     "fs": 8.4,
+     "cls": "",
+     "text": "صفحه اصلی"
+    },
+    {
+     "tag": "a",
+     "fs": 8.4,
+     "cls": "",
+     "text": "سیم و مفتول"
+    },
+    {
+     "tag": "a",
+     "fs": 8.4,
+     "cls": "",
+     "text": "توری"
+    },
+    {
+     "tag": "a",
+     "fs": 8.4,
+     "cls": "",
+     "text": "توری مش"
+    },
+    {
+     "tag": "a",
+     "fs": 8.4,
+     "cls": "",
+     "text": "سیم خاردار"
+    },
+    {
+     "tag": "a",
+     "fs": 8.4,
+     "cls": "",
+     "text": "مجله سپاهان فلز"
+    },
+    {
+     "tag": "a",
+     "fs": 8.4,
+     "cls": "",
+     "text": "درباره ما"
+    },
+    {
+     "tag": "a",
+     "fs": 8.4,
+     "cls": "",
+     "text": "تماس با ما"
+    },
+    {
+     "tag": "a",
+     "fs": 12,
+     "cls": "",
+     "text": "صفحه اصلی"
+    },
+    {
+     "tag": "a",
+     "fs": 12,
+     "cls": "dropdown-btn d-flex align-items-center g",
+     "text": "سیم و مفتول"
+    },
+    {
+     "tag": "a",
+     "fs": 10.8,
+     "cls": "dropdown-btn d-flex",
+     "text": "مفتول گالوانیزه"
+    },
+    {
+     "tag": "a",
+     "fs": 10.8,
+     "cls": "",
+     "text": "مفتول آرماتوربندی"
+    },
+    {
+     "tag": "a",
+     "fs": 12,
+     "cls": "dropdown-btn d-flex align-items-center g",
+     "text": "توری"
+    }
+   ],
+   "smallTextBySize": {
+    "12": 9,
+    "8.4": 23,
+    "10.8": 10,
+    "10.2": 8,
+    "7.2": 1
+   },
+   "totalInteractive": 54,
+   "smallTapTargets": 23,
+   "smallTapSample": [
+    {
+     "tag": "a",
+     "w": 15,
+     "h": 26,
+     "cls": "cart",
+     "text": ""
+    },
+    {
+     "tag": "a",
+     "w": 72,
+     "h": 26,
+     "cls": "user",
+     "text": "ناحیه ی کاربری"
+    },
+    {
+     "tag": "div",
+     "w": 36,
+     "h": 27,
+     "cls": "navbar-toggler",
+     "text": ""
+    },
+    {
+     "tag": "input",
+     "w": 24,
+     "h": 24,
+     "cls": "searchInput",
+     "text": ""
+    },
+    {
+     "tag": "button",
+     "w": 24,
+     "h": 24,
+     "cls": "searchBtn",
+     "text": ""
+    },
+    {
+     "tag": "a",
+     "w": 324,
+     "h": 20,
+     "cls": "",
+     "text": "صفحه اصلی"
+    },
+    {
+     "tag": "a",
+     "w": 324,
+     "h": 20,
+     "cls": "dropdown-btn d-flex align-items-center g",
+     "text": "سیم و مفتول"
+    },
+    {
+     "tag": "a",
+     "w": 324,
+     "h": 20,
+     "cls": "dropdown-btn d-flex align-items-center g",
+     "text": "توری"
+    },
+    {
+     "tag": "a",
+     "w": 324,
+     "h": 20,
+     "cls": "dropdown-btn d-flex align-items-center g",
+     "text": "توری مش"
+    },
+    {
+     "tag": "a",
+     "w": 324,
+     "h": 20,
+     "cls": "",
+     "text": "سیم خاردار"
+    },
+    {
+     "tag": "a",
+     "w": 324,
+     "h": 20,
+     "cls": "",
+     "text": "مجله سپاهان فلز"
+    },
+    {
+     "tag": "a",
+     "w": 324,
+     "h": 20,
+     "cls": "",
+     "text": "درباره ما"
+    },
+    {
+     "tag": "a",
+     "w": 324,
+     "h": 20,
+     "cls": "",
+     "text": "تماس با ما"
+    },
+    {
+     "tag": "a",
+     "w": 288,
+     "h": 24,
+     "cls": "red-btn mx-auto mb-5",
+     "text": "با ما در تماس باشید"
+    },
+    {
+     "tag": "a",
+     "w": 36,
+     "h": 14,
+     "cls": "",
+     "text": "تماس با ما"
+    }
+   ],
+   "imgTotal": 36,
+   "imgNoAlt": 1,
+   "imgEmptyAlt": 1,
+   "imgNoDims": 13,
+   "imgNoLazy": 19,
+   "imgNoDimsSample": [
+    {
+     "src": "factory.png",
+     "w": 0
+    },
+    {
+     "src": "factory.png",
+     "w": 0
+    },
+    {
+     "src": "factory.png",
+     "w": 0
+    },
+    {
+     "src": "885205Pqe5Y0e-best-linux-wallpaper.png",
+     "w": 366
+    },
+    {
+     "src": "326f107022bedc4ab7f44e5a899efff6",
+     "w": 262
+    },
+    {
+     "src": "b17d31affcb0e67427c7d56437cf0999",
+     "w": 262
+    },
+    {
+     "src": "d41d8cd98f00b204e9800998ecf8427e",
+     "w": 262
+    },
+    {
+     "src": "235bf5b9de6c3cbf8ff69f5b9c089abd",
+     "w": 262
+    },
+    {
+     "src": "d41d8cd98f00b204e9800998ecf8427e",
+     "w": 262
+    },
+    {
+     "src": "48b2482edd2c10db5451fed42f5c3b84",
+     "w": 262
+    }
+   ],
+   "imgFormats": {
+    "svg": 2,
+    "webp": 1,
+    "jpg": 2,
+    "png": 23,
+    "com/a": 8
+   },
+   "headings": [
+    {
+     "lvl": 2,
+     "text": "درباره ما"
+    },
+    {
+     "lvl": 3,
+     "text": "تیم ما"
+    }
+   ],
+   "h1Count": 0,
+   "headingSkips": [],
+   "formFields": 2,
+   "fieldsNoLabel": 1,
+   "fieldsPlaceholderOnly": 0,
+   "fieldsNoAutocomplete": 1,
+   "fieldTypes": [
+    {
+     "t": "text",
+     "name": "",
+     "ph": ""
+    },
+    {
+     "t": "text",
+     "name": "mobile",
+     "ph": "مثال : 09389611983"
+    }
+   ],
+   "langAttr": "fa",
+   "dirAttr": "rtl",
+   "skipLink": false,
+   "landmarks": {
+    "main": 1,
+    "nav": 1,
+    "header": 1,
+    "footer": 1,
+    "aside": 0
+   },
+   "iconOnlyNoLabel": 4,
+   "iconOnlySample": [
+    {
+     "tag": "a",
+     "cls": "cart"
+    },
+    {
+     "tag": "button",
+     "cls": "searchBtn"
+    },
+    {
+     "tag": "a",
+     "cls": "whatsapp-btn"
+    },
+    {
+     "tag": "a",
+     "cls": ""
+    }
+   ],
+   "tabbable": 0,
+   "lowContrastPairs": 2,
+   "lowContrastSample": [
+    {
+     "fg": "rgb(180, 35, 50)",
+     "bg": "rgb(180,35,50)",
+     "ratio": 1,
+     "need": 4.5,
+     "fs": 12,
+     "text": "021-91326030"
+    },
+    {
+     "fg": "rgb(255, 255, 255)",
+     "bg": "rgb(255,255,255)",
+     "ratio": 1,
+     "need": 4.5,
+     "fs": 10.2,
+     "text": "مصطفی شیرزادی"
+    }
+   ],
+   "tableCount": 0,
+   "tableInfo": [],
+   "stylesheets": [
+    "app.css?v=1786020965"
+   ],
+   "scripts": [
+    {
+     "src": "?v=1a&pid=5200&site=1&l=https%3A%2F%2Fsepahan",
+     "async": true,
+     "defer": false,
+     "third": false
+    },
+    {
+     "src": "js?id=G-FPYB89P985&cx=c&gtm=4e6850",
+     "async": true,
+     "defer": false,
+     "third": true
+    },
+    {
+     "src": "js15_as.js",
+     "async": true,
+     "defer": false,
+     "third": true
+    },
+    {
+     "src": "js?id=G-4G781JNM07",
+     "async": true,
+     "defer": false,
+     "third": true
+    },
+    {
+     "src": "analytics.js",
+     "async": true,
+     "defer": false,
+     "third": true
+    },
+    {
+     "src": "?_a=v&_h=sepahanfelez.ir&_ss=1x00pevnjc&_pv=4",
+     "async": true,
+     "defer": true,
+     "third": false
+    },
+    {
+     "src": "fugB8i",
+     "async": true,
+     "defer": false,
+     "third": true
+    },
+    {
+     "src": "app.js?v=1786011687",
+     "async": false,
+     "defer": false,
+     "third": false
+    },
+    {
+     "src": "sidemenu.js?v=1786011689",
+     "async": false,
+     "defer": false,
+     "third": false
+    },
+    {
+     "src": "js?id=G-FPYB89P985",
+     "async": true,
+     "defer": false,
+     "third": true
+    },
+    {
+     "src": "0.php?4920158&@f16&@g0&@h4&@i1&@j178604037359",
+     "async": true,
+     "defer": false,
+     "third": false
+    },
+    {
+     "src": "mm.js",
+     "async": true,
+     "defer": false,
+     "third": true
+    }
+   ],
+   "inlineScripts": 6,
+   "preconnect": [],
+   "title": "درباره ما",
+   "metaDesc": null,
+   "canonical": "https://sepahanfelez.ir/about",
+   "robots": "index, follow",
+   "jsonLd": [
+    "Organization"
+   ],
+   "domNodes": 349,
+   "perf": {
+    "cls": 0.325,
+    "lcp": 724,
+    "lcpEl": "IMG.",
+    "longTasks": 6,
+    "longTaskTime": 428,
+    "shifts": [
+     {
+      "v": 0.325,
+      "src": [
+       "MAIN.about-us-page",
+       "SECTION.",
+       "P."
+      ]
+     }
+    ],
+    "ttfb": 370,
+    "domContentLoaded": 687,
+    "loadEvent": 1286,
+    "resourceCount": 35,
+    "totalTransferKB": 83,
+    "byTypeKB": {
+     "link": 0,
+     "script": 0,
+     "img": 65,
+     "css": 0,
+     "video": 18,
+     "fetch": 0
+    },
+    "heaviest": [
+     {
+      "u": "885205Pqe5Y0e-best-linux-wallpaper.png",
+      "kb": 65,
+      "ms": 243
+     },
+     {
+      "u": "9763Steel-Bridge-Fabrication-is-Revolutionize",
+      "kb": 18,
+      "ms": 237
+     },
+     {
+      "u": "app.css",
+      "kb": 0,
+      "ms": 6
+     },
+     {
+      "u": "js",
+      "kb": 0,
+      "ms": 13
+     },
+     {
+      "u": "analytics.js",
+      "kb": 0,
+      "ms": 47
+     },
+     {
+      "u": "sepahanfelez-logo.svg",
+      "kb": 0,
+      "ms": 9
+     },
+     {
+      "u": "wrapper.webp",
+      "kb": 0,
+      "ms": 9
+     },
+     {
+      "u": "factory.png",
+      "kb": 0,
+      "ms": 12
+     },
+     {
+      "u": "270133%D9%85%D9%81%D8%AA%D9%88%D9%84%20%20-%2",
+      "kb": 0,
+      "ms": 51
+     },
+     {
+      "u": "841951%D8%AA%D9%88%D8%B1%DB%8C%20%20-%20%20Ic",
+      "kb": 0,
+      "ms": 51
+     },
+     {
+      "u": "638219%D9%85%D8%B4%20%20-%20%20Icon%20pack.pn",
+      "kb": 0,
+      "ms": 53
+     },
+     {
+      "u": "985532%D8%B3%DB%8C%D9%85%20%D8%AE%D8%A7%D8%B1",
+      "kb": 0,
+      "ms": 53
+     }
+    ]
+   },
+   "consoleIssues": [
+    "pageerror: Cannot set properties of null (setting 'textContent')",
+    "pageerror: Cannot set properties of null (setting 'textContent')",
+    "pageerror: Cannot set properties of null (setting 'textContent')",
+    "pageerror: Cannot set properties of null (setting 'textContent')",
+    "pageerror: Cannot set properties of null (setting 'textContent')",
+    "pageerror: Cannot set properties of null (setting 'textContent')",
+    "pageerror: Cannot set properties of null (setting 'textContent')",
+    "pageerror: Cannot set properties of null (setting 'textContent')"
+   ],
+   "consoleIssueCount": 8
+  },
+  "/contact": {
+   "htmlFontSize": "6px",
+   "bodyFontSize": "8.4px",
+   "scrollWidth": 375,
+   "viewportWidth": 375,
+   "horizontalOverflow": false,
+   "overflowingCount": 28,
+   "overflowingSample": [
+    {
+     "tag": "div",
+     "cls": "",
+     "right": 735,
+     "left": 375,
+     "w": 360
+    },
+    {
+     "tag": "div",
+     "cls": "closeBtn",
+     "right": 411,
+     "left": 393,
+     "w": 18
+    },
+    {
+     "tag": "i",
+     "cls": "bi bi-x-lg",
+     "right": 411,
+     "left": 393,
+     "w": 18
+    },
+    {
+     "tag": "ul",
+     "cls": "",
+     "right": 717,
+     "left": 393,
+     "w": 324
+    },
+    {
+     "tag": "li",
+     "cls": "",
+     "right": 717,
+     "left": 393,
+     "w": 324
+    },
+    {
+     "tag": "a",
+     "cls": "",
+     "right": 717,
+     "left": 393,
+     "w": 324
+    },
+    {
+     "tag": "li",
+     "cls": "",
+     "right": 717,
+     "left": 393,
+     "w": 324
+    },
+    {
+     "tag": "a",
+     "cls": "dropdown-btn d-flex align-items-center gap-2",
+     "right": 717,
+     "left": 393,
+     "w": 324
+    },
+    {
+     "tag": "img",
+     "cls": "",
+     "right": 717,
+     "left": 687,
+     "w": 30
+    },
+    {
+     "tag": "i",
+     "cls": "bi bi-caret-left-fill me-auto",
+     "right": 405,
+     "left": 393,
+     "w": 12
+    },
+    {
+     "tag": "li",
+     "cls": "",
+     "right": 717,
+     "left": 393,
+     "w": 324
+    },
+    {
+     "tag": "a",
+     "cls": "dropdown-btn d-flex align-items-center gap-2",
+     "right": 717,
+     "left": 393,
+     "w": 324
+    }
+   ],
+   "smallTextCount": 57,
+   "smallTextSample": [
+    {
+     "tag": "a",
+     "fs": 12,
+     "cls": "",
+     "text": "021-91326030"
+    },
+    {
+     "tag": "p",
+     "fs": 8.4,
+     "cls": "",
+     "text": "ناحیه ی کاربری"
+    },
+    {
+     "tag": "a",
+     "fs": 8.4,
+     "cls": "",
+     "text": "صفحه اصلی"
+    },
+    {
+     "tag": "a",
+     "fs": 8.4,
+     "cls": "",
+     "text": "سیم و مفتول"
+    },
+    {
+     "tag": "a",
+     "fs": 8.4,
+     "cls": "",
+     "text": "توری"
+    },
+    {
+     "tag": "a",
+     "fs": 8.4,
+     "cls": "",
+     "text": "توری مش"
+    },
+    {
+     "tag": "a",
+     "fs": 8.4,
+     "cls": "",
+     "text": "سیم خاردار"
+    },
+    {
+     "tag": "a",
+     "fs": 8.4,
+     "cls": "",
+     "text": "مجله سپاهان فلز"
+    },
+    {
+     "tag": "a",
+     "fs": 8.4,
+     "cls": "",
+     "text": "درباره ما"
+    },
+    {
+     "tag": "a",
+     "fs": 8.4,
+     "cls": "",
+     "text": "تماس با ما"
+    },
+    {
+     "tag": "a",
+     "fs": 12,
+     "cls": "",
+     "text": "صفحه اصلی"
+    },
+    {
+     "tag": "a",
+     "fs": 12,
+     "cls": "dropdown-btn d-flex align-items-center g",
+     "text": "سیم و مفتول"
+    },
+    {
+     "tag": "a",
+     "fs": 10.8,
+     "cls": "dropdown-btn d-flex",
+     "text": "مفتول گالوانیزه"
+    },
+    {
+     "tag": "a",
+     "fs": 10.8,
+     "cls": "",
+     "text": "مفتول آرماتوربندی"
+    },
+    {
+     "tag": "a",
+     "fs": 12,
+     "cls": "dropdown-btn d-flex align-items-center g",
+     "text": "توری"
+    }
+   ],
+   "smallTextBySize": {
+    "12": 9,
+    "8.4": 37,
+    "10.8": 10,
+    "7.2": 1
+   },
+   "totalInteractive": 62,
+   "smallTapTargets": 31,
+   "smallTapSample": [
+    {
+     "tag": "a",
+     "w": 15,
+     "h": 26,
+     "cls": "cart",
+     "text": ""
+    },
+    {
+     "tag": "a",
+     "w": 72,
+     "h": 26,
+     "cls": "user",
+     "text": "ناحیه ی کاربری"
+    },
+    {
+     "tag": "div",
+     "w": 36,
+     "h": 27,
+     "cls": "navbar-toggler",
+     "text": ""
+    },
+    {
+     "tag": "input",
+     "w": 24,
+     "h": 24,
+     "cls": "searchInput",
+     "text": ""
+    },
+    {
+     "tag": "button",
+     "w": 24,
+     "h": 24,
+     "cls": "searchBtn",
+     "text": ""
+    },
+    {
+     "tag": "a",
+     "w": 324,
+     "h": 20,
+     "cls": "",
+     "text": "صفحه اصلی"
+    },
+    {
+     "tag": "a",
+     "w": 324,
+     "h": 20,
+     "cls": "dropdown-btn d-flex align-items-center g",
+     "text": "سیم و مفتول"
+    },
+    {
+     "tag": "a",
+     "w": 324,
+     "h": 20,
+     "cls": "dropdown-btn d-flex align-items-center g",
+     "text": "توری"
+    },
+    {
+     "tag": "a",
+     "w": 324,
+     "h": 20,
+     "cls": "dropdown-btn d-flex align-items-center g",
+     "text": "توری مش"
+    },
+    {
+     "tag": "a",
+     "w": 324,
+     "h": 20,
+     "cls": "",
+     "text": "سیم خاردار"
+    },
+    {
+     "tag": "a",
+     "w": 324,
+     "h": 20,
+     "cls": "",
+     "text": "مجله سپاهان فلز"
+    },
+    {
+     "tag": "a",
+     "w": 324,
+     "h": 20,
+     "cls": "",
+     "text": "درباره ما"
+    },
+    {
+     "tag": "a",
+     "w": 324,
+     "h": 20,
+     "cls": "",
+     "text": "تماس با ما"
+    },
+    {
+     "tag": "a",
+     "w": 17,
+     "h": 26,
+     "cls": "",
+     "text": ""
+    },
+    {
+     "tag": "a",
+     "w": 40,
+     "h": 14,
+     "cls": "",
+     "text": "آدرس اصلی"
+    }
+   ],
+   "imgTotal": 27,
+   "imgNoAlt": 1,
+   "imgEmptyAlt": 1,
+   "imgNoDims": 4,
+   "imgNoLazy": 10,
+   "imgNoDimsSample": [
+    {
+     "src": "factory.png",
+     "w": 0
+    },
+    {
+     "src": "factory.png",
+     "w": 0
+    },
+    {
+     "src": "factory.png",
+     "w": 0
+    },
+    {
+     "src": "e_namad.png",
+     "w": 90
+    }
+   ],
+   "imgFormats": {
+    "svg": 2,
+    "webp": 1,
+    "jpg": 2,
+    "png": 22
+   },
+   "headings": [
+    {
+     "lvl": 2,
+     "text": "تماس با ما"
+    },
+    {
+     "lvl": 4,
+     "text": "اطلاعات تماس"
+    },
+    {
+     "lvl": 3,
+     "text": "آدرس"
+    },
+    {
+     "lvl": 2,
+     "text": "فرم تماس با ما"
+    }
+   ],
+   "h1Count": 0,
+   "headingSkips": [
+    "h2→h4"
+   ],
+   "formFields": 8,
+   "fieldsNoLabel": 1,
+   "fieldsPlaceholderOnly": 0,
+   "fieldsNoAutocomplete": 1,
+   "fieldTypes": [
+    {
+     "t": "text",
+     "name": "",
+     "ph": ""
+    },
+    {
+     "t": "text",
+     "name": "first_name",
+     "ph": ""
+    },
+    {
+     "t": "text",
+     "name": "last_name",
+     "ph": ""
+    },
+    {
+     "t": "text",
+     "name": "phone",
+     "ph": ""
+    },
+    {
+     "t": "text",
+     "name": "email",
+     "ph": ""
+    },
+    {
+     "t": "text",
+     "name": "subject",
+     "ph": ""
+    },
+    {
+     "t": "textarea",
+     "name": "body",
+     "ph": ""
+    },
+    {
+     "t": "text",
+     "name": "mobile",
+     "ph": "مثال : 09389611983"
+    }
+   ],
+   "langAttr": "fa",
+   "dirAttr": "rtl",
+   "skipLink": false,
+   "landmarks": {
+    "main": 1,
+    "nav": 1,
+    "header": 1,
+    "footer": 1,
+    "aside": 0
+   },
+   "iconOnlyNoLabel": 5,
+   "iconOnlySample": [
+    {
+     "tag": "a",
+     "cls": "cart"
+    },
+    {
+     "tag": "button",
+     "cls": "searchBtn"
+    },
+    {
+     "tag": "a",
+     "cls": ""
+    },
+    {
+     "tag": "a",
+     "cls": "whatsapp-btn"
+    },
+    {
+     "tag": "a",
+     "cls": ""
+    }
+   ],
+   "tabbable": 0,
+   "lowContrastPairs": 1,
+   "lowContrastSample": [
+    {
+     "fg": "rgb(180, 35, 50)",
+     "bg": "rgb(180,35,50)",
+     "ratio": 1,
+     "need": 4.5,
+     "fs": 12,
+     "text": "021-91326030"
+    }
+   ],
+   "tableCount": 0,
+   "tableInfo": [],
+   "stylesheets": [
+    "app.css?v=1786020965"
+   ],
+   "scripts": [
+    {
+     "src": "?v=1a&pid=5200&site=1&l=https%3A%2F%2Fsepahan",
+     "async": true,
+     "defer": false,
+     "third": false
+    },
+    {
+     "src": "js?id=G-FPYB89P985&cx=c&gtm=4e6850",
+     "async": true,
+     "defer": false,
+     "third": true
+    },
+    {
+     "src": "js15_as.js",
+     "async": true,
+     "defer": false,
+     "third": true
+    },
+    {
+     "src": "js?id=G-4G781JNM07",
+     "async": true,
+     "defer": false,
+     "third": true
+    },
+    {
+     "src": "analytics.js",
+     "async": true,
+     "defer": false,
+     "third": true
+    },
+    {
+     "src": "?_a=v&_h=sepahanfelez.ir&_ss=1x00pevnjc&_pv=5",
+     "async": true,
+     "defer": true,
+     "third": false
+    },
+    {
+     "src": "fugB8i",
+     "async": true,
+     "defer": false,
+     "third": true
+    },
+    {
+     "src": "app.js?v=1786011687",
+     "async": false,
+     "defer": false,
+     "third": false
+    },
+    {
+     "src": "sidemenu.js?v=1786011689",
+     "async": false,
+     "defer": false,
+     "third": false
+    },
+    {
+     "src": "js?id=G-FPYB89P985",
+     "async": true,
+     "defer": false,
+     "third": true
+    },
+    {
+     "src": "0.php?4920158&@f16&@g0&@h5&@i1&@j178604038294",
+     "async": true,
+     "defer": false,
+     "third": false
+    },
+    {
+     "src": "mm.js",
+     "async": true,
+     "defer": false,
+     "third": true
+    }
+   ],
+   "inlineScripts": 6,
+   "preconnect": [],
+   "title": "تماس با ما",
+   "metaDesc": null,
+   "canonical": "https://sepahanfelez.ir/contact",
+   "robots": "index, follow",
+   "jsonLd": [
+    "Organization"
+   ],
+   "domNodes": 333,
+   "perf": {
+    "cls": 0.083,
+    "lcp": 564,
+    "lcpEl": "P.mb-5",
+    "longTasks": 9,
+    "longTaskTime": 802,
+    "shifts": [
+     {
+      "v": 0.083,
+      "src": [
+       "DIV.address",
+       "DIV.social",
+       "DIV.container"
+      ]
+     }
+    ],
+    "ttfb": 298,
+    "domContentLoaded": 558,
+    "loadEvent": 1414,
+    "resourceCount": 29,
+    "totalTransferKB": 0,
+    "byTypeKB": {
+     "link": 0,
+     "script": 0,
+     "img": 0,
+     "iframe": 0,
+     "css": 0,
+     "fetch": 0
+    },
+    "heaviest": [
+     {
+      "u": "app.css",
+      "kb": 0,
+      "ms": 5
+     },
+     {
+      "u": "js",
+      "kb": 0,
+      "ms": 10
+     },
+     {
+      "u": "analytics.js",
+      "kb": 0,
+      "ms": 39
+     },
+     {
+      "u": "sepahanfelez-logo.svg",
+      "kb": 0,
+      "ms": 7
+     },
+     {
+      "u": "wrapper.webp",
+      "kb": 0,
+      "ms": 7
+     },
+     {
+      "u": "factory.png",
+      "kb": 0,
+      "ms": 16
+     },
+     {
+      "u": "270133%D9%85%D9%81%D8%AA%D9%88%D9%84%20%20-%2",
+      "kb": 0,
+      "ms": 41
+     },
+     {
+      "u": "841951%D8%AA%D9%88%D8%B1%DB%8C%20%20-%20%20Ic",
+      "kb": 0,
+      "ms": 41
+     },
+     {
+      "u": "638219%D9%85%D8%B4%20%20-%20%20Icon%20pack.pn",
+      "kb": 0,
+      "ms": 42
+     },
+     {
+      "u": "985532%D8%B3%DB%8C%D9%85%20%D8%AE%D8%A7%D8%B1",
+      "kb": 0,
+      "ms": 42
+     },
+     {
+      "u": "e_namad.png",
+      "kb": 0,
+      "ms": 42
+     },
+     {
+      "u": "app.js",
+      "kb": 0,
+      "ms": 28
+     }
+    ]
+   },
+   "consoleIssues": [
+    "pageerror: Cannot set properties of null (setting 'textContent')",
+    "pageerror: Cannot set properties of null (setting 'textContent')",
+    "pageerror: Cannot set properties of null (setting 'textContent')",
+    "pageerror: Cannot set properties of null (setting 'textContent')",
+    "pageerror: Cannot set properties of null (setting 'textContent')",
+    "pageerror: Cannot set properties of null (setting 'textContent')",
+    "pageerror: Cannot set properties of null (setting 'textContent')",
+    "pageerror: Cannot set properties of null (setting 'textContent')",
+    "pageerror: Cannot set properties of null (setting 'textContent')"
+   ],
+   "consoleIssueCount": 9
+  },
+  "/login": {
+   "htmlFontSize": "12px",
+   "bodyFontSize": "12px",
+   "scrollWidth": 375,
+   "viewportWidth": 375,
+   "horizontalOverflow": false,
+   "overflowingCount": 1,
+   "overflowingSample": [
+    {
+     "tag": "svg",
+     "cls": "[object SVGAnimatedString]",
+     "right": -373,
+     "left": -375,
+     "w": 2
+    }
+   ],
+   "smallTextCount": 2,
+   "smallTextSample": [
+    {
+     "tag": "p",
+     "fs": 12,
+     "cls": "text-white",
+     "text": "حساب کاربری ندارید؟\n                    "
+    },
+    {
+     "tag": "a",
+     "fs": 12,
+     "cls": "",
+     "text": "ثبت نام کنید"
+    }
+   ],
+   "smallTextBySize": {
+    "12": 2
+   },
+   "totalInteractive": 4,
+   "smallTapTargets": 3,
+   "smallTapSample": [
+    {
+     "tag": "input",
+     "w": 333,
+     "h": 42,
+     "cls": "form-control h-auto text-white bg-white-",
+     "text": ""
+    },
+    {
+     "tag": "button",
+     "w": 114,
+     "h": 38,
+     "cls": "btn btn-pill btn-primary opacity-90 px-1",
+     "text": "ورود"
+    },
+    {
+     "tag": "a",
+     "w": 60,
+     "h": 20,
+     "cls": "",
+     "text": "ثبت نام کنید"
+    }
+   ],
+   "imgTotal": 1,
+   "imgNoAlt": 1,
+   "imgEmptyAlt": 0,
+   "imgNoDims": 1,
+   "imgNoLazy": 1,
+   "imgNoDimsSample": [
+    {
+     "src": "logo.png",
+     "w": 130
+    }
+   ],
+   "imgFormats": {
+    "png": 1
+   },
+   "headings": [
+    {
+     "lvl": 3,
+     "text": "ورود به پنل"
+    }
+   ],
+   "h1Count": 0,
+   "headingSkips": [],
+   "formFields": 1,
+   "fieldsNoLabel": 1,
+   "fieldsPlaceholderOnly": 1,
+   "fieldsNoAutocomplete": 0,
+   "fieldTypes": [
+    {
+     "t": "tel",
+     "name": "mobile",
+     "ph": "تلفن همراه خود را وارد کنید"
+    }
+   ],
+   "langAttr": null,
+   "dirAttr": "rtl",
+   "skipLink": false,
+   "landmarks": {
+    "main": 0,
+    "nav": 0,
+    "header": 0,
+    "footer": 0,
+    "aside": 0
+   },
+   "iconOnlyNoLabel": 0,
+   "iconOnlySample": [],
+   "tabbable": 0,
+   "lowContrastPairs": 4,
+   "lowContrastSample": [
+    {
+     "fg": "rgb(255, 255, 255)",
+     "bg": "rgb(238,240,248)",
+     "ratio": 1.14,
+     "need": 4.5,
+     "fs": 16.4,
+     "text": "ورود به پنل"
+    },
+    {
+     "fg": "rgb(255, 255, 255)",
+     "bg": "rgb(54,153,255)",
+     "ratio": 2.93,
+     "need": 4.5,
+     "fs": 12,
+     "text": "ورود"
+    },
+    {
+     "fg": "rgb(255, 255, 255)",
+     "bg": "rgb(238,240,248)",
+     "ratio": 1.14,
+     "need": 4.5,
+     "fs": 12,
+     "text": "حساب کاربری ندارید؟\n                    "
+    },
+    {
+     "fg": "rgb(54, 153, 255)",
+     "bg": "rgb(238,240,248)",
+     "ratio": 2.58,
+     "need": 4.5,
+     "fs": 12,
+     "text": "ثبت نام کنید"
+    }
+   ],
+   "tableCount": 0,
+   "tableInfo": [],
+   "stylesheets": [
+    "login-5.rtl.css",
+    "plugins.bundle.rtl.css",
+    "prismjs.bundle.rtl.css",
+    "style.bundle.rtl.css",
+    "light.rtl.css",
+    "light.rtl.css",
+    "dark.rtl.css",
+    "dark.rtl.css"
+   ],
+   "scripts": [
+    {
+     "src": "plugins.bundle.js",
+     "async": false,
+     "defer": false,
+     "third": false
+    },
+    {
+     "src": "prismjs.bundle.js",
+     "async": false,
+     "defer": false,
+     "third": false
+    },
+    {
+     "src": "scripts.bundle.js",
+     "async": false,
+     "defer": false,
+     "third": false
+    },
+    {
+     "src": "login-general.js",
+     "async": false,
+     "defer": false,
+     "third": false
+    }
+   ],
+   "inlineScripts": 3,
+   "preconnect": [],
+   "title": "ورود به پنل",
+   "metaDesc": null,
+   "canonical": null,
+   "robots": "noindex",
+   "jsonLd": [],
+   "domNodes": 49,
+   "perf": {
+    "cls": 0,
+    "lcp": 1056,
+    "lcpEl": "IMG.",
+    "longTasks": 2,
+    "longTaskTime": 278,
+    "shifts": [],
+    "ttfb": 350,
+    "domContentLoaded": 1307,
+    "loadEvent": 1309,
+    "resourceCount": 15,
+    "totalTransferKB": 1423,
+    "byTypeKB": {
+     "link": 226,
+     "img": 28,
+     "script": 895,
+     "css": 274
+    },
+    "heaviest": [
+     {
+      "u": "plugins.bundle.js",
+      "kb": 826,
+      "ms": 665
+     },
+     {
+      "u": "bg-2.jpg",
+      "kb": 237,
+      "ms": 121
+     },
+     {
+      "u": "style.bundle.rtl.css",
+      "kb": 144,
+      "ms": 558
+     },
+     {
+      "u": "plugins.bundle.rtl.css",
+      "kb": 74,
+      "ms": 491
+     },
+     {
+      "u": "scripts.bundle.js",
+      "kb": 57,
+      "ms": 488
+     },
+     {
+      "u": "IRANSansWeb.woff",
+      "kb": 38,
+      "ms": 132
+     },
+     {
+      "u": "logo.png",
+      "kb": 28,
+      "ms": 398
+     },
+     {
+      "u": "prismjs.bundle.js",
+      "kb": 10,
+      "ms": 389
+     },
+     {
+      "u": "dark.rtl.css",
+      "kb": 3,
+      "ms": 292
+     },
+     {
+      "u": "light.rtl.css",
+      "kb": 2,
+      "ms": 382
+     },
+     {
+      "u": "login-general.js",
+      "kb": 2,
+      "ms": 377
+     },
+     {
+      "u": "prismjs.bundle.rtl.css",
+      "kb": 1,
+      "ms": 199
+     }
+    ]
+   },
+   "consoleIssues": [
+    "warning: jQuery.Deferred exception: Cannot read properties of null (reading 'classList') TypeError: Cannot read properties of nul",
+    "pageerror: Cannot read properties of null (reading 'classList')"
+   ],
+   "consoleIssueCount": 2
+  },
+  "/category/": {
+   "htmlFontSize": "6px",
+   "bodyFontSize": "8.4px",
+   "scrollWidth": 375,
+   "viewportWidth": 375,
+   "horizontalOverflow": false,
+   "overflowingCount": 27,
+   "overflowingSample": [
+    {
+     "tag": "div",
+     "cls": "",
+     "right": 735,
+     "left": 375,
+     "w": 360
+    },
+    {
+     "tag": "div",
+     "cls": "closeBtn",
+     "right": 411,
+     "left": 393,
+     "w": 18
+    },
+    {
+     "tag": "i",
+     "cls": "bi bi-x-lg",
+     "right": 411,
+     "left": 393,
+     "w": 18
+    },
+    {
+     "tag": "ul",
+     "cls": "",
+     "right": 717,
+     "left": 393,
+     "w": 324
+    },
+    {
+     "tag": "li",
+     "cls": "",
+     "right": 717,
+     "left": 393,
+     "w": 324
+    },
+    {
+     "tag": "a",
+     "cls": "",
+     "right": 717,
+     "left": 393,
+     "w": 324
+    },
+    {
+     "tag": "li",
+     "cls": "",
+     "right": 717,
+     "left": 393,
+     "w": 324
+    },
+    {
+     "tag": "a",
+     "cls": "dropdown-btn d-flex align-items-center gap-2",
+     "right": 717,
+     "left": 393,
+     "w": 324
+    },
+    {
+     "tag": "img",
+     "cls": "",
+     "right": 717,
+     "left": 687,
+     "w": 30
+    },
+    {
+     "tag": "i",
+     "cls": "bi bi-caret-left-fill me-auto",
+     "right": 405,
+     "left": 393,
+     "w": 12
+    },
+    {
+     "tag": "li",
+     "cls": "",
+     "right": 717,
+     "left": 393,
+     "w": 324
+    },
+    {
+     "tag": "a",
+     "cls": "dropdown-btn d-flex align-items-center gap-2",
+     "right": 717,
+     "left": 393,
+     "w": 324
+    }
+   ],
+   "smallTextCount": 68,
+   "smallTextSample": [
+    {
+     "tag": "a",
+     "fs": 12,
+     "cls": "",
+     "text": "021-91326030"
+    },
+    {
+     "tag": "p",
+     "fs": 8.4,
+     "cls": "",
+     "text": "ناحیه ی کاربری"
+    },
+    {
+     "tag": "a",
+     "fs": 8.4,
+     "cls": "",
+     "text": "صفحه اصلی"
+    },
+    {
+     "tag": "a",
+     "fs": 8.4,
+     "cls": "",
+     "text": "سیم و مفتول"
+    },
+    {
+     "tag": "a",
+     "fs": 8.4,
+     "cls": "",
+     "text": "توری"
+    },
+    {
+     "tag": "a",
+     "fs": 8.4,
+     "cls": "",
+     "text": "توری مش"
+    },
+    {
+     "tag": "a",
+     "fs": 8.4,
+     "cls": "",
+     "text": "سیم خاردار"
+    },
+    {
+     "tag": "a",
+     "fs": 8.4,
+     "cls": "",
+     "text": "مجله سپاهان فلز"
+    },
+    {
+     "tag": "a",
+     "fs": 8.4,
+     "cls": "",
+     "text": "درباره ما"
+    },
+    {
+     "tag": "a",
+     "fs": 8.4,
+     "cls": "",
+     "text": "تماس با ما"
+    },
+    {
+     "tag": "a",
+     "fs": 12,
+     "cls": "",
+     "text": "صفحه اصلی"
+    },
+    {
+     "tag": "a",
+     "fs": 12,
+     "cls": "dropdown-btn d-flex align-items-center g",
+     "text": "سیم و مفتول"
+    },
+    {
+     "tag": "a",
+     "fs": 10.8,
+     "cls": "dropdown-btn d-flex",
+     "text": "مفتول گالوانیزه"
+    },
+    {
+     "tag": "a",
+     "fs": 10.8,
+     "cls": "",
+     "text": "مفتول آرماتوربندی"
+    },
+    {
+     "tag": "a",
+     "fs": 12,
+     "cls": "dropdown-btn d-flex align-items-center g",
+     "text": "توری"
+    }
+   ],
+   "smallTextBySize": {
+    "12": 9,
+    "8.4": 48,
+    "10.8": 10,
+    "7.2": 1
+   },
+   "totalInteractive": 66,
+   "smallTapTargets": 36,
+   "smallTapSample": [
+    {
+     "tag": "a",
+     "w": 15,
+     "h": 26,
+     "cls": "cart",
+     "text": ""
+    },
+    {
+     "tag": "a",
+     "w": 72,
+     "h": 26,
+     "cls": "user",
+     "text": "ناحیه ی کاربری"
+    },
+    {
+     "tag": "div",
+     "w": 36,
+     "h": 27,
+     "cls": "navbar-toggler",
+     "text": ""
+    },
+    {
+     "tag": "input",
+     "w": 24,
+     "h": 24,
+     "cls": "searchInput",
+     "text": ""
+    },
+    {
+     "tag": "button",
+     "w": 24,
+     "h": 24,
+     "cls": "searchBtn",
+     "text": ""
+    },
+    {
+     "tag": "a",
+     "w": 324,
+     "h": 20,
+     "cls": "",
+     "text": "صفحه اصلی"
+    },
+    {
+     "tag": "a",
+     "w": 324,
+     "h": 20,
+     "cls": "dropdown-btn d-flex align-items-center g",
+     "text": "سیم و مفتول"
+    },
+    {
+     "tag": "a",
+     "w": 324,
+     "h": 20,
+     "cls": "dropdown-btn d-flex align-items-center g",
+     "text": "توری"
+    },
+    {
+     "tag": "a",
+     "w": 324,
+     "h": 20,
+     "cls": "dropdown-btn d-flex align-items-center g",
+     "text": "توری مش"
+    },
+    {
+     "tag": "a",
+     "w": 324,
+     "h": 20,
+     "cls": "",
+     "text": "سیم خاردار"
+    },
+    {
+     "tag": "a",
+     "w": 324,
+     "h": 20,
+     "cls": "",
+     "text": "مجله سپاهان فلز"
+    },
+    {
+     "tag": "a",
+     "w": 324,
+     "h": 20,
+     "cls": "",
+     "text": "درباره ما"
+    },
+    {
+     "tag": "a",
+     "w": 324,
+     "h": 20,
+     "cls": "",
+     "text": "تماس با ما"
+    },
+    {
+     "tag": "a",
+     "w": 16,
+     "h": 14,
+     "cls": "",
+     "text": "خانه"
+    },
+    {
+     "tag": "a",
+     "w": 67,
+     "h": 14,
+     "cls": "",
+     "text": "لیست دسته بندی ها"
+    }
+   ],
+   "imgTotal": 41,
+   "imgNoAlt": 15,
+   "imgEmptyAlt": 1,
+   "imgNoDims": 18,
+   "imgNoLazy": 24,
+   "imgNoDimsSample": [
+    {
+     "src": "factory.png",
+     "w": 0
+    },
+    {
+     "src": "factory.png",
+     "w": 0
+    },
+    {
+     "src": "factory.png",
+     "w": 0
+    },
+    {
+     "src": "270133%D9%85%D9%81%D8%AA%D9%88%D9%84%20%20-%20%20I",
+     "w": 124
+    },
+    {
+     "src": "841951%D8%AA%D9%88%D8%B1%DB%8C%20%20-%20%20Icon%20",
+     "w": 124
+    },
+    {
+     "src": "254325389666%D9%BE%D8%A7%DB%8C%D9%87-%D9%81%D9%86%",
+     "w": 124
+    },
+    {
+     "src": "638219%D9%85%D8%B4%20%20-%20%20Icon%20pack.png",
+     "w": 124
+    },
+    {
+     "src": "985532%D8%B3%DB%8C%D9%85%20%D8%AE%D8%A7%D8%B1%D8%A",
+     "w": 124
+    },
+    {
+     "src": "863937%D8%B1%D8%A7%D8%A8%DB%8C%D8%AA%D8%B3%20%20-%",
+     "w": 124
+    },
+    {
+     "src": "925714%D8%A7%D9%84%DA%A9%D8%AA%D8%B1%D9%88%D8%AF%2",
+     "w": 124
+    }
+   ],
+   "imgFormats": {
+    "svg": 2,
+    "webp": 1,
+    "jpg": 3,
+    "png": 35
+   },
+   "headings": [
+    {
+     "lvl": 1,
+     "text": "لیست دسته بندی ها"
+    }
+   ],
+   "h1Count": 1,
+   "headingSkips": [],
+   "formFields": 2,
+   "fieldsNoLabel": 1,
+   "fieldsPlaceholderOnly": 0,
+   "fieldsNoAutocomplete": 1,
+   "fieldTypes": [
+    {
+     "t": "text",
+     "name": "",
+     "ph": ""
+    },
+    {
+     "t": "text",
+     "name": "mobile",
+     "ph": "مثال : 09389611983"
+    }
+   ],
+   "langAttr": "fa",
+   "dirAttr": "rtl",
+   "skipLink": false,
+   "landmarks": {
+    "main": 1,
+    "nav": 1,
+    "header": 1,
+    "footer": 1,
+    "aside": 0
+   },
+   "iconOnlyNoLabel": 4,
+   "iconOnlySample": [
+    {
+     "tag": "a",
+     "cls": "cart"
+    },
+    {
+     "tag": "button",
+     "cls": "searchBtn"
+    },
+    {
+     "tag": "a",
+     "cls": "whatsapp-btn"
+    },
+    {
+     "tag": "a",
+     "cls": ""
+    }
+   ],
+   "tabbable": 0,
+   "lowContrastPairs": 1,
+   "lowContrastSample": [
+    {
+     "fg": "rgb(180, 35, 50)",
+     "bg": "rgb(180,35,50)",
+     "ratio": 1,
+     "need": 4.5,
+     "fs": 12,
+     "text": "021-91326030"
+    }
+   ],
+   "tableCount": 0,
+   "tableInfo": [],
+   "stylesheets": [
+    "app.css?v=1786020965"
+   ],
+   "scripts": [
+    {
+     "src": "?v=1a&pid=5200&site=1&l=https%3A%2F%2Fsepahan",
+     "async": true,
+     "defer": false,
+     "third": false
+    },
+    {
+     "src": "js?id=G-FPYB89P985&cx=c&gtm=4e6850",
+     "async": true,
+     "defer": false,
+     "third": true
+    },
+    {
+     "src": "js15_as.js",
+     "async": true,
+     "defer": false,
+     "third": true
+    },
+    {
+     "src": "js?id=G-4G781JNM07",
+     "async": true,
+     "defer": false,
+     "third": true
+    },
+    {
+     "src": "analytics.js",
+     "async": true,
+     "defer": false,
+     "third": true
+    },
+    {
+     "src": "?_a=v&_h=sepahanfelez.ir&_ss=1x00pevnjc&_pv=6",
+     "async": true,
+     "defer": true,
+     "third": false
+    },
+    {
+     "src": "fugB8i",
+     "async": true,
+     "defer": false,
+     "third": true
+    },
+    {
+     "src": "app.js?v=1786011687",
+     "async": false,
+     "defer": false,
+     "third": false
+    },
+    {
+     "src": "sidemenu.js?v=1786011689",
+     "async": false,
+     "defer": false,
+     "third": false
+    },
+    {
+     "src": "js?id=G-FPYB89P985",
+     "async": true,
+     "defer": false,
+     "third": true
+    },
+    {
+     "src": "0.php?4920158&@f16&@g0&@h6&@i1&@j178604040377",
+     "async": true,
+     "defer": false,
+     "third": false
+    },
+    {
+     "src": "mm.js",
+     "async": true,
+     "defer": false,
+     "third": true
+    }
+   ],
+   "inlineScripts": 6,
+   "preconnect": [],
+   "title": "لیست دسته بندی ها",
+   "metaDesc": null,
+   "canonical": "https://sepahanfelez.ir/category",
+   "robots": "index, follow",
+   "jsonLd": [
+    "Organization"
+   ],
+   "domNodes": 328,
+   "perf": {
+    "cls": 0,
+    "lcp": 1484,
+    "lcpEl": "IMG.",
+    "longTasks": 3,
+    "longTaskTime": 219,
+    "shifts": [],
+    "ttfb": 1227,
+    "domContentLoaded": 1514,
+    "loadEvent": 1981,
+    "resourceCount": 38,
+    "totalTransferKB": 0,
+    "byTypeKB": {
+     "link": 0,
+     "script": 0,
+     "img": 0,
+     "css": 0,
+     "fetch": 0
+    },
+    "heaviest": [
+     {
+      "u": "app.css",
+      "kb": 0,
+      "ms": 7
+     },
+     {
+      "u": "js",
+      "kb": 0,
+      "ms": 15
+     },
+     {
+      "u": "analytics.js",
+      "kb": 0,
+      "ms": 37
+     },
+     {
+      "u": "sepahanfelez-logo.svg",
+      "kb": 0,
+      "ms": 10
+     },
+     {
+      "u": "wrapper.webp",
+      "kb": 0,
+      "ms": 10
+     },
+     {
+      "u": "factory.png",
+      "kb": 0,
+      "ms": 14
+     },
+     {
+      "u": "270133%D9%85%D9%81%D8%AA%D9%88%D9%84%20%20-%2",
+      "kb": 0,
+      "ms": 42
+     },
+     {
+      "u": "841951%D8%AA%D9%88%D8%B1%DB%8C%20%20-%20%20Ic",
+      "kb": 0,
+      "ms": 44
+     },
+     {
+      "u": "638219%D9%85%D8%B4%20%20-%20%20Icon%20pack.pn",
+      "kb": 0,
+      "ms": 45
+     },
+     {
+      "u": "985532%D8%B3%DB%8C%D9%85%20%D8%AE%D8%A7%D8%B1",
+      "kb": 0,
+      "ms": 48
+     },
+     {
+      "u": "254325389666%D9%BE%D8%A7%DB%8C%D9%87-%D9%81%D",
+      "kb": 0,
+      "ms": 48
+     },
+     {
+      "u": "863937%D8%B1%D8%A7%D8%A8%DB%8C%D8%AA%D8%B3%20",
+      "kb": 0,
+      "ms": 48
+     }
+    ]
+   },
+   "consoleIssues": [
+    "pageerror: Cannot set properties of null (setting 'textContent')",
+    "pageerror: Cannot set properties of null (setting 'textContent')",
+    "pageerror: Cannot set properties of null (setting 'textContent')",
+    "pageerror: Cannot set properties of null (setting 'textContent')",
+    "pageerror: Cannot set properties of null (setting 'textContent')",
+    "pageerror: Cannot set properties of null (setting 'textContent')",
+    "pageerror: Cannot set properties of null (setting 'textContent')",
+    "pageerror: Cannot set properties of null (setting 'textContent')"
+   ],
+   "consoleIssueCount": 8
+  },
+  "/category/سیم-خاردار": {
+   "htmlFontSize": "6px",
+   "bodyFontSize": "8.4px",
+   "scrollWidth": 375,
+   "viewportWidth": 375,
+   "horizontalOverflow": false,
+   "overflowingCount": 73,
+   "overflowingSample": [
+    {
+     "tag": "div",
+     "cls": "",
+     "right": 735,
+     "left": 375,
+     "w": 360
+    },
+    {
+     "tag": "div",
+     "cls": "closeBtn",
+     "right": 411,
+     "left": 393,
+     "w": 18
+    },
+    {
+     "tag": "i",
+     "cls": "bi bi-x-lg",
+     "right": 411,
+     "left": 393,
+     "w": 18
+    },
+    {
+     "tag": "ul",
+     "cls": "",
+     "right": 717,
+     "left": 393,
+     "w": 324
+    },
+    {
+     "tag": "li",
+     "cls": "",
+     "right": 717,
+     "left": 393,
+     "w": 324
+    },
+    {
+     "tag": "a",
+     "cls": "",
+     "right": 717,
+     "left": 393,
+     "w": 324
+    },
+    {
+     "tag": "li",
+     "cls": "",
+     "right": 717,
+     "left": 393,
+     "w": 324
+    },
+    {
+     "tag": "a",
+     "cls": "dropdown-btn d-flex align-items-center gap-2",
+     "right": 717,
+     "left": 393,
+     "w": 324
+    },
+    {
+     "tag": "img",
+     "cls": "",
+     "right": 717,
+     "left": 687,
+     "w": 30
+    },
+    {
+     "tag": "i",
+     "cls": "bi bi-caret-left-fill me-auto",
+     "right": 405,
+     "left": 393,
+     "w": 12
+    },
+    {
+     "tag": "li",
+     "cls": "",
+     "right": 717,
+     "left": 393,
+     "w": 324
+    },
+    {
+     "tag": "a",
+     "cls": "dropdown-btn d-flex align-items-center gap-2",
+     "right": 717,
+     "left": 393,
+     "w": 324
+    }
+   ],
+   "smallTextCount": 125,
+   "smallTextSample": [
+    {
+     "tag": "a",
+     "fs": 12,
+     "cls": "",
+     "text": "021-91326030"
+    },
+    {
+     "tag": "p",
+     "fs": 8.4,
+     "cls": "",
+     "text": "ناحیه ی کاربری"
+    },
+    {
+     "tag": "a",
+     "fs": 8.4,
+     "cls": "",
+     "text": "صفحه اصلی"
+    },
+    {
+     "tag": "a",
+     "fs": 8.4,
+     "cls": "",
+     "text": "سیم و مفتول"
+    },
+    {
+     "tag": "a",
+     "fs": 8.4,
+     "cls": "",
+     "text": "توری"
+    },
+    {
+     "tag": "a",
+     "fs": 8.4,
+     "cls": "",
+     "text": "توری مش"
+    },
+    {
+     "tag": "a",
+     "fs": 8.4,
+     "cls": "",
+     "text": "سیم خاردار"
+    },
+    {
+     "tag": "a",
+     "fs": 8.4,
+     "cls": "",
+     "text": "مجله سپاهان فلز"
+    },
+    {
+     "tag": "a",
+     "fs": 8.4,
+     "cls": "",
+     "text": "درباره ما"
+    },
+    {
+     "tag": "a",
+     "fs": 8.4,
+     "cls": "",
+     "text": "تماس با ما"
+    },
+    {
+     "tag": "a",
+     "fs": 12,
+     "cls": "",
+     "text": "صفحه اصلی"
+    },
+    {
+     "tag": "a",
+     "fs": 12,
+     "cls": "dropdown-btn d-flex align-items-center g",
+     "text": "سیم و مفتول"
+    },
+    {
+     "tag": "a",
+     "fs": 10.8,
+     "cls": "dropdown-btn d-flex",
+     "text": "مفتول گالوانیزه"
+    },
+    {
+     "tag": "a",
+     "fs": 10.8,
+     "cls": "",
+     "text": "مفتول آرماتوربندی"
+    },
+    {
+     "tag": "a",
+     "fs": 12,
+     "cls": "dropdown-btn d-flex align-items-center g",
+     "text": "توری"
+    }
+   ],
+   "smallTextBySize": {
+    "12": 9,
+    "8.4": 68,
+    "10.8": 10,
+    "9.6": 14,
+    "7.8": 20,
+    "10.1": 2,
+    "11.3": 1,
+    "7.2": 1
+   },
+   "totalInteractive": 86,
+   "smallTapTargets": 49,
+   "smallTapSample": [
+    {
+     "tag": "a",
+     "w": 15,
+     "h": 26,
+     "cls": "cart",
+     "text": ""
+    },
+    {
+     "tag": "a",
+     "w": 72,
+     "h": 26,
+     "cls": "user",
+     "text": "ناحیه ی کاربری"
+    },
+    {
+     "tag": "div",
+     "w": 36,
+     "h": 27,
+     "cls": "navbar-toggler",
+     "text": ""
+    },
+    {
+     "tag": "input",
+     "w": 24,
+     "h": 24,
+     "cls": "searchInput",
+     "text": ""
+    },
+    {
+     "tag": "button",
+     "w": 24,
+     "h": 24,
+     "cls": "searchBtn",
+     "text": ""
+    },
+    {
+     "tag": "a",
+     "w": 324,
+     "h": 20,
+     "cls": "",
+     "text": "صفحه اصلی"
+    },
+    {
+     "tag": "a",
+     "w": 324,
+     "h": 20,
+     "cls": "dropdown-btn d-flex align-items-center g",
+     "text": "سیم و مفتول"
+    },
+    {
+     "tag": "a",
+     "w": 324,
+     "h": 20,
+     "cls": "dropdown-btn d-flex align-items-center g",
+     "text": "توری"
+    },
+    {
+     "tag": "a",
+     "w": 324,
+     "h": 20,
+     "cls": "dropdown-btn d-flex align-items-center g",
+     "text": "توری مش"
+    },
+    {
+     "tag": "a",
+     "w": 324,
+     "h": 20,
+     "cls": "",
+     "text": "سیم خاردار"
+    },
+    {
+     "tag": "a",
+     "w": 324,
+     "h": 20,
+     "cls": "",
+     "text": "مجله سپاهان فلز"
+    },
+    {
+     "tag": "a",
+     "w": 324,
+     "h": 20,
+     "cls": "",
+     "text": "درباره ما"
+    },
+    {
+     "tag": "a",
+     "w": 324,
+     "h": 20,
+     "cls": "",
+     "text": "تماس با ما"
+    },
+    {
+     "tag": "a",
+     "w": 16,
+     "h": 14,
+     "cls": "",
+     "text": "خانه"
+    },
+    {
+     "tag": "a",
+     "w": 45,
+     "h": 14,
+     "cls": "",
+     "text": "دسته بندی ها"
+    }
+   ],
+   "imgTotal": 29,
+   "imgNoAlt": 1,
+   "imgEmptyAlt": 1,
+   "imgNoDims": 6,
+   "imgNoLazy": 12,
+   "imgNoDimsSample": [
+    {
+     "src": "factory.png",
+     "w": 0
+    },
+    {
+     "src": "factory.png",
+     "w": 0
+    },
+    {
+     "src": "factory.png",
+     "w": 0
+    },
+    {
+     "src": "8285%D8%A7%D9%86%D9%88%D8%A7%D8%B9-%D8%B3%DB%8C%D9",
+     "w": 294
+    },
+    {
+     "src": "3223simkhardar1-.jpg",
+     "w": 294
+    },
+    {
+     "src": "e_namad.png",
+     "w": 90
+    }
+   ],
+   "imgFormats": {
+    "svg": 2,
+    "webp": 1,
+    "jpg": 4,
+    "png": 22
+   },
+   "headings": [
+    {
+     "lvl": 1,
+     "text": "سیم خاردار"
+    },
+    {
+     "lvl": 2,
+     "text": "نمودار قیمت سیم خاردار"
+    },
+    {
+     "lvl": 2,
+     "text": "نمودار قیمت میانگین محصولات دسته بندی سیم خاردار"
+    },
+    {
+     "lvl": 2,
+     "text": "عوامل موثر بر تعیین قیمت سیم خاردار"
+    },
+    {
+     "lvl": 3,
+     "text": "پوشش و روشنایی؛ موثر در قیمت سیم خاردار حلقوی"
+    },
+    {
+     "lvl": 3,
+     "text": "محل استفاده شما تعیین کننده قیمت سیم خاردار خطی"
+    },
+    {
+     "lvl": 3,
+     "text": "چگونه سیم خاردار ارزان قیمت بخریم؟"
+    },
+    {
+     "lvl": 3,
+     "text": "به دنبال خرید سیم خاردار دست دوم نباشید!"
+    },
+    {
+     "lvl": 2,
+     "text": "معرفی مختصری از 13 نوع سیم خاردار موجود در بازار"
+    },
+    {
+     "lvl": 2,
+     "text": "سیم خاردار چه کاربرد و مزایایی دارد؟"
+    },
+    {
+     "lvl": 3,
+     "text": "فروش سیم خارداری حلقوی تهران"
+    },
+    {
+     "lvl": 4,
+     "text": "دیدگاه ها"
+    }
+   ],
+   "h1Count": 1,
+   "headingSkips": [],
+   "formFields": 17,
+   "fieldsNoLabel": 1,
+   "fieldsPlaceholderOnly": 0,
+   "fieldsNoAutocomplete": 7,
+   "fieldTypes": [
+    {
+     "t": "text",
+     "name": "",
+     "ph": ""
+    },
+    {
+     "t": "select-one",
+     "name": "spec[1]",
+     "ph": ""
+    },
+    {
+     "t": "select-one",
+     "name": "spec[3]",
+     "ph": ""
+    },
+    {
+     "t": "select-one",
+     "name": "spec[7]",
+     "ph": ""
+    },
+    {
+     "t": "select-one",
+     "name": "spec[20]",
+     "ph": ""
+    },
+    {
+     "t": "select-one",
+     "name": "spec[21]",
+     "ph": ""
+    },
+    {
+     "t": "select-one",
+     "name": "product-time-range",
+     "ph": ""
+    },
+    {
+     "t": "select-one",
+     "name": "category-time-range",
+     "ph": ""
+    },
+    {
+     "t": "text",
+     "name": "first_name",
+     "ph": ""
+    },
+    {
+     "t": "text",
+     "name": "last_name",
+     "ph": ""
+    },
+    {
+     "t": "text",
+     "name": "phone",
+     "ph": ""
+    },
+    {
+     "t": "text",
+     "name": "email",
+     "ph": ""
+    },
+    {
+     "t": "text",
+     "name": "address",
+     "ph": ""
+    },
+    {
+     "t": "text",
+     "name": "name",
+     "ph": ""
+    },
+    {
+     "t": "text",
+     "name": "phone",
+     "ph": ""
+    },
+    {
+     "t": "textarea",
+     "name": "body",
+     "ph": ""
+    },
+    {
+     "t": "text",
+     "name": "mobile",
+     "ph": "مثال : 09389611983"
+    }
+   ],
+   "langAttr": "fa",
+   "dirAttr": "rtl",
+   "skipLink": false,
+   "landmarks": {
+    "main": 1,
+    "nav": 1,
+    "header": 1,
+    "footer": 1,
+    "aside": 0
+   },
+   "iconOnlyNoLabel": 7,
+   "iconOnlySample": [
+    {
+     "tag": "a",
+     "cls": "cart"
+    },
+    {
+     "tag": "button",
+     "cls": "searchBtn"
+    },
+    {
+     "tag": "button",
+     "cls": "border-0"
+    },
+    {
+     "tag": "button",
+     "cls": "border-0"
+    },
+    {
+     "tag": "button",
+     "cls": "border-0"
+    },
+    {
+     "tag": "a",
+     "cls": "whatsapp-btn"
+    },
+    {
+     "tag": "a",
+     "cls": ""
+    }
+   ],
+   "tabbable": 2,
+   "lowContrastPairs": 2,
+   "lowContrastSample": [
+    {
+     "fg": "rgb(180, 35, 50)",
+     "bg": "rgb(180,35,50)",
+     "ratio": 1,
+     "need": 4.5,
+     "fs": 12,
+     "text": "021-91326030"
+    },
+    {
+     "fg": "rgb(35, 207, 20)",
+     "bg": "rgb(243,243,243)",
+     "ratio": 1.89,
+     "need": 4.5,
+     "fs": 7.8,
+     "text": "13,000,000 ریال"
+    }
+   ],
+   "tableCount": 2,
+   "tableInfo": [
+    {
+     "rows": 4,
+     "cols": 12,
+     "w": 633,
+     "minW": "0px",
+     "caption": false,
+     "thead": true,
+     "scope": 0
+    },
+    {
+     "rows": 2,
+     "cols": 3,
+     "w": 276,
+     "minW": "auto",
+     "caption": false,
+     "thead": true,
+     "scope": 0
+    }
+   ],
+   "stylesheets": [
+    "app.css?v=1786020965"
+   ],
+   "scripts": [
+    {
+     "src": "?v=1a&pid=5200&site=1&l=https%3A%2F%2Fsepahan",
+     "async": true,
+     "defer": false,
+     "third": false
+    },
+    {
+     "src": "js?id=G-FPYB89P985&cx=c&gtm=4e6850",
+     "async": true,
+     "defer": false,
+     "third": true
+    },
+    {
+     "src": "js15_as.js",
+     "async": true,
+     "defer": false,
+     "third": true
+    },
+    {
+     "src": "js?id=G-4G781JNM07",
+     "async": true,
+     "defer": false,
+     "third": true
+    },
+    {
+     "src": "analytics.js",
+     "async": true,
+     "defer": false,
+     "third": true
+    },
+    {
+     "src": "?_a=v&_h=sepahanfelez.ir&_ss=1x00pevnjc&_pv=7",
+     "async": true,
+     "defer": true,
+     "third": false
+    },
+    {
+     "src": "fugB8i",
+     "async": true,
+     "defer": false,
+     "third": true
+    },
+    {
+     "src": "app.js?v=1786011687",
+     "async": false,
+     "defer": false,
+     "third": false
+    },
+    {
+     "src": "sidemenu.js?v=1786011689",
+     "async": false,
+     "defer": false,
+     "third": false
+    },
+    {
+     "src": "category.js",
+     "async": false,
+     "defer": false,
+     "third": false
+    },
+    {
+     "src": "0.php?4920158&@f16&@g0&@h7&@i1&@j178604041341",
+     "async": true,
+     "defer": false,
+     "third": false
+    },
+    {
+     "src": "print.js",
+     "async": false,
+     "defer": false,
+     "third": false
+    },
+    {
+     "src": "jquery.min.js",
+     "async": false,
+     "defer": false,
+     "third": true
+    },
+    {
+     "src": "js?id=G-FPYB89P985",
+     "async": true,
+     "defer": false,
+     "third": true
+    },
+    {
+     "src": "mm.js",
+     "async": true,
+     "defer": false,
+     "third": true
+    }
+   ],
+   "inlineScripts": 8,
+   "preconnect": [],
+   "title": "تولید و فروش سیم خاردار برای حصارکشی | خرید به قیمت کارخانه",
+   "metaDesc": "سیم خاردار با کیفیت، مستقیم از کارخانه! حصارکشی امن و مطمئن با سیم خاردار گالوانیزه. انواع سیم خاردار با قیمت روز و مناسب. تولید و فروش سیم خاردار به صورت عمده و جزئی. #سیم_خاردار #قیمت_سیم_خاردار #تولید_سیم_خاردار",
+   "canonical": "https://sepahanfelez.ir/category/%D8%B3%DB%8C%D9%85-%D8%AE%D8%A7%D8%B1%D8%AF%D8%A7%D8%B1",
+   "robots": "index, follow",
+   "jsonLd": [
+    "Organization",
+    "CollectionPage",
+    "BreadcrumbList"
+   ],
+   "domNodes": 656,
+   "perf": {
+    "cls": 0.015,
+    "lcp": 684,
+    "lcpEl": "H2.title",
+    "longTasks": 7,
+    "longTaskTime": 798,
+    "shifts": [
+     {
+      "v": 0.015,
+      "src": [
+       "DIV.price-chart",
+       "TR.",
+       "H2.title"
+      ]
+     }
+    ],
+    "ttfb": 420,
+    "domContentLoaded": 1344,
+    "loadEvent": 1546,
+    "resourceCount": 33,
+    "totalTransferKB": 162,
+    "byTypeKB": {
+     "link": 0,
+     "script": 143,
+     "img": 18,
+     "css": 0,
+     "fetch": 0
+    },
+    "heaviest": [
+     {
+      "u": "category.js",
+      "kb": 115,
+      "ms": 287
+     },
+     {
+      "u": "jquery.min.js",
+      "kb": 28,
+      "ms": 65
+     },
+     {
+      "u": "8285%D8%A7%D9%86%D9%88%D8%A7%D8%B9-%D8%B3%DB%",
+      "kb": 18,
+      "ms": 106
+     },
+     {
+      "u": "app.css",
+      "kb": 0,
+      "ms": 7
+     },
+     {
+      "u": "js",
+      "kb": 0,
+      "ms": 16
+     },
+     {
+      "u": "analytics.js",
+      "kb": 0,
+      "ms": 34
+     },
+     {
+      "u": "sepahanfelez-logo.svg",
+      "kb": 0,
+      "ms": 11
+     },
+     {
+      "u": "wrapper.webp",
+      "kb": 0,
+      "ms": 11
+     },
+     {
+      "u": "factory.png",
+      "kb": 0,
+      "ms": 28
+     },
+     {
+      "u": "270133%D9%85%D9%81%D8%AA%D9%88%D9%84%20%20-%2",
+      "kb": 0,
+      "ms": 33
+     },
+     {
+      "u": "841951%D8%AA%D9%88%D8%B1%DB%8C%20%20-%20%20Ic",
+      "kb": 0,
+      "ms": 33
+     },
+     {
+      "u": "638219%D9%85%D8%B4%20%20-%20%20Icon%20pack.pn",
+      "kb": 0,
+      "ms": 33
+     }
+    ]
+   },
+   "consoleIssues": [
+    "pageerror: Cannot set properties of null (setting 'textContent')",
+    "pageerror: Cannot set properties of null (setting 'textContent')",
+    "pageerror: Cannot set properties of null (setting 'textContent')",
+    "pageerror: Cannot set properties of null (setting 'textContent')",
+    "pageerror: Cannot set properties of null (setting 'textContent')",
+    "pageerror: Cannot set properties of null (setting 'textContent')",
+    "pageerror: Cannot set properties of null (setting 'textContent')",
+    "pageerror: Cannot set properties of null (setting 'textContent')",
+    "pageerror: Cannot set properties of null (setting 'textContent')",
+    "pageerror: Cannot set properties of null (setting 'textContent')"
+   ],
+   "consoleIssueCount": 10
+  }
+ },
+ "desktop": {
+  "/": {
+   "htmlFontSize": "10px",
+   "bodyFontSize": "14px",
+   "scrollWidth": 1440,
+   "viewportWidth": 1440,
+   "horizontalOverflow": false,
+   "overflowingCount": 9,
+   "overflowingSample": [
+    {
+     "tag": "div",
+     "cls": "slick-track",
+     "right": 2655,
+     "left": -3795,
+     "w": 6450
+    },
+    {
+     "tag": "a",
+     "cls": "slide slick-slide slick-cloned",
+     "right": 2655,
+     "left": 1365,
+     "w": 1290
+    },
+    {
+     "tag": "img",
+     "cls": "",
+     "right": 2655,
+     "left": 1365,
+     "w": 1290
+    },
+    {
+     "tag": "a",
+     "cls": "slide slick-slide",
+     "right": 75,
+     "left": -1215,
+     "w": 1290
+    },
+    {
+     "tag": "img",
+     "cls": "",
+     "right": 75,
+     "left": -1215,
+     "w": 1290
+    },
+    {
+     "tag": "a",
+     "cls": "slide slick-slide slick-cloned",
+     "right": -1215,
+     "left": -2505,
+     "w": 1290
+    },
+    {
+     "tag": "img",
+     "cls": "",
+     "right": -1215,
+     "left": -2505,
+     "w": 1290
+    },
+    {
+     "tag": "a",
+     "cls": "slide slick-slide slick-cloned",
+     "right": -2505,
+     "left": -3795,
+     "w": 1290
+    },
+    {
+     "tag": "img",
+     "cls": "",
+     "right": -2505,
+     "left": -3795,
+     "w": 1290
+    }
+   ],
+   "smallTextCount": 1,
+   "smallTextSample": [
+    {
+     "tag": "label",
+     "fs": 12,
+     "cls": "",
+     "text": "شماره تلفن خود را وارد کنید"
+    }
+   ],
+   "smallTextBySize": {
+    "12": 1
+   },
+   "totalInteractive": 106,
+   "smallTapTargets": 38,
+   "smallTapSample": [
+    {
+     "tag": "a",
+     "w": 120,
+     "h": 33,
+     "cls": "",
+     "text": "021-91326030"
+    },
+    {
+     "tag": "a",
+     "w": 25,
+     "h": 43,
+     "cls": "cart",
+     "text": ""
+    },
+    {
+     "tag": "a",
+     "w": 119,
+     "h": 43,
+     "cls": "user",
+     "text": "ناحیه ی کاربری"
+    },
+    {
+     "tag": "a",
+     "w": 68,
+     "h": 34,
+     "cls": "",
+     "text": "صفحه اصلی"
+    },
+    {
+     "tag": "input",
+     "w": 40,
+     "h": 40,
+     "cls": "searchInput",
+     "text": ""
+    },
+    {
+     "tag": "button",
+     "w": 40,
+     "h": 40,
+     "cls": "searchBtn",
+     "text": ""
+    },
+    {
+     "tag": "button",
+     "w": 20,
+     "h": 20,
+     "cls": "",
+     "text": "1"
+    },
+    {
+     "tag": "button",
+     "w": 20,
+     "h": 20,
+     "cls": "",
+     "text": "2"
+    },
+    {
+     "tag": "a",
+     "w": 136,
+     "h": 24,
+     "cls": "border-0",
+     "text": ""
+    },
+    {
+     "tag": "a",
+     "w": 260,
+     "h": 24,
+     "cls": "border-0",
+     "text": "توری پرسی توری پرسی چشمه 2*2 م"
+    },
+    {
+     "tag": "a",
+     "w": 136,
+     "h": 24,
+     "cls": "border-0",
+     "text": ""
+    },
+    {
+     "tag": "a",
+     "w": 260,
+     "h": 24,
+     "cls": "border-0",
+     "text": "توری پرسی توری پرسی چشمه 5*5 م"
+    },
+    {
+     "tag": "a",
+     "w": 136,
+     "h": 24,
+     "cls": "border-0",
+     "text": ""
+    },
+    {
+     "tag": "a",
+     "w": 136,
+     "h": 24,
+     "cls": "border-0",
+     "text": ""
+    },
+    {
+     "tag": "a",
+     "w": 136,
+     "h": 24,
+     "cls": "border-0",
+     "text": ""
+    }
+   ],
+   "imgTotal": 54,
+   "imgNoAlt": 1,
+   "imgEmptyAlt": 1,
+   "imgNoDims": 29,
+   "imgNoLazy": 10,
+   "imgNoDimsSample": [
+    {
+     "src": "factory.png",
+     "w": 31
+    },
+    {
+     "src": "factory.png",
+     "w": 31
+    },
+    {
+     "src": "factory.png",
+     "w": 31
+    },
+    {
+     "src": "711838karkhane-sanaye-maftuli-sepahanfelez.jpg",
+     "w": 1290
+    },
+    {
+     "src": "842987tori-joshi-galvanize-sepahanfelez.jpg",
+     "w": 1290
+    },
+    {
+     "src": "711838karkhane-sanaye-maftuli-sepahanfelez.jpg",
+     "w": 1290
+    },
+    {
+     "src": "842987tori-joshi-galvanize-sepahanfelez.jpg",
+     "w": 1290
+    },
+    {
+     "src": "711838karkhane-sanaye-maftuli-sepahanfelez.jpg",
+     "w": 1290
+    },
+    {
+     "src": "mini-chart.png",
+     "w": 136
+    },
+    {
+     "src": "mini-chart.png",
+     "w": 136
+    }
+   ],
+   "imgFormats": {
+    "svg": 3,
+    "webp": 1,
+    "jpg": 11,
+    "png": 39
+   },
+   "headings": [
+    {
+     "lvl": 2,
+     "text": "قیمت لحظه ای"
+    },
+    {
+     "lvl": 3,
+     "text": "درباره ما"
+    },
+    {
+     "lvl": 1,
+     "text": "شرکت صنایع مفتولی طلوع سپاهان | سایت سپاهان فلز"
+    },
+    {
+     "lvl": 3,
+     "text": "دانش نامه"
+    },
+    {
+     "lvl": 2,
+     "text": "چه نوع فنسی بهت..."
+    },
+    {
+     "lvl": 3,
+     "text": "محصول\n                                                به سبد"
+    }
+   ],
+   "h1Count": 1,
+   "headingSkips": [
+    "h1→h3"
+   ],
+   "formFields": 2,
+   "fieldsNoLabel": 1,
+   "fieldsPlaceholderOnly": 0,
+   "fieldsNoAutocomplete": 1,
+   "fieldTypes": [
+    {
+     "t": "text",
+     "name": "",
+     "ph": ""
+    },
+    {
+     "t": "text",
+     "name": "mobile",
+     "ph": "مثال : 09389611983"
+    }
+   ],
+   "langAttr": "fa",
+   "dirAttr": "rtl",
+   "skipLink": false,
+   "landmarks": {
+    "main": 0,
+    "nav": 1,
+    "header": 1,
+    "footer": 1,
+    "aside": 0
+   },
+   "iconOnlyNoLabel": 16,
+   "iconOnlySample": [
+    {
+     "tag": "a",
+     "cls": "cart"
+    },
+    {
+     "tag": "button",
+     "cls": "searchBtn"
+    },
+    {
+     "tag": "button",
+     "cls": "landing-prev slick-arrow"
+    },
+    {
+     "tag": "button",
+     "cls": "landing-next slick-arrow"
+    },
+    {
+     "tag": "button",
+     "cls": "border-0 mx-auto"
+    },
+    {
+     "tag": "button",
+     "cls": "border-0 mx-auto"
+    },
+    {
+     "tag": "button",
+     "cls": "border-0 mx-auto"
+    },
+    {
+     "tag": "button",
+     "cls": "border-0 mx-auto"
+    },
+    {
+     "tag": "button",
+     "cls": "border-0 mx-auto"
+    },
+    {
+     "tag": "button",
+     "cls": "border-0 mx-auto"
+    }
+   ],
+   "tabbable": 8,
+   "lowContrastPairs": 3,
+   "lowContrastSample": [
+    {
+     "fg": "rgb(180, 35, 50)",
+     "bg": "rgb(180,35,50)",
+     "ratio": 1,
+     "need": 4.5,
+     "fs": 20,
+     "text": "021-91326030"
+    },
+    {
+     "fg": "rgb(35, 207, 20)",
+     "bg": "rgb(255,255,255)",
+     "ratio": 2.1,
+     "need": 4.5,
+     "fs": 14,
+     "text": "افزایش"
+    },
+    {
+     "fg": "rgb(255, 255, 255)",
+     "bg": "rgb(255,255,255)",
+     "ratio": 1,
+     "need": 4.5,
+     "fs": 20,
+     "text": "اطلاعات تماس"
+    }
+   ],
+   "tableCount": 1,
+   "tableInfo": [
+    {
+     "rows": 11,
+     "cols": 8,
+     "w": 1170,
+     "minW": "992px",
+     "caption": false,
+     "thead": true,
+     "scope": 0
+    }
+   ],
+   "stylesheets": [
+    "app.css?v=1786020965"
+   ],
+   "scripts": [
+    {
+     "src": "?v=1a&pid=5200&site=1&l=https%3A%2F%2Fsepahan",
+     "async": true,
+     "defer": false,
+     "third": false
+    },
+    {
+     "src": "js?id=G-FPYB89P985&cx=c&gtm=4e6850",
+     "async": true,
+     "defer": false,
+     "third": true
+    },
+    {
+     "src": "js15_as.js",
+     "async": true,
+     "defer": false,
+     "third": true
+    },
+    {
+     "src": "js?id=G-4G781JNM07",
+     "async": true,
+     "defer": false,
+     "third": true
+    },
+    {
+     "src": "analytics.js",
+     "async": true,
+     "defer": false,
+     "third": true
+    },
+    {
+     "src": "fugB8i",
+     "async": true,
+     "defer": false,
+     "third": true
+    },
+    {
+     "src": "app.js?v=1786011687",
+     "async": false,
+     "defer": false,
+     "third": false
+    },
+    {
+     "src": "sidemenu.js?v=1786011689",
+     "async": false,
+     "defer": false,
+     "third": false
+    },
+    {
+     "src": "home.js",
+     "async": false,
+     "defer": false,
+     "third": false
+    },
+    {
+     "src": "js?id=G-FPYB89P985",
+     "async": true,
+     "defer": false,
+     "third": true
+    },
+    {
+     "src": "0.php?4920158&@f16&@g1&@h1&@i1&@j178604042551",
+     "async": true,
+     "defer": false,
+     "third": false
+    },
+    {
+     "src": "mm.js",
+     "async": true,
+     "defer": false,
+     "third": true
+    }
+   ],
+   "inlineScripts": 6,
+   "preconnect": [],
+   "title": "سپاهان فلز | تولید کننده انواع مفتول‌های صنعتی و ساختمانی",
+   "metaDesc": "شرکت رادمان جاده ابریشم تنها نماینده رسمی شرکت صنایع مفتولی طلوع سپاهان با نام تجاری سپاهان فلز| تولید و عرضه کلیه محصولات صنایع مفتولی",
+   "canonical": "https://sepahanfelez.ir/",
+   "robots": "index, follow",
+   "jsonLd": [
+    "Organization"
+   ],
+   "domNodes": 601,
+   "perf": {
+    "cls": 0.323,
+    "lcp": 1472,
+    "lcpEl": "IMG.",
+    "longTasks": 6,
+    "longTaskTime": 516,
+    "shifts": [
+     {
+      "v": 0.211,
+      "src": [
+       "DIV.container",
+       "BUTTON.landing-prev",
+       "BUTTON.landing-next"
+      ]
+     },
+     {
+      "v": 0.06,
+      "src": [
+       "DIV.container",
+       "LI.my-nav-link",
+       "LI.my-nav-link"
+      ]
+     },
+     {
+      "v": 0.052,
+      "src": [
+       "DIV.container"
+      ]
+     }
+    ],
+    "ttfb": 644,
+    "domContentLoaded": 1410,
+    "loadEvent": 1859,
+    "resourceCount": 49,
+    "totalTransferKB": 1205,
+    "byTypeKB": {
+     "link": 38,
+     "script": 134,
+     "img": 849,
+     "css": 183,
+     "fetch": 0
+    },
+    "heaviest": [
+     {
+      "u": "8490chain-link-fence.jpg",
+      "kb": 217,
+      "ms": 303
+     },
+     {
+      "u": "711838karkhane-sanaye-maftuli-sepahanfelez.jp",
+      "kb": 122,
+      "ms": 246
+     },
+     {
+      "u": "694148884139530447about-us.jpg",
+      "kb": 120,
+      "ms": 297
+     },
+     {
+      "u": "842987tori-joshi-galvanize-sepahanfelez.jpg",
+      "kb": 118,
+      "ms": 297
+     },
+     {
+      "u": "app.js",
+      "kb": 93,
+      "ms": 408
+     },
+     {
+      "u": "bootstrap-icons.woff2",
+      "kb": 89,
+      "ms": 447
+     },
+     {
+      "u": "995796instagram.jpg",
+      "kb": 57,
+      "ms": 241
+     },
+     {
+      "u": "270133%D9%85%D9%81%D8%AA%D9%88%D9%84%20%20-%2",
+      "kb": 53,
+      "ms": 429
+     },
+     {
+      "u": "439764telegram.jpg",
+      "kb": 52,
+      "ms": 227
+     },
+     {
+      "u": "home.js",
+      "kb": 40,
+      "ms": 428
+     },
+     {
+      "u": "app.css",
+      "kb": 38,
+      "ms": 201
+     },
+     {
+      "u": "IRANSansWeb_FaNum_Light.woff2",
+      "kb": 32,
+      "ms": 357
+     }
+    ]
+   },
+   "consoleIssues": [
+    "pageerror: Cannot set properties of null (setting 'textContent')",
+    "pageerror: Cannot set properties of null (setting 'textContent')",
+    "pageerror: Cannot set properties of null (setting 'textContent')",
+    "pageerror: Cannot set properties of null (setting 'textContent')",
+    "pageerror: Cannot set properties of null (setting 'textContent')",
+    "pageerror: Cannot set properties of null (setting 'textContent')",
+    "pageerror: Cannot set properties of null (setting 'textContent')",
+    "pageerror: Cannot set properties of null (setting 'textContent')",
+    "pageerror: Cannot set properties of null (setting 'textContent')"
+   ],
+   "consoleIssueCount": 9
+  },
+  "/price": {
+   "htmlFontSize": "10px",
+   "bodyFontSize": "14px",
+   "scrollWidth": 1440,
+   "viewportWidth": 1440,
+   "horizontalOverflow": false,
+   "overflowingCount": 0,
+   "overflowingSample": [],
+   "smallTextCount": 1,
+   "smallTextSample": [
+    {
+     "tag": "label",
+     "fs": 12,
+     "cls": "",
+     "text": "شماره تلفن خود را وارد کنید"
+    }
+   ],
+   "smallTextBySize": {
+    "12": 1
+   },
+   "totalInteractive": 141,
+   "smallTapTargets": 78,
+   "smallTapSample": [
+    {
+     "tag": "a",
+     "w": 120,
+     "h": 33,
+     "cls": "",
+     "text": "021-91326030"
+    },
+    {
+     "tag": "a",
+     "w": 25,
+     "h": 43,
+     "cls": "cart",
+     "text": ""
+    },
+    {
+     "tag": "a",
+     "w": 119,
+     "h": 43,
+     "cls": "user",
+     "text": "ناحیه ی کاربری"
+    },
+    {
+     "tag": "a",
+     "w": 68,
+     "h": 34,
+     "cls": "",
+     "text": "صفحه اصلی"
+    },
+    {
+     "tag": "input",
+     "w": 40,
+     "h": 40,
+     "cls": "searchInput",
+     "text": ""
+    },
+    {
+     "tag": "button",
+     "w": 40,
+     "h": 40,
+     "cls": "searchBtn",
+     "text": ""
+    },
+    {
+     "tag": "a",
+     "w": 136,
+     "h": 24,
+     "cls": "border-0",
+     "text": ""
+    },
+    {
+     "tag": "button",
+     "w": 31,
+     "h": 51,
+     "cls": "border-0 bg-white mx-auto",
+     "text": ""
+    },
+    {
+     "tag": "a",
+     "w": 251,
+     "h": 24,
+     "cls": "border-0",
+     "text": "توری پرسی توری پرسی چشمه 2*2 م"
+    },
+    {
+     "tag": "a",
+     "w": 136,
+     "h": 24,
+     "cls": "border-0",
+     "text": ""
+    },
+    {
+     "tag": "button",
+     "w": 31,
+     "h": 51,
+     "cls": "border-0 bg-white mx-auto",
+     "text": ""
+    },
+    {
+     "tag": "a",
+     "w": 256,
+     "h": 24,
+     "cls": "border-0",
+     "text": "توری پرسی توری پرسی چشمه 5*5 م"
+    },
+    {
+     "tag": "a",
+     "w": 136,
+     "h": 24,
+     "cls": "border-0",
+     "text": ""
+    },
+    {
+     "tag": "button",
+     "w": 31,
+     "h": 51,
+     "cls": "border-0 bg-white mx-auto",
+     "text": ""
+    },
+    {
+     "tag": "a",
+     "w": 273,
+     "h": 24,
+     "cls": "border-0",
+     "text": "توری پرسی توری پرسی چشمه 3*3 م"
+    }
+   ],
+   "imgTotal": 61,
+   "imgNoAlt": 1,
+   "imgEmptyAlt": 1,
+   "imgNoDims": 38,
+   "imgNoLazy": 44,
+   "imgNoDimsSample": [
+    {
+     "src": "factory.png",
+     "w": 31
+    },
+    {
+     "src": "factory.png",
+     "w": 31
+    },
+    {
+     "src": "factory.png",
+     "w": 31
+    },
+    {
+     "src": "270133%D9%85%D9%81%D8%AA%D9%88%D9%84%20%20-%20%20I",
+     "w": 64
+    },
+    {
+     "src": "841951%D8%AA%D9%88%D8%B1%DB%8C%20%20-%20%20Icon%20",
+     "w": 64
+    },
+    {
+     "src": "254325389666%D9%BE%D8%A7%DB%8C%D9%87-%D9%81%D9%86%",
+     "w": 64
+    },
+    {
+     "src": "638219%D9%85%D8%B4%20%20-%20%20Icon%20pack.png",
+     "w": 64
+    },
+    {
+     "src": "985532%D8%B3%DB%8C%D9%85%20%D8%AE%D8%A7%D8%B1%D8%A",
+     "w": 64
+    },
+    {
+     "src": "863937%D8%B1%D8%A7%D8%A8%DB%8C%D8%AA%D8%B3%20%20-%",
+     "w": 64
+    },
+    {
+     "src": "925714%D8%A7%D9%84%DA%A9%D8%AA%D8%B1%D9%88%D8%AF%2",
+     "w": 64
+    }
+   ],
+   "imgFormats": {
+    "svg": 2,
+    "webp": 1,
+    "jpg": 3,
+    "png": 55
+   },
+   "headings": [
+    {
+     "lvl": 1,
+     "text": "جدول تغییرات لحظه ای"
+    },
+    {
+     "lvl": 3,
+     "text": "محصول\n                                                به سبد"
+    }
+   ],
+   "h1Count": 1,
+   "headingSkips": [
+    "h1→h3"
+   ],
+   "formFields": 2,
+   "fieldsNoLabel": 1,
+   "fieldsPlaceholderOnly": 0,
+   "fieldsNoAutocomplete": 1,
+   "fieldTypes": [
+    {
+     "t": "text",
+     "name": "",
+     "ph": ""
+    },
+    {
+     "t": "text",
+     "name": "mobile",
+     "ph": "مثال : 09389611983"
+    }
+   ],
+   "langAttr": "fa",
+   "dirAttr": "rtl",
+   "skipLink": false,
+   "landmarks": {
+    "main": 1,
+    "nav": 2,
+    "header": 1,
+    "footer": 1,
+    "aside": 0
+   },
+   "iconOnlyNoLabel": 24,
+   "iconOnlySample": [
+    {
+     "tag": "a",
+     "cls": "cart"
+    },
+    {
+     "tag": "button",
+     "cls": "searchBtn"
+    },
+    {
+     "tag": "button",
+     "cls": "border-0 bg-white mx-auto"
+    },
+    {
+     "tag": "button",
+     "cls": "border-0 bg-white mx-auto"
+    },
+    {
+     "tag": "button",
+     "cls": "border-0 bg-white mx-auto"
+    },
+    {
+     "tag": "button",
+     "cls": "border-0 bg-white mx-auto"
+    },
+    {
+     "tag": "button",
+     "cls": "border-0 bg-white mx-auto"
+    },
+    {
+     "tag": "button",
+     "cls": "border-0 bg-white mx-auto"
+    },
+    {
+     "tag": "button",
+     "cls": "border-0 bg-white mx-auto"
+    },
+    {
+     "tag": "button",
+     "cls": "border-0 bg-white mx-auto"
+    }
+   ],
+   "tabbable": 1,
+   "lowContrastPairs": 3,
+   "lowContrastSample": [
+    {
+     "fg": "rgb(180, 35, 50)",
+     "bg": "rgb(180,35,50)",
+     "ratio": 1,
+     "need": 4.5,
+     "fs": 20,
+     "text": "021-91326030"
+    },
+    {
+     "fg": "rgb(35, 207, 20)",
+     "bg": "rgb(255,255,255)",
+     "ratio": 2.1,
+     "need": 4.5,
+     "fs": 14,
+     "text": "افزایش"
+    },
+    {
+     "fg": "rgb(108, 117, 125)",
+     "bg": "rgb(247,247,247)",
+     "ratio": 4.38,
+     "need": 4.5,
+     "fs": 14,
+     "text": "صفحه قبل"
+    }
+   ],
+   "tableCount": 1,
+   "tableInfo": [
+    {
+     "rows": 21,
+     "cols": 7,
+     "w": 1205,
+     "minW": "992px",
+     "caption": false,
+     "thead": true,
+     "scope": 0
+    }
+   ],
+   "stylesheets": [
+    "app.css?v=1786020965"
+   ],
+   "scripts": [
+    {
+     "src": "?v=1a&pid=5200&site=1&l=https%3A%2F%2Fsepahan",
+     "async": true,
+     "defer": false,
+     "third": false
+    },
+    {
+     "src": "js?id=G-FPYB89P985&cx=c&gtm=4e6850",
+     "async": true,
+     "defer": false,
+     "third": true
+    },
+    {
+     "src": "js15_as.js",
+     "async": true,
+     "defer": false,
+     "third": true
+    },
+    {
+     "src": "js?id=G-4G781JNM07",
+     "async": true,
+     "defer": false,
+     "third": true
+    },
+    {
+     "src": "analytics.js",
+     "async": true,
+     "defer": false,
+     "third": true
+    },
+    {
+     "src": "?_a=v&_h=sepahanfelez.ir&_ss=4n5hu4fbvu&_pv=2",
+     "async": true,
+     "defer": true,
+     "third": false
+    },
+    {
+     "src": "fugB8i",
+     "async": true,
+     "defer": false,
+     "third": true
+    },
+    {
+     "src": "app.js?v=1786011687",
+     "async": false,
+     "defer": false,
+     "third": false
+    },
+    {
+     "src": "sidemenu.js?v=1786011689",
+     "async": false,
+     "defer": false,
+     "third": false
+    },
+    {
+     "src": "print.js",
+     "async": false,
+     "defer": false,
+     "third": false
+    },
+    {
+     "src": "js?id=G-FPYB89P985",
+     "async": true,
+     "defer": false,
+     "third": true
+    },
+    {
+     "src": "0.php?4920158&@f16&@g0&@h2&@i1&@j178604043586",
+     "async": true,
+     "defer": false,
+     "third": false
+    },
+    {
+     "src": "mm.js",
+     "async": true,
+     "defer": false,
+     "third": true
+    }
+   ],
+   "inlineScripts": 6,
+   "preconnect": [],
+   "title": "قیمت آهن لحظه ای | بروزرسانی روزانه توسط سپاهان فلز",
+   "metaDesc": "صفحه قیمت ها | قیمت لحظه ای آهن در سایت سپاهان فلز سایت فروشگاهی شرکت صنایع مفتولی طلوع سپاهان تولید و عرضه کلیه محصولات صنایع مفتولی",
+   "canonical": "https://sepahanfelez.ir/price",
+   "robots": "index, follow",
+   "jsonLd": [
+    "Organization"
+   ],
+   "domNodes": 785,
+   "perf": {
+    "cls": 0.041,
+    "lcp": 796,
+    "lcpEl": "IMG.",
+    "longTasks": 5,
+    "longTaskTime": 421,
+    "shifts": [
+     {
+      "v": 0.041,
+      "src": [
+       "DIV.tab-content",
+       "DIV.col-lg-1",
+       "DIV.col-lg-1"
+      ]
+     }
+    ],
+    "ttfb": 590,
+    "domContentLoaded": 913,
+    "loadEvent": 1400,
+    "resourceCount": 43,
+    "totalTransferKB": 25,
+    "byTypeKB": {
+     "link": 0,
+     "script": 6,
+     "img": 19,
+     "css": 0,
+     "fetch": 0
+    },
+    "heaviest": [
+     {
+      "u": "print.js",
+      "kb": 6,
+      "ms": 145
+     },
+     {
+      "u": "972833%D9%88%D8%A7%D8%AA%D8%B1%D8%A7%D8%B3%D8",
+      "kb": 3,
+      "ms": 145
+     },
+     {
+      "u": "142822%D9%85%DB%8C%D9%84%20%DA%AF%D8%B1%D8%AF",
+      "kb": 3,
+      "ms": 150
+     },
+     {
+      "u": "863937%D8%B1%D8%A7%D8%A8%DB%8C%D8%AA%D8%B3%20",
+      "kb": 2,
+      "ms": 143
+     },
+     {
+      "u": "254325389666%D9%BE%D8%A7%DB%8C%D9%87-%D9%81%D",
+      "kb": 2,
+      "ms": 141
+     },
+     {
+      "u": "925714%D8%A7%D9%84%DA%A9%D8%AA%D8%B1%D9%88%D8",
+      "kb": 2,
+      "ms": 144
+     },
+     {
+      "u": "404176%D8%A7%D8%B3%D9%BE%DB%8C%D8%B3%D8%B1%20",
+      "kb": 2,
+      "ms": 145
+     },
+     {
+      "u": "572219%D9%BE%D8%B4%D9%85%20%D8%B4%DB%8C%D8%B4",
+      "kb": 2,
+      "ms": 148
+     },
+     {
+      "u": "546667%D8%AE%D8%A7%D9%85%D9%88%D8%AA%20%20-%2",
+      "kb": 1,
+      "ms": 152
+     },
+     {
+      "u": "824374%D9%88%D8%B1%D9%82%20%D9%81%D9%84%D8%B2",
+      "kb": 1,
+      "ms": 151
+     },
+     {
+      "u": "323332%D8%AA%DB%8C%D8%B1%20%20%D8%A2%D9%87%D9",
+      "kb": 1,
+      "ms": 229
+     },
+     {
+      "u": "app.css",
+      "kb": 0,
+      "ms": 7
+     }
+    ]
+   },
+   "consoleIssues": [
+    "pageerror: Cannot set properties of null (setting 'textContent')",
+    "pageerror: Cannot set properties of null (setting 'textContent')",
+    "pageerror: Cannot set properties of null (setting 'textContent')",
+    "pageerror: Cannot set properties of null (setting 'textContent')",
+    "pageerror: Cannot set properties of null (setting 'textContent')",
+    "pageerror: Cannot set properties of null (setting 'textContent')",
+    "pageerror: Cannot set properties of null (setting 'textContent')",
+    "pageerror: Cannot set properties of null (setting 'textContent')"
+   ],
+   "consoleIssueCount": 8
+  },
+  "/blog": {
+   "htmlFontSize": "10px",
+   "bodyFontSize": "14px",
+   "scrollWidth": 1440,
+   "viewportWidth": 1440,
+   "horizontalOverflow": false,
+   "overflowingCount": 0,
+   "overflowingSample": [],
+   "smallTextCount": 1,
+   "smallTextSample": [
+    {
+     "tag": "label",
+     "fs": 12,
+     "cls": "",
+     "text": "شماره تلفن خود را وارد کنید"
+    }
+   ],
+   "smallTextBySize": {
+    "12": 1
+   },
+   "totalInteractive": 81,
+   "smallTapTargets": 39,
+   "smallTapSample": [
+    {
+     "tag": "a",
+     "w": 120,
+     "h": 33,
+     "cls": "",
+     "text": "021-91326030"
+    },
+    {
+     "tag": "a",
+     "w": 25,
+     "h": 43,
+     "cls": "cart",
+     "text": ""
+    },
+    {
+     "tag": "a",
+     "w": 119,
+     "h": 43,
+     "cls": "user",
+     "text": "ناحیه ی کاربری"
+    },
+    {
+     "tag": "a",
+     "w": 68,
+     "h": 34,
+     "cls": "",
+     "text": "صفحه اصلی"
+    },
+    {
+     "tag": "input",
+     "w": 40,
+     "h": 40,
+     "cls": "searchInput",
+     "text": ""
+    },
+    {
+     "tag": "button",
+     "w": 40,
+     "h": 40,
+     "cls": "searchBtn",
+     "text": ""
+    },
+    {
+     "tag": "a",
+     "w": 263,
+     "h": 33,
+     "cls": "",
+     "text": "خرید توری باغی با قیمت مناسب"
+    },
+    {
+     "tag": "a",
+     "w": 158,
+     "h": 33,
+     "cls": "",
+     "text": "توری مرغی گالوانیزه"
+    },
+    {
+     "tag": "a",
+     "w": 196,
+     "h": 33,
+     "cls": "",
+     "text": "خرید توری حصاری ارزان"
+    },
+    {
+     "tag": "a",
+     "w": 194,
+     "h": 33,
+     "cls": "",
+     "text": "چه نوع فنسی بهتر است"
+    },
+    {
+     "tag": "button",
+     "w": 111,
+     "h": 34,
+     "cls": "nav-link active",
+     "text": "پر بازدیدترین"
+    },
+    {
+     "tag": "button",
+     "w": 95,
+     "h": 34,
+     "cls": "nav-link",
+     "text": "جدیدترین"
+    },
+    {
+     "tag": "a",
+     "w": 206,
+     "h": 29,
+     "cls": "",
+     "text": "میلگرد و انواع استاندارهای آن"
+    },
+    {
+     "tag": "a",
+     "w": 66,
+     "h": 24,
+     "cls": "",
+     "text": "ادامه مطلب"
+    },
+    {
+     "tag": "a",
+     "w": 191,
+     "h": 29,
+     "cls": "",
+     "text": "محاسبه وزن مفتول گالوانیزه"
+    }
+   ],
+   "imgTotal": 41,
+   "imgNoAlt": 1,
+   "imgEmptyAlt": 1,
+   "imgNoDims": 18,
+   "imgNoLazy": 24,
+   "imgNoDimsSample": [
+    {
+     "src": "factory.png",
+     "w": 31
+    },
+    {
+     "src": "factory.png",
+     "w": 31
+    },
+    {
+     "src": "factory.png",
+     "w": 31
+    },
+    {
+     "src": "8735steel-bars.jpg",
+     "w": 250
+    },
+    {
+     "src": "8497maftool-3.jpg",
+     "w": 250
+    },
+    {
+     "src": "3223simkhardar1-.jpg",
+     "w": 250
+    },
+    {
+     "src": "8735%D8%AA%D9%88%D8%B1%DB%8C-%D9%85%D8%B4-%DB%8C%D",
+     "w": 250
+    },
+    {
+     "src": "8490chain-link-fence.jpg",
+     "w": 0
+    },
+    {
+     "src": "4479link_fencing_2.jpg",
+     "w": 0
+    },
+    {
+     "src": "2712GDN-119_Steel_Fruit_Cage_with_Butterfly_Net_8.",
+     "w": 0
+    }
+   ],
+   "imgFormats": {
+    "svg": 2,
+    "webp": 2,
+    "jpg": 15,
+    "png": 22
+   },
+   "headings": [
+    {
+     "lvl": 3,
+     "text": "میلگرد و انواع استاندارهای آن"
+    },
+    {
+     "lvl": 3,
+     "text": "محاسبه وزن مفتول گالوانیزه"
+    },
+    {
+     "lvl": 3,
+     "text": "سیم خاردار چیست؟"
+    },
+    {
+     "lvl": 3,
+     "text": "توری مش یا توری جوشی چیست؟"
+    },
+    {
+     "lvl": 3,
+     "text": "چه نوع فنسی بهتر است"
+    },
+    {
+     "lvl": 3,
+     "text": "خرید توری حصاری ارزان"
+    },
+    {
+     "lvl": 3,
+     "text": "خرید توری باغی با قیمت مناسب"
+    },
+    {
+     "lvl": 3,
+     "text": "توری مرغی گالوانیزه"
+    },
+    {
+     "lvl": 2,
+     "text": "میلگرد"
+    },
+    {
+     "lvl": 2,
+     "text": "سایر مطالب"
+    }
+   ],
+   "h1Count": 0,
+   "headingSkips": [],
+   "formFields": 2,
+   "fieldsNoLabel": 1,
+   "fieldsPlaceholderOnly": 0,
+   "fieldsNoAutocomplete": 1,
+   "fieldTypes": [
+    {
+     "t": "text",
+     "name": "",
+     "ph": ""
+    },
+    {
+     "t": "text",
+     "name": "mobile",
+     "ph": "مثال : 09389611983"
+    }
+   ],
+   "langAttr": "fa",
+   "dirAttr": "rtl",
+   "skipLink": false,
+   "landmarks": {
+    "main": 1,
+    "nav": 1,
+    "header": 1,
+    "footer": 1,
+    "aside": 0
+   },
+   "iconOnlyNoLabel": 4,
+   "iconOnlySample": [
+    {
+     "tag": "a",
+     "cls": "cart"
+    },
+    {
+     "tag": "button",
+     "cls": "searchBtn"
+    },
+    {
+     "tag": "a",
+     "cls": "whatsapp-btn"
+    },
+    {
+     "tag": "a",
+     "cls": ""
+    }
+   ],
+   "tabbable": 0,
+   "lowContrastPairs": 2,
+   "lowContrastSample": [
+    {
+     "fg": "rgb(180, 35, 50)",
+     "bg": "rgb(180,35,50)",
+     "ratio": 1,
+     "need": 4.5,
+     "fs": 20,
+     "text": "021-91326030"
+    },
+    {
+     "fg": "rgb(119, 119, 119)",
+     "bg": "rgb(247,247,247)",
+     "ratio": 4.18,
+     "need": 4.5,
+     "fs": 14,
+     "text": "23:21   27-فروردین-1401"
+    }
+   ],
+   "tableCount": 0,
+   "tableInfo": [],
+   "stylesheets": [
+    "app.css?v=1786020965"
+   ],
+   "scripts": [
+    {
+     "src": "?v=1a&pid=5200&site=1&l=https%3A%2F%2Fsepahan",
+     "async": true,
+     "defer": false,
+     "third": false
+    },
+    {
+     "src": "js?id=G-FPYB89P985&cx=c&gtm=4e6850",
+     "async": true,
+     "defer": false,
+     "third": true
+    },
+    {
+     "src": "js15_as.js",
+     "async": true,
+     "defer": false,
+     "third": true
+    },
+    {
+     "src": "js?id=G-4G781JNM07",
+     "async": true,
+     "defer": false,
+     "third": true
+    },
+    {
+     "src": "analytics.js",
+     "async": true,
+     "defer": false,
+     "third": true
+    },
+    {
+     "src": "?_a=v&_h=sepahanfelez.ir&_ss=4n5hu4fbvu&_pv=3",
+     "async": true,
+     "defer": true,
+     "third": false
+    },
+    {
+     "src": "fugB8i",
+     "async": true,
+     "defer": false,
+     "third": true
+    },
+    {
+     "src": "app.js?v=1786011687",
+     "async": false,
+     "defer": false,
+     "third": false
+    },
+    {
+     "src": "sidemenu.js?v=1786011689",
+     "async": false,
+     "defer": false,
+     "third": false
+    },
+    {
+     "src": "blog.js",
+     "async": false,
+     "defer": false,
+     "third": false
+    },
+    {
+     "src": "js?id=G-FPYB89P985",
+     "async": true,
+     "defer": false,
+     "third": true
+    },
+    {
+     "src": "0.php?4920158&@f16&@g0&@h3&@i1&@j178604044552",
+     "async": true,
+     "defer": false,
+     "third": false
+    },
+    {
+     "src": "mm.js",
+     "async": true,
+     "defer": false,
+     "third": true
+    }
+   ],
+   "inlineScripts": 6,
+   "preconnect": [],
+   "title": "لیست مقالات بلاگ . sepahanfelez.ir",
+   "metaDesc": null,
+   "canonical": "https://sepahanfelez.ir/blog",
+   "robots": "index, follow",
+   "jsonLd": [
+    "Organization"
+   ],
+   "domNodes": 464,
+   "perf": {
+    "cls": 0,
+    "lcp": 1232,
+    "lcpEl": "DIV.card",
+    "longTasks": 6,
+    "longTaskTime": 432,
+    "shifts": [],
+    "ttfb": 400,
+    "domContentLoaded": 893,
+    "loadEvent": 1318,
+    "resourceCount": 47,
+    "totalTransferKB": 1854,
+    "byTypeKB": {
+     "link": 0,
+     "script": 89,
+     "img": 1114,
+     "css": 651,
+     "fetch": 0
+    },
+    "heaviest": [
+     {
+      "u": "2712GDN-119_Steel_Fruit_Cage_with_Butterfly_N",
+      "kb": 549,
+      "ms": 804
+     },
+     {
+      "u": "2712GDN-119_Steel_Fruit_Cage_with_Butterfly_N",
+      "kb": 361,
+      "ms": 749
+     },
+     {
+      "u": "4479link_fencing_2.jpg",
+      "kb": 156,
+      "ms": 625
+     },
+     {
+      "u": "8490chain-link-fence.jpg",
+      "kb": 155,
+      "ms": 579
+     },
+     {
+      "u": "4479link_fencing_2.jpg",
+      "kb": 135,
+      "ms": 578
+     },
+     {
+      "u": "8735steel-bars.jpg",
+      "kb": 92,
+      "ms": 598
+     },
+     {
+      "u": "blog.js",
+      "kb": 89,
+      "ms": 332
+     },
+     {
+      "u": "2343maftoolgalvanizeh-webp-.jpg",
+      "kb": 70,
+      "ms": 560
+     },
+     {
+      "u": "3011toori-morghi.jpg",
+      "kb": 60,
+      "ms": 543
+     },
+     {
+      "u": "3223simkhardar1-.jpg",
+      "kb": 41,
+      "ms": 526
+     },
+     {
+      "u": "8497maftool-3.jpg",
+      "kb": 38,
+      "ms": 529
+     },
+     {
+      "u": "8735%D8%AA%D9%88%D8%B1%DB%8C-%D9%85%D8%B4-%DB",
+      "kb": 34,
+      "ms": 509
+     }
+    ]
+   },
+   "consoleIssues": [
+    "pageerror: Cannot set properties of null (setting 'textContent')",
+    "pageerror: Cannot set properties of null (setting 'textContent')",
+    "pageerror: Cannot set properties of null (setting 'textContent')",
+    "pageerror: Cannot set properties of null (setting 'textContent')",
+    "pageerror: Cannot set properties of null (setting 'textContent')",
+    "pageerror: Cannot set properties of null (setting 'textContent')",
+    "pageerror: Cannot set properties of null (setting 'textContent')",
+    "pageerror: Cannot set properties of null (setting 'textContent')"
+   ],
+   "consoleIssueCount": 8
+  },
+  "/about": {
+   "htmlFontSize": "10px",
+   "bodyFontSize": "14px",
+   "scrollWidth": 1440,
+   "viewportWidth": 1440,
+   "horizontalOverflow": false,
+   "overflowingCount": 0,
+   "overflowingSample": [],
+   "smallTextCount": 1,
+   "smallTextSample": [
+    {
+     "tag": "label",
+     "fs": 12,
+     "cls": "",
+     "text": "شماره تلفن خود را وارد کنید"
+    }
+   ],
+   "smallTextBySize": {
+    "12": 1
+   },
+   "totalInteractive": 54,
+   "smallTapTargets": 16,
+   "smallTapSample": [
+    {
+     "tag": "a",
+     "w": 120,
+     "h": 33,
+     "cls": "",
+     "text": "021-91326030"
+    },
+    {
+     "tag": "a",
+     "w": 25,
+     "h": 43,
+     "cls": "cart",
+     "text": ""
+    },
+    {
+     "tag": "a",
+     "w": 119,
+     "h": 43,
+     "cls": "user",
+     "text": "ناحیه ی کاربری"
+    },
+    {
+     "tag": "a",
+     "w": 68,
+     "h": 34,
+     "cls": "",
+     "text": "صفحه اصلی"
+    },
+    {
+     "tag": "input",
+     "w": 40,
+     "h": 40,
+     "cls": "searchInput",
+     "text": ""
+    },
+    {
+     "tag": "button",
+     "w": 40,
+     "h": 40,
+     "cls": "searchBtn",
+     "text": ""
+    },
+    {
+     "tag": "a",
+     "w": 1106,
+     "h": 38,
+     "cls": "red-btn mx-auto mb-5",
+     "text": "با ما در تماس باشید"
+    },
+    {
+     "tag": "a",
+     "w": 57,
+     "h": 24,
+     "cls": "",
+     "text": "تماس با ما"
+    },
+    {
+     "tag": "a",
+     "w": 45,
+     "h": 24,
+     "cls": "",
+     "text": "درباره ما"
+    },
+    {
+     "tag": "a",
+     "w": 62,
+     "h": 33,
+     "cls": "",
+     "text": ""
+    },
+    {
+     "tag": "input",
+     "w": 246,
+     "h": 38,
+     "cls": "",
+     "text": ""
+    },
+    {
+     "tag": "button",
+     "w": 158,
+     "h": 38,
+     "cls": "mt-2",
+     "text": "عضویت در خبرنامه"
+    },
+    {
+     "tag": "a",
+     "w": 91,
+     "h": 35,
+     "cls": "",
+     "text": "021-91326030"
+    },
+    {
+     "tag": "a",
+     "w": 153,
+     "h": 35,
+     "cls": "",
+     "text": "info@sepahanfelez.ir"
+    },
+    {
+     "tag": "a",
+     "w": 101,
+     "h": 24,
+     "cls": "text-danger",
+     "text": "سایت سپاهان فلز"
+    }
+   ],
+   "imgTotal": 36,
+   "imgNoAlt": 1,
+   "imgEmptyAlt": 1,
+   "imgNoDims": 13,
+   "imgNoLazy": 19,
+   "imgNoDimsSample": [
+    {
+     "src": "factory.png",
+     "w": 31
+    },
+    {
+     "src": "factory.png",
+     "w": 31
+    },
+    {
+     "src": "factory.png",
+     "w": 31
+    },
+    {
+     "src": "885205Pqe5Y0e-best-linux-wallpaper.png",
+     "w": 1305
+    },
+    {
+     "src": "326f107022bedc4ab7f44e5a899efff6",
+     "w": 241
+    },
+    {
+     "src": "b17d31affcb0e67427c7d56437cf0999",
+     "w": 241
+    },
+    {
+     "src": "d41d8cd98f00b204e9800998ecf8427e",
+     "w": 241
+    },
+    {
+     "src": "235bf5b9de6c3cbf8ff69f5b9c089abd",
+     "w": 241
+    },
+    {
+     "src": "d41d8cd98f00b204e9800998ecf8427e",
+     "w": 241
+    },
+    {
+     "src": "48b2482edd2c10db5451fed42f5c3b84",
+     "w": 241
+    }
+   ],
+   "imgFormats": {
+    "svg": 2,
+    "webp": 1,
+    "jpg": 2,
+    "png": 23,
+    "com/a": 8
+   },
+   "headings": [
+    {
+     "lvl": 2,
+     "text": "درباره ما"
+    },
+    {
+     "lvl": 3,
+     "text": "تیم ما"
+    }
+   ],
+   "h1Count": 0,
+   "headingSkips": [],
+   "formFields": 2,
+   "fieldsNoLabel": 1,
+   "fieldsPlaceholderOnly": 0,
+   "fieldsNoAutocomplete": 1,
+   "fieldTypes": [
+    {
+     "t": "text",
+     "name": "",
+     "ph": ""
+    },
+    {
+     "t": "text",
+     "name": "mobile",
+     "ph": "مثال : 09389611983"
+    }
+   ],
+   "langAttr": "fa",
+   "dirAttr": "rtl",
+   "skipLink": false,
+   "landmarks": {
+    "main": 1,
+    "nav": 1,
+    "header": 1,
+    "footer": 1,
+    "aside": 0
+   },
+   "iconOnlyNoLabel": 4,
+   "iconOnlySample": [
+    {
+     "tag": "a",
+     "cls": "cart"
+    },
+    {
+     "tag": "button",
+     "cls": "searchBtn"
+    },
+    {
+     "tag": "a",
+     "cls": "whatsapp-btn"
+    },
+    {
+     "tag": "a",
+     "cls": ""
+    }
+   ],
+   "tabbable": 0,
+   "lowContrastPairs": 2,
+   "lowContrastSample": [
+    {
+     "fg": "rgb(180, 35, 50)",
+     "bg": "rgb(180,35,50)",
+     "ratio": 1,
+     "need": 4.5,
+     "fs": 20,
+     "text": "021-91326030"
+    },
+    {
+     "fg": "rgb(255, 255, 255)",
+     "bg": "rgb(255,255,255)",
+     "ratio": 1,
+     "need": 4.5,
+     "fs": 17,
+     "text": "مصطفی شیرزادی"
+    }
+   ],
+   "tableCount": 0,
+   "tableInfo": [],
+   "stylesheets": [
+    "app.css?v=1786020965"
+   ],
+   "scripts": [
+    {
+     "src": "?v=1a&pid=5200&site=1&l=https%3A%2F%2Fsepahan",
+     "async": true,
+     "defer": false,
+     "third": false
+    },
+    {
+     "src": "js?id=G-FPYB89P985&cx=c&gtm=4e6850",
+     "async": true,
+     "defer": false,
+     "third": true
+    },
+    {
+     "src": "js15_as.js",
+     "async": true,
+     "defer": false,
+     "third": true
+    },
+    {
+     "src": "js?id=G-4G781JNM07",
+     "async": true,
+     "defer": false,
+     "third": true
+    },
+    {
+     "src": "analytics.js",
+     "async": true,
+     "defer": false,
+     "third": true
+    },
+    {
+     "src": "?_a=v&_h=sepahanfelez.ir&_ss=4n5hu4fbvu&_pv=4",
+     "async": true,
+     "defer": true,
+     "third": false
+    },
+    {
+     "src": "fugB8i",
+     "async": true,
+     "defer": false,
+     "third": true
+    },
+    {
+     "src": "app.js?v=1786011687",
+     "async": false,
+     "defer": false,
+     "third": false
+    },
+    {
+     "src": "sidemenu.js?v=1786011689",
+     "async": false,
+     "defer": false,
+     "third": false
+    },
+    {
+     "src": "js?id=G-FPYB89P985",
+     "async": true,
+     "defer": false,
+     "third": true
+    },
+    {
+     "src": "0.php?4920158&@f16&@g0&@h4&@i1&@j178604045541",
+     "async": true,
+     "defer": false,
+     "third": false
+    },
+    {
+     "src": "mm.js",
+     "async": true,
+     "defer": false,
+     "third": true
+    }
+   ],
+   "inlineScripts": 6,
+   "preconnect": [],
+   "title": "درباره ما",
+   "metaDesc": null,
+   "canonical": "https://sepahanfelez.ir/about",
+   "robots": "index, follow",
+   "jsonLd": [
+    "Organization"
+   ],
+   "domNodes": 349,
+   "perf": {
+    "cls": 0.225,
+    "lcp": 696,
+    "lcpEl": "IMG.",
+    "longTasks": 5,
+    "longTaskTime": 366,
+    "shifts": [
+     {
+      "v": 0.225,
+      "src": [
+       "MAIN.about-us-page",
+       "LI.my-nav-link",
+       "LI.my-nav-link"
+      ]
+     }
+    ],
+    "ttfb": 312,
+    "domContentLoaded": 607,
+    "loadEvent": 1132,
+    "resourceCount": 40,
+    "totalTransferKB": 1937,
+    "byTypeKB": {
+     "link": 0,
+     "script": 0,
+     "img": 65,
+     "css": 0,
+     "video": 1872,
+     "fetch": 0
+    },
+    "heaviest": [
+     {
+      "u": "9763Steel-Bridge-Fabrication-is-Revolutionize",
+      "kb": 1854,
+      "ms": 265
+     },
+     {
+      "u": "885205Pqe5Y0e-best-linux-wallpaper.png",
+      "kb": 65,
+      "ms": 236
+     },
+     {
+      "u": "9763Steel-Bridge-Fabrication-is-Revolutionize",
+      "kb": 18,
+      "ms": 308
+     },
+     {
+      "u": "app.css",
+      "kb": 0,
+      "ms": 6
+     },
+     {
+      "u": "js",
+      "kb": 0,
+      "ms": 13
+     },
+     {
+      "u": "analytics.js",
+      "kb": 0,
+      "ms": 36
+     },
+     {
+      "u": "sepahanfelez-logo.svg",
+      "kb": 0,
+      "ms": 9
+     },
+     {
+      "u": "wrapper.webp",
+      "kb": 0,
+      "ms": 9
+     },
+     {
+      "u": "factory.png",
+      "kb": 0,
+      "ms": 11
+     },
+     {
+      "u": "270133%D9%85%D9%81%D8%AA%D9%88%D9%84%20%20-%2",
+      "kb": 0,
+      "ms": 40
+     },
+     {
+      "u": "841951%D8%AA%D9%88%D8%B1%DB%8C%20%20-%20%20Ic",
+      "kb": 0,
+      "ms": 41
+     },
+     {
+      "u": "638219%D9%85%D8%B4%20%20-%20%20Icon%20pack.pn",
+      "kb": 0,
+      "ms": 42
+     }
+    ]
+   },
+   "consoleIssues": [
+    "pageerror: Cannot set properties of null (setting 'textContent')",
+    "pageerror: Cannot set properties of null (setting 'textContent')",
+    "pageerror: Cannot set properties of null (setting 'textContent')",
+    "pageerror: Cannot set properties of null (setting 'textContent')",
+    "pageerror: Cannot set properties of null (setting 'textContent')",
+    "pageerror: Cannot set properties of null (setting 'textContent')",
+    "pageerror: Cannot set properties of null (setting 'textContent')",
+    "pageerror: Cannot set properties of null (setting 'textContent')"
+   ],
+   "consoleIssueCount": 8
+  },
+  "/contact": {
+   "htmlFontSize": "10px",
+   "bodyFontSize": "14px",
+   "scrollWidth": 1440,
+   "viewportWidth": 1440,
+   "horizontalOverflow": false,
+   "overflowingCount": 0,
+   "overflowingSample": [],
+   "smallTextCount": 1,
+   "smallTextSample": [
+    {
+     "tag": "label",
+     "fs": 12,
+     "cls": "",
+     "text": "شماره تلفن خود را وارد کنید"
+    }
+   ],
+   "smallTextBySize": {
+    "12": 1
+   },
+   "totalInteractive": 62,
+   "smallTapTargets": 24,
+   "smallTapSample": [
+    {
+     "tag": "a",
+     "w": 120,
+     "h": 33,
+     "cls": "",
+     "text": "021-91326030"
+    },
+    {
+     "tag": "a",
+     "w": 25,
+     "h": 43,
+     "cls": "cart",
+     "text": ""
+    },
+    {
+     "tag": "a",
+     "w": 119,
+     "h": 43,
+     "cls": "user",
+     "text": "ناحیه ی کاربری"
+    },
+    {
+     "tag": "a",
+     "w": 68,
+     "h": 34,
+     "cls": "",
+     "text": "صفحه اصلی"
+    },
+    {
+     "tag": "input",
+     "w": 40,
+     "h": 40,
+     "cls": "searchInput",
+     "text": ""
+    },
+    {
+     "tag": "button",
+     "w": 40,
+     "h": 40,
+     "cls": "searchBtn",
+     "text": ""
+    },
+    {
+     "tag": "a",
+     "w": 27,
+     "h": 43,
+     "cls": "",
+     "text": ""
+    },
+    {
+     "tag": "a",
+     "w": 67,
+     "h": 24,
+     "cls": "",
+     "text": "آدرس اصلی"
+    },
+    {
+     "tag": "a",
+     "w": 111,
+     "h": 24,
+     "cls": "",
+     "text": "دفتر بازار آهن تهران"
+    },
+    {
+     "tag": "input",
+     "w": 387,
+     "h": 36,
+     "cls": "",
+     "text": ""
+    },
+    {
+     "tag": "input",
+     "w": 387,
+     "h": 36,
+     "cls": "",
+     "text": ""
+    },
+    {
+     "tag": "input",
+     "w": 387,
+     "h": 36,
+     "cls": "",
+     "text": ""
+    },
+    {
+     "tag": "input",
+     "w": 387,
+     "h": 36,
+     "cls": "",
+     "text": ""
+    },
+    {
+     "tag": "input",
+     "w": 989,
+     "h": 36,
+     "cls": "",
+     "text": ""
+    },
+    {
+     "tag": "button",
+     "w": 134,
+     "h": 38,
+     "cls": "red-btn me-auto",
+     "text": "ارسال درخواست"
+    }
+   ],
+   "imgTotal": 27,
+   "imgNoAlt": 1,
+   "imgEmptyAlt": 1,
+   "imgNoDims": 4,
+   "imgNoLazy": 10,
+   "imgNoDimsSample": [
+    {
+     "src": "factory.png",
+     "w": 31
+    },
+    {
+     "src": "factory.png",
+     "w": 31
+    },
+    {
+     "src": "factory.png",
+     "w": 31
+    },
+    {
+     "src": "e_namad.png",
+     "w": 150
+    }
+   ],
+   "imgFormats": {
+    "svg": 2,
+    "webp": 1,
+    "jpg": 2,
+    "png": 22
+   },
+   "headings": [
+    {
+     "lvl": 2,
+     "text": "تماس با ما"
+    },
+    {
+     "lvl": 4,
+     "text": "اطلاعات تماس"
+    },
+    {
+     "lvl": 3,
+     "text": "آدرس"
+    },
+    {
+     "lvl": 2,
+     "text": "فرم تماس با ما"
+    }
+   ],
+   "h1Count": 0,
+   "headingSkips": [
+    "h2→h4"
+   ],
+   "formFields": 8,
+   "fieldsNoLabel": 1,
+   "fieldsPlaceholderOnly": 0,
+   "fieldsNoAutocomplete": 1,
+   "fieldTypes": [
+    {
+     "t": "text",
+     "name": "",
+     "ph": ""
+    },
+    {
+     "t": "text",
+     "name": "first_name",
+     "ph": ""
+    },
+    {
+     "t": "text",
+     "name": "last_name",
+     "ph": ""
+    },
+    {
+     "t": "text",
+     "name": "phone",
+     "ph": ""
+    },
+    {
+     "t": "text",
+     "name": "email",
+     "ph": ""
+    },
+    {
+     "t": "text",
+     "name": "subject",
+     "ph": ""
+    },
+    {
+     "t": "textarea",
+     "name": "body",
+     "ph": ""
+    },
+    {
+     "t": "text",
+     "name": "mobile",
+     "ph": "مثال : 09389611983"
+    }
+   ],
+   "langAttr": "fa",
+   "dirAttr": "rtl",
+   "skipLink": false,
+   "landmarks": {
+    "main": 1,
+    "nav": 1,
+    "header": 1,
+    "footer": 1,
+    "aside": 0
+   },
+   "iconOnlyNoLabel": 5,
+   "iconOnlySample": [
+    {
+     "tag": "a",
+     "cls": "cart"
+    },
+    {
+     "tag": "button",
+     "cls": "searchBtn"
+    },
+    {
+     "tag": "a",
+     "cls": ""
+    },
+    {
+     "tag": "a",
+     "cls": "whatsapp-btn"
+    },
+    {
+     "tag": "a",
+     "cls": ""
+    }
+   ],
+   "tabbable": 0,
+   "lowContrastPairs": 1,
+   "lowContrastSample": [
+    {
+     "fg": "rgb(180, 35, 50)",
+     "bg": "rgb(180,35,50)",
+     "ratio": 1,
+     "need": 4.5,
+     "fs": 20,
+     "text": "021-91326030"
+    }
+   ],
+   "tableCount": 0,
+   "tableInfo": [],
+   "stylesheets": [
+    "app.css?v=1786020965"
+   ],
+   "scripts": [
+    {
+     "src": "?v=1a&pid=5200&site=1&l=https%3A%2F%2Fsepahan",
+     "async": true,
+     "defer": false,
+     "third": false
+    },
+    {
+     "src": "js?id=G-FPYB89P985&cx=c&gtm=4e6850",
+     "async": true,
+     "defer": false,
+     "third": true
+    },
+    {
+     "src": "js15_as.js",
+     "async": true,
+     "defer": false,
+     "third": true
+    },
+    {
+     "src": "js?id=G-4G781JNM07",
+     "async": true,
+     "defer": false,
+     "third": true
+    },
+    {
+     "src": "analytics.js",
+     "async": true,
+     "defer": false,
+     "third": true
+    },
+    {
+     "src": "?_a=v&_h=sepahanfelez.ir&_ss=4n5hu4fbvu&_pv=5",
+     "async": true,
+     "defer": true,
+     "third": false
+    },
+    {
+     "src": "fugB8i",
+     "async": true,
+     "defer": false,
+     "third": true
+    },
+    {
+     "src": "app.js?v=1786011687",
+     "async": false,
+     "defer": false,
+     "third": false
+    },
+    {
+     "src": "sidemenu.js?v=1786011689",
+     "async": false,
+     "defer": false,
+     "third": false
+    },
+    {
+     "src": "js?id=G-FPYB89P985",
+     "async": true,
+     "defer": false,
+     "third": true
+    },
+    {
+     "src": "0.php?4920158&@f16&@g0&@h5&@i1&@j178604046512",
+     "async": true,
+     "defer": false,
+     "third": false
+    },
+    {
+     "src": "mm.js",
+     "async": true,
+     "defer": false,
+     "third": true
+    }
+   ],
+   "inlineScripts": 6,
+   "preconnect": [],
+   "title": "تماس با ما",
+   "metaDesc": null,
+   "canonical": "https://sepahanfelez.ir/contact",
+   "robots": "index, follow",
+   "jsonLd": [
+    "Organization"
+   ],
+   "domNodes": 333,
+   "perf": {
+    "cls": 0.001,
+    "lcp": 512,
+    "lcpEl": "IMG.",
+    "longTasks": 7,
+    "longTaskTime": 1081,
+    "shifts": [],
+    "ttfb": 304,
+    "domContentLoaded": 601,
+    "loadEvent": 1211,
+    "resourceCount": 32,
+    "totalTransferKB": 0,
+    "byTypeKB": {
+     "link": 0,
+     "script": 0,
+     "img": 0,
+     "iframe": 0,
+     "css": 0,
+     "fetch": 0
+    },
+    "heaviest": [
+     {
+      "u": "app.css",
+      "kb": 0,
+      "ms": 5
+     },
+     {
+      "u": "js",
+      "kb": 0,
+      "ms": 11
+     },
+     {
+      "u": "analytics.js",
+      "kb": 0,
+      "ms": 34
+     },
+     {
+      "u": "sepahanfelez-logo.svg",
+      "kb": 0,
+      "ms": 7
+     },
+     {
+      "u": "wrapper.webp",
+      "kb": 0,
+      "ms": 7
+     },
+     {
+      "u": "factory.png",
+      "kb": 0,
+      "ms": 12
+     },
+     {
+      "u": "270133%D9%85%D9%81%D8%AA%D9%88%D9%84%20%20-%2",
+      "kb": 0,
+      "ms": 38
+     },
+     {
+      "u": "841951%D8%AA%D9%88%D8%B1%DB%8C%20%20-%20%20Ic",
+      "kb": 0,
+      "ms": 38
+     },
+     {
+      "u": "638219%D9%85%D8%B4%20%20-%20%20Icon%20pack.pn",
+      "kb": 0,
+      "ms": 38
+     },
+     {
+      "u": "985532%D8%B3%DB%8C%D9%85%20%D8%AE%D8%A7%D8%B1",
+      "kb": 0,
+      "ms": 38
+     },
+     {
+      "u": "e_namad.png",
+      "kb": 0,
+      "ms": 39
+     },
+     {
+      "u": "sidemenu.js",
+      "kb": 0,
+      "ms": 18
+     }
+    ]
+   },
+   "consoleIssues": [
+    "pageerror: Cannot set properties of null (setting 'textContent')",
+    "pageerror: Cannot set properties of null (setting 'textContent')",
+    "pageerror: Cannot set properties of null (setting 'textContent')",
+    "pageerror: Cannot set properties of null (setting 'textContent')",
+    "pageerror: Cannot set properties of null (setting 'textContent')",
+    "pageerror: Cannot set properties of null (setting 'textContent')",
+    "pageerror: Cannot set properties of null (setting 'textContent')",
+    "pageerror: Cannot set properties of null (setting 'textContent')",
+    "pageerror: Cannot set properties of null (setting 'textContent')",
+    "pageerror: Cannot set properties of null (setting 'textContent')"
+   ],
+   "consoleIssueCount": 10
+  },
+  "/login": {
+   "htmlFontSize": "13px",
+   "bodyFontSize": "13px",
+   "scrollWidth": 1440,
+   "viewportWidth": 1440,
+   "horizontalOverflow": false,
+   "overflowingCount": 1,
+   "overflowingSample": [
+    {
+     "tag": "svg",
+     "cls": "[object SVGAnimatedString]",
+     "right": -1438,
+     "left": -1440,
+     "w": 2
+    }
+   ],
+   "smallTextCount": 2,
+   "smallTextSample": [
+    {
+     "tag": "p",
+     "fs": 13,
+     "cls": "text-white",
+     "text": "حساب کاربری ندارید؟\n                    "
+    },
+    {
+     "tag": "a",
+     "fs": 13,
+     "cls": "",
+     "text": "ثبت نام کنید"
+    }
+   ],
+   "smallTextBySize": {
+    "13": 2
+   },
+   "totalInteractive": 4,
+   "smallTapTargets": 2,
+   "smallTapSample": [
+    {
+     "tag": "button",
+     "w": 123,
+     "h": 41,
+     "cls": "btn btn-pill btn-primary opacity-90 px-1",
+     "text": "ورود"
+    },
+    {
+     "tag": "a",
+     "w": 66,
+     "h": 22,
+     "cls": "",
+     "text": "ثبت نام کنید"
+    }
+   ],
+   "imgTotal": 1,
+   "imgNoAlt": 1,
+   "imgEmptyAlt": 0,
+   "imgNoDims": 1,
+   "imgNoLazy": 1,
+   "imgNoDimsSample": [
+    {
+     "src": "logo.png",
+     "w": 130
+    }
+   ],
+   "imgFormats": {
+    "png": 1
+   },
+   "headings": [
+    {
+     "lvl": 3,
+     "text": "ورود به پنل"
+    }
+   ],
+   "h1Count": 0,
+   "headingSkips": [],
+   "formFields": 1,
+   "fieldsNoLabel": 1,
+   "fieldsPlaceholderOnly": 1,
+   "fieldsNoAutocomplete": 0,
+   "fieldTypes": [
+    {
+     "t": "tel",
+     "name": "mobile",
+     "ph": "تلفن همراه خود را وارد کنید"
+    }
+   ],
+   "langAttr": null,
+   "dirAttr": "rtl",
+   "skipLink": false,
+   "landmarks": {
+    "main": 0,
+    "nav": 0,
+    "header": 0,
+    "footer": 0,
+    "aside": 0
+   },
+   "iconOnlyNoLabel": 0,
+   "iconOnlySample": [],
+   "tabbable": 0,
+   "lowContrastPairs": 4,
+   "lowContrastSample": [
+    {
+     "fg": "rgb(255, 255, 255)",
+     "bg": "rgb(238,240,248)",
+     "ratio": 1.14,
+     "need": 4.5,
+     "fs": 19.5,
+     "text": "ورود به پنل"
+    },
+    {
+     "fg": "rgb(255, 255, 255)",
+     "bg": "rgb(54,153,255)",
+     "ratio": 2.93,
+     "need": 4.5,
+     "fs": 13,
+     "text": "ورود"
+    },
+    {
+     "fg": "rgb(255, 255, 255)",
+     "bg": "rgb(238,240,248)",
+     "ratio": 1.14,
+     "need": 4.5,
+     "fs": 13,
+     "text": "حساب کاربری ندارید؟\n                    "
+    },
+    {
+     "fg": "rgb(54, 153, 255)",
+     "bg": "rgb(238,240,248)",
+     "ratio": 2.58,
+     "need": 4.5,
+     "fs": 13,
+     "text": "ثبت نام کنید"
+    }
+   ],
+   "tableCount": 0,
+   "tableInfo": [],
+   "stylesheets": [
+    "login-5.rtl.css",
+    "plugins.bundle.rtl.css",
+    "prismjs.bundle.rtl.css",
+    "style.bundle.rtl.css",
+    "light.rtl.css",
+    "light.rtl.css",
+    "dark.rtl.css",
+    "dark.rtl.css"
+   ],
+   "scripts": [
+    {
+     "src": "plugins.bundle.js",
+     "async": false,
+     "defer": false,
+     "third": false
+    },
+    {
+     "src": "prismjs.bundle.js",
+     "async": false,
+     "defer": false,
+     "third": false
+    },
+    {
+     "src": "scripts.bundle.js",
+     "async": false,
+     "defer": false,
+     "third": false
+    },
+    {
+     "src": "login-general.js",
+     "async": false,
+     "defer": false,
+     "third": false
+    }
+   ],
+   "inlineScripts": 3,
+   "preconnect": [],
+   "title": "ورود به پنل",
+   "metaDesc": null,
+   "canonical": null,
+   "robots": "noindex",
+   "jsonLd": [],
+   "domNodes": 49,
+   "perf": {
+    "cls": 0,
+    "lcp": 1040,
+    "lcpEl": "IMG.",
+    "longTasks": 3,
+    "longTaskTime": 400,
+    "shifts": [],
+    "ttfb": 254,
+    "domContentLoaded": 1283,
+    "loadEvent": 1287,
+    "resourceCount": 15,
+    "totalTransferKB": 1423,
+    "byTypeKB": {
+     "link": 226,
+     "img": 28,
+     "script": 895,
+     "css": 274
+    },
+    "heaviest": [
+     {
+      "u": "plugins.bundle.js",
+      "kb": 826,
+      "ms": 687
+     },
+     {
+      "u": "bg-2.jpg",
+      "kb": 237,
+      "ms": 125
+     },
+     {
+      "u": "style.bundle.rtl.css",
+      "kb": 144,
+      "ms": 581
+     },
+     {
+      "u": "plugins.bundle.rtl.css",
+      "kb": 74,
+      "ms": 504
+     },
+     {
+      "u": "scripts.bundle.js",
+      "kb": 57,
+      "ms": 503
+     },
+     {
+      "u": "IRANSansWeb.woff",
+      "kb": 38,
+      "ms": 128
+     },
+     {
+      "u": "logo.png",
+      "kb": 28,
+      "ms": 387
+     },
+     {
+      "u": "prismjs.bundle.js",
+      "kb": 10,
+      "ms": 379
+     },
+     {
+      "u": "dark.rtl.css",
+      "kb": 3,
+      "ms": 293
+     },
+     {
+      "u": "light.rtl.css",
+      "kb": 2,
+      "ms": 110
+     },
+     {
+      "u": "login-general.js",
+      "kb": 2,
+      "ms": 293
+     },
+     {
+      "u": "prismjs.bundle.rtl.css",
+      "kb": 1,
+      "ms": 113
+     }
+    ]
+   },
+   "consoleIssues": [
+    "warning: jQuery.Deferred exception: Cannot read properties of null (reading 'classList') TypeError: Cannot read properties of nul",
+    "pageerror: Cannot read properties of null (reading 'classList')"
+   ],
+   "consoleIssueCount": 2
+  },
+  "/category/": {
+   "htmlFontSize": "10px",
+   "bodyFontSize": "14px",
+   "scrollWidth": 1440,
+   "viewportWidth": 1440,
+   "horizontalOverflow": false,
+   "overflowingCount": 0,
+   "overflowingSample": [],
+   "smallTextCount": 1,
+   "smallTextSample": [
+    {
+     "tag": "label",
+     "fs": 12,
+     "cls": "",
+     "text": "شماره تلفن خود را وارد کنید"
+    }
+   ],
+   "smallTextBySize": {
+    "12": 1
+   },
+   "totalInteractive": 66,
+   "smallTapTargets": 29,
+   "smallTapSample": [
+    {
+     "tag": "a",
+     "w": 120,
+     "h": 33,
+     "cls": "",
+     "text": "021-91326030"
+    },
+    {
+     "tag": "a",
+     "w": 25,
+     "h": 43,
+     "cls": "cart",
+     "text": ""
+    },
+    {
+     "tag": "a",
+     "w": 119,
+     "h": 43,
+     "cls": "user",
+     "text": "ناحیه ی کاربری"
+    },
+    {
+     "tag": "a",
+     "w": 68,
+     "h": 34,
+     "cls": "",
+     "text": "صفحه اصلی"
+    },
+    {
+     "tag": "input",
+     "w": 40,
+     "h": 40,
+     "cls": "searchInput",
+     "text": ""
+    },
+    {
+     "tag": "button",
+     "w": 40,
+     "h": 40,
+     "cls": "searchBtn",
+     "text": ""
+    },
+    {
+     "tag": "a",
+     "w": 23,
+     "h": 24,
+     "cls": "",
+     "text": "خانه"
+    },
+    {
+     "tag": "a",
+     "w": 118,
+     "h": 24,
+     "cls": "",
+     "text": "لیست دسته بندی ها"
+    },
+    {
+     "tag": "a",
+     "w": 1245,
+     "h": 24,
+     "cls": "",
+     "text": "👈مفتول گالوانیزه"
+    },
+    {
+     "tag": "a",
+     "w": 1245,
+     "h": 24,
+     "cls": "",
+     "text": "👈مفتول آرماتوربندی"
+    },
+    {
+     "tag": "a",
+     "w": 1245,
+     "h": 24,
+     "cls": "",
+     "text": "👈توری مرغی"
+    },
+    {
+     "tag": "a",
+     "w": 1245,
+     "h": 24,
+     "cls": "",
+     "text": "👈توری فرنگی"
+    },
+    {
+     "tag": "a",
+     "w": 1245,
+     "h": 24,
+     "cls": "",
+     "text": "👈توری حصاری"
+    },
+    {
+     "tag": "a",
+     "w": 1245,
+     "h": 24,
+     "cls": "",
+     "text": "👈توری پرسی"
+    },
+    {
+     "tag": "a",
+     "w": 1245,
+     "h": 24,
+     "cls": "",
+     "text": "👈توری گابیون"
+    }
+   ],
+   "imgTotal": 41,
+   "imgNoAlt": 15,
+   "imgEmptyAlt": 1,
+   "imgNoDims": 18,
+   "imgNoLazy": 24,
+   "imgNoDimsSample": [
+    {
+     "src": "factory.png",
+     "w": 31
+    },
+    {
+     "src": "factory.png",
+     "w": 31
+    },
+    {
+     "src": "factory.png",
+     "w": 31
+    },
+    {
+     "src": "270133%D9%85%D9%81%D8%AA%D9%88%D9%84%20%20-%20%20I",
+     "w": 124
+    },
+    {
+     "src": "841951%D8%AA%D9%88%D8%B1%DB%8C%20%20-%20%20Icon%20",
+     "w": 124
+    },
+    {
+     "src": "254325389666%D9%BE%D8%A7%DB%8C%D9%87-%D9%81%D9%86%",
+     "w": 124
+    },
+    {
+     "src": "638219%D9%85%D8%B4%20%20-%20%20Icon%20pack.png",
+     "w": 124
+    },
+    {
+     "src": "985532%D8%B3%DB%8C%D9%85%20%D8%AE%D8%A7%D8%B1%D8%A",
+     "w": 124
+    },
+    {
+     "src": "863937%D8%B1%D8%A7%D8%A8%DB%8C%D8%AA%D8%B3%20%20-%",
+     "w": 124
+    },
+    {
+     "src": "925714%D8%A7%D9%84%DA%A9%D8%AA%D8%B1%D9%88%D8%AF%2",
+     "w": 124
+    }
+   ],
+   "imgFormats": {
+    "svg": 2,
+    "webp": 1,
+    "jpg": 3,
+    "png": 35
+   },
+   "headings": [
+    {
+     "lvl": 1,
+     "text": "لیست دسته بندی ها"
+    }
+   ],
+   "h1Count": 1,
+   "headingSkips": [],
+   "formFields": 2,
+   "fieldsNoLabel": 1,
+   "fieldsPlaceholderOnly": 0,
+   "fieldsNoAutocomplete": 1,
+   "fieldTypes": [
+    {
+     "t": "text",
+     "name": "",
+     "ph": ""
+    },
+    {
+     "t": "text",
+     "name": "mobile",
+     "ph": "مثال : 09389611983"
+    }
+   ],
+   "langAttr": "fa",
+   "dirAttr": "rtl",
+   "skipLink": false,
+   "landmarks": {
+    "main": 1,
+    "nav": 1,
+    "header": 1,
+    "footer": 1,
+    "aside": 0
+   },
+   "iconOnlyNoLabel": 4,
+   "iconOnlySample": [
+    {
+     "tag": "a",
+     "cls": "cart"
+    },
+    {
+     "tag": "button",
+     "cls": "searchBtn"
+    },
+    {
+     "tag": "a",
+     "cls": "whatsapp-btn"
+    },
+    {
+     "tag": "a",
+     "cls": ""
+    }
+   ],
+   "tabbable": 0,
+   "lowContrastPairs": 1,
+   "lowContrastSample": [
+    {
+     "fg": "rgb(180, 35, 50)",
+     "bg": "rgb(180,35,50)",
+     "ratio": 1,
+     "need": 4.5,
+     "fs": 20,
+     "text": "021-91326030"
+    }
+   ],
+   "tableCount": 0,
+   "tableInfo": [],
+   "stylesheets": [
+    "app.css?v=1786020965"
+   ],
+   "scripts": [
+    {
+     "src": "?v=1a&pid=5200&site=1&l=https%3A%2F%2Fsepahan",
+     "async": true,
+     "defer": false,
+     "third": false
+    },
+    {
+     "src": "?t=300&d=sepahanfelez.ir",
+     "async": true,
+     "defer": false,
+     "third": false
+    },
+    {
+     "src": "js?id=G-FPYB89P985&cx=c&gtm=4e6850",
+     "async": true,
+     "defer": false,
+     "third": true
+    },
+    {
+     "src": "js15_as.js",
+     "async": true,
+     "defer": false,
+     "third": true
+    },
+    {
+     "src": "js?id=G-4G781JNM07",
+     "async": true,
+     "defer": false,
+     "third": true
+    },
+    {
+     "src": "analytics.js",
+     "async": true,
+     "defer": false,
+     "third": true
+    },
+    {
+     "src": "?_a=v&_h=sepahanfelez.ir&_ss=4n5hu4fbvu&_pv=6",
+     "async": true,
+     "defer": true,
+     "third": false
+    },
+    {
+     "src": "fugB8i",
+     "async": true,
+     "defer": false,
+     "third": true
+    },
+    {
+     "src": "app.js?v=1786011687",
+     "async": false,
+     "defer": false,
+     "third": false
+    },
+    {
+     "src": "sidemenu.js?v=1786011689",
+     "async": false,
+     "defer": false,
+     "third": false
+    },
+    {
+     "src": "js?id=G-FPYB89P985",
+     "async": true,
+     "defer": false,
+     "third": true
+    },
+    {
+     "src": "0.php?4920158&@f16&@g0&@h6&@i1&@j178604048610",
+     "async": true,
+     "defer": false,
+     "third": false
+    },
+    {
+     "src": "mm.js",
+     "async": true,
+     "defer": false,
+     "third": true
+    }
+   ],
+   "inlineScripts": 6,
+   "preconnect": [],
+   "title": "لیست دسته بندی ها",
+   "metaDesc": null,
+   "canonical": "https://sepahanfelez.ir/category",
+   "robots": "index, follow",
+   "jsonLd": [
+    "Organization"
+   ],
+   "domNodes": 329,
+   "perf": {
+    "cls": 0,
+    "lcp": 816,
+    "lcpEl": "IMG.",
+    "longTasks": 6,
+    "longTaskTime": 593,
+    "shifts": [],
+    "ttfb": 468,
+    "domContentLoaded": 916,
+    "loadEvent": 1493,
+    "resourceCount": 42,
+    "totalTransferKB": 0,
+    "byTypeKB": {
+     "link": 0,
+     "script": 0,
+     "img": 0,
+     "css": 0,
+     "fetch": 0
+    },
+    "heaviest": [
+     {
+      "u": "app.css",
+      "kb": 0,
+      "ms": 6
+     },
+     {
+      "u": "js",
+      "kb": 0,
+      "ms": 15
+     },
+     {
+      "u": "analytics.js",
+      "kb": 0,
+      "ms": 42
+     },
+     {
+      "u": "sepahanfelez-logo.svg",
+      "kb": 0,
+      "ms": 10
+     },
+     {
+      "u": "wrapper.webp",
+      "kb": 0,
+      "ms": 11
+     },
+     {
+      "u": "factory.png",
+      "kb": 0,
+      "ms": 14
+     },
+     {
+      "u": "270133%D9%85%D9%81%D8%AA%D9%88%D9%84%20%20-%2",
+      "kb": 0,
+      "ms": 44
+     },
+     {
+      "u": "841951%D8%AA%D9%88%D8%B1%DB%8C%20%20-%20%20Ic",
+      "kb": 0,
+      "ms": 47
+     },
+     {
+      "u": "638219%D9%85%D8%B4%20%20-%20%20Icon%20pack.pn",
+      "kb": 0,
+      "ms": 48
+     },
+     {
+      "u": "985532%D8%B3%DB%8C%D9%85%20%D8%AE%D8%A7%D8%B1",
+      "kb": 0,
+      "ms": 49
+     },
+     {
+      "u": "254325389666%D9%BE%D8%A7%DB%8C%D9%87-%D9%81%D",
+      "kb": 0,
+      "ms": 51
+     },
+     {
+      "u": "863937%D8%B1%D8%A7%D8%A8%DB%8C%D8%AA%D8%B3%20",
+      "kb": 0,
+      "ms": 51
+     }
+    ]
+   },
+   "consoleIssues": [
+    "pageerror: Cannot set properties of null (setting 'textContent')",
+    "pageerror: Cannot set properties of null (setting 'textContent')",
+    "pageerror: Cannot set properties of null (setting 'textContent')",
+    "pageerror: Cannot set properties of null (setting 'textContent')",
+    "pageerror: Cannot set properties of null (setting 'textContent')",
+    "pageerror: Cannot set properties of null (setting 'textContent')",
+    "pageerror: Cannot set properties of null (setting 'textContent')",
+    "pageerror: Cannot set properties of null (setting 'textContent')"
+   ],
+   "consoleIssueCount": 8
+  },
+  "/category/سیم-خاردار": {
+   "htmlFontSize": "10px",
+   "bodyFontSize": "14px",
+   "scrollWidth": 1440,
+   "viewportWidth": 1440,
+   "horizontalOverflow": false,
+   "overflowingCount": 0,
+   "overflowingSample": [],
+   "smallTextCount": 21,
+   "smallTextSample": [
+    {
+     "tag": "td",
+     "fs": 13,
+     "cls": "",
+     "text": "سیم خاردار خطی"
+    },
+    {
+     "tag": "td",
+     "fs": 13,
+     "cls": "",
+     "text": "کیلوگرم"
+    },
+    {
+     "tag": "td",
+     "fs": 13,
+     "cls": "",
+     "text": "2/50"
+    },
+    {
+     "tag": "td",
+     "fs": 13,
+     "cls": "",
+     "text": "800,000"
+    },
+    {
+     "tag": "td",
+     "fs": 13,
+     "cls": "",
+     "text": "1,250,000"
+    },
+    {
+     "tag": "a",
+     "fs": 13,
+     "cls": "",
+     "text": "سیم خاردار سوزنی قطر 60 سانتی متر"
+    },
+    {
+     "tag": "td",
+     "fs": 13,
+     "cls": "",
+     "text": "کلاف"
+    },
+    {
+     "tag": "td",
+     "fs": 13,
+     "cls": "",
+     "text": "2/50"
+    },
+    {
+     "tag": "td",
+     "fs": 13,
+     "cls": "",
+     "text": "سوزنی"
+    },
+    {
+     "tag": "td",
+     "fs": 13,
+     "cls": "",
+     "text": "7,200,000"
+    },
+    {
+     "tag": "td",
+     "fs": 13,
+     "cls": "",
+     "text": "11,000,000"
+    },
+    {
+     "tag": "a",
+     "fs": 13,
+     "cls": "",
+     "text": "سیم خاردار سوزنی قطر 90 سانتی متر"
+    },
+    {
+     "tag": "td",
+     "fs": 13,
+     "cls": "",
+     "text": "کلاف"
+    },
+    {
+     "tag": "td",
+     "fs": 13,
+     "cls": "",
+     "text": "2/50"
+    },
+    {
+     "tag": "td",
+     "fs": 13,
+     "cls": "",
+     "text": "سوزنی"
+    }
+   ],
+   "smallTextBySize": {
+    "12": 1,
+    "13": 20
+   },
+   "totalInteractive": 86,
+   "smallTapTargets": 39,
+   "smallTapSample": [
+    {
+     "tag": "a",
+     "w": 120,
+     "h": 33,
+     "cls": "",
+     "text": "021-91326030"
+    },
+    {
+     "tag": "a",
+     "w": 25,
+     "h": 43,
+     "cls": "cart",
+     "text": ""
+    },
+    {
+     "tag": "a",
+     "w": 119,
+     "h": 43,
+     "cls": "user",
+     "text": "ناحیه ی کاربری"
+    },
+    {
+     "tag": "a",
+     "w": 68,
+     "h": 34,
+     "cls": "",
+     "text": "صفحه اصلی"
+    },
+    {
+     "tag": "input",
+     "w": 40,
+     "h": 40,
+     "cls": "searchInput",
+     "text": ""
+    },
+    {
+     "tag": "button",
+     "w": 40,
+     "h": 40,
+     "cls": "searchBtn",
+     "text": ""
+    },
+    {
+     "tag": "a",
+     "w": 23,
+     "h": 24,
+     "cls": "",
+     "text": "خانه"
+    },
+    {
+     "tag": "a",
+     "w": 79,
+     "h": 24,
+     "cls": "",
+     "text": "دسته بندی ها"
+    },
+    {
+     "tag": "a",
+     "w": 60,
+     "h": 24,
+     "cls": "",
+     "text": "سیم خاردار"
+    },
+    {
+     "tag": "select",
+     "w": 247,
+     "h": 30,
+     "cls": "select-filter-input",
+     "text": "ضخامت مفتول (mm)0/500/800/850/"
+    },
+    {
+     "tag": "select",
+     "w": 247,
+     "h": 30,
+     "cls": "select-filter-input",
+     "text": "نوع گالوانیزهسردگرم"
+    },
+    {
+     "tag": "select",
+     "w": 247,
+     "h": 30,
+     "cls": "select-filter-input",
+     "text": "وزن (کیلوگرم)1010/511152/90020"
+    },
+    {
+     "tag": "select",
+     "w": 247,
+     "h": 30,
+     "cls": "select-filter-input",
+     "text": "نوعFixHardMaxWheelحلقویخطیسوزن"
+    },
+    {
+     "tag": "select",
+     "w": 247,
+     "h": 30,
+     "cls": "select-filter-input",
+     "text": "ضخامت خار (میلی متر)2"
+    },
+    {
+     "tag": "a",
+     "w": 91,
+     "h": 24,
+     "cls": "",
+     "text": "021-91326030"
+    }
+   ],
+   "imgTotal": 29,
+   "imgNoAlt": 1,
+   "imgEmptyAlt": 1,
+   "imgNoDims": 6,
+   "imgNoLazy": 12,
+   "imgNoDimsSample": [
+    {
+     "src": "factory.png",
+     "w": 31
+    },
+    {
+     "src": "factory.png",
+     "w": 31
+    },
+    {
+     "src": "factory.png",
+     "w": 31
+    },
+    {
+     "src": "8285%D8%A7%D9%86%D9%88%D8%A7%D8%B9-%D8%B3%DB%8C%D9",
+     "w": 345
+    },
+    {
+     "src": "3223simkhardar1-.jpg",
+     "w": 345
+    },
+    {
+     "src": "e_namad.png",
+     "w": 150
+    }
+   ],
+   "imgFormats": {
+    "svg": 2,
+    "webp": 1,
+    "jpg": 4,
+    "png": 22
+   },
+   "headings": [
+    {
+     "lvl": 1,
+     "text": "سیم خاردار"
+    },
+    {
+     "lvl": 2,
+     "text": "نمودار قیمت سیم خاردار"
+    },
+    {
+     "lvl": 2,
+     "text": "نمودار قیمت میانگین محصولات دسته بندی سیم خاردار"
+    },
+    {
+     "lvl": 2,
+     "text": "عوامل موثر بر تعیین قیمت سیم خاردار"
+    },
+    {
+     "lvl": 3,
+     "text": "پوشش و روشنایی؛ موثر در قیمت سیم خاردار حلقوی"
+    },
+    {
+     "lvl": 3,
+     "text": "محل استفاده شما تعیین کننده قیمت سیم خاردار خطی"
+    },
+    {
+     "lvl": 3,
+     "text": "چگونه سیم خاردار ارزان قیمت بخریم؟"
+    },
+    {
+     "lvl": 3,
+     "text": "به دنبال خرید سیم خاردار دست دوم نباشید!"
+    },
+    {
+     "lvl": 2,
+     "text": "معرفی مختصری از 13 نوع سیم خاردار موجود در بازار"
+    },
+    {
+     "lvl": 2,
+     "text": "سیم خاردار چه کاربرد و مزایایی دارد؟"
+    },
+    {
+     "lvl": 3,
+     "text": "فروش سیم خارداری حلقوی تهران"
+    },
+    {
+     "lvl": 4,
+     "text": "دیدگاه ها"
+    }
+   ],
+   "h1Count": 1,
+   "headingSkips": [],
+   "formFields": 17,
+   "fieldsNoLabel": 1,
+   "fieldsPlaceholderOnly": 0,
+   "fieldsNoAutocomplete": 7,
+   "fieldTypes": [
+    {
+     "t": "text",
+     "name": "",
+     "ph": ""
+    },
+    {
+     "t": "select-one",
+     "name": "spec[1]",
+     "ph": ""
+    },
+    {
+     "t": "select-one",
+     "name": "spec[3]",
+     "ph": ""
+    },
+    {
+     "t": "select-one",
+     "name": "spec[7]",
+     "ph": ""
+    },
+    {
+     "t": "select-one",
+     "name": "spec[20]",
+     "ph": ""
+    },
+    {
+     "t": "select-one",
+     "name": "spec[21]",
+     "ph": ""
+    },
+    {
+     "t": "select-one",
+     "name": "product-time-range",
+     "ph": ""
+    },
+    {
+     "t": "select-one",
+     "name": "category-time-range",
+     "ph": ""
+    },
+    {
+     "t": "text",
+     "name": "first_name",
+     "ph": ""
+    },
+    {
+     "t": "text",
+     "name": "last_name",
+     "ph": ""
+    },
+    {
+     "t": "text",
+     "name": "phone",
+     "ph": ""
+    },
+    {
+     "t": "text",
+     "name": "email",
+     "ph": ""
+    },
+    {
+     "t": "text",
+     "name": "address",
+     "ph": ""
+    },
+    {
+     "t": "text",
+     "name": "name",
+     "ph": ""
+    },
+    {
+     "t": "text",
+     "name": "phone",
+     "ph": ""
+    },
+    {
+     "t": "textarea",
+     "name": "body",
+     "ph": ""
+    },
+    {
+     "t": "text",
+     "name": "mobile",
+     "ph": "مثال : 09389611983"
+    }
+   ],
+   "langAttr": "fa",
+   "dirAttr": "rtl",
+   "skipLink": false,
+   "landmarks": {
+    "main": 1,
+    "nav": 1,
+    "header": 1,
+    "footer": 1,
+    "aside": 0
+   },
+   "iconOnlyNoLabel": 7,
+   "iconOnlySample": [
+    {
+     "tag": "a",
+     "cls": "cart"
+    },
+    {
+     "tag": "button",
+     "cls": "searchBtn"
+    },
+    {
+     "tag": "button",
+     "cls": "border-0"
+    },
+    {
+     "tag": "button",
+     "cls": "border-0"
+    },
+    {
+     "tag": "button",
+     "cls": "border-0"
+    },
+    {
+     "tag": "a",
+     "cls": "whatsapp-btn"
+    },
+    {
+     "tag": "a",
+     "cls": ""
+    }
+   ],
+   "tabbable": 2,
+   "lowContrastPairs": 2,
+   "lowContrastSample": [
+    {
+     "fg": "rgb(180, 35, 50)",
+     "bg": "rgb(180,35,50)",
+     "ratio": 1,
+     "need": 4.5,
+     "fs": 20,
+     "text": "021-91326030"
+    },
+    {
+     "fg": "rgb(35, 207, 20)",
+     "bg": "rgb(243,243,243)",
+     "ratio": 1.89,
+     "need": 4.5,
+     "fs": 13,
+     "text": "13,000,000 ریال"
+    }
+   ],
+   "tableCount": 2,
+   "tableInfo": [
+    {
+     "rows": 4,
+     "cols": 12,
+     "w": 1245,
+     "minW": "0px",
+     "caption": false,
+     "thead": true,
+     "scope": 0
+    },
+    {
+     "rows": 2,
+     "cols": 3,
+     "w": 463,
+     "minW": "auto",
+     "caption": false,
+     "thead": true,
+     "scope": 0
+    }
+   ],
+   "stylesheets": [
+    "app.css?v=1786020965"
+   ],
+   "scripts": [
+    {
+     "src": "?v=1a&pid=5200&site=1&l=https%3A%2F%2Fsepahan",
+     "async": true,
+     "defer": false,
+     "third": false
+    },
+    {
+     "src": "js?id=G-FPYB89P985&cx=c&gtm=4e6850",
+     "async": true,
+     "defer": false,
+     "third": true
+    },
+    {
+     "src": "js15_as.js",
+     "async": true,
+     "defer": false,
+     "third": true
+    },
+    {
+     "src": "js?id=G-4G781JNM07",
+     "async": true,
+     "defer": false,
+     "third": true
+    },
+    {
+     "src": "analytics.js",
+     "async": true,
+     "defer": false,
+     "third": true
+    },
+    {
+     "src": "?_a=v&_h=sepahanfelez.ir&_ss=4n5hu4fbvu&_pv=7",
+     "async": true,
+     "defer": true,
+     "third": false
+    },
+    {
+     "src": "fugB8i",
+     "async": true,
+     "defer": false,
+     "third": true
+    },
+    {
+     "src": "app.js?v=1786011687",
+     "async": false,
+     "defer": false,
+     "third": false
+    },
+    {
+     "src": "sidemenu.js?v=1786011689",
+     "async": false,
+     "defer": false,
+     "third": false
+    },
+    {
+     "src": "category.js",
+     "async": false,
+     "defer": false,
+     "third": false
+    },
+    {
+     "src": "print.js",
+     "async": false,
+     "defer": false,
+     "third": false
+    },
+    {
+     "src": "jquery.min.js",
+     "async": false,
+     "defer": false,
+     "third": true
+    },
+    {
+     "src": "0.php?4920158&@f16&@g0&@h7&@i1&@j178604049660",
+     "async": true,
+     "defer": false,
+     "third": false
+    },
+    {
+     "src": "js?id=G-FPYB89P985",
+     "async": true,
+     "defer": false,
+     "third": true
+    },
+    {
+     "src": "mm.js",
+     "async": true,
+     "defer": false,
+     "third": true
+    }
+   ],
+   "inlineScripts": 8,
+   "preconnect": [],
+   "title": "تولید و فروش سیم خاردار برای حصارکشی | خرید به قیمت کارخانه",
+   "metaDesc": "سیم خاردار با کیفیت، مستقیم از کارخانه! حصارکشی امن و مطمئن با سیم خاردار گالوانیزه. انواع سیم خاردار با قیمت روز و مناسب. تولید و فروش سیم خاردار به صورت عمده و جزئی. #سیم_خاردار #قیمت_سیم_خاردار #تولید_سیم_خاردار",
+   "canonical": "https://sepahanfelez.ir/category/%D8%B3%DB%8C%D9%85-%D8%AE%D8%A7%D8%B1%D8%AF%D8%A7%D8%B1",
+   "robots": "index, follow",
+   "jsonLd": [
+    "Organization",
+    "CollectionPage",
+    "BreadcrumbList"
+   ],
+   "domNodes": 656,
+   "perf": {
+    "cls": 0.002,
+    "lcp": 584,
+    "lcpEl": "IMG.",
+    "longTasks": 6,
+    "longTaskTime": 1264,
+    "shifts": [],
+    "ttfb": 392,
+    "domContentLoaded": 1775,
+    "loadEvent": 2062,
+    "resourceCount": 36,
+    "totalTransferKB": 162,
+    "byTypeKB": {
+     "link": 0,
+     "script": 143,
+     "img": 18,
+     "css": 0,
+     "fetch": 0
+    },
+    "heaviest": [
+     {
+      "u": "category.js",
+      "kb": 115,
+      "ms": 837
+     },
+     {
+      "u": "jquery.min.js",
+      "kb": 28,
+      "ms": 58
+     },
+     {
+      "u": "8285%D8%A7%D9%86%D9%88%D8%A7%D8%B9-%D8%B3%DB%",
+      "kb": 18,
+      "ms": 105
+     },
+     {
+      "u": "app.css",
+      "kb": 0,
+      "ms": 5
+     },
+     {
+      "u": "js",
+      "kb": 0,
+      "ms": 13
+     },
+     {
+      "u": "analytics.js",
+      "kb": 0,
+      "ms": 16
+     },
+     {
+      "u": "sepahanfelez-logo.svg",
+      "kb": 0,
+      "ms": 9
+     },
+     {
+      "u": "wrapper.webp",
+      "kb": 0,
+      "ms": 9
+     },
+     {
+      "u": "factory.png",
+      "kb": 0,
+      "ms": 12
+     },
+     {
+      "u": "270133%D9%85%D9%81%D8%AA%D9%88%D9%84%20%20-%2",
+      "kb": 0,
+      "ms": 32
+     },
+     {
+      "u": "841951%D8%AA%D9%88%D8%B1%DB%8C%20%20-%20%20Ic",
+      "kb": 0,
+      "ms": 34
+     },
+     {
+      "u": "638219%D9%85%D8%B4%20%20-%20%20Icon%20pack.pn",
+      "kb": 0,
+      "ms": 34
+     }
+    ]
+   },
+   "consoleIssues": [
+    "pageerror: Cannot set properties of null (setting 'textContent')",
+    "pageerror: Cannot set properties of null (setting 'textContent')",
+    "pageerror: Cannot set properties of null (setting 'textContent')",
+    "pageerror: Cannot set properties of null (setting 'textContent')",
+    "pageerror: Cannot set properties of null (setting 'textContent')",
+    "pageerror: Cannot set properties of null (setting 'textContent')",
+    "pageerror: Cannot set properties of null (setting 'textContent')",
+    "pageerror: Cannot set properties of null (setting 'textContent')",
+    "pageerror: Cannot set properties of null (setting 'textContent')",
+    "pageerror: Cannot set properties of null (setting 'textContent')"
+   ],
+   "consoleIssueCount": 10
+  }
+ }
+}
