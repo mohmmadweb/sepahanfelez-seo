@@ -1,0 +1,9 @@
+requests>=2.31
+beautifulsoup4>=4.12
+lxml>=5.0
+jdatetime>=5.0
+holidays>=0.57
+google-api-python-client>=2.130
+google-auth>=2.30
+google-analytics-data>=0.18
+cryptography>=42

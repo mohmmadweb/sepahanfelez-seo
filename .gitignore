@@ -1,0 +1,18 @@
+# secrets — values live only in .env on the server (see .env.example for the names)
+.env
+*.session
+*.session-journal
+service_account*.json
+automation/sessions/
+
+# business data stays private; backed up encrypted as dashboard/state.enc
+dashboard/config/*
+!dashboard/config/site.json
+dashboard/data/
+dashboard/site/
+
+.venv/
+__pycache__/
+*.pyc
+*.tmp
+dashboard/.backup/
