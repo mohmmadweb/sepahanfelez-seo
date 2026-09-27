@@ -1,0 +1,258 @@
+{
+ "name_fa": "سپاهان فلز — صنایع مفتولی طلوع سپاهان",
+ "url": "https://sepahanfelez.ir",
+ "host": "sepahanfelez.ir",
+ "gsc_property": "sc-domain:sepahanfelez.ir",
+ "gsc_property_fallback": "https://sepahanfelez.ir/",
+ "ga4_property": null,
+ "ga4_measurement_id": "G-4G781JNM07",
+ "brand_terms": [
+  "سپاهان فلز",
+  "سپاهان",
+  "sepahanfelez",
+  "sepahan felez",
+  "طلوع سپاهان",
+  "آهن امن",
+  "ahanamn",
+  "ahan amn"
+ ],
+ "crawl": {
+  "max_pages": 400,
+  "delay_seconds": 1.0,
+  "skip_prefixes": [
+   "/cart",
+   "/login",
+   "/register",
+   "/admin",
+   "/profile",
+   "/user",
+   "/verify",
+   "/index.php",
+   "/api/",
+   "/files/",
+   "/images/",
+   "/storage/",
+   "/news"
+  ],
+  "skip_extensions": [
+   ".jpg",
+   ".jpeg",
+   ".png",
+   ".webp",
+   ".gif",
+   ".svg",
+   ".pdf",
+   ".zip",
+   ".mp4",
+   ".css",
+   ".js",
+   ".xml",
+   ".ico",
+   ".woff",
+   ".woff2"
+  ]
+ },
+ "psi_urls": [
+  "https://sepahanfelez.ir/",
+  "https://sepahanfelez.ir/price",
+  "https://sepahanfelez.ir/category/توری-مرغی",
+  "https://sepahanfelez.ir/category/سیم-خاردار/سیم-خاردار-حلقوی-90",
+  "https://sepahanfelez.ir/blog/net/Gabion"
+ ],
+ "foreign_hosts_must_refuse": [
+  "emaratnews.ir",
+  "cr1.7hostir.com",
+  "cr2.7hostir.com"
+ ],
+ "page_types": [
+  {
+   "type": "home",
+   "label_fa": "صفحه اصلی",
+   "pattern": "^/?$"
+  },
+  {
+   "type": "price",
+   "label_fa": "قیمت لحظه‌ای",
+   "pattern": "^/price$"
+  },
+  {
+   "type": "category-index",
+   "label_fa": "فهرست دسته‌ها",
+   "pattern": "^/category$"
+  },
+  {
+   "type": "product",
+   "label_fa": "محصول",
+   "pattern": "^/category/[^/]+/[^/]+$"
+  },
+  {
+   "type": "category",
+   "label_fa": "دسته محصول",
+   "pattern": "^/category/[^/]+$"
+  },
+  {
+   "type": "blog-index",
+   "label_fa": "مجله",
+   "pattern": "^/blog$"
+  },
+  {
+   "type": "blog-category",
+   "label_fa": "دسته مجله",
+   "pattern": "^/blog/[^/]+$"
+  },
+  {
+   "type": "article",
+   "label_fa": "مقاله",
+   "pattern": "^/blog/[^/]+/[^/]+$"
+  },
+  {
+   "type": "static",
+   "label_fa": "صفحه ثابت",
+   "pattern": "^/(about|contact)$"
+  }
+ ],
+ "thresholds": {
+  "title_min": 20,
+  "title_max": 65,
+  "desc_min": 70,
+  "desc_max": 165,
+  "thin_words": {
+   "category": 300,
+   "article": 600,
+   "product": 150,
+   "home": 250
+  },
+  "slow_seconds": 2.5,
+  "stale_price_days": 14
+ },
+ "working_days": {
+  "note": "ساعت کاری کارفرما: شنبه تا چهارشنبه ۹ تا ۱۸، پنجشنبه ۹ تا ۱۳؛ جمعه و تعطیلات رسمی (time.ir) تعطیل. کلیدها = روز هفته‌ی پایتون (دوشنبه=۰ … یکشنبه=۶)",
+  "days": {
+   "5": {
+    "label": "شنبه",
+    "hours": [
+     "09:00",
+     "18:00"
+    ],
+    "story_slots": [
+     "09:00",
+     "13:00",
+     "16:00"
+    ],
+    "telegram": [
+     "10:30",
+     "12:30",
+     "17:30"
+    ]
+   },
+   "6": {
+    "label": "یکشنبه",
+    "hours": [
+     "09:00",
+     "18:00"
+    ],
+    "story_slots": [
+     "09:00",
+     "13:00",
+     "16:00"
+    ],
+    "telegram": [
+     "10:30",
+     "12:30",
+     "17:30"
+    ]
+   },
+   "0": {
+    "label": "دوشنبه",
+    "hours": [
+     "09:00",
+     "18:00"
+    ],
+    "story_slots": [
+     "09:00",
+     "13:00",
+     "16:00"
+    ],
+    "telegram": [
+     "10:30",
+     "12:30",
+     "17:30"
+    ]
+   },
+   "1": {
+    "label": "سه‌شنبه",
+    "hours": [
+     "09:00",
+     "18:00"
+    ],
+    "story_slots": [
+     "09:00",
+     "13:00",
+     "16:00"
+    ],
+    "telegram": [
+     "10:30",
+     "12:30",
+     "17:30"
+    ]
+   },
+   "2": {
+    "label": "چهارشنبه",
+    "hours": [
+     "09:00",
+     "18:00"
+    ],
+    "story_slots": [
+     "09:00",
+     "13:00",
+     "16:00"
+    ],
+    "telegram": [
+     "10:30",
+     "12:30",
+     "17:30"
+    ]
+   },
+   "3": {
+    "label": "پنجشنبه",
+    "hours": [
+     "09:00",
+     "13:00"
+    ],
+    "story_slots": [
+     "09:00",
+     "11:00",
+     "12:40"
+    ],
+    "telegram": [
+     "10:00",
+     "12:30"
+    ]
+   }
+  }
+ },
+ "target_overrides": {
+  "/": {
+   "primary": "صنایع مفتولی",
+   "secondary": [
+    "تولید کننده محصولات مفتولی",
+    "کارخانه توری سازی اصفهان"
+   ]
+  },
+  "/category": {
+   "primary": "محصولات مفتولی",
+   "secondary": [
+    "انواع توری فلزی",
+    "انواع مفتول"
+   ]
+  },
+  "/price": {
+   "primary": "قیمت محصولات مفتولی",
+   "secondary": [
+    "قیمت توری",
+    "قیمت مفتول گالوانیزه",
+    "قیمت سیم خاردار"
+   ]
+  }
+ }
+}
