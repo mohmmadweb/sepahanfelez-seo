@@ -13,7 +13,7 @@ import re
 import time
 import urllib.parse
 
-from .util import DATA, decode_url, fetch, read_json, today_str, write_json
+from .util import DATA, decode_url, fetch, now_tehran, read_json, today_str, write_json
 
 _LOC = re.compile(r"<loc>\s*([^<\s]+)\s*</loc>")
 _TITLE = re.compile(r"<title[^>]*>(.*?)</title>", re.S | re.I)
@@ -92,16 +92,16 @@ def watch(log=print):
 
         history = prev.get("history", [])
         history = [h for h in history if h["date"] != today_str()]
-        history.append({"date": today_str(), "urls": len(urls), "new": len(new), "gone": len(gone),
+        history.append({"date": today_str(), "ts": now_tehran().isoformat(timespec="seconds"), "urls": len(urls), "new": len(new), "gone": len(gone),
                         "blog": by_type.get("blog", 0)})
         new_log = (prev.get("new_log", []) + [{"date": today_str(), "url": u, "type": classify(u)} for u in new])[-300:]
 
         write_json(store_path, {"id": cid, "domain": domain, "urls": sorted(urls) if urls else sorted(prev_urls),
                                 "history": history[-400:], "new_log": new_log})
-        out.append({"id": cid, "domain": domain, "reachable": home is not None and home.status_code < 500,
+        out.append({"id": cid, "domain": domain, "checked_at": now_tehran().isoformat(timespec="seconds"), "reachable": home is not None and home.status_code < 500,
                     "home_status": home.status_code if home is not None else None, "home_seconds": secs,
                     "home_title": title, "home_error": herr, "sitemap_errors": errors[:3],
                     "urls_total": len(urls), "by_type": by_type, "new_today": new[:50], "gone_today": gone[:50],
                     "first_run": not prev_urls})
         log(f"  {domain}: {len(urls)} urls, +{len(new)} / -{len(gone)}")
-    return {"date": today_str(), "competitors": out}
+    return {"date": today_str(), "checked_at": now_tehran().isoformat(timespec="seconds"), "competitors": out}
