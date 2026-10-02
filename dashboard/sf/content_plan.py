@@ -227,7 +227,7 @@ def plan(cal, keywords_cfg=None, days=14):
             media, photo_why = pick_photo(slug, day_idx)
             item_id = f"{day['date']}-1100-article"
             items.append({"id": item_id, "date": day["date"], "jalali": day["jalali"], "weekday": day["weekday_fa"],
-                          "time": "11:00", "kind": "article", "channels": ["سایت", "تلگرام (خلاصه + لینک)"],
+                          "time": "11:00", "kind": "article", "channels": ["سایت", "تلگرام (خلاصه + لینک)", "لینکدین (خلاصه + لینک)"],
                           "type": idea["type"] if idea else type_fa[ctype], "product_rank": rank,
                           "product": name, "title": idea["title"] if idea else None,
                           "keyword": idea.get("keyword") if idea else None,
