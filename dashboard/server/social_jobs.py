@@ -17,10 +17,11 @@ import uuid
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path.insert(0, os.path.join(ROOT, "automation", "social"))
+sys.path.insert(0, os.path.join(ROOT, "automation"))
 import login as L  # noqa: E402
 
 NETS = {"eitaa": "ایتا", "bale": "بله", "rubika": "روبیکا", "whatsapp": "واتساپ",
-        "telegram": "تلگرام", "instagram": "اینستاگرام"}
+        "telegram": "تلگرام", "instagram": "اینستاگرام", "linkedin": "لینکدین"}
 ANSWER_TIMEOUT = 300
 
 
@@ -72,7 +73,7 @@ def current():
     return _current.view() if _current else None
 
 
-def start(net, action="login"):
+def start(net, action="login", params=None):
     global _current
     if net not in NETS:
         raise ValueError("unknown network")
@@ -91,12 +92,24 @@ def start(net, action="login"):
                 L.save_status(net, False, "logged out from dashboard")
                 job.ok = True
                 job.messages.append(f"از {NETS[net]} خارج شدید و نشست پاک شد.")
+            elif action == "act":
+                import actions
+                p = params or {}
+                res = actions.act(net, p.get("kind"), target=p.get("target"), text=p.get("text", ""),
+                                  media=p.get("media"), link=p.get("link"), item_id=p.get("item_id"),
+                                  content_type=p.get("content_type"), product=p.get("product"))
+                job.ok = res.get("status") in ("published", "sent-to-operator")
+                if res.get("url"):
+                    job.messages.append("لینک: " + res["url"])
+                job.messages.append("ثبت در تاریخچه‌ی انتشار و «روند تولید» (" + res["item_id"] + ")")
             elif action == "check":
-                fn = {"telegram": L.check_telegram, "instagram": L.check_instagram}.get(net, lambda: L.check_web(net))
+                fn = {"telegram": L.check_telegram, "instagram": L.check_instagram,
+                      "linkedin": L.check_linkedin}.get(net, lambda: L.check_web(net))
                 job.ok = bool(fn())
                 job.messages.append("وارد هستید." if job.ok else "وارد نیستید.")
             else:
-                fn = {"telegram": L.login_telegram, "instagram": L.login_instagram}.get(net, lambda: L.login_web(net))
+                fn = {"telegram": L.login_telegram, "instagram": L.login_instagram,
+                      "linkedin": L.login_linkedin}.get(net, lambda: L.login_web(net))
                 job.ok = bool(fn())
             job.phase = "done"
         except SystemExit as exc:              # login.py exits with a message when .env is missing a value
@@ -104,8 +117,10 @@ def start(net, action="login"):
             job.messages.append(str(exc))
         except Exception as exc:               # noqa: BLE001
             job.ok, job.phase = False, "error"
-            job.messages.append(f"{type(exc).__name__}: {str(exc)[:240]}")
-            L.save_status(net, False, f"{type(exc).__name__}")
+            friendly = type(exc).__name__ in ("Blocked", "NotLoggedIn", "ValueError")
+            job.messages.append(str(exc) if friendly else f"{type(exc).__name__}: {str(exc)[:240]}")
+            if action != "act":
+                L.save_status(net, False, f"{type(exc).__name__}")
         finally:
             L.IO = L.TerminalIO()
 

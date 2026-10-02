@@ -32,7 +32,7 @@ from sf import build, serp, trace  # noqa: E402
 from sf.env import load_env  # noqa: E402
 from sf.util import DATA, now_tehran, read_json, write_json  # noqa: E402
 
-from . import drive_auth, envfile, social_jobs  # noqa: E402
+from . import drive_auth, envfile, linkedin_auth, social_jobs  # noqa: E402
 
 load_env()
 WEB = os.path.join(DASH, "web")
@@ -75,7 +75,7 @@ def _ip(req):
 @app.middleware("http")
 async def guard(req: Request, call_next):
     path = req.url.path
-    if path.startswith("/api/") and path != "/api/login":
+    if path.startswith("/api/") and path not in ("/api/login", "/api/linkedin/callback"):
         if not _verify(req.cookies.get(COOKIE, "")):
             return JSONResponse({"error": "login required"}, status_code=401)
         if req.method != "GET" and req.headers.get("x-requested-with") != "sf":
@@ -168,14 +168,96 @@ async def social_job():
     return {"job": social_jobs.current(), "status": read_json(os.path.join(DATA, "social_status.json"), {})}
 
 
-@app.post("/api/social/{net}/{action}")
-async def social_action(net: str, action: str):
-    if action not in ("login", "logout", "check"):
-        raise HTTPException(404)
+UPLOADS = os.path.join(DATA, "uploads")
+MEDIA_OK = (".jpg", ".jpeg", ".png", ".webp", ".mp4", ".mov")
+
+
+def _media_path(ref):
+    """'uploads/<f>', 'drive/<slug>/<f>' or '<slug>/<f>' (prototype library) → absolute path, or None."""
+    if not ref:
+        return None
+    ref = ref.strip().lstrip("/")
+    if ref.startswith("uploads/"):
+        base, rel = UPLOADS, ref[8:]
+    elif ref.startswith("drive/"):
+        base, rel = os.path.join(DATA, "photos"), ref[6:]
+    else:
+        base, rel = "/home/ubuntu/projects/sepahanfelez-prototype/assets/products", ref
+    base = os.path.realpath(base)
+    path = os.path.realpath(os.path.join(base, rel))
+    if not path.startswith(base + os.sep) or not os.path.isfile(path):
+        raise HTTPException(400, "فایل رسانه پیدا نشد")
+    return path
+
+
+@app.post("/api/upload")
+async def upload(req: Request):
+    form = await req.form()
+    f = form.get("file")
+    if not f or not getattr(f, "filename", ""):
+        raise HTTPException(400, "فایلی نیامد")
+    ext = os.path.splitext(f.filename)[1].lower()
+    if ext not in MEDIA_OK:
+        raise HTTPException(400, "فقط عکس (jpg/png/webp) یا ویدئو (mp4/mov)")
+    data = await f.read()
+    if len(data) > 60 * 1024 * 1024:
+        raise HTTPException(400, "حداکثر ۶۰ مگابایت")
+    os.makedirs(UPLOADS, exist_ok=True)
+    name = now_tehran().strftime("%Y%m%d-%H%M%S-") + uuid.uuid4().hex[:6] + ext
+    with open(os.path.join(UPLOADS, name), "wb") as fh:
+        fh.write(data)
+    return {"ref": f"uploads/{name}", "size": len(data)}
+
+
+@app.post("/api/social/{net}/act")
+async def social_act(net: str, req: Request):
+    b = await req.json()
+    if not b.get("confirm"):
+        raise HTTPException(400, "تأیید انتشار لازم است")
+    params = {"kind": b.get("kind"), "target": (b.get("target") or "").strip() or None, "text": b.get("text", ""),
+              "media": _media_path(b.get("media")), "link": (b.get("link") or "").strip() or None,
+              "item_id": b.get("item_id"), "content_type": b.get("content_type"), "product": b.get("product")}
     try:
-        return social_jobs.start(net, action)
+        return social_jobs.start(net, "act", params)
     except (ValueError, RuntimeError) as exc:
         raise HTTPException(409, str(exc))
+
+
+@app.get("/api/social/safety")
+async def social_safety():
+    sys.path.insert(0, os.path.join(ROOT, "automation", "social"))
+    import safety
+    nets = list(social_jobs.NETS)
+    return {"config": safety.config(), "alerts": {n: safety.active_alert(n) for n in nets}}
+
+
+@app.post("/api/social/{net}/clear-alert")
+async def social_clear_alert(net: str):
+    import safety
+    safety.clear_alert(net)
+    return {"ok": True}
+
+
+@app.get("/api/linkedin/start")
+async def linkedin_start():
+    try:
+        return linkedin_auth.start()
+    except ValueError as exc:
+        raise HTTPException(400, str(exc))
+
+
+@app.get("/api/linkedin/callback")
+async def linkedin_callback(code: str = "", state: str = "", error: str = "", error_description: str = ""):
+    if error:
+        return HTMLResponse(f"<meta charset=utf-8><p dir=rtl>لینکدین اجازه نداد: {error_description[:200]}</p><a href='/#integrations'>بازگشت</a>", status_code=400)
+    try:
+        r = linkedin_auth.callback(code, state)
+    except (ValueError, RuntimeError) as exc:
+        return HTMLResponse(f"<meta charset=utf-8><p dir=rtl>{str(exc)[:300]}</p><a href='/#integrations'>بازگشت</a>", status_code=400)
+    sys.path.insert(0, os.path.join(ROOT, "automation", "social"))
+    import login as L
+    L.check_linkedin()
+    return HTMLResponse(f"<meta charset=utf-8><meta http-equiv=refresh content='2;url=/#integrations'><p dir=rtl>✓ لینکدین وصل شد ({r['name']}) — {r['days']} روز اعتبار. در حال بازگشت…</p>")
 
 
 @app.post("/api/social/answer")
@@ -271,6 +353,16 @@ async def run_steps(req: Request):
 @app.get("/api/runs")
 async def runs():
     return {"steps": STEPS, "runs": read_json(RUNS, {}) or {}, "busy": _run_lock.locked()}
+
+
+@app.post("/api/social/{net}/{action}")
+async def social_action(net: str, action: str):
+    if action not in ("login", "logout", "check"):
+        raise HTTPException(404)
+    try:
+        return social_jobs.start(net, action)
+    except (ValueError, RuntimeError) as exc:
+        raise HTTPException(409, str(exc))
 
 
 # ---------------------------------------------------------------- media + static
