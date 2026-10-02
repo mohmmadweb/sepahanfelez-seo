@@ -89,7 +89,8 @@ def published_history(per_network=500):
     return out
 
 
-def build():
+def assemble():
+    """Everything the UI shows, as one dict. Served live by server/app.py, or baked by build()."""
     site = config("site.json")
     crawl = _l("crawl", {}) or {}
     gsc, ga4, psi = _l("gsc", {}), _l("ga4", {}), _l("psi", {})
@@ -125,6 +126,28 @@ def build():
         "published": published_history(),
         "social_status": read_json(os.path.join(DATA, "social_status.json"), {}),
     }
+    data["serp"] = _l("serp", {}) or {}
+    data["competitor_candidates"] = read_json(os.path.join(DATA, "competitor_candidates.json"), {}) or {}
+    data["runs"] = read_json(os.path.join(DATA, "runs.json"), {}) or {}
+    data["traces"] = traces_index()
+    return data
+
+
+def traces_index():
+    """item id → number of logged steps (the popup fetches the full trace on demand)."""
+    tdir = os.path.join(DATA, "traces")
+    out = {}
+    if os.path.isdir(tdir):
+        for f in os.listdir(tdir):
+            if f.endswith(".jsonl"):
+                with open(os.path.join(tdir, f), encoding="utf-8") as fh:
+                    out[f[:-6]] = sum(1 for _ in fh)
+    return out
+
+
+def build():
+    data = assemble()
+    site = config("site.json")
     if os.path.isdir(SITE):
         shutil.rmtree(SITE)
     shutil.copytree(WEB, SITE)

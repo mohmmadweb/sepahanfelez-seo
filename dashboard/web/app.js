@@ -74,6 +74,59 @@
     catch (e) { return iso; }
   }
 
+
+  // exact Jalali date + time (Tehran), for every "checked at"
+  function jdt(iso, withSec) {
+    if (!iso) return "—";
+    try {
+      var d = new Date(iso);
+      var day = d.toLocaleDateString("fa-IR-u-ca-persian", { timeZone: "Asia/Tehran", year: "numeric", month: "2-digit", day: "2-digit" });
+      var t = d.toLocaleTimeString("fa-IR", { timeZone: "Asia/Tehran", hour: "2-digit", minute: "2-digit", second: withSec ? "2-digit" : undefined, hour12: false });
+      return day + " ساعت " + t;
+    } catch (e) { return iso; }
+  }
+  function checked(iso, label) { return el("span", { class: "small muted", text: (label || "آخرین بررسی") + ": " + jdt(iso) }); }
+  var API = window.SFAPI || { get: function () { return Promise.reject(new Error("offline")); }, post: function () { return Promise.reject(new Error("offline")); } };
+  function reloadKeepTab() { location.reload(); }
+
+  function openModal(title, body, onClose) {
+    var back = el("div", { class: "modal-back", role: "dialog", "aria-modal": "true", "aria-label": title });
+    function close() { back.remove(); document.removeEventListener("keydown", esc); if (onClose) onClose(); }
+    function esc(e) { if (e.key === "Escape") close(); }
+    var box = el("div", { class: "modal" },
+      el("div", { class: "modal-h" }, el("h3", { text: title }), el("button", { class: "btn small", type: "button", onclick: close, "aria-label": "بستن" }, "بستن ✕")),
+      el("div", { class: "modal-b" }, body));
+    back.appendChild(box);
+    back.addEventListener("click", function (e) { if (e.target === back) close(); });
+    document.addEventListener("keydown", esc);
+    document.body.appendChild(back);
+    var f = box.querySelector("input,button"); if (f) f.focus();
+    return { close: close, body: box.querySelector(".modal-b") };
+  }
+
+  var STAGE_FA = { plan: "برنامه‌ریزی", brief: "بریف", write: "نوشتن", qa: "کنترل کیفیت", design: "طراحی", approve: "تأیید", publish: "انتشار", measure: "سنجش" };
+  function traceButton(id, label) {
+    if (!id) return null;
+    return el("button", { type: "button", class: "trace-btn", onclick: function (e) { e.stopPropagation(); showTrace(id, label); } }, "روند تولید این محتوا");
+  }
+  function showTrace(id, label) {
+    var holder = el("div", { class: "muted", text: "در حال خواندن…" });
+    openModal("روند تولید: " + (label || id), holder);
+    API.get("/api/trace/" + encodeURIComponent(id)).then(function (t) {
+      holder.textContent = ""; holder.className = "";
+      var stages = {}; t.steps.forEach(function (s) { stages[s.stage] = 1; });
+      holder.appendChild(el("p", { class: "small ink2", style: "margin-top:0" },
+        fn(t.steps.length) + " مرحله ثبت شده · مراحل: " + Object.keys(stages).map(function (k) { return STAGE_FA[k] || k; }).join(" ← ")));
+      holder.appendChild(el("ol", { class: "timeline" }, t.steps.map(function (s, i) {
+        return el("li", null,
+          el("div", { class: "when" }, fd(i + 1) + ". " + (STAGE_FA[s.stage] || s.stage) + " · " + jdt(s.ts, true)),
+          el("div", null, el("b", { text: s.title }), s.detail ? el("span", { class: "ink2", text: " — " + fd(s.detail) }) : null),
+          s.decision ? el("div", { class: "why" }, el("b", { text: "چرا: " }), fd(s.decision)) : null,
+          s.alternatives && s.alternatives.length ? el("div", { class: "small muted", text: "گزینه‌های دیگر: " + s.alternatives.join("، ") }) : null);
+      })));
+    }).catch(function (e) { holder.textContent = e.message; });
+  }
+
   // ------------------------------------------------------------------ data indexes
   var crawl = D.crawl || { pages: [] };
   var pages = (crawl.pages || []).filter(function (p) { return p.status === 200 && !p.redirect_to; });
@@ -307,7 +360,7 @@
     v.push(sec("نمای کلی", "وضعیت امروز سایت sepahanfelez.ir: سلامت فنی، کلمات کلیدی ۱۳ محصول اولویت‌دار، رقبا و برنامه‌ی انتشار. این صفحه هر روز صبح خودکار به‌روز می‌شود."));
     v.push(el("div", { class: "grid g2" },
       el("section", { class: "card" },
-        el("div", { class: "card-h" }, el("h3", { text: "امتیاز سلامت سئو" }), el("span", { class: "sub", text: "از ۱۰۰ — بر پایه‌ی مشکلات خزش امروز" })),
+        el("div", { class: "card-h" }, el("h3", { text: "امتیاز سلامت سئو" }), el("span", { class: "sub", text: "از ۱۰۰ — خزش " + jdt(crawl.crawled_at) })),
         el("div", { class: "hero" },
           el("div", { class: "big" }, health == null ? "—" : fn(health), el("small", { text: " / ۱۰۰" })),
           el("div", { style: "flex:1;min-width:200px" },
@@ -391,6 +444,7 @@
   }
   function mediaUrl(m) {
     if (!m) return null;
+    if (m.indexOf("drive/") === 0) return "/media/photos/" + m.slice(6).split("/").map(encodeURIComponent).join("/");
     if (/\.(mp4)$/.test(m)) return null;
     if (m.indexOf("/") > 0 && !/^(banner|toloue|videos)/.test(m)) return "https://sepahanfelez.lenzit.ir/assets/products/" + m.replace("photo-", "thumb-");
     return "https://sepahanfelez.lenzit.ir/" + m;
@@ -403,7 +457,8 @@
       mu ? el("img", { src: mu, alt: it.product || "", loading: "lazy", width: "44", height: "44" })
         : el("span", { class: "ph", text: it.media && /mp4$/.test(it.media) ? "ویدئو" : "خبر" }),
       el("div", null, el("span", { class: "kind " + it.kind, text: kindFa }), " ", el("b", { text: it.type }),
-        el("div", { class: "small ink2" }, it.title || it.product || "", it.occasion ? " — " + it.occasion : "")));
+        el("div", { class: "small ink2" }, it.title || it.product || "", it.occasion ? " — " + it.occasion : ""),
+        traceButton(it.id, kindFa + " " + (it.jalali ? fd(it.jalali) : "") + " " + fd(it.time))));
   }
 
   function viewIssues() {
@@ -431,7 +486,7 @@
     render();
     var log = D.issues_log || {};
     var resolved = Object.keys(log).filter(function (k) { return log[k].resolved; }).map(function (k) { return log[k]; });
-    return [v, el("div", { class: "filters" }, seg, sel, q), list,
+    return [v, el("div", { style: "margin:-8px 0 12px" }, checked((D.issues || {}).checked_at || crawl.crawled_at, "آخرین تحلیل")), el("div", { class: "filters" }, seg, sel, q), list,
       resolved.length ? el("div", { class: "mt2" }, card("حل‌شده‌ها", fn(resolved.length) + " مورد",
         el("ul", { class: "small" }, resolved.map(function (r) { return el("li", null, fd(r.title), el("span", { class: "muted", text: " — حل شد " + jd(r.resolved) })); })))) : null];
   }
@@ -499,7 +554,7 @@
         el("div", null, el("b", { text: "تصاویر بدون alt: " }), fn(p.images_no_alt) + " از " + fn(p.images)),
         p.redirect_to ? el("div", null, el("b", { text: "ریدایرکت به: " }), link(p.redirect_to)) : null,
         p.linked_from && p.linked_from.length ? el("div", null, el("b", { text: "لینک‌شده از: " }), p.linked_from.map(function (u) { return el("span", { class: "tag" }, short(u)); })) : null,
-        el("div", null, link(p.url, "باز کردن صفحه ↗"))),
+        el("div", null, link(p.url, "باز کردن صفحه ↗"), " ", checked(p.checked_at || crawl.crawled_at))),
       el("div", { class: "stack small" },
         t ? el("div", { class: "note" }, el("b", { text: "هدف: " }), t.primary, " — فرعی: ", (t.secondary || []).join("، ")) : null,
         iss.length ? el("div", null, el("b", { text: "مشکلات این صفحه:" }), el("ul", { style: "margin:4px 0;padding-inline-start:18px" }, iss.map(function (i) { return el("li", null, sevChip(i.severity), " ", fd(i.title)); }))) : el("div", { class: "yes", text: "✓ مشکلی ثبت نشده" }),
@@ -604,6 +659,52 @@
   }
 
   function viewCompetitors() {
+    var base = viewCompetitorsWatch();
+    return [base[0], candidatesSection(), serpSection()].concat(base.slice(1));
+  }
+
+  function candidatesSection() {
+    var C = D.competitor_candidates || {}, list = Object.keys(C.candidates || {}).map(function (k) { return C.candidates[k]; });
+    list.sort(function (a, b) { return (b.new - a.new) || (b.keyword_count - a.keyword_count) || (a.best_pos - b.best_pos); });
+    var nNew = list.filter(function (c) { return c.new; }).length;
+    function act(c, action, btn) {
+      btn.disabled = true;
+      API.post("/api/competitors/" + encodeURIComponent(c.domain) + "/" + action, {}).then(reloadKeepTab, function (e) { btn.disabled = false; alert(e.message); });
+    }
+    return el("div", { class: "mt" }, card("رقبای تازه در نتایج جستجو", fn(list.length) + " سایت" + (nNew ? " · " + fn(nNew) + " مورد امروز پیدا شد" : ""),
+      list.length ? el("div", null,
+        el("p", { class: "small ink2", style: "margin-top:0", text: "سایت‌هایی که امروز در ۱۰ نتیجه‌ی اول یکی از کلمات کلیدی شما هستند و هنوز در فهرست رصد نیستند. «افزودن» آن‌ها را به رصد روزانه‌ی نقشه‌ی سایت اضافه می‌کند؛ «نادیده» دیگر پیشنهادشان نمی‌کند." }),
+        table([
+          { key: "domain", label: "سایت", render: function (c) { return el("span", null, el("a", { href: "https://" + c.domain, target: "_blank", rel: "noopener", class: "ltr", text: c.domain }), c.new ? el("span", { class: "sev critical", style: "margin-inline-start:6px", text: "تازه" }) : null); } },
+          { key: "keyword_count", label: "تعداد کلمه", num: true, render: function (c) { return fn(c.keyword_count); } },
+          { key: "best_pos", label: "بهترین رتبه", num: true, render: function (c) { return fn(c.best_pos); } },
+          { key: "kws", label: "کلمات و رتبه", nosort: true, render: function (c) { return Object.keys(c.keywords).slice(0, 4).map(function (k) { return el("span", { class: "tag", text: k + " · " + fd(c.keywords[k].pos) }); }); } },
+          { key: "first_seen", label: "اولین دیده‌شدن", render: function (c) { return el("span", { class: "small nowrap", text: jdt(c.first_seen) }); } },
+          { key: "act", label: "", nosort: true, render: function (c) {
+            var a = el("button", { class: "btn small primary", type: "button", text: "افزودن به رصد" }), b = el("button", { class: "btn small", type: "button", text: "نادیده" });
+            a.onclick = function () { act(c, "accept", a); }; b.onclick = function () { act(c, "ignore", b); };
+            return el("span", { style: "display:flex;gap:6px" }, a, b); } }
+        ], list, { sortKey: "keyword_count", limit: 15 })) : empty("رصد نتایج جستجو هنوز اجرا نشده."),
+      C.updated ? checked(C.updated) : null));
+  }
+
+  function serpSection() {
+    var S = D.serp || {}, kws = S.keywords || [];
+    if (!kws.length) return null;
+    var hist = S.history || {};
+    return el("div", { class: "mt" }, card("جایگاه در نتایج جستجو", S.provider_note || "",
+      el("div", null, table([
+        { key: "kw", label: "کلمه‌ی کلیدی", render: function (r) { return el("b", { text: r.kw }); } },
+        { key: "our_position", label: "رتبه‌ی ما", num: true, render: function (r) { return r.our_position ? el("span", { class: r.our_position <= 10 ? "yes" : "", text: fn(r.our_position) }) : el("span", { class: "no", text: "بالای ۲۰" }); }, sort: function (r) { return r.our_position || 99; } },
+        { key: "trend", label: "روند", nosort: true, render: function (r) { return spark((hist[r.kw] || []).map(function (h) { return h.pos ? -h.pos : -25; })); } },
+        { key: "top", label: "سه نفر اول", nosort: true, render: function (r) { return r.top.slice(0, 3).map(function (t, i) { return el("div", { class: "small" }, fd(i + 1) + ". ", el("a", { href: t.url, target: "_blank", rel: "noopener", class: "ltr", text: t.domain })); }); } },
+        { key: "provider", label: "منبع", render: function (r) { return el("span", { class: "tag ltr", text: r.provider || "—" }); } },
+        { key: "checked_at", label: "زمان بررسی", render: function (r) { return el("span", { class: "small nowrap", text: jdt(r.checked_at) }); } }
+      ], kws, { sortKey: "our_position", sortDir: "asc", limit: 30 }),
+      S.checked_at ? checked(S.checked_at) : null)));
+  }
+
+  function viewCompetitorsWatch() {
     var out = sec("رقبا", "رقبای لیست دست‌نویس کارفرما و بررسی ۱۶ مرداد، با رصد روزانه‌ی نقشه‌ی سایتشان: هر صفحه‌ای که منتشر یا حذف کنند فردا صبح اینجاست.");
     if (!compCfg.length) return [out, empty("تحقیق رقبا در حال اجراست؛ در بیلد بعدی اینجا پر می‌شود.")];
     var TH = { high: "بالا", medium: "متوسط", low: "کم" };
@@ -625,7 +726,8 @@
       { key: "cover", label: "پوشش ۱۳ محصول", num: true, render: function (r) { return fn(r.cover) + " / ۱۳"; } },
       { key: "price", label: "جدول قیمت", render: function (r) { return r.price === "yes" ? el("span", { class: "yes", text: "✓ دارد" }) : r.price === "no" ? el("span", { class: "muted", text: "ندارد" }) : "؟"; } },
       { key: "trend", label: "روند صفحات", nosort: true, render: function (r) { return spark(r.h.map(function (x) { return x.urls; })); } },
-      { key: "reach", label: "دسترسی", render: function (r) { return r.reach === false ? el("span", { class: "no", text: "باز نشد" }) : el("span", { class: "yes", text: "✓" }); } }
+      { key: "reach", label: "دسترسی", render: function (r) { return r.reach === false ? el("span", { class: "no", text: "باز نشد" }) : el("span", { class: "yes", text: "✓" }); } },
+      { key: "chk", label: "آخرین بررسی", render: function (r) { return el("span", { class: "small nowrap", text: jdt((compWatch[r.c.id] || {}).checked_at) }); }, sort: function (r) { return (compWatch[r.c.id] || {}).checked_at || ""; } }
     ], rows, { sortKey: "owner", limit: 40, detail: function (r) {
       var c = r.c, w = compWatch[c.id] || {};
       return el("div", { class: "grid g2 small" },
@@ -690,7 +792,7 @@
 
     // calendar next 10 working days
     var days = []; items.forEach(function (it) { if (days.indexOf(it.date) < 0) days.push(it.date); });
-    out.push(el("div", { class: "mt2" }, card("تقویم ۱۰ روز کاری آینده", "روزهای تعطیل رسمی و پنجشنبه/جمعه حذف شده‌اند", el("div", { class: "grid g2" }, days.slice(0, 10).map(function (d) {
+    out.push(el("div", { class: "mt2" }, card("تقویم ۱۰ روز کاری آینده", "شنبه تا چهارشنبه ۹–۱۸، پنجشنبه ۹–۱۳؛ جمعه و تعطیلات رسمی حذف شده‌اند · تقویم: " + jdt((D.calendar || {}).checked_at), el("div", { class: "grid g2" }, days.slice(0, 10).map(function (d) {
       var c = (((D.calendar || {}).days || []).filter(function (x) { return x.date === d; })[0]) || {};
       return el("div", { class: "day" }, el("h4", null, (c.weekday_fa || "") + " " + fd(c.jalali_label || d),
         c.events && c.events.length ? el("span", { class: "ev", text: c.events.slice(0, 2).join("، ") }) : null),
@@ -789,7 +891,7 @@
       chk.push({ name: "دامنه‌ی غریبه " + f.host, ok: !f.serves_our_content, v: f.serves_our_content ? "محتوای ما را نشان می‌دهد!" : "محتوای ما را نشان نمی‌دهد (" + (f.status ? fd(f.status) : "بسته") + ")" });
     });
     out.push(el("div", { class: "grid g2" },
-      card("بررسی‌های سطح سایت", null, el("div", { class: "stack small" }, chk.map(function (x) {
+      card("بررسی‌های سطح سایت", jdt(crawl.crawled_at), el("div", { class: "stack small" }, chk.map(function (x) {
         return el("div", { style: "display:flex;gap:8px" }, el("span", { class: x.ok ? "yes" : "no", text: x.ok ? "✓" : "✗" }), el("b", { text: x.name }), el("span", { class: "ink2", text: x.v }));
       }))),
       card("زمان پاسخ سرور به تفکیک نوع صفحه", "میانگین ثانیه، از خزش امروز (سرور در اروپا)", bars(Object.keys(TYPE_FA).map(function (t) {
@@ -890,31 +992,162 @@
       }))];
   }
 
-  function viewIntegrations() {
-    var rows = D.integrations || [];
-    return [sec("اتصالات", "وضعیت هر منبع داده و هر کانال انتشار، و قدم‌های لازم برای وصل کردنش."),
-      el("div", { class: "grid g2" },
-        card("وضعیت", null, el("div", { class: "stack small" }, rows.map(function (r) {
-          return el("div", null, el("div", { style: "display:flex;gap:8px;align-items:center;flex-wrap:wrap" }, stChip(r.status), el("b", { text: r.name }), el("span", { class: "tag", text: r.group })),
-            r.detail ? el("div", { class: "ink2", style: "margin-top:2px", text: r.detail }) : null,
-            r.steps && r.steps.length && r.status !== "ok" ? el("ol", { class: "steps" }, r.steps.map(function (s) { return el("li", { text: s }); })) : null);
-        }))),
-        el("div", { class: "stack" },
-          card("اتصال سرچ کنسول و آنالیتیکس", null, el("div", { class: "small stack" },
-            el("ol", { class: "steps", style: "color:var(--ink)" },
-              el("li", null, "تأیید مالکیت دامنه در Search Console با رکورد TXT در DNS هاست (راهنمای قدم‌به‌قدم در پیام جدا)."),
-              el("li", null, "Search Console → Settings → Users and permissions → Add user → ایمیل سرویس‌اکانت با دسترسی ", el("b", { text: "Owner" })),
-              el("li", null, "Google Analytics → Admin → Property access management → همان ایمیل با نقش ", el("b", { text: "Viewer" })),
-              el("li", null, "Property ID آنالیتیکس را در .env بگذارید: ", el("code", { text: "GA4_PROPERTY_ID" }))),
-            el("div", { class: "note warn", text: "همه‌ی کلیدها فقط در فایل .env روی سرور هستند و هیچ‌جا منتشر نمی‌شوند؛ این صفحه فقط نام متغیرها را نشان می‌دهد." }))),
-          card("این داشبورد چطور به‌روز می‌شود", null, el("ol", { class: "steps" },
-            el("li", { text: "هر روز ساعت ۰۷:۰۰ تهران: خزش کامل sepahanfelez.ir (یک درخواست در ثانیه تا هاست زیر بار نرود)" }),
-            el("li", { text: "نقشه‌ی سایت همه‌ی رقبا و مقایسه با دیروز" }),
-            el("li", { text: "سرچ کنسول (۹۰ روز)، آنالیتیکس، PageSpeed و بازرسی ایندکس صفحات" }),
-            el("li", { text: "تقویم رسمی time.ir و ساخت صف انتشار ۴ هفته" }),
-            el("li", { text: "محاسبه‌ی مشکلات، امتیاز سلامت، ثبت در تاریخچه و انتشار همین صفحه" })))))];
+  var SOCIAL = [["telegram", "تلگرام", "TELEGRAM_API_ID"], ["instagram", "اینستاگرام", "INSTAGRAM_USERNAME"], ["bale", "بله"], ["eitaa", "ایتا"], ["rubika", "روبیکا"], ["whatsapp", "واتساپ"]];
+
+  function socialModal(net, netFa, action) {
+    var box = el("div"), msgs = el("div", { class: "stack small", style: "margin:8px 0" }), area = el("div");
+    box.appendChild(el("p", { class: "small ink2", style: "margin-top:0", text: action === "login" ? "کد تأیید به شماره‌ی ثبت‌شده در تنظیمات فرستاده می‌شود. این پنجره را تا پایان باز نگه دارید." : "" }));
+    box.appendChild(msgs); box.appendChild(area);
+    var timer = null, lastPrompt = null;
+    var m = openModal((action === "login" ? "ورود به " : action === "logout" ? "خروج از " : "بررسی ") + netFa, box, function () { clearInterval(timer); });
+    function draw(j) {
+      msgs.textContent = "";
+      (j.messages || []).forEach(function (t) { msgs.appendChild(el("div", { text: t })); });
+      if (j.link_code) {
+        msgs.appendChild(el("div", { class: "code-big", text: j.link_code }));
+      }
+      if (j.phase === "waiting" && j.prompt !== lastPrompt) {
+        lastPrompt = j.prompt; area.textContent = "";
+        var inp = el("input", { type: j.secret ? "password" : "text", inputmode: j.secret ? null : "numeric", autocomplete: "one-time-code",
+          style: "width:100%;padding:10px;border:1px solid var(--border-2);border-radius:8px;font-size:20px;letter-spacing:3px;direction:ltr;text-align:center;background:var(--surface)" });
+        var send = el("button", { class: "btn primary", type: "submit", text: "ارسال" });
+        var f = el("form", { class: "stack" }, el("label", { class: "small", text: j.prompt }), inp, send);
+        f.onsubmit = function (e) { e.preventDefault(); send.disabled = true; API.post("/api/social/answer", { answer: inp.value }).then(function () { area.textContent = "در حال ادامه…"; }, function (er) { send.disabled = false; alert(er.message); }); };
+        area.appendChild(f); inp.focus();
+      } else if (j.phase === "running" && lastPrompt === null) {
+        area.textContent = "در حال انجام… (" + fd(j.elapsed) + " ثانیه)";
+      } else if (j.phase === "done" || j.phase === "error") {
+        clearInterval(timer); area.textContent = "";
+        area.appendChild(el("div", { class: "note " + (j.ok ? "" : "warn"), text: j.ok ? "✓ انجام شد." : "✗ انجام نشد." }));
+        area.appendChild(el("div", { class: "mt" }, el("button", { class: "btn primary", type: "button", text: "بستن و تازه‌سازی", onclick: reloadKeepTab })));
+      }
+    }
+    API.post("/api/social/" + net + "/" + action, {}).then(function (j) {
+      draw(j);
+      timer = setInterval(function () { API.get("/api/social/job").then(function (r) { if (r.job) draw(r.job); }); }, 1500);
+    }, function (e) { area.textContent = e.message; });
   }
 
+  function driveModal() {
+    var box = el("div", { class: "stack small" }, el("div", { class: "muted", text: "در حال ساخت لینک ورود گوگل…" }));
+    openModal("اتصال گوگل درایو (mohmmadweb@gmail.com)", box);
+    API.post("/api/drive/start", {}).then(function (s) {
+      box.textContent = "";
+      if (s.phase !== "waiting") { box.appendChild(el("div", { class: "note warn", text: s.message || "خطا" })); return; }
+      var paste = el("input", { type: "url", placeholder: "http://127.0.0.1:53682/?state=…&code=…", style: "width:100%;padding:8px;border:1px solid var(--border-2);border-radius:8px;direction:ltr;background:var(--surface)" });
+      var go = el("button", { class: "btn primary", type: "submit", text: "تکمیل اتصال" });
+      var res = el("div");
+      var f = el("form", { class: "stack" }, el("label", { text: "۳. آدرس صفحه‌ی آخر را این‌جا بچسبانید:" }), paste, go, res);
+      f.onsubmit = function (e) { e.preventDefault(); go.disabled = true; res.textContent = "در حال اتصال…";
+        API.post("/api/drive/finish", { url: paste.value }).then(function (r) { res.textContent = ""; res.appendChild(el("div", { class: "note", text: "✓ " + r.message + " همگام‌سازی عکس‌ها شروع شد." })); res.appendChild(el("button", { class: "btn mt", type: "button", text: "بستن و تازه‌سازی", onclick: reloadKeepTab })); },
+          function (er) { go.disabled = false; res.textContent = er.message; }); };
+      box.appendChild(el("ol", { class: "steps", style: "color:var(--ink)" },
+        el("li", null, el("a", { href: s.auth_url, target: "_blank", rel: "noopener", class: "btn primary", text: "باز کردن صفحه‌ی ورود گوگل ↗" })),
+        el("li", { text: "با mohmmadweb@gmail.com وارد شوید و Allow را بزنید. صفحه‌ی آخر می‌گوید «این سایت در دسترس نیست» — طبیعی است." })));
+      box.appendChild(f);
+    }, function (e) { box.textContent = e.message; });
+  }
+
+  function envSection(holder) {
+    holder.textContent = "در حال خواندن تنظیمات…";
+    API.get("/api/env").then(function (groups) {
+      holder.textContent = "";
+      holder.appendChild(el("p", { class: "small ink2", style: "margin-top:0", text: "هر چه این‌جا وارد کنید مستقیم در فایل .env روی سرور ذخیره می‌شود. مقدار رمزها و توکن‌ها هیچ‌وقت به مرورگر برنمی‌گردد؛ فقط «تنظیم شده» نشان داده می‌شود. خالی گذاشتن یعنی دست نخوردن." }));
+      groups.forEach(function (g) {
+        var inputs = {};
+        var nSet = g.vars.filter(function (v) { return v.set; }).length;
+        var form = el("form", { class: "mt" }, g.vars.map(function (v) {
+          var inp = el("input", { type: v.secret ? "password" : "text", autocomplete: "off", disabled: v.read_only,
+            placeholder: v.secret ? (v.set ? "تنظیم شده ✓ — برای تغییر مقدار تازه بنویسید" : "خالی") : (v.default || ""), value: v.secret ? "" : (v.value || "") });
+          inputs[v.name] = { el: inp, v: v };
+          return el("div", { class: "field" },
+            el("div", null, el("div", { class: "nm", text: v.name }), el("div", { class: "small " + (v.set ? "yes" : "muted"), text: v.set ? "✓ تنظیم شده" : "خالی" })),
+            el("div", null, inp, v.help ? el("div", { class: "small muted", style: "margin-top:3px", text: v.help }) : null,
+              v.read_only ? el("div", { class: "small muted", text: "فقط‌خواندنی: تغییرش پشتیبان‌های رمزشده را غیرقابل‌بازکردن می‌کند." }) : null));
+        }), el("div", { class: "mt" }, el("button", { class: "btn primary", type: "submit", text: "ذخیره در .env" }), el("span", { class: "small muted", style: "margin-inline-start:10px" })));
+        form.onsubmit = function (e) {
+          e.preventDefault();
+          var changes = {}, out = form.querySelector("span.small.muted:last-child");
+          Object.keys(inputs).forEach(function (k) { var x = inputs[k]; if (x.v.read_only) return; var val = x.el.value.trim();
+            if (x.v.secret ? val !== "" : val !== (x.v.value || "")) changes[k] = val; });
+          if (!Object.keys(changes).length) { out.textContent = "تغییری نبود."; return; }
+          API.post("/api/env", { values: changes }).then(function (r) {
+            out.textContent = "✓ ذخیره شد: " + r.changed.join("، ");
+            if (r.changed.indexOf("SF_DASHBOARD_PASSWORD") >= 0) setTimeout(function () { location.reload(); }, 900);
+          }, function (er) { out.textContent = er.message; });
+        };
+        holder.appendChild(el("details", { class: "card flat mt", open: g.group.indexOf("داشبورد") >= 0 ? null : null },
+          el("summary", { style: "cursor:pointer;font-weight:700" }, g.group, el("span", { class: "small muted", text: "  ·  " + fn(nSet) + " از " + fn(g.vars.length) + " تنظیم شده" })), form));
+      });
+    }, function (e) { holder.textContent = e.message; });
+  }
+
+  function runsSection(holder) {
+    API.get("/api/runs").then(function (R) {
+      holder.textContent = "";
+      var boxes = {};
+      var row = el("div", { style: "display:flex;flex-wrap:wrap;gap:10px 18px" }, Object.keys(R.steps).map(function (k) {
+        var cb = el("input", { type: "checkbox", value: k }); boxes[k] = cb;
+        return el("label", { class: "small", style: "display:inline-flex;gap:6px;align-items:center;cursor:pointer" }, cb, R.steps[k]);
+      }));
+      var go = el("button", { class: "btn primary", type: "button", text: R.busy ? "یک اجرا در جریان است…" : "اجرا", disabled: R.busy });
+      go.onclick = function () { var st = Object.keys(boxes).filter(function (k) { return boxes[k].checked; }); if (!st.length) return;
+        go.disabled = true; API.post("/api/run", { steps: st }).then(function () { runsSection(holder); }, function (e) { alert(e.message); go.disabled = false; }); };
+      holder.appendChild(row); holder.appendChild(el("div", { class: "mt" }, go));
+      var list = Object.keys(R.runs).sort().reverse().slice(0, 8).map(function (k) { var r = R.runs[k];
+        return el("details", { class: "small mt" }, el("summary", null, el("span", { class: "st " + (r.state === "done" ? "ok" : r.state === "running" ? "waiting" : "blocked"), text: r.state === "done" ? "تمام" : r.state === "running" ? "در جریان" : "خطا" }),
+          " " + r.steps.map(function (x) { return R.steps[x] || x; }).join("، ") + " — شروع " + jdt(r.started, true) + (r.finished ? " · پایان " + jdt(r.finished, true) : "")),
+          r.log ? el("pre", { style: "white-space:pre-wrap;direction:ltr;text-align:left;font-size:11.5px;max-height:240px;overflow:auto;background:var(--surface-2);padding:8px;border-radius:8px", text: r.log }) : null); });
+      if (list.length) holder.appendChild(el("div", { class: "mt" }, list));
+      if (R.busy) setTimeout(function () { runsSection(holder); }, 5000);
+    }, function (e) { holder.textContent = e.message; });
+  }
+
+  function viewIntegrations() {
+    var S = D.social_status || {};
+    var out = [sec("اتصالات و تنظیمات", "ورود و خروج از شبکه‌ها، اتصال درایو، کلیدها و اجرای دستی هر بررسی — همه از همین صفحه.")];
+    out.push(el("div", { class: "grid g3" }, SOCIAL.map(function (n) {
+      var st = S[n[0]] || {};
+      return el("section", { class: "card net-card" },
+        el("div", { class: "card-h" }, el("h3", { text: n[1] }), st.logged_in ? stChip("ok") : el("span", { class: "st pending", text: "وارد نشده" })),
+        el("div", { class: "small muted", text: st.checked ? "بررسی: " + jdt(st.checked) + (st.detail && !st.logged_in ? " · " + ({ "no session": "نشستی ذخیره نشده", "logged out": "نشست منقضی/خارج‌شده", "logged out by user": "خارج شدید", "logged out from dashboard": "خارج شدید" }[st.detail] || st.detail) : "") : "هنوز بررسی نشده" }),
+        n[2] ? el("div", { class: "small muted", text: "پیش‌نیاز در تنظیمات: " + n[2] + (n[0] === "telegram" ? " و TELEGRAM_API_HASH" : " و INSTAGRAM_PASSWORD") }) : null,
+        el("div", { class: "row" },
+          st.logged_in ? null : el("button", { class: "btn primary small", type: "button", text: "ورود", onclick: function () { socialModal(n[0], n[1], "login"); } }),
+          el("button", { class: "btn small", type: "button", text: "بررسی", onclick: function () { socialModal(n[0], n[1], "check"); } }),
+          st.logged_in || st.checked ? el("button", { class: "btn small danger", type: "button", text: "خروج", onclick: function () { if (confirm("از " + n[1] + " خارج شویم؟ نشست روی سرور پاک می‌شود.")) socialModal(n[0], n[1], "logout"); } }) : null));
+    })));
+
+    var driveBox = el("div", { class: "small muted", text: "…" });
+    API.get("/api/drive").then(function (d) {
+      driveBox.textContent = ""; driveBox.className = "";
+      var sy = d.sync || {};
+      driveBox.appendChild(el("div", { class: "card-h" }, el("h3", { text: "گوگل درایو — عکس محصولات" }), d.configured ? stChip("ok") : el("span", { class: "st pending", text: "وصل نیست" })));
+      driveBox.appendChild(el("div", { class: "small ink2", text: d.configured ? ("اتصال با mohmmadweb@gmail.com (فقط‌خواندنی)." + (sy.synced_at ? " آخرین همگام‌سازی: " + jdt(sy.synced_at) + " — " + fn((sy.folders || []).reduce(function (a, f) { return a + f.photos; }, 0)) + " عکس در " + fn((sy.folders || []).length) + " پوشه" : "")) : "عکس‌های پوشه‌ی هر دسته در درایو مستقیم وارد تقویم محتوا می‌شوند. اتصال فقط‌خواندنی است." }));
+      if (sy.folders && sy.folders.length) driveBox.appendChild(el("div", { class: "small mt" }, sy.folders.map(function (f) { return el("span", { class: "tag", text: f.folder + " → " + (f.category || "نامشخص") + " (" + fd(f.photos) + ")" }); })));
+      driveBox.appendChild(el("div", { class: "row mt" }, el("button", { class: "btn primary small", type: "button", text: d.configured ? "اتصال دوباره" : "اتصال با mohmmadweb@gmail.com", onclick: driveModal })));
+    }, function (e) { driveBox.textContent = e.message; });
+    out.push(el("section", { class: "card net-card mt" }, driveBox));
+
+    var envHolder = el("div"), runHolder = el("div", { class: "small muted", text: "…" });
+    out.push(el("div", { class: "mt2" }, card("اجرای دستی بررسی‌ها", "هر روز ساعت ۰۷:۱۵ خودکار اجرا می‌شوند؛ این‌جا هر وقت خواستید", runHolder)));
+    out.push(el("div", { class: "mt2" }, card("تنظیمات و کلیدها (.env)", null, envHolder)));
+    envSection(envHolder); runsSection(runHolder);
+
+    var rows = (D.integrations || []).filter(function (r) { return SOCIAL.every(function (n) { return n[0] !== r.id; }) && r.id !== "drive"; });
+    out.push(el("div", { class: "grid g2 mt2" },
+      card("منابع داده", null, el("div", { class: "stack small" }, rows.map(function (r) {
+        return el("div", null, el("div", { style: "display:flex;gap:8px;align-items:center;flex-wrap:wrap" }, stChip(r.status), el("b", { text: r.name })),
+          r.detail ? el("div", { class: "ink2", style: "margin-top:2px", text: r.detail }) : null,
+          r.steps && r.steps.length && r.status !== "ok" ? el("ol", { class: "steps" }, r.steps.map(function (x) { return el("li", { text: x }); })) : null);
+      }))),
+      card("اتصال سرچ کنسول و آنالیتیکس", null, el("ol", { class: "steps", style: "color:var(--ink)" },
+        el("li", { text: "Search Console → Add property → URL prefix → https://sepahanfelez.ir/ → روش HTML file → فایل را در cPanel داخل public_html آپلود کنید → VERIFY" }),
+        el("li", { text: "Settings → Users and permissions → Add user → ایمیل سرویس‌اکانت با دسترسی Owner" }),
+        el("li", { text: "Google Analytics → Admin → Property access management → همان ایمیل با نقش Viewer؛ Property ID را در تنظیمات بالا (GA4_PROPERTY_ID) وارد کنید" }),
+        el("li", { text: "GitHub → sepahanfelez-seo → Settings → Secrets: GOOGLE_SERVICE_ACCOUNT، GOOGLE_API_KEY، SF_STATE_KEY" })))));
+    return out;
+  }
 
   var NETS = [["site", "سایت"], ["telegram", "تلگرام"], ["instagram", "اینستاگرام"], ["bale", "بله"], ["eitaa", "ایتا"], ["rubika", "روبیکا"], ["whatsapp", "واتساپ"]];
   var KIND_FA = { article: "مقاله", post: "پست", story: "استوری", reel: "ریلز", carousel: "کاروسل", message: "پیام کانال", comment: "کامنت", like: "لایک" };
@@ -945,7 +1178,7 @@
       });
       if (!all.length) { holder.appendChild(empty("هنوز چیزی منتشر نشده. اولین انتشار پس از ورود به شبکه‌ها و تأیید شما شروع می‌شود؛ از آن لحظه هر پست، استوری و مقاله اینجا ثبت می‌شود.")); return; }
       holder.appendChild(table([
-        { key: "ts", label: "زمان", render: function (r) { return el("span", { class: "nowrap" }, jd(r.ts), " ", el("span", { class: "muted", text: fd(r.ts.slice(11, 16)) })); } },
+        { key: "ts", label: "زمان دقیق", render: function (r) { return el("span", { class: "nowrap", text: jdt(r.ts) }); } },
         { key: "network", label: "شبکه", render: function (r) { return (NETS.filter(function (n) { return n[0] === r.network; })[0] || [0, r.network])[1]; } },
         { key: "kind", label: "قالب", render: function (r) { return KIND_FA[r.kind] || r.kind; } },
         { key: "content_type", label: "نوع محتوا", render: function (r) { return r.content_type || "—"; } },
@@ -953,7 +1186,8 @@
         { key: "text", label: "متن", nosort: true, render: function (r) { return el("span", { class: "clip", title: r.text || "", text: r.text || "—" }); } },
         { key: "media", label: "رسانه", nosort: true, render: function (r) { var m = mediaUrl(r.media); return m ? el("img", { src: m, alt: "", width: "40", height: "40", loading: "lazy", style: "border-radius:6px;object-fit:cover" }) : "—"; } },
         { key: "url", label: "لینک", nosort: true, render: function (r) { return r.url ? el("a", { href: r.url, target: "_blank", rel: "noopener", text: "مشاهده ↗" }) : "—"; } },
-        { key: "status", label: "وضعیت", render: function (r) { var s = PUB_ST[r.status] || ["pending", r.status]; return el("span", { class: "st " + s[0], title: r.error || "", text: s[1] }); } }
+        { key: "status", label: "وضعیت", render: function (r) { var s = PUB_ST[r.status] || ["pending", r.status]; return el("span", { class: "st " + s[0], title: r.error || "", text: s[1] }); } },
+        { key: "trace", label: "روند", nosort: true, render: function (r) { return traceButton(r.plan_ref, (r.content_type || "") + " " + jdt(r.ts)); } }
       ], f, { sortKey: "ts", limit: 100, emptyText: "با این فیلتر موردی نیست." }));
     }
     var seg = el("div", { class: "seg", role: "group", "aria-label": "شبکه" }, [["all", "همه"]].concat(NETS).map(function (n) {
@@ -983,7 +1217,7 @@
     { id: "tech", fa: "فنی و سرعت", view: viewTech },
     { id: "trends", fa: "روند روزانه", view: viewTrends },
     { id: "roadmap", fa: "نقشه‌ی راه", view: viewRoadmap },
-    { id: "integrations", fa: "اتصالات", view: viewIntegrations }
+    { id: "integrations", fa: "اتصالات و تنظیمات", view: viewIntegrations }
   ];
   var nav = document.getElementById("tabs"), view = document.getElementById("view");
   TABS.forEach(function (t) {
@@ -998,7 +1232,7 @@
     var cur = nav.querySelector('[aria-current="page"]'); if (cur && cur.scrollIntoView) cur.scrollIntoView({ block: "nearest", inline: "nearest" });
   }
   window.addEventListener("hashchange", function () { route(); window.scrollTo(0, 0); });
-  document.getElementById("updated").textContent = "به‌روزرسانی: " + fd(D.generated_jalali || "") + " ساعت " + fd((D.generated || "").slice(11, 16));
+  document.getElementById("updated").textContent = "داده‌ها: " + jdt((D.crawl || {}).crawled_at || D.generated);
   document.getElementById("foot").textContent = "داده‌ها: خزش روزانه‌ی sepahanfelez.ir، نقشه‌ی سایت رقبا، پیشنهادهای جستجوی گوگل، time.ir" + (gscOk ? "، Search Console" : "") + (ga4Ok ? "، GA4" : "") + (psiOk ? "، PageSpeed" : "") + " — این صفحه noindex است.";
   var themes = ["auto", "light", "dark"], TFA = { auto: "پوسته: خودکار", light: "پوسته: روشن", dark: "پوسته: تیره" };
   var th = document.getElementById("theme");

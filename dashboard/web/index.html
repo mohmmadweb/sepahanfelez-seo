@@ -8,20 +8,28 @@
 <meta name="description" content="داشبورد روزانه‌ی سئو، کلمات کلیدی، رقبا و تولید محتوای sepahanfelez.ir">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="preload" href="fonts/Estedad-Regular.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="app.css?v=1">
+<link rel="stylesheet" href="app.css?v=2">
 <script>try{var t=localStorage.getItem('sf-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
 </head>
 <body>
 <header class="top"><div class="top-in">
   <div class="brand"><img src="mark-88.png" alt="" width="40" height="40">
     <div><h1>رصد سئو و محتوای سپاهان فلز</h1><p>sepahanfelez.ir — صنایع مفتولی طلوع سپاهان</p></div></div>
-  <div class="top-meta"><span class="pill" id="updated">…</span>
+  <div class="top-meta"><span class="pill" id="updated">…</span><button class="theme-btn" id="logout" type="button" hidden>خروج</button>
     <button class="theme-btn" id="theme" type="button" aria-label="تغییر پوسته">پوسته</button></div>
 </div></header>
 <nav class="tabs" aria-label="بخش‌ها"><div class="in" id="tabs"></div></nav>
 <main id="view" tabindex="-1"></main>
 <footer id="foot"></footer>
-<script src="data.js?v=0"></script>
-<script src="app.js?v=1"></script>
+<div id="gate" hidden style="max-width:380px;margin:12vh auto;padding:0 16px">
+<form id="gate-form" class="card" style="padding:22px">
+<h2 class="sec" style="margin-top:0">ورود به داشبورد</h2>
+<label class="small" for="gate-pass">رمز</label>
+<input id="gate-pass" type="password" autocomplete="current-password" required
+ style="width:100%;margin:6px 0 12px;padding:8px 10px;border:1px solid var(--border-2);border-radius:8px;background:var(--surface);min-height:42px">
+<button type="submit" class="btn primary" style="width:100%">ورود</button>
+<p id="gate-msg" class="small" role="status" style="margin:10px 0 0;color:var(--critical)"></p>
+</form></div>
+<script src="boot.js?v=2"></script>
 </body>
 </html>
