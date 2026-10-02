@@ -449,6 +449,17 @@
     if (m.indexOf("/") > 0 && !/^(banner|toloue|videos)/.test(m)) return "https://sepahanfelez.lenzit.ir/assets/products/" + m.replace("photo-", "thumb-");
     return "https://sepahanfelez.lenzit.ir/" + m;
   }
+  function pickNetAndSend(it) {
+    var S = D.social_status || {};
+    var nets = SOCIAL.filter(function (n) { return (S[n[0]] || {}).logged_in && (CAN[n[0]] || []).indexOf(it.kind === "story" ? "story" : "post") >= 0; });
+    if (!nets.length) { alert("هنوز به هیچ شبکه‌ای وارد نشده‌اید (تب اتصالات و تنظیمات)."); return; }
+    var box = el("div", { class: "stack" }, el("p", { class: "small ink2", text: "این آیتم در کدام شبکه منتشر شود؟ متن را در مرحله‌ی بعد می‌نویسید؛ ارسال در «روند تولید» همین آیتم ثبت می‌شود." }),
+      el("div", { class: "row", style: "display:flex;gap:8px;flex-wrap:wrap" }, nets.map(function (n) {
+        return el("button", { class: "btn", type: "button", text: n[1], onclick: function () { m.close(); actModal(n[0], n[1], { kind: it.kind === "story" ? "story" : "post", media: it.media && !/\.mp4$/.test(it.media) && it.media.indexOf("/") > 0 && !/^(banner|toloue|videos)/.test(it.media) ? it.media : null, item_id: it.id, content_type: it.type, product: it.product }); } });
+      })));
+    var m = openModal("ارسال دستی: " + it.type + " — " + (it.product || ""), box);
+  }
+
   function slotRow(it) {
     var mu = mediaUrl(it.media);
     var kindFa = { story: "استوری", telegram: "کانال", article: "مقاله" }[it.kind] || it.kind;
@@ -458,7 +469,8 @@
         : el("span", { class: "ph", text: it.media && /mp4$/.test(it.media) ? "ویدئو" : "خبر" }),
       el("div", null, el("span", { class: "kind " + it.kind, text: kindFa }), " ", el("b", { text: it.type }),
         el("div", { class: "small ink2" }, it.title || it.product || "", it.occasion ? " — " + it.occasion : ""),
-        traceButton(it.id, kindFa + " " + (it.jalali ? fd(it.jalali) : "") + " " + fd(it.time))));
+        el("span", { style: "display:inline-flex;gap:10px" }, traceButton(it.id, kindFa + " " + (it.jalali ? fd(it.jalali) : "") + " " + fd(it.time)),
+          it.kind !== "article" ? el("button", { type: "button", class: "trace-btn", onclick: function () { pickNetAndSend(it); } }, "ارسال دستی") : null)));
   }
 
   function viewIssues() {
@@ -992,20 +1004,23 @@
       }))];
   }
 
-  var SOCIAL = [["telegram", "تلگرام", "TELEGRAM_API_ID"], ["instagram", "اینستاگرام", "INSTAGRAM_USERNAME"], ["bale", "بله"], ["eitaa", "ایتا"], ["rubika", "روبیکا"], ["whatsapp", "واتساپ"]];
+  var SOCIAL = [["telegram", "تلگرام", "TELEGRAM_API_ID"], ["instagram", "اینستاگرام", "INSTAGRAM_USERNAME"], ["linkedin", "لینکدین", "LINKEDIN_CLIENT_ID"], ["bale", "بله"], ["eitaa", "ایتا"], ["rubika", "روبیکا"], ["whatsapp", "واتساپ"]];
+  var CAN = { telegram: ["post", "story", "message"], instagram: ["post", "story", "message"], linkedin: ["post"],
+    bale: ["post", "story", "message"], eitaa: ["post", "story", "message"], rubika: ["post", "story", "message"], whatsapp: ["story", "message"] };
+  var KIND = { post: "پست در کانال / صفحه", story: "استوری", message: "پیام به یک نفر / گفتگو" };
+  var TARGET_HINT = { telegram: "@کانال یا @نام‌کاربری — خالی: کانال تنظیمات · me: پیام‌های ذخیره‌شده", instagram: "برای پیام: @نام‌کاربری",
+    linkedin: "خالی: پروفایل شما · org: صفحه‌ی شرکت", bale: "@کانال یا نام گفتگو — me: پیام‌های ذخیره‌شده", eitaa: "@کانال یا نام گفتگو — me: پیام‌های ذخیره‌شده",
+    rubika: "@کانال یا نام گفتگو — me: پیام‌های ذخیره‌شده", whatsapp: "شماره (۰۹…) — me: پیام به خودتان" };
 
-  function socialModal(net, netFa, action) {
-    var box = el("div"), msgs = el("div", { class: "stack small", style: "margin:8px 0" }), area = el("div");
-    box.appendChild(el("p", { class: "small ink2", style: "margin-top:0", text: action === "login" ? "کد تأیید به شماره‌ی ثبت‌شده در تنظیمات فرستاده می‌شود. این پنجره را تا پایان باز نگه دارید." : "" }));
-    box.appendChild(msgs); box.appendChild(area);
+  function watchJob(area, msgs, startPromise, onDone) {
     var timer = null, lastPrompt = null;
-    var m = openModal((action === "login" ? "ورود به " : action === "logout" ? "خروج از " : "بررسی ") + netFa, box, function () { clearInterval(timer); });
     function draw(j) {
       msgs.textContent = "";
-      (j.messages || []).forEach(function (t) { msgs.appendChild(el("div", { text: t })); });
-      if (j.link_code) {
-        msgs.appendChild(el("div", { class: "code-big", text: j.link_code }));
-      }
+      (j.messages || []).forEach(function (t) {
+        var m = /^لینک: (https?:\S+)/.exec(t);
+        msgs.appendChild(m ? el("div", null, "لینک: ", el("a", { href: m[1], target: "_blank", rel: "noopener", class: "ltr", text: m[1] })) : el("div", { text: t }));
+      });
+      if (j.link_code) msgs.appendChild(el("div", { class: "code-big", text: j.link_code }));
       if (j.phase === "waiting" && j.prompt !== lastPrompt) {
         lastPrompt = j.prompt; area.textContent = "";
         var inp = el("input", { type: j.secret ? "password" : "text", inputmode: j.secret ? null : "numeric", autocomplete: "one-time-code",
@@ -1020,12 +1035,73 @@
         clearInterval(timer); area.textContent = "";
         area.appendChild(el("div", { class: "note " + (j.ok ? "" : "warn"), text: j.ok ? "✓ انجام شد." : "✗ انجام نشد." }));
         area.appendChild(el("div", { class: "mt" }, el("button", { class: "btn primary", type: "button", text: "بستن و تازه‌سازی", onclick: reloadKeepTab })));
+        if (onDone) onDone(j);
       }
     }
-    API.post("/api/social/" + net + "/" + action, {}).then(function (j) {
+    startPromise.then(function (j) {
       draw(j);
       timer = setInterval(function () { API.get("/api/social/job").then(function (r) { if (r.job) draw(r.job); }); }, 1500);
     }, function (e) { area.textContent = e.message; });
+    return function () { clearInterval(timer); };
+  }
+
+  function actModal(net, netFa, preset) {
+    preset = preset || {};
+    var kinds = CAN[net] || [];
+    var kindSel = el("select", { style: "min-height:38px;border:1px solid var(--border-2);border-radius:8px;padding:4px 8px;background:var(--surface)" },
+      kinds.map(function (k) { return el("option", { value: k, text: KIND[k], selected: preset.kind === k ? "" : null }); }));
+    var target = el("input", { type: "text", placeholder: TARGET_HINT[net] || "", value: preset.target || "", style: "width:100%;padding:8px;border:1px solid var(--border-2);border-radius:8px;background:var(--surface)" });
+    var text = el("textarea", { rows: "5", style: "width:100%;padding:8px;border:1px solid var(--border-2);border-radius:8px;background:var(--surface);font:inherit" }, preset.text || "");
+    var link = el("input", { type: "url", placeholder: "https://sepahanfelez.ir/… (اختیاری؛ استوری اینستاگرام: استیکر لینک)", value: preset.link || "", style: "width:100%;padding:8px;border:1px solid var(--border-2);border-radius:8px;direction:ltr;background:var(--surface)" });
+    var file = el("input", { type: "file", accept: "image/*,video/mp4,video/quicktime" });
+    var mediaRef = preset.media || null;
+    var mediaInfo = el("div", { class: "small muted", text: mediaRef ? "رسانه: " + mediaRef : "بدون رسانه" });
+    if (mediaRef && mediaUrl(mediaRef)) mediaInfo.appendChild(el("img", { src: mediaUrl(mediaRef), alt: "", style: "display:block;max-width:120px;border-radius:8px;margin-top:6px" }));
+    file.onchange = function () {
+      if (!file.files[0]) return;
+      var fdta = new FormData(); fdta.append("file", file.files[0]);
+      mediaInfo.textContent = "در حال بارگذاری…";
+      fetch("/api/upload", { method: "POST", body: fdta, credentials: "same-origin", headers: { "X-Requested-With": "sf" } })
+        .then(function (r) { return r.json().then(function (d) { if (!r.ok) throw new Error(d.detail || "خطا"); return d; }); })
+        .then(function (d) { mediaRef = d.ref; mediaInfo.textContent = "✓ بارگذاری شد (" + fn(Math.round(d.size / 1024)) + " KB)"; }, function (e) { mediaInfo.textContent = e.message; });
+    };
+    var confirmBox = el("input", { type: "checkbox" });
+    var go = el("button", { class: "btn primary", type: "submit", text: "انتشار" });
+    var msgs = el("div", { class: "stack small", style: "margin:8px 0" }), area = el("div");
+    function lbl(t, x) { return el("label", { class: "stack small", style: "display:block" }, el("span", { class: "ink2", text: t }), x); }
+    var form = el("form", { class: "stack" }, lbl("نوع", kindSel), lbl("مقصد", target), lbl("متن / کپشن", text), lbl("لینک", link),
+      lbl("عکس یا ویدئو", el("div", null, file, mediaInfo)),
+      el("label", { class: "small", style: "display:flex;gap:6px;align-items:center" }, confirmBox, "می‌دانم این واقعاً در " + netFa + " منتشر می‌شود"),
+      go, msgs, area);
+    form.onsubmit = function (e) {
+      e.preventDefault();
+      if (!confirmBox.checked) { alert("تیک تأیید را بزنید."); return; }
+      if (kindSel.value !== "message" && kindSel.value !== "post" && !mediaRef) { alert("استوری به عکس یا ویدئو نیاز دارد."); return; }
+      go.disabled = true;
+      watchJob(area, msgs, API.post("/api/social/" + net + "/act", { kind: kindSel.value, target: target.value, text: text.value, link: link.value,
+        media: mediaRef, confirm: true, item_id: preset.item_id || null, content_type: preset.content_type || null, product: preset.product || null }));
+    };
+    openModal("ارسال در " + netFa, form);
+  }
+
+  function linkedinConnect() {
+    API.get("/api/linkedin/start").then(function (r) {
+      var box = el("div", { class: "stack small" },
+        el("p", { text: "در صفحه‌ی لینکدین وارد شوید و Allow بزنید؛ خودکار به داشبورد برمی‌گردید." }),
+        el("p", { class: "muted" }, "این نشانی باید در اپ لینکدین شما به‌عنوان Redirect URL ثبت باشد: ", el("code", { text: r.redirect_uri })),
+        el("a", { href: r.auth_url, class: "btn primary", text: "ورود با لینکدین ↗" }));
+      openModal("اتصال لینکدین", box);
+    }, function (e) { alert(e.message); });
+  }
+
+  function socialModal(net, netFa, action) {
+    if (net === "linkedin" && action === "login") { linkedinConnect(); return; }
+    var box = el("div"), msgs = el("div", { class: "stack small", style: "margin:8px 0" }), area = el("div");
+    box.appendChild(el("p", { class: "small ink2", style: "margin-top:0", text: action === "login" ? "کد تأیید به شماره‌ی ثبت‌شده در تنظیمات فرستاده می‌شود. این پنجره را تا پایان باز نگه دارید." : "" }));
+    box.appendChild(msgs); box.appendChild(area);
+    var stop = null;
+    openModal((action === "login" ? "ورود به " : action === "logout" ? "خروج از " : "بررسی ") + netFa, box, function () { if (stop) stop(); });
+    stop = watchJob(area, msgs, API.post("/api/social/" + net + "/" + action, {}));
   }
 
   function driveModal() {
@@ -1103,17 +1179,33 @@
     }, function (e) { holder.textContent = e.message; });
   }
 
+  var SAFETY = null;
+  function alertsBox(net) {
+    var holder = el("div", { class: "small" });
+    function fill() {
+      var a = SAFETY && SAFETY.alerts[net];
+      if (!a) return;
+      holder.appendChild(el("div", { class: "note warn", style: "margin-top:8px" }, "⏸ متوقف تا " + jdt(a.until) + " به‌خاطر هشدار «" + a.kind + "». ",
+        el("button", { class: "btn small", type: "button", text: "ادامه‌ی دستی", onclick: function () { if (confirm("هشدار پلتفرم را نادیده بگیریم؟ ریسک محدودیت حساب بالا می‌رود.")) API.post("/api/social/" + net + "/clear-alert", {}).then(reloadKeepTab); } })));
+    }
+    if (SAFETY) fill(); else API.get("/api/social/safety").then(function (r) { SAFETY = r; fill(); }, function () {});
+    return holder;
+  }
+
   function viewIntegrations() {
     var S = D.social_status || {};
     var out = [sec("اتصالات و تنظیمات", "ورود و خروج از شبکه‌ها، اتصال درایو، کلیدها و اجرای دستی هر بررسی — همه از همین صفحه.")];
+    out.push(el("p", { class: "small ink2", text: "ایمنی هر شبکه: یک کار در لحظه، سقف روزانه و فاصله‌ی حداقل برای هر نوع اقدام، و توقف خودکار ۲۴ ساعته با اولین هشدار پلتفرم (همان قواعدی که پیج لنزیت را سالم نگه داشت). هر ارسال در «تاریخچه‌ی انتشار» و «روند تولید» ثبت می‌شود." }));
     out.push(el("div", { class: "grid g3" }, SOCIAL.map(function (n) {
       var st = S[n[0]] || {};
       return el("section", { class: "card net-card" },
         el("div", { class: "card-h" }, el("h3", { text: n[1] }), st.logged_in ? stChip("ok") : el("span", { class: "st pending", text: "وارد نشده" })),
         el("div", { class: "small muted", text: st.checked ? "بررسی: " + jdt(st.checked) + (st.detail && !st.logged_in ? " · " + ({ "no session": "نشستی ذخیره نشده", "logged out": "نشست منقضی/خارج‌شده", "logged out by user": "خارج شدید", "logged out from dashboard": "خارج شدید" }[st.detail] || st.detail) : "") : "هنوز بررسی نشده" }),
-        n[2] ? el("div", { class: "small muted", text: "پیش‌نیاز در تنظیمات: " + n[2] + (n[0] === "telegram" ? " و TELEGRAM_API_HASH" : " و INSTAGRAM_PASSWORD") }) : null,
+        n[2] && !st.logged_in ? el("div", { class: "small muted", text: "پیش‌نیاز در تنظیمات: " + n[2] + ({ telegram: " و TELEGRAM_API_HASH", instagram: " و INSTAGRAM_PASSWORD", linkedin: " و LINKEDIN_CLIENT_SECRET" }[n[0]] || "") }) : null,
+        alertsBox(n[0]),
         el("div", { class: "row" },
-          st.logged_in ? null : el("button", { class: "btn primary small", type: "button", text: "ورود", onclick: function () { socialModal(n[0], n[1], "login"); } }),
+          st.logged_in ? el("button", { class: "btn primary small", type: "button", text: "ارسال / اقدام", onclick: function () { actModal(n[0], n[1]); } }) : null,
+          st.logged_in ? null : el("button", { class: "btn primary small", type: "button", text: n[0] === "linkedin" ? "اتصال" : "ورود", onclick: function () { socialModal(n[0], n[1], "login"); } }),
           el("button", { class: "btn small", type: "button", text: "بررسی", onclick: function () { socialModal(n[0], n[1], "check"); } }),
           st.logged_in || st.checked ? el("button", { class: "btn small danger", type: "button", text: "خروج", onclick: function () { if (confirm("از " + n[1] + " خارج شویم؟ نشست روی سرور پاک می‌شود.")) socialModal(n[0], n[1], "logout"); } }) : null));
     })));

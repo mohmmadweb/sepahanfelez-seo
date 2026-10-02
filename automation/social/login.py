@@ -42,11 +42,11 @@ WEB = {
     "rubika": {"url": "https://web.rubika.ir/", "fa": "روبیکا", "phone_env": "RUBIKA_PHONE", "locale": "fa-IR",
                "login_marker": "input[name=phone_number]", "ok_markers": [".chatlist", "#column-left .sidebar-header"]},
     "bale": {"url": "https://web.bale.ai/", "fa": "بله", "phone_env": "BALE_PHONE", "locale": "en-US",
-             "login_marker": "input[inputmode=numeric]", "ok_markers": ["body"], "login_url": "/login"},
+             "login_marker": "input[inputmode=numeric], [data-testid=submit-button]", "ok_markers": [], "login_url": "/login"},
     "whatsapp": {"url": "https://web.whatsapp.com/", "fa": "واتساپ", "phone_env": "WHATSAPP_PHONE", "locale": "en-US",
                  "login_marker": "canvas, [data-ref]", "ok_markers": ["#pane-side", "div[aria-label='Chat list']"]},
 }
-ALL = list(WEB) + ["telegram", "instagram"]
+ALL = list(WEB) + ["telegram", "instagram", "linkedin"]
 
 
 class TerminalIO:
@@ -106,14 +106,23 @@ def _browser(p, net):
 
 
 def _logged_in(page, net):
+    """Positive evidence only. A login page that has not redirected yet must not count as logged in
+    (Bale's check said «logged in» for days because it looked before the redirect to /login)."""
     cfg = WEB[net]
     if cfg.get("login_url") and cfg["login_url"] in page.url:
         return False
+    try:
+        if page.locator(cfg["login_marker"]).first.is_visible(timeout=300):
+            return False
+    except Exception:                                                  # noqa: BLE001
+        pass
+    if not cfg["ok_markers"]:
+        # no stable chat-list selector known (Bale): logged in = app loaded, settled, no login form anywhere
+        return page.evaluate("document.readyState") == "complete" and page.locator("input, [contenteditable=true]").count() > 0
     for sel in cfg["ok_markers"]:
         try:
             if page.locator(sel).first.is_visible(timeout=500):
-                if not page.locator(cfg["login_marker"]).first.is_visible(timeout=300):
-                    return True
+                return True
         except Exception:                                              # noqa: BLE001
             pass
     return False
@@ -259,7 +268,8 @@ def check_web(net):
         ctx = _browser(p, net)
         page = ctx.pages[0] if ctx.pages else ctx.new_page()
         page.goto(WEB[net]["url"], wait_until="domcontentloaded")
-        ok = _wait_logged_in(page, net, 25)
+        page.wait_for_timeout(10000)               # let client-side redirects (→ /login) happen first
+        ok = _wait_logged_in(page, net, 15)
         ctx.close()
     save_status(net, ok, "session ok" if ok else "logged out")
     return ok
@@ -308,29 +318,58 @@ IG_SESSION = lambda: os.path.join(profile_dir("instagram"), "session.json")  # n
 
 
 def _ig_client():
+    """One fixed device for the account's whole life (what kept @lenzit_org stable): the device is
+    written to disk before the first login, so a retry after a challenge is the *same* phone."""
     from instagrapi import Client
     cl = Client()
     cl.request_timeout = 1          # instagrapi: this is a pause BEFORE each request, not an HTTP timeout
     cl.delay_range = [3, 8]
-    if get("INSTAGRAM_PROXY"):
-        cl.set_proxy(get("INSTAGRAM_PROXY"))
     if os.path.exists(IG_SESSION()):
         cl.load_settings(IG_SESSION())
+    else:
+        cl.set_locale("fa_IR")
+        cl.set_country("IR")
+        cl.set_country_code(98)
+        cl.set_timezone_offset(int(3.5 * 3600))
+    if get("INSTAGRAM_PROXY"):
+        cl.set_proxy(get("INSTAGRAM_PROXY"))
     cl.challenge_code_handler = lambda username, choice: IO.ask(f"کد تأیید اینستاگرام ({choice}) برای {username}")
     return cl
 
 
 def login_instagram():
+    from instagrapi.exceptions import BadPassword, ChallengeRequired, TwoFactorRequired
     user, pw = get("INSTAGRAM_USERNAME"), get("INSTAGRAM_PASSWORD")
     if not (user and pw):
-        sys.exit("INSTAGRAM_USERNAME و INSTAGRAM_PASSWORD را در .env پر کنید.")
+        sys.exit("INSTAGRAM_USERNAME و INSTAGRAM_PASSWORD را در تنظیمات پر کنید.")
     cl = _ig_client()
-    code = None
-    if get("INSTAGRAM_TOTP_SECRET"):
-        code = cl.totp_generate_code(get("INSTAGRAM_TOTP_SECRET"))
-    cl.login(user, pw, verification_code=code or "")
     cl.dump_settings(IG_SESSION())
     os.chmod(IG_SESSION(), 0o600)
+    try:
+        cl.get_timeline_feed()
+        cl.account_info()
+        say(f"✓ اینستاگرام: نشست قبلی @{user} هنوز معتبر است.")
+        save_status("instagram", True, f"@{user}")
+        return True
+    except Exception:                                                  # noqa: BLE001
+        pass
+    try:
+        code = cl.totp_generate_code(get("INSTAGRAM_TOTP_SECRET")) if get("INSTAGRAM_TOTP_SECRET") else ""
+        try:
+            cl.login(user, pw, verification_code=code)
+        except TwoFactorRequired:
+            cl.login(user, pw, verification_code=IO.ask("کد ورود دومرحله‌ای اینستاگرام (پیامک یا اپ احراز هویت)"))
+    except ChallengeRequired:
+        cl.dump_settings(IG_SESSION())
+        save_status("instagram", False, "challenge")
+        say("اینستاگرام این ورود را بررسی می‌کند: در اپ اینستاگرام روی همین اکانت پیام «آیا این شما بودید؟» را تأیید کنید، "
+            "بعد دوباره «ورود» را بزنید (همان دستگاه ذخیره شده است).")
+        return False
+    except BadPassword:
+        save_status("instagram", False, "bad password")
+        say("رمز اینستاگرام درست نیست (INSTAGRAM_PASSWORD).")
+        return False
+    cl.dump_settings(IG_SESSION())
     say(f"✓ اینستاگرام: وارد شدید به‌عنوان @{user}؛ نشست ثابت ذخیره شد.")
     save_status("instagram", True, f"@{user}")
     return True
@@ -350,6 +389,25 @@ def check_instagram():
         return False
 
 
+# ------------------------------------------------------------------ LinkedIn (OAuth from the dashboard)
+def check_linkedin():
+    path = os.path.join(SESSIONS, "linkedin", "token.json")
+    try:
+        with open(path, encoding="utf-8") as fh:
+            tok = json.load(fh)
+    except FileNotFoundError:
+        save_status("linkedin", False, "no session")
+        return False
+    ok = tok.get("expires_at", 0) > time.time()
+    days = int((tok.get("expires_at", 0) - time.time()) / 86400)
+    save_status("linkedin", ok, f"{tok.get('name', '')} · {days} روز تا انقضا" if ok else "token expired")
+    return ok
+
+
+def login_linkedin():
+    sys.exit("ورود لینکدین از داشبورد انجام می‌شود (دکمه‌ی «اتصال لینکدین»): نیاز به صفحه‌ی بازگشت روی دامنه دارد.")
+
+
 # ------------------------------------------------------------------ CLI
 def main():
     if len(sys.argv) < 2 or sys.argv[1] not in ("login", "status", "logout"):
@@ -361,9 +419,9 @@ def main():
     for net in nets:
         try:
             if cmd == "login":
-                {"telegram": login_telegram, "instagram": login_instagram}.get(net, lambda: login_web(net))()
+                {"telegram": login_telegram, "instagram": login_instagram, "linkedin": login_linkedin}.get(net, lambda: login_web(net))()
             elif cmd == "status":
-                ok = {"telegram": check_telegram, "instagram": check_instagram}.get(net, lambda: check_web(net))()
+                ok = {"telegram": check_telegram, "instagram": check_instagram, "linkedin": check_linkedin}.get(net, lambda: check_web(net))()
                 say(f"{'✓' if ok else '✗'} {WEB.get(net, {}).get('fa', net)}")
             elif cmd == "logout":
                 import shutil
