@@ -23,7 +23,7 @@ from sf.env import load_env  # noqa: E402
 
 load_env()
 
-from sf import build, calendar_ir, competitors, content_plan, crawl, google, issues, publish  # noqa: E402
+from sf import build, calendar_ir, competitors, content_plan, crawl, drive_sync, google, issues, publish, serp  # noqa: E402
 from sf.util import DATA, config, jalali, now_tehran, read_json, today_str, write_json  # noqa: E402
 
 LATEST = os.path.join(DATA, "latest")
@@ -63,9 +63,17 @@ def main():
     if run("competitors"):
         print("▸ competitor watch")
         write_json(os.path.join(LATEST, "competitors.json"), competitors.watch())
+    if run("serp"):
+        print("▸ search results + new competitor discovery")
+        write_json(os.path.join(LATEST, "serp.json"), serp.check())
+    if run("drive"):
+        print("▸ product photos from Google Drive")
+        r = drive_sync.sync()
+        print(f"  {r['status']} {r.get('reason') or ''}")
     if run("calendar"):
         print("▸ Iranian calendar (time.ir)")
         cal = calendar_ir.calendar(35, site)
+        cal["checked_at"] = now_tehran().isoformat(timespec="seconds")
         write_json(os.path.join(LATEST, "calendar.json"), cal)
         write_json(os.path.join(LATEST, "content_plan.json"), content_plan.plan(cal, kw, days=28))
     if run("google"):
@@ -88,7 +96,8 @@ def main():
         found = issues.analyse(site, cr, kw, latest("gsc"), latest("psi"), known)
         n_pages = len([p for p in cr["pages"] if p["status"] == 200 and not p.get("redirect_to")])
         score = issues.health_score(found, n_pages)
-        write_json(os.path.join(LATEST, "issues.json"), {"health": score, "issues": found})
+        write_json(os.path.join(LATEST, "issues.json"), {"health": score, "issues": found,
+                                                         "checked_at": now_tehran().isoformat(timespec="seconds")})
         track_issues(found)
         append_history(site, cr, found, score)
         print(f"  health {score}/100 · {len(found)} issues")
@@ -98,11 +107,11 @@ def main():
         import subprocess
         subprocess.run([sys.executable, os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
                         "automation", "social", "login.py"), "status"], timeout=600, check=False)
-    if run("build"):
+    if run("build") and os.environ.get("SF_PUBLISH_PAGES", "0") == "1":
         print("▸ build dashboard" + (" (encrypted)" if os.environ.get("SF_DASHBOARD_PASSWORD") else " (PLAIN — local preview only)"))
         out = build.build()
         print(f"  → {out}")
-    if run("publish"):
+    if run("publish") and os.environ.get("SF_PUBLISH_PAGES", "0") == "1":
         print("▸ publish to sepahanfelezseo.lenzit.ir")
         print("  →", publish.publish_site(build.SITE))
     if run("backup"):
@@ -136,7 +145,7 @@ def append_history(site, cr, found, score):
     gsc, ga4, psi = latest("gsc", {}), latest("ga4", {}), latest("psi", {})
     comp = latest("competitors", {}) or {}
     row = {
-        "date": today_str(), "jalali": jalali(), "health": score,
+        "date": today_str(), "ts": now_tehran().isoformat(timespec="seconds"), "jalali": jalali(), "health": score,
         "pages": len(ok), "sitemap": cr["sitemap"]["count"], "broken": len(cr.get("broken", [])),
         "redirects": len(cr.get("redirects", [])), "issues": sev,
         "articles": sum(1 for p in ok if p["type"] == "article"),

@@ -96,6 +96,19 @@ def _weighted_cycle():
 def _photos():
     """Scan the photo folders where they exist (our server) and snapshot the index into
     config/photo_library.json, so runs elsewhere (GitHub Actions) plan with the same photos."""
+    from .drive_sync import library
+    from .util import CONFIG, write_json
+    drive = library()
+    if drive:                                  # owner's Drive photos win; prototype photos fill missing categories
+        merged = {k: ["@d/" + f for f in v] for k, v in drive.items()}
+        proto = _proto_photos()
+        for k, v in proto.items():
+            merged.setdefault(k, v)
+        return merged
+    return _proto_photos()
+
+
+def _proto_photos():
     from .util import CONFIG, write_json
     path = os.path.join(CONFIG, "photo_library.json")
     if not os.path.isdir(PHOTO_ROOT):
@@ -110,6 +123,8 @@ def _photos():
 
 
 def plan(cal, keywords_cfg=None, days=14):
+    """Build the schedule and log, for every item, why it was planned the way it was."""
+    from . import trace
     photos = _photos()
     ideas = {}
     for p in (keywords_cfg or {}).get("products", []):
@@ -117,16 +132,21 @@ def plan(cal, keywords_cfg=None, days=14):
     cycle = _weighted_cycle()
     used_photo, ci, story_n, article_n = {}, 0, [0] * len(STORY_ROTATION), 0
     type_fa = {t["id"]: t["fa"] for t in CONTENT_TYPES}
+    type_goal = {t["id"]: t["goal"] for t in CONTENT_TYPES}
     items = []
-    working_seen = 0
     start = date.fromisoformat(cal["days"][0]["date"]) if cal.get("days") else date.today()
+    src = "، ".join(cal.get("source", [])) or "—"
+    skipped = [d for d in cal.get("days", [])[: days + 1] if not d["working"]]
 
     for day in cal.get("days", [])[: days + 1]:
         if not day["working"]:
             continue
-        working_seen += 1
         d = date.fromisoformat(day["date"])
         occasion = next((e for e in day["events"] if any(k in e for k in INDUSTRY_OCCASIONS)), None)
+        hours = "–".join(day.get("hours") or [])
+        day_step = {"title": "انتخاب روز", "detail": f"{day['weekday_fa']} {day['jalali']} — روز کاری، ساعت کاری {hours}",
+                    "decision": f"منبع تقویم: {src}. جمعه، تعطیلات رسمی و روزهای خارج از ساعت کاری کنار گذاشته می‌شوند.",
+                    "data": {"events": day["events"], "skipped_non_working": [f"{x['weekday_fa']} {x['jalali']}" for x in skipped][:6]}}
 
         def pick_photo(slug, day_idx):
             files = photos.get(slug) or []
@@ -134,33 +154,65 @@ def plan(cal, keywords_cfg=None, days=14):
                 last = used_photo.get((slug, f))
                 if last is None or (day_idx - last) >= 10:
                     used_photo[(slug, f)] = day_idx
-                    return f"{slug}/{f}"
-            return f"{slug}/{files[0]}" if files else None
+                    path = f"drive/{slug}/{f[3:]}" if f.startswith("@d/") else f"{slug}/{f}"
+                    reused = [x for x in files if used_photo.get((slug, x)) is not None and x != f]
+                    return path, ("از پوشه‌ی گوگل درایو کارفرما — " if f.startswith("@d/") else "از عکس‌های پروتوتایپ (درایو هنوز همگام نشده) — ") + (f"اولین عکسِ «{slug}» که در ۱۰ روز گذشته استفاده نشده؛ "
+                                           f"{len(files)} عکس در این دسته، {len(reused)} تای دیگر اخیراً استفاده شده‌اند.")
+            if files:
+                f0 = files[0]
+                return (f"drive/{slug}/{f0[3:]}" if f0.startswith("@d/") else f"{slug}/{f0}"), f"همه‌ی {len(files)} عکس این دسته در ۱۰ روز اخیر استفاده شده‌اند؛ قدیمی‌ترین تکرار شد."
+            return None, f"برای «{slug}» عکسی در کتابخانه نیست (پوشه‌ی درایو هنوز همگام نشده)."
 
         day_idx = (d - start).days
         for pos, slot in enumerate(day.get("slots", [])[: len(STORY_ROTATION)]):
             rot = STORY_ROTATION[pos]
-            ctype = rot[story_n[pos] % len(rot)]
+            base = rot[story_n[pos] % len(rot)]
             story_n[pos] += 1
-            if pos == 0 and occasion:
-                ctype = "seasonal"
+            ctype = "seasonal" if (pos == 0 and occasion) else base
             rank, name, slug = cycle[ci % len(cycle)]
             ci += 1
-            media = pick_photo(slug, day_idx)
+            media, photo_why = pick_photo(slug, day_idx)
             if ctype in ("factory", "bts"):
                 media = FACTORY_MEDIA[(day_idx + len(slot)) % len(FACTORY_MEDIA)]
-            items.append({"date": day["date"], "jalali": day["jalali"], "weekday": day["weekday_fa"],
+                photo_why = "نوع محتوا پشت‌صحنه/کارخانه است؛ از عکس‌ها و ویدئوهای کارخانه به‌نوبت استفاده می‌شود."
+            item_id = f"{day['date']}-{slot.replace(':', '')}-story"
+            items.append({"id": item_id, "date": day["date"], "jalali": day["jalali"], "weekday": day["weekday_fa"],
                           "time": slot, "kind": "story",
                           "channels": ["اینستاگرام", "روبیکا", "ایتا", "بله", "واتساپ"],
                           "type": type_fa[ctype], "product_rank": rank, "product": name,
                           "occasion": occasion if ctype == "seasonal" else None, "media": media,
                           "status": "planned"})
+            pos_fa = ["اول (جذب مخاطب)", "دوم (معرفی محصول)", "سوم (اعتماد و تبدیل)"][pos]
+            trace.replan(item_id, [
+                day_step,
+                {"title": "ساعت انتشار", "detail": f"ساعت {slot} — استوری {pos_fa} روز",
+                 "decision": f"ساعت‌های استوری این روز: {' / '.join(day.get('slots', []))} (از تنظیمات ساعت کاری کارفرما)."},
+                {"title": "نوع محتوا", "detail": f"«{type_fa[ctype]}» — {type_goal[ctype]}",
+                 "decision": (f"مناسبت روز «{occasion}» به صنعت مربوط است، پس استوری اول به‌جای «{type_fa[base]}» مناسبتی شد."
+                              if ctype != base else f"چرخه‌ی ثابت جایگاه {pos_fa}: {' ← '.join(type_fa[x] for x in rot)}؛ نوبت این بار: {type_fa[ctype]}."),
+                 "alternatives": [type_fa[x] for x in rot if x != ctype]},
+                {"title": "محصول", "detail": f"#{rank} {name}",
+                 "decision": "چرخه‌ی وزن‌دار لیست اولویت کارفرما: اولویت ۱ تا ۴ سه بار، ۵ تا ۹ دو بار، ۱۰ تا ۱۳ یک بار در هر دور؛ محصول تکراری پشت سر هم نمی‌آید."},
+                {"title": "عکس / ویدئو", "detail": media or "—", "decision": photo_why},
+                {"title": "کانال‌ها", "detail": "اینستاگرام (خودکار با API رسمی) · روبیکا، ایتا، بله، واتساپ (یک‌لمسی: فایل ۱۰ دقیقه زودتر روی گوشی اپراتور)",
+                 "decision": "این چهار پیام‌رسان API رسمی برای استوری ندارند."},
+                {"title": "وضعیت", "detail": "برنامه‌ریزی شد — منتظر تولید متن و طراحی",
+                 "decision": "تا وقتی تولید شروع نشده، این برنامه هر صبح دوباره با تقویم و عکس‌های تازه سنجیده می‌شود."},
+            ])
 
         for tpos, ttime in enumerate(day.get("telegram", [])[: len(TELEGRAM_KINDS)]):
             ttype, what, status = TELEGRAM_KINDS[tpos]
-            items.append({"date": day["date"], "jalali": day["jalali"], "weekday": day["weekday_fa"],
+            item_id = f"{day['date']}-{ttime.replace(':', '')}-channel"
+            items.append({"id": item_id, "date": day["date"], "jalali": day["jalali"], "weekday": day["weekday_fa"],
                           "time": ttime, "kind": "telegram", "channels": ["تلگرام", "بله", "ایتا", "روبیکا"],
                           "type": ttype, "product": what, "product_rank": None, "media": None, "status": status})
+            trace.replan(item_id, [
+                day_step,
+                {"title": "نوع پست کانال", "detail": f"«{ttype}» ساعت {ttime}",
+                 "decision": f"پست‌های کانال این روز: {' / '.join(day.get('telegram', []))} — به ترتیب خبر، قیمت روز (بعد از به‌روزرسانی ۱۲:۳۰)، محتوای آموزشی."},
+                {"title": "منبع", "detail": what,
+                 "decision": "منابع خبری هنوز از کارفرما نرسیده؛ این پست تا آن موقع منتشر نمی‌شود." if status == "needs-sources" else "از داده‌ی خود سایت و تقویم محتوا."},
+            ])
 
         week = (d - start).days // 7
         per_week = 3 if week < 2 else 5 if week < 4 else 6
@@ -172,12 +224,26 @@ def plan(cal, keywords_cfg=None, days=14):
             idea_list = ideas.get(rank) or []
             idea = idea_list.pop(0) if idea_list else None
             ctype = ARTICLE_TYPES[article_n % len(ARTICLE_TYPES)]
-            items.append({"date": day["date"], "jalali": day["jalali"], "weekday": day["weekday_fa"],
+            media, photo_why = pick_photo(slug, day_idx)
+            item_id = f"{day['date']}-1100-article"
+            items.append({"id": item_id, "date": day["date"], "jalali": day["jalali"], "weekday": day["weekday_fa"],
                           "time": "11:00", "kind": "article", "channels": ["سایت", "تلگرام (خلاصه + لینک)"],
                           "type": idea["type"] if idea else type_fa[ctype], "product_rank": rank,
                           "product": name, "title": idea["title"] if idea else None,
                           "keyword": idea.get("keyword") if idea else None,
-                          "media": pick_photo(slug, day_idx), "status": "planned"})
+                          "media": media, "status": "planned"})
+            trace.replan(item_id, [
+                day_step,
+                {"title": "سهمیه‌ی مقاله", "detail": f"هفته‌ی {week + 1} از شروع: {per_week} مقاله در هفته",
+                 "decision": "رشد پلکانی: هفته‌ی ۱–۲ سه مقاله، ۳–۴ پنج مقاله، بعد هر روز کاری. کیفیت پیش از کمیت."},
+                {"title": "محصول", "detail": f"#{rank} {name}", "decision": "مقاله‌ها به‌نوبت روی ۱۳ محصول اولویت‌دار کارفرما می‌چرخند."},
+                {"title": "موضوع و کلمه‌ی کلیدی", "detail": (idea or {}).get("title") or "— (ایده‌ی آماده نماند)",
+                 "decision": (f"اولین ایده‌ی استفاده‌نشده از تحقیق کلمات کلیدی این محصول؛ کلمه‌ی هدف: «{idea.get('keyword')}»."
+                              if idea else "ایده‌های این محصول تمام شده؛ موضوع از شکاف‌های کلمات کلیدی انتخاب خواهد شد."),
+                 "alternatives": [x["title"] for x in idea_list[:3]]},
+                {"title": "عکس شاخص", "detail": media or "—", "decision": photo_why},
+                {"title": "وضعیت", "detail": "برنامه‌ریزی شد — منتظر بریف و نوشتن", "decision": "در دو هفته‌ی اول، متن پیش از انتشار برای تأیید شما فرستاده می‌شود."},
+            ])
     return {"types": CONTENT_TYPES, "priority": [{"rank": r, "name": n, "slug": s,
                                                   "photos": len(photos.get(s, []))} for r, n, s in PRIORITY],
             "items": items}

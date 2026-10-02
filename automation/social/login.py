@@ -49,8 +49,24 @@ WEB = {
 ALL = list(WEB) + ["telegram", "instagram"]
 
 
+class TerminalIO:
+    """How a login flow talks to a human. The web UI swaps in a queue-backed version."""
+    def say(self, msg):
+        print(msg, flush=True)
+
+    def ask(self, prompt, secret=False):
+        return (getpass.getpass(prompt) if secret else input(prompt)).strip()
+
+    def link_code(self, code, how):
+        self.say(how)
+        self.say(f"  کد:  {code}")
+
+
+IO = TerminalIO()
+
+
 def say(msg):
-    print(msg, flush=True)
+    IO.say(msg)
 
 
 def profile_dir(net):
@@ -129,7 +145,8 @@ def _first_visible(page, selectors, timeout=20000):
 
 
 def _ask_code(net):
-    return input(f"\n  کد تأییدی که {WEB[net]['fa'] if net in WEB else net} برای شماره‌تان فرستاد را وارد کنید: ").strip()
+    name = WEB[net]["fa"] if net in WEB else {"telegram": "تلگرام", "instagram": "اینستاگرام"}.get(net, net)
+    return IO.ask(f"کد تأییدی که {name} برای شماره‌تان فرستاد")
 
 
 def _code_and_password(page, net, shot):
@@ -146,7 +163,7 @@ def _code_and_password(page, net, shot):
     page.wait_for_timeout(5000)
     pw = _first_visible(page, ["input[type=password]"], timeout=4000)
     if pw:
-        pw.fill(getpass.getpass("  رمز دومرحله‌ای (cloud password) حساب: "))
+        pw.fill(IO.ask("رمز دومرحله‌ای حساب", secret=True))
         page.keyboard.press("Enter")
 
 
@@ -223,9 +240,7 @@ def login_web(net):
                 text = page.inner_text("body")
                 m = re.search(r"\b([A-Z0-9]{4}[-\s]?[A-Z0-9]{4})\b", text)
                 code = m.group(1) if m else None
-            say("\n  روی گوشی: واتساپ ← تنظیمات ← Linked devices ← Link a device ← Link with phone number instead")
-            say(f"  و این کد را وارد کنید:  {code or '(کد خوانده نشد — تصویر ' + shot + ' را باز کنید)'}\n")
-            say("  منتظر تأیید روی گوشی (تا ۳ دقیقه)…")
+            IO.link_code(code or "?", "روی گوشی: واتساپ ← Linked devices ← Link a device ← Link with phone number instead ← این کد را وارد کنید (تا ۳ دقیقه)")
 
         ok = _wait_logged_in(page, net, 180 if net == "whatsapp" else 60)
         page.screenshot(path=shot)
@@ -252,6 +267,11 @@ def check_web(net):
 
 # ------------------------------------------------------------------ Telegram (official client API)
 def _telegram_client():
+    import asyncio
+    try:
+        asyncio.get_event_loop()
+    except RuntimeError:
+        asyncio.set_event_loop(asyncio.new_event_loop())
     from telethon.sync import TelegramClient
     api_id, api_hash = get("TELEGRAM_API_ID"), get("TELEGRAM_API_HASH")
     if not (api_id and api_hash):
@@ -263,7 +283,7 @@ def _telegram_client():
 def login_telegram():
     client = _telegram_client()
     client.start(phone=lambda: get("TELEGRAM_PHONE"), code_callback=lambda: _ask_code("telegram"),
-                 password=lambda: getpass.getpass("  رمز دومرحله‌ای تلگرام: "))
+                 password=lambda: IO.ask("رمز دومرحله‌ای تلگرام", secret=True))
     me = client.get_me()
     say(f"✓ تلگرام: وارد شدید به‌عنوان {me.first_name} (@{me.username or '—'})")
     save_status("telegram", True, f"user {me.id}")
@@ -296,7 +316,7 @@ def _ig_client():
         cl.set_proxy(get("INSTAGRAM_PROXY"))
     if os.path.exists(IG_SESSION()):
         cl.load_settings(IG_SESSION())
-    cl.challenge_code_handler = lambda username, choice: input(f"  کد تأیید اینستاگرام ({choice}) برای {username}: ").strip()
+    cl.challenge_code_handler = lambda username, choice: IO.ask(f"کد تأیید اینستاگرام ({choice}) برای {username}")
     return cl
 
 

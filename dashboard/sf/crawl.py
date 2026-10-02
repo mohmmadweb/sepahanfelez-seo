@@ -16,7 +16,7 @@ import ssl
 import time
 import urllib.parse
 from collections import deque
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 
 from bs4 import BeautifulSoup
 
@@ -215,7 +215,8 @@ def crawl(site=None, log=print):
         r, err, secs = fetch(url)
         time.sleep(ccfg["delay_seconds"])
         path = urllib.parse.urlsplit(key).path or "/"
-        rec = {"url": key, "path": path, "type": page_type(path.rstrip("/") or "/", types),
+        rec = {"checked_at": datetime.now(timezone(timedelta(hours=3, minutes=30))).isoformat(timespec="seconds"),
+               "url": key, "path": path, "type": page_type(path.rstrip("/") or "/", types),
                "in_sitemap": key in sm_set, "sitemap_lastmod": sm_lastmod.get(key),
                "status": r.status_code if r is not None else None, "error": err, "seconds": secs,
                "final_url": canon_url(r.url) if r is not None else None,
@@ -257,7 +258,7 @@ def crawl(site=None, log=print):
     redirects = [p for p in pages.values() if p.get("redirect_to")]
 
     return {
-        "crawled_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        "crawled_at": datetime.now(timezone.utc).astimezone(timezone(timedelta(hours=3, minutes=30))).isoformat(timespec="seconds"),
         "duration_s": round(time.time() - started),
         "sitemap": {"count": len(sm), "error": sm_err,
                     "not_crawlable": [decode_url(u["url"]) for u in sm
