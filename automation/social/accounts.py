@@ -1,9 +1,9 @@
 """
 Accounts: any number of accounts per network, added and removed from the dashboard.
 
-  registry  automation/sessions/accounts.json (chmod 600, gitignored): id, net, label, phone /
-            username, default flag. Not secret, but private.
-  secrets   in .env as SF_ACCT_<ID>_PASSWORD / _TOTP / _PROXY (Instagram); nothing secret in the registry.
+  .env      everything the owner enters (owner's rule), chmod 600, gitignored:
+            SF_ACCT_<ID>_NET / _LABEL / _PHONE / _USERNAME / _DEFAULT / _CREATED
+            SF_ACCT_<ID>_PASSWORD / _TOTP / _PROXY (Instagram)
   session   automation/sessions/<net>/<id>/ — browser profile, Telegram .session, Instagram device,
             LinkedIn token. Deleting an account deletes this folder and its .env lines.
 
@@ -23,6 +23,8 @@ ROOT = os.path.dirname(os.path.dirname(HERE))
 SESSIONS = os.path.join(ROOT, "automation", "sessions")
 REG = os.path.join(SESSIONS, "accounts.json")
 sys.path.insert(0, os.path.join(ROOT, "dashboard"))
+sys.path.insert(0, os.path.join(ROOT, "dashboard", "server"))
+sys.path.insert(0, HERE)
 from sf.env import get  # noqa: E402
 
 NETS = {"telegram": "تلگرام", "instagram": "اینستاگرام", "linkedin": "لینکدین", "bale": "بله",
@@ -46,13 +48,56 @@ def _norm_phone(p):
     return "+98" + d
 
 
+FIELDS = ("net", "label", "phone", "username", "default", "created")
+
+
+def _envw(changes, drop=False):
+    from dashboard_env import set_secrets
+    set_secrets(changes, drop=drop)
+
+
 def _save(rows):
-    os.makedirs(SESSIONS, mode=0o700, exist_ok=True)
-    tmp = REG + ".tmp"
-    with open(tmp, "w", encoding="utf-8") as fh:
-        json.dump(rows, fh, ensure_ascii=False, indent=1)
-    os.chmod(tmp, 0o600)
-    os.replace(tmp, REG)
+    """Write the account list into .env (and drop the keys of accounts that are gone)."""
+    import envfile
+    vals = envfile.read_all()
+    keep = {r["id"].upper() for r in rows}
+    stale = {k: "" for k in vals if re.match(r"^SF_ACCT_([A-Z0-9]+)_(NET|LABEL|PHONE|USERNAME|DEFAULT|CREATED)$", k)
+             and k.split("_")[2] not in keep}
+    ch = {}
+    for r in rows:
+        u = r["id"].upper()
+        for f in FIELDS:
+            v = r.get(f)
+            if f == "default":
+                v = "1" if v else "0"
+            elif f == "created":
+                v = str(int(v or time.time()))
+            ch[f"SF_ACCT_{u}_{f.upper()}"] = "" if v is None else str(v).replace("\n", " ").strip()
+        if r.get("legacy_secrets"):
+            ch[f"SF_ACCT_{u}_USERNAME"] = r.get("username", "")
+    ch["SF_ACCOUNTS_MIGRATED"] = "1"
+    if stale:
+        _envw(stale, drop=True)
+    _envw(ch)
+
+
+def _from_env():
+    import envfile
+    vals = envfile.read_all()
+    ids = sorted({m.group(1) for k in vals if (m := re.match(r"^SF_ACCT_([A-Z0-9]+)_NET$", k))})
+    rows = []
+    for u in ids:
+        g = lambda f: vals.get(f"SF_ACCT_{u}_{f}", "")  # noqa: E731
+        if g("NET") not in NETS:
+            continue
+        r = {"id": u.lower(), "net": g("NET"), "label": g("LABEL"), "default": g("DEFAULT") == "1",
+             "created": float(g("CREATED") or 0)}
+        if g("PHONE"):
+            r["phone"] = g("PHONE")
+        if g("USERNAME"):
+            r["username"] = g("USERNAME")
+        rows.append(r)
+    return rows, vals.get("SF_ACCOUNTS_MIGRATED") == "1"
 
 
 def _migrate():
@@ -80,10 +125,16 @@ def _migrate():
 
 
 def load():
-    if not os.path.exists(REG):
-        return _migrate()
-    with open(REG, encoding="utf-8") as fh:
-        return json.load(fh)
+    rows, migrated = _from_env()
+    if rows or migrated:
+        return sorted(rows, key=lambda r: r.get("created") or 0)
+    if os.path.exists(REG):                       # earlier version kept a JSON registry → move it into .env
+        with open(REG, encoding="utf-8") as fh:
+            rows = json.load(fh)
+        _save(rows)
+        os.remove(REG)
+        return rows
+    return _migrate()
 
 
 def get_account(acct_id):
