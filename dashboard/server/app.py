@@ -141,6 +141,51 @@ async def get_trace(item_id: str):
     return {"id": item_id, "steps": steps, "stages": trace.STAGES}
 
 
+@app.get("/api/brief")
+async def get_brief(date: str = ""):
+    import re as _re
+    if not _re.fullmatch(r"\d{4}-\d{2}-\d{2}", date or ""):
+        raise HTTPException(400, "date")
+    b = read_json(os.path.join(DATA, "briefs", f"{date}.json"))
+    if not b:
+        raise HTTPException(404, "برای این روز تحلیلی ثبت نشده")
+    return b
+
+
+@app.post("/api/goals/{goal_id}")
+async def goal_target(goal_id: str, req: Request):
+    from sf import changes, goals
+    body = await req.json()
+    try:
+        target = float(body.get("target"))
+    except (TypeError, ValueError):
+        raise HTTPException(400, "عدد هدف نامعتبر است")
+    try:
+        r = goals.set_target(goal_id, int(target) if target.is_integer() else target)
+    except KeyError:
+        raise HTTPException(404, "هدف پیدا نشد")
+    changes.add("decision", f"هدف «{goal_id}» از {r['old']} به {r['new']} تغییر کرد", str(body.get("why") or "از داشبورد"),
+                source="dashboard")
+    goals.evaluate()
+    return r
+
+
+@app.post("/api/changes")
+async def add_change(req: Request):
+    from sf import changes
+    b = await req.json()
+    title, why = str(b.get("title", "")).strip(), str(b.get("why", "")).strip()
+    if len(title) < 4 or len(why) < 4:
+        raise HTTPException(400, "عنوان و «چرا» را بنویسید")
+    metric = b.get("metric") or None
+    try:
+        days = max(1, min(90, int(b.get("eval_days") or 14)))
+    except (TypeError, ValueError):
+        days = 14
+    return changes.add("decision", title[:200], why[:400], metric=metric, direction="down" if b.get("direction") == "down" else "up",
+                       eval_days=days, source="dashboard")
+
+
 # ---------------------------------------------------------------- settings (.env)
 @app.get("/api/env")
 async def env_view():
@@ -309,9 +354,7 @@ async def competitor_decide(domain: str, action: str):
 
 
 # ---------------------------------------------------------------- manual runs
-STEPS = {"crawl": "خزش سایت", "competitors": "نقشه‌ی سایت رقبا", "serp": "نتایج جستجو و رقبای تازه",
-         "drive": "عکس‌های درایو", "calendar": "تقویم و برنامه‌ی محتوا", "google": "داده‌ی گوگل",
-         "social": "وضعیت ورود شبکه‌ها", "analyse": "تحلیل مشکلات", "backup": "پشتیبان"}
+from run_daily import STEP_FA as STEPS  # noqa: E402
 _run_lock = threading.Lock()
 RUNS = os.path.join(DATA, "runs.json")
 
@@ -326,7 +369,8 @@ def _start_run(steps):
 
     def work():
         try:
-            p = subprocess.run([sys.executable, os.path.join(DASH, "run_daily.py"), "--only", *steps, "analyse"],
+            p = subprocess.run([sys.executable, os.path.join(DASH, "run_daily.py"), "--only", *steps, "analyse", "goals", "brief",
+                                "--trigger", "dashboard"],
                                cwd=DASH, capture_output=True, text=True, timeout=3600)
             out, rc = (p.stdout + p.stderr)[-4000:], p.returncode
         except Exception as exc:                                         # noqa: BLE001

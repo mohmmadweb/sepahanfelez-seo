@@ -358,6 +358,8 @@
     var prods = pages.filter(function (p) { return p.type === "product"; }).length;
 
     v.push(sec("نمای کلی", "وضعیت امروز سایت sepahanfelez.ir: سلامت فنی، کلمات کلیدی ۱۳ محصول اولویت‌دار، رقبا و برنامه‌ی انتشار. این صفحه هر روز صبح خودکار به‌روز می‌شود."));
+    v.push(el("div", { class: "grid g2" }, briefSection(), tasksSection()));
+    v.push(el("div", { class: "mt" }));
     v.push(el("div", { class: "grid g2" },
       el("section", { class: "card" },
         el("div", { class: "card-h" }, el("h3", { text: "امتیاز سلامت سئو" }), el("span", { class: "sub", text: "از ۱۰۰ — خزش " + jdt(crawl.crawled_at) })),
@@ -1279,6 +1281,9 @@
         { key: "media", label: "رسانه", nosort: true, render: function (r) { var m = mediaUrl(r.media); return m ? el("img", { src: m, alt: "", width: "40", height: "40", loading: "lazy", style: "border-radius:6px;object-fit:cover" }) : "—"; } },
         { key: "url", label: "لینک", nosort: true, render: function (r) { return r.url ? el("a", { href: r.url, target: "_blank", rel: "noopener", text: "مشاهده ↗" }) : "—"; } },
         { key: "status", label: "وضعیت", render: function (r) { var s = PUB_ST[r.status] || ["pending", r.status]; return el("span", { class: "st " + s[0], title: r.error || "", text: s[1] }); } },
+        { key: "result", label: "نتیجه (۲۴س / ۷روز)", nosort: true, render: function (r) {
+          var e = (D.results || {})[r.network + ":" + r.message_id]; if (!e) return el("span", { class: "muted small", text: r.network === "telegram" || r.network === "instagram" ? "در انتظار ۲۴ ساعت" : "قابل سنجش نیست" });
+          return el("span", { class: "small" }, fn((e.h24 || {}).views) + " / " + fn((e.d7 || {}).views) + " بازدید · هدف " + fn(e.goal_views) + " ", e.verdict ? el("span", { class: "st " + (e.verdict === "met" ? "ok" : "blocked"), text: e.verdict === "met" ? "رسید" : "نرسید" }) : null); } },
         { key: "trace", label: "روند", nosort: true, render: function (r) { return traceButton(r.plan_ref, (r.content_type || "") + " " + jdt(r.ts)); } }
       ], f, { sortKey: "ts", limit: 100, emptyText: "با این فیلتر موردی نیست." }));
     }
@@ -1295,10 +1300,128 @@
     return out;
   }
 
+
+  // ------------------------------------------------------------------ daily analysis, tasks, goals, machines, changes
+  var LIGHT = { good: ["ok", "خوب"], warn: ["stale", "متوسط"], bad: ["blocked", "بد"] };
+  var VERD = { met: ["ok", "رسید"], on_track: ["pending", "در مسیر"], behind: ["blocked", "عقب"], missed: ["blocked", "نرسید"], unmeasured: ["waiting", "سنجیده نشده"] };
+  var DAYV = { met: "✅", on_track: "⏳", behind: "❌" };
+
+  function briefBody(b) {
+    if (!b || !b.headline) return empty("تحلیل امروز هنوز نوشته نشده؛ بعد از اجرای ۰۷:۱۵ می‌آید.");
+    return el("div", { class: "stack" },
+      el("div", { class: "small muted", text: "روز: " + fd(b.jalali || "") + " · نوشته‌شده " + jdt(b.made_at) + " · " + (b.written_by === "claude-sonnet" ? "نویسنده: هوش مصنوعی از روی عددهای کد" : "نوشته‌شده با کد") }),
+      el("div", { style: "font-weight:700;font-size:16px", text: fd(b.headline) }),
+      el("ul", { style: "margin:0;padding-inline-start:20px" }, (b.bullets || []).map(function (x) { return el("li", { text: fd(x) }); })),
+      el("div", { class: "grid g4" }, (b.lights || []).map(function (l) {
+        var c = LIGHT[l.state] || ["pending", l.state];
+        return el("div", { class: "card flat" }, el("div", { class: "small ink2", text: l.name }), el("div", { style: "margin-top:4px" }, el("span", { class: "st " + c[0], text: c[1] })), el("div", { class: "small", style: "margin-top:4px", text: l.text }));
+      })));
+  }
+
+  function briefSection() {
+    var body = el("div"), b = D.brief || {};
+    body.appendChild(briefBody(b));
+    var idx = D.brief_index || [];
+    var picker = el("select", { "aria-label": "روز", onchange: function (e) {
+      body.textContent = "…";
+      API.get("/api/brief?date=" + e.target.value).then(function (x) { body.textContent = ""; body.appendChild(briefBody(x)); }, function (er) { body.textContent = er.message; });
+    } }, idx.map(function (d) { return el("option", { value: d.date, selected: d.date === b.date ? "" : null, text: (DAYV[d.verdict] || "—") + " " + fd(d.jalali || d.date) }); }));
+    return card("تحلیل امروز", "هر صبح بعد از بررسی‌ها؛ عددها را کد می‌سازد", body, idx.length > 1 ? picker : null);
+  }
+
+  function tasksSection() {
+    var t = (D.brief || {}).tasks || [];
+    return card("کارهای تو و هشدارها", fn(t.length) + " مورد", t.length ? el("div", { class: "stack small" }, t.slice(0, 10).map(function (x) {
+      return el("div", { style: "display:flex;gap:8px;align-items:flex-start" }, sevChip(x.sev), el("div", { style: "flex:1;min-width:0;overflow-wrap:anywhere" }, el("b", { text: x.title }), el("div", { class: "muted", text: x.why })),
+        el("a", { href: "#" + x.tab, class: "btn small", text: "برو" }));
+    }), t.length > 10 ? el("div", { class: "muted", text: "و " + fn(t.length - 10) + " مورد دیگر" }) : null) : el("div", { class: "yes", text: "✓ کاری لازم نیست و هشداری هم نیست." }));
+  }
+
+  function viewGoals() {
+    var G = D.goals || {}, out = [sec("برنامه و اهداف", "هدف‌های ماه، هفته و امروز با عدد مشخص؛ هر روز کد می‌سنجد. «عقب» یعنی پیشرفت از زمانِ گذشته خیلی کمتر است. عدد هدف را می‌توانید عوض کنید؛ تغییر در «سیر تغییرات» ثبت می‌شود.")];
+    if (!G.periods) return [out, empty("اهداف هنوز سنجیده نشده‌اند.")];
+    out.push(el("div", { style: "margin:-8px 0 12px" }, checked(G.checked_at, "آخرین سنجش")));
+    G.periods.forEach(function (p) {
+      var kindFa = { month: "ماه", week: "هفته", day: "امروز" }[p.kind];
+      out.push(el("div", { class: "mt" }, card(kindFa + " — " + fd(p.label),
+        "پیشرفت " + (p.progress == null ? "—" : fn(p.progress) + "٪") + " · زمان گذشته " + fn(p.time_pct) + "٪ · " + fn(p.counts.met) + " رسید، " + fn(p.counts.on_track) + " در مسیر، " + fn(p.counts.behind) + " عقب، " + fn(p.counts.unmeasured) + " سنجیده نشده",
+        table([
+          { key: "title", label: "هدف", render: function (g) { return el("b", { text: g.title }); } },
+          { key: "target", label: "هدف عددی", num: true, render: function (g) {
+            var b = el("button", { class: "trace-btn", type: "button", title: "تغییر عدد هدف", text: (g.op === ">=" ? "≥ " : "≤ ") + fn(g.target, 1) + " " + (g.unit || "") });
+            b.onclick = function () { var v = prompt("عدد تازه‌ی هدف «" + g.title + "»:", g.target); if (v == null) return; var why = prompt("چرا؟ (در سیر تغییرات ثبت می‌شود)", "") || "";
+              API.post("/api/goals/" + g.id, { target: v, why: why }).then(reloadKeepTab, function (e) { alert(e.message); }); };
+            return b; }, sort: function (g) { return g.target; } },
+          { key: "value", label: "واقعی", num: true, render: function (g) { return g.value == null ? "—" : fn(g.value, 1) + " " + (g.unit || ""); } },
+          { key: "progress", label: "پیشرفت", render: function (g) { return g.progress == null ? "—" : el("span", { class: "bar-cell" }, el("i", { style: "width:" + Math.max(2, g.progress * 0.8) + "px" }), fn(g.progress) + "٪"); }, sort: function (g) { return g.progress || 0; } },
+          { key: "status", label: "وضعیت", render: function (g) { var v = VERD[g.status] || ["pending", g.status]; return el("span", { class: "st " + v[0], text: v[1] }); } }
+        ], p.goals, { limit: 30 }))));
+    });
+    return out;
+  }
+
+  function viewMachines() {
+    var M = D.machines || {}, out = [sec("ماشین‌ها", "هر بررسی خودکار یک «ماشین» است: کِی اجرا شد، سر وقت بود یا نه، چه گفت. نگهبان هر ۲ ساعت ماشینی را که جا مانده یا خطا داده یک‌بار دوباره اجرا می‌کند؛ خطای ورود دوباره اجرا نمی‌شود چون کار شماست.")];
+    if (!M.steps) return [out, empty("هنوز گزارش سلامتی ثبت نشده.")];
+    var VM = { ok: ["ok", "سالم"], error: ["blocked", "خطا"], missed: ["blocked", "جا ماند"], auth: ["waiting", "نیاز به ورود"], pending: ["pending", "هنوز اجرا نشده"] };
+    out.push(el("div", { style: "margin:-8px 0 12px" }, checked(M.checked_at)));
+    if ((M.outcomes || []).length) out.push(el("div", { class: "note warn", style: "margin-bottom:12px" }, M.outcomes.map(function (o) { return el("div", { text: o }); })));
+    out.push(card("مراحل اجرای روزانه", "زمان‌بند ۰۷:۱۵ تهران", table([
+      { key: "name", label: "ماشین", render: function (r) { return el("b", { text: r.name }); } },
+      { key: "verdict", label: "وضعیت", render: function (r) { var v = VM[r.verdict] || ["pending", r.verdict]; return el("span", { class: "st " + v[0], text: v[1] }); } },
+      { key: "why", label: "نتیجه / خطا", render: function (r) { return el("span", { class: "small ink2", text: fd(r.why || "") }); } },
+      { key: "last", label: "آخرین اجرا", render: function (r) { return el("span", { class: "small nowrap", text: jdt(r.last, true) }); } },
+      { key: "seconds", label: "مدت (ث)", num: true, render: function (r) { return fn(r.seconds, 1); } },
+      { key: "fail_streak", label: "خطای پیاپی", num: true, render: function (r) { return fn(r.fail_streak); } },
+      { key: "act", label: "", nosort: true, render: function (r) { return el("button", { class: "btn small", type: "button", text: "اجرای دوباره", onclick: function (e) {
+        e.target.disabled = true; API.post("/api/run", { steps: [r.id] }).then(function () { e.target.textContent = "در صف…"; }, function (er) { alert(er.message); e.target.disabled = false; }); } }); } }
+    ], M.steps, { limit: 30 })));
+    out.push(el("div", { class: "mt" }, card("سرویس‌ها", null, table([
+      { key: "name", label: "سرویس", render: function (r) { return el("b", { text: r.name }); } },
+      { key: "state", label: "وضعیت", render: function (r) { return el("span", { class: "st " + (r.ok ? "ok" : "blocked"), text: r.ok ? "روشن" : (r.state || "?") }); } },
+      { key: "next", label: "اجرای بعد / آخرین", render: function (r) { return el("span", { class: "small nowrap", text: r.next ? jdt(r.next) : "—" }); } }
+    ], M.services || [], { limit: 10 }))));
+    out.push(el("div", { class: "mt" }, card("آخرین اجراها", null, el("div", { class: "stack small" }, (M.runs || []).slice().reverse().map(function (r) {
+      var res = r.results || {}, bad = Object.keys(res).filter(function (k) { return !res[k].ok; });
+      return el("div", null, el("b", { text: jdt(r.started, true) }), " · ", { timer: "خودکار", watchdog: "نگهبان", dashboard: "از داشبورد", manual: "دستی" }[r.trigger] || r.trigger,
+        " · " + fn(Object.keys(res).length) + " مرحله" + (bad.length ? " · خطا: " + bad.join("، ") : " · بدون خطا"));
+    })))));
+    return out;
+  }
+
+  function viewChanges() {
+    var C = (D.changes || []).slice().reverse(), out = [sec("سیر تغییرات", "هر تغییر روی سایت (خودکار از خزش روزانه: عنوان، توضیح، H1، حجم متن، صفحه‌ی تازه/حذف‌شده) و هر تصمیم ما، با اینکه کدام عدد را باید جابه‌جا کند و بعد از چند روز چه شد.")];
+    var VC = { waiting: ["pending", "در حال سنجش"], effective: ["ok", "مؤثر"], no_effect: ["waiting", "بی‌اثر"], worse: ["blocked", "بدتر"] };
+    var n = { effective: 0, no_effect: 0, worse: 0 }; C.forEach(function (c) { if (n[c.verdict] != null) n[c.verdict]++; });
+    out.push(el("div", { class: "grid g4" }, tile("تغییر ثبت‌شده", fn(C.length)), tile("مؤثر", fn(n.effective)), tile("بی‌اثر", fn(n.no_effect)), tile("بدتر", fn(n.worse))));
+    out.push(el("div", { class: "mt2" }, card("تغییرها", "جدیدترین اول", C.length ? table([
+      { key: "date", label: "تاریخ", render: function (c) { return el("span", { class: "nowrap small", text: jdt(c.ts) }); } },
+      { key: "title", label: "تغییر", render: function (c) { return el("div", null, el("b", { text: fd(c.title) }), c.old != null || c.new != null ? el("div", { class: "small muted", text: "قبل: " + String(c.old == null ? "—" : c.old).slice(0, 80) + " ← بعد: " + String(c.new == null ? "—" : c.new).slice(0, 80) }) : null); } },
+      { key: "why", label: "چرا", render: function (c) { return el("span", { class: "small ink2", text: c.why }); } },
+      { key: "metric", label: "شاخص", render: function (c) { return el("span", { class: "small", text: c.metric_fa || c.metric || "—" }); } },
+      { key: "ba", label: "قبل ← بعد", nosort: true, render: function (c) { return el("span", { class: "nowrap", text: fn(c.before, 1) + " ← " + (c.after != null ? fn(c.after, 1) : "—") }); } },
+      { key: "verdict", label: "نتیجه", render: function (c) { var v = VC[c.verdict] || ["pending", c.verdict];
+        return el("div", null, el("span", { class: "st " + v[0], text: v[1] }), c.verdict === "waiting" && c.metric ? el("div", { class: "small muted", text: "تا " + jd(c.eval_on) + " صبر می‌کنیم؛ فعلاً: " + fn(c.current, 1) }) : null); } }
+    ], C, { limit: 50 }) : empty("از فردا هر تغییری روی سایت خودکار این‌جا ثبت می‌شود (امروز خط مبنا گرفته شد)."))));
+    // add a decision
+    var metrics = [["", "بدون شاخص"], ["health", "امتیاز سلامت"], ["critical_issues", "مشکل بحرانی"], ["serp_top20", "کلمات در ۲۰ نتیجه‌ی اول"], ["price_age_days", "عمر قیمت (روز)"], ["product_pages", "صفحه‌ی محصول"], ["networks_connected", "شبکه‌های وصل"], ["stories_vs_plan_pct", "٪ استوری منتشرشده از برنامه"]];
+    var t = el("input", { type: "text", placeholder: "چه تصمیمی/تغییری؟", style: "width:100%;padding:8px;border:1px solid var(--border-2);border-radius:8px;background:var(--surface)" });
+    var w = el("input", { type: "text", placeholder: "چرا؟", style: "width:100%;padding:8px;border:1px solid var(--border-2);border-radius:8px;background:var(--surface)" });
+    var m = el("select", null, metrics.map(function (x) { return el("option", { value: x[0], text: x[1] }); }));
+    var dir = el("select", null, el("option", { value: "up", text: "باید بالا برود" }), el("option", { value: "down", text: "باید پایین بیاید" }));
+    var days = el("input", { type: "number", value: "14", min: "1", max: "90", style: "width:80px" });
+    var f = el("form", { class: "stack small" }, t, w, el("div", { class: "filters", style: "margin:0" }, m, dir, el("label", null, "سنجش بعد از ", days, " روز")), el("button", { class: "btn primary", type: "submit", text: "ثبت تغییر" }));
+    f.onsubmit = function (e) { e.preventDefault(); API.post("/api/changes", { title: t.value, why: w.value, metric: m.value, direction: dir.value, eval_days: days.value }).then(reloadKeepTab, function (er) { alert(er.message); }); };
+    out.push(el("div", { class: "mt2" }, card("ثبت یک تصمیم", "مثل «استوری‌ها را از ۳ به ۴ در روز بردیم»", f)));
+    return out;
+  }
+
   // ------------------------------------------------------------------ router
   var nCrit = issues.filter(function (i) { return i.severity === "critical"; }).length;
   var TABS = [
     { id: "overview", fa: "نمای کلی", view: viewOverview },
+    { id: "goals", fa: "برنامه و اهداف", view: viewGoals },
+    { id: "machines", fa: "ماشین‌ها", view: viewMachines },
     { id: "issues", fa: "مشکلات", view: viewIssues, badge: nCrit },
     { id: "pages", fa: "صفحات", view: viewPages },
     { id: "keywords", fa: "کلمات کلیدی", view: viewKeywords },
@@ -1308,6 +1431,7 @@
     { id: "history", fa: "تاریخچه‌ی انتشار", view: viewHistory },
     { id: "tech", fa: "فنی و سرعت", view: viewTech },
     { id: "trends", fa: "روند روزانه", view: viewTrends },
+    { id: "changes", fa: "سیر تغییرات", view: viewChanges },
     { id: "roadmap", fa: "نقشه‌ی راه", view: viewRoadmap },
     { id: "integrations", fa: "اتصالات و تنظیمات", view: viewIntegrations }
   ];
