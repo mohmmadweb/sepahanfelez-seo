@@ -69,12 +69,41 @@ def say(msg):
     IO.say(msg)
 
 
+ACCT = None          # the account a flow works on (accounts.py row); set with use()
+
+
+def use(acct):
+    """Select the account for the following login/check/act calls (None = default account of each network)."""
+    global ACCT
+    ACCT = acct
+    return acct
+
+
+def _acct(net):
+    import accounts
+    if ACCT and ACCT["net"] == net:
+        return ACCT
+    a = accounts.default(net)
+    if not a:
+        sys.exit(f"برای {net} هنوز حسابی اضافه نشده؛ از صفحه‌ی اتصالات «افزودن حساب» را بزنید.")
+    return a
+
+
 def profile_dir(net):
     os.makedirs(SESSIONS, mode=0o700, exist_ok=True)
     os.chmod(SESSIONS, 0o700)
-    d = os.path.join(SESSIONS, net)
+    d = os.path.join(SESSIONS, net, _acct(net)["id"])
     os.makedirs(d, mode=0o700, exist_ok=True)
     return d
+
+
+def has_session(net, name=None):
+    import accounts
+    a = ACCT if ACCT and ACCT["net"] == net else accounts.default(net)
+    if not a:
+        return False
+    d = os.path.join(SESSIONS, net, a["id"])
+    return os.path.exists(os.path.join(d, name)) if name else os.path.isdir(d) and bool(os.listdir(d))
 
 
 def local_phone(phone):
@@ -86,13 +115,18 @@ def local_phone(phone):
 
 
 def save_status(net, ok, detail=""):
+    """Status is kept per account (key = account id) so two numbers on one app are reported separately."""
+    import accounts
+    a = ACCT if ACCT and ACCT["net"] == net else accounts.default(net)
+    key = a["id"] if a else net
     os.makedirs(os.path.dirname(STATUS_FILE), exist_ok=True)
     try:
         with open(STATUS_FILE, encoding="utf-8") as fh:
             st = json.load(fh)
     except (FileNotFoundError, json.JSONDecodeError):
         st = {}
-    st[net] = {"logged_in": ok, "checked": datetime.now(TEHRAN).isoformat(timespec="minutes"), "detail": detail}
+    st[key] = {"logged_in": ok, "checked": datetime.now(TEHRAN).isoformat(timespec="minutes"), "detail": detail,
+               "net": net, "label": (a or {}).get("label"), "who": (a or {}).get("phone") or (a or {}).get("username")}
     with open(STATUS_FILE, "w", encoding="utf-8") as fh:
         json.dump(st, fh, ensure_ascii=False, indent=1)
 
@@ -188,9 +222,9 @@ def _dry_stop(page, net, shot):
 def login_web(net):
     from playwright.sync_api import sync_playwright
     cfg = WEB[net]
-    phone = get(cfg["phone_env"])
+    phone = _acct(net).get("phone")
     if not phone:
-        sys.exit(f"{cfg['phone_env']} در .env خالی است.")
+        sys.exit("برای این حساب شماره ثبت نشده است.")
     shot = os.path.join(profile_dir(net), "last.png")
     with sync_playwright() as p:
         ctx = _browser(p, net)
@@ -261,7 +295,7 @@ def login_web(net):
 
 def check_web(net):
     from playwright.sync_api import sync_playwright
-    if not os.path.isdir(os.path.join(SESSIONS, net)):
+    if not has_session(net):
         save_status(net, False, "no session")
         return False
     with sync_playwright() as p:
@@ -292,7 +326,7 @@ def _telegram_client():
 
 def login_telegram():
     client = _telegram_client()
-    client.start(phone=lambda: get("TELEGRAM_PHONE"), code_callback=lambda: _ask_code("telegram"),
+    client.start(phone=lambda: _acct("telegram")["phone"], code_callback=lambda: _ask_code("telegram"),
                  password=lambda: IO.ask("رمز دومرحله‌ای تلگرام", secret=True))
     me = client.get_me()
     say(f"✓ تلگرام: وارد شدید به‌عنوان {me.first_name} (@{me.username or '—'})")
@@ -302,7 +336,7 @@ def login_telegram():
 
 
 def check_telegram():
-    if not os.path.exists(os.path.join(SESSIONS, "telegram", "user.session")):
+    if not has_session("telegram", "user.session"):
         save_status("telegram", False, "no session")
         return False
     client = _telegram_client()
@@ -331,17 +365,21 @@ def _ig_client():
         cl.set_country("IR")
         cl.set_country_code(98)
         cl.set_timezone_offset(int(3.5 * 3600))
-    if get("INSTAGRAM_PROXY"):
-        cl.set_proxy(get("INSTAGRAM_PROXY"))
+    import accounts
+    proxy = accounts.secret(_acct("instagram"), "proxy")
+    if proxy:
+        cl.set_proxy(proxy)
     cl.challenge_code_handler = lambda username, choice: IO.ask(f"کد تأیید اینستاگرام ({choice}) برای {username}")
     return cl
 
 
 def login_instagram():
     from instagrapi.exceptions import BadPassword, ChallengeRequired, TwoFactorRequired
-    user, pw = get("INSTAGRAM_USERNAME"), get("INSTAGRAM_PASSWORD")
+    import accounts
+    a = _acct("instagram")
+    user, pw = a.get("username"), accounts.secret(a, "password")
     if not (user and pw):
-        sys.exit("INSTAGRAM_USERNAME و INSTAGRAM_PASSWORD را در تنظیمات پر کنید.")
+        sys.exit("نام کاربری یا رمز این حساب اینستاگرام ثبت نشده است.")
     cl = _ig_client()
     cl.dump_settings(IG_SESSION())
     os.chmod(IG_SESSION(), 0o600)
@@ -354,7 +392,8 @@ def login_instagram():
     except Exception:                                                  # noqa: BLE001
         pass
     try:
-        code = cl.totp_generate_code(get("INSTAGRAM_TOTP_SECRET")) if get("INSTAGRAM_TOTP_SECRET") else ""
+        totp = accounts.secret(a, "totp")
+        code = cl.totp_generate_code(totp) if totp else ""
         try:
             cl.login(user, pw, verification_code=code)
         except TwoFactorRequired:
@@ -376,7 +415,7 @@ def login_instagram():
 
 
 def check_instagram():
-    if not os.path.exists(IG_SESSION()):
+    if not has_session("instagram", "session.json"):
         save_status("instagram", False, "no session")
         return False
     try:
@@ -391,7 +430,10 @@ def check_instagram():
 
 # ------------------------------------------------------------------ LinkedIn (OAuth from the dashboard)
 def check_linkedin():
-    path = os.path.join(SESSIONS, "linkedin", "token.json")
+    if not has_session("linkedin", "token.json"):
+        save_status("linkedin", False, "no session")
+        return False
+    path = os.path.join(profile_dir("linkedin"), "token.json")
     try:
         with open(path, encoding="utf-8") as fh:
             tok = json.load(fh)
@@ -416,23 +458,33 @@ def main():
     for net in nets:
         if net not in ALL:
             sys.exit(f"شبکه‌ی ناشناخته: {net} — یکی از: {' '.join(ALL)}")
+    import accounts
     for net in nets:
-        try:
-            if cmd == "login":
-                {"telegram": login_telegram, "instagram": login_instagram, "linkedin": login_linkedin}.get(net, lambda: login_web(net))()
-            elif cmd == "status":
-                ok = {"telegram": check_telegram, "instagram": check_instagram, "linkedin": check_linkedin}.get(net, lambda: check_web(net))()
-                say(f"{'✓' if ok else '✗'} {WEB.get(net, {}).get('fa', net)}")
-            elif cmd == "logout":
-                import shutil
-                shutil.rmtree(os.path.join(SESSIONS, net), ignore_errors=True)
-                save_status(net, False, "logged out by user")
-                say(f"نشست {net} پاک شد.")
-        except SystemExit:
-            raise
-        except Exception as exc:                                       # noqa: BLE001
-            save_status(net, False, f"{type(exc).__name__}: {str(exc)[:160]}")
-            say(f"✗ {net}: {type(exc).__name__}: {str(exc)[:200]}")
+        targets = accounts.for_net(net) or [None]
+        for a in targets:
+            use(a)
+            who = (a or {}).get("phone") or (a or {}).get("username") or ""
+            try:
+                if a is None:
+                    if cmd == "status":
+                        say(f"– {net}: حسابی اضافه نشده")
+                    continue
+                if cmd == "login":
+                    {"telegram": login_telegram, "instagram": login_instagram, "linkedin": login_linkedin}.get(net, lambda: login_web(net))()
+                elif cmd == "status":
+                    ok = {"telegram": check_telegram, "instagram": check_instagram, "linkedin": check_linkedin}.get(net, lambda: check_web(net))()
+                    say(f"{'✓' if ok else '✗'} {WEB.get(net, {}).get('fa', net)} {who}")
+                elif cmd == "logout":
+                    import shutil
+                    shutil.rmtree(os.path.join(SESSIONS, net, a["id"]), ignore_errors=True)
+                    save_status(net, False, "logged out by user")
+                    say(f"نشست {net} {who} پاک شد.")
+            except SystemExit as exc:
+                say(f"✗ {net} {who}: {exc}")
+            except Exception as exc:                                   # noqa: BLE001
+                save_status(net, False, f"{type(exc).__name__}: {str(exc)[:160]}")
+                say(f"✗ {net} {who}: {type(exc).__name__}: {str(exc)[:200]}")
+        use(None)
 
 
 if __name__ == "__main__":

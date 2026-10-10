@@ -99,7 +99,7 @@ def _telegram(kind, target, text, media, link):
             return {"status": "published", "detail": f"ارسال شد به {uname or peer}", "url": url, "message_id": msg.id}
         except FloodWaitError as exc:
             if exc.seconds > 120:
-                safety.raise_alert("telegram", "FloodWait", f"{exc.seconds}s")
+                safety.raise_alert("telegram", "FloodWait", f"{exc.seconds}s", (L.ACCT or {}).get("id"))
             raise
     finally:
         client.disconnect()
@@ -146,7 +146,7 @@ def _instagram(kind, target, text, media, link):
                 return found
             raise
     except sensitive as exc:
-        safety.raise_alert("instagram", type(exc).__name__, str(exc))
+        safety.raise_alert("instagram", type(exc).__name__, str(exc), (L.ACCT or {}).get("id"))
         raise
     finally:
         try:
@@ -209,7 +209,7 @@ def _linkedin(kind, target, text, media, link):
         body["content"] = content
     r = requests.post("https://api.linkedin.com/rest/posts", headers=h, json=body, timeout=60)
     if r.status_code == 429:
-        safety.raise_alert("linkedin", "RateLimit", r.text[:200])
+        safety.raise_alert("linkedin", "RateLimit", r.text[:200], (L.ACCT or {}).get("id"))
     if r.status_code >= 300:
         raise RuntimeError(f"LinkedIn {r.status_code}: {r.text[:300]}")
     urn = r.headers.get("x-restli-id", "")
@@ -238,7 +238,7 @@ def _web(net, kind, target, text, media, link):
         page = ctx.pages[0] if ctx.pages else ctx.new_page()
         try:
             if net == "whatsapp":
-                phone = L.local_phone(get("WHATSAPP_PHONE")) if target == "me" else re.sub(r"\D", "", target)
+                phone = L.local_phone(L.ACCT["phone"]) if target == "me" else re.sub(r"\D", "", target)
                 phone = phone if phone.startswith("98") else "98" + phone.lstrip("0")
                 page.goto(f"https://web.whatsapp.com/send?phone={phone}", wait_until="domcontentloaded")
                 page.wait_for_timeout(12000)
@@ -329,9 +329,16 @@ IMPL = {"telegram": _telegram, "instagram": _instagram, "linkedin": _linkedin,
 
 
 # ================================================================ entry point
-def act(net, kind, target=None, text="", media=None, link=None, item_id=None, content_type=None, product=None):
+def act(net, kind, target=None, text="", media=None, link=None, item_id=None, content_type=None, product=None, account=None):
+    """account: account id (accounts.py); None → the network's default account."""
+    import accounts
     if net not in IMPL or kind not in CAN.get(net, set()):
         raise ValueError(f"«{KIND_FA.get(kind, kind)}» برای {net} پشتیبانی نمی‌شود.")
+    acct = accounts.get_account(account) if account else accounts.default(net)
+    if not acct or acct["net"] != net:
+        raise NotLoggedIn(f"برای {net} حسابی انتخاب یا اضافه نشده است.")
+    L.use(acct)
+    who = acct.get("phone") or ("@" + acct["username"] if acct.get("username") else acct["label"])
     if not target and kind == "post":
         target = get(CHANNEL_ENV.get(net, ""), "") if net in CHANNEL_ENV else ("org" if get("LINKEDIN_ORG_ID") else "me")
         if net in CHANNEL_ENV and not target:
@@ -339,36 +346,39 @@ def act(net, kind, target=None, text="", media=None, link=None, item_id=None, co
     if media and not os.path.isfile(media):
         raise ValueError("فایل رسانه پیدا نشد.")
     item_id = item_id or f"manual-{safety.now().strftime('%Y%m%d-%H%M%S')}-{net}"
-    trace.step(item_id, "publish", f"درخواست {KIND_FA[kind]} در {net}",
+    trace.step(item_id, "publish", f"درخواست {KIND_FA[kind]} در {net} با حساب {who}",
                detail=f"مقصد: {target or '—'} · متن: {len(text or '')} نویسه · رسانه: {os.path.basename(media) if media else '—'}",
                decision="از داشبورد درخواست شد" if item_id.startswith("manual-") else "زمانش در تقویم انتشار رسید")
     try:
-        safety.check(net, kind)
+        safety.check(net, kind, acct["id"])
     except safety.Blocked as exc:
         trace.step(item_id, "publish", "رد شد توسط قواعد ایمنی", detail=str(exc))
+        L.use(None)
         record(net, kind if kind != "post" else "post", content_type=content_type, product=product, text=text,
-               media=media, status="failed", plan_ref=item_id, error=str(exc))
+               media=media, status="failed", plan_ref=item_id, account=acct["id"], error=str(exc))
         raise
     trace.step(item_id, "publish", "بررسی ایمنی", detail="سقف روزانه، فاصله‌ی حداقل و هشدار فعال بررسی شد — مجاز")
     _say(f"در حال ارسال {KIND_FA[kind]} به {net}…")
     try:
-        with safety.lock(net):
+        with safety.lock(f"{net}-{acct['id']}"):
             try:
                 res = IMPL[net](kind, target, text or "", media, link)
             except SystemExit as exc:            # login helpers exit with a message when a setting is missing
                 raise NotLoggedIn(str(exc)) from None
     except Exception as exc:
-        safety.note(net, kind, False, f"{type(exc).__name__}: {exc}")
+        safety.note(net, kind, False, f"{type(exc).__name__}: {exc}", acct["id"])
+        L.use(None)
         trace.step(item_id, "publish", "خطا", detail=f"{type(exc).__name__}: {str(exc)[:240]}",
                    decision="هشدار پلتفرم → توقف ۲۴ ساعته‌ی این شبکه" if safety.active_alert(net) else "دوباره به‌طور خودکار فرستاده نمی‌شود")
         record(net, kind, content_type=content_type, product=product, text=text, media=media, status="failed",
-               plan_ref=item_id, error=f"{type(exc).__name__}: {exc}")
+               plan_ref=item_id, account=acct["id"], error=f"{type(exc).__name__}: {exc}")
         raise
     ok = res.get("status") in ("published", "sent-to-operator")
-    safety.note(net, kind, ok, res.get("detail", ""))
+    safety.note(net, kind, ok, res.get("detail", ""), acct["id"])
+    L.use(None)
     trace.step(item_id, "publish", "نتیجه", detail=res.get("detail", ""), data={k: v for k, v in res.items() if k != "screenshot"})
-    record(net, kind, content_type=content_type, product=product, text=text, media=media, url=res.get("url"),
-           message_id=res.get("message_id"), status=res.get("status", "published"), plan_ref=item_id)
+    record(net, kind, content_type=content_type, product=f"{product or ''} · {who}".strip(" ·"), text=text, media=media, url=res.get("url"),
+           message_id=res.get("message_id"), status=res.get("status", "published"), plan_ref=item_id, account=acct["id"])
     _say(("✓ " if ok else "✗ ") + res.get("detail", ""))
     res["item_id"] = item_id
     return res

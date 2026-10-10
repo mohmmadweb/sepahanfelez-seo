@@ -133,7 +133,7 @@ def measure(metric, since, until):
         return sum(1 for k in kws if k.get("our_position") and k["our_position"] <= 20) if kws else None
     if metric == "networks_connected":
         st = read_json(os.path.join(DATA, "social_status.json"), {}) or {}
-        return sum(1 for v in st.values() if v.get("logged_in"))
+        return len({v.get("net") or k for k, v in st.items() if v.get("logged_in")})
     if metric == "gsc_connected":
         return 1 if L("gsc").get("status") == "ok" else 0
     if metric == "articles_published":

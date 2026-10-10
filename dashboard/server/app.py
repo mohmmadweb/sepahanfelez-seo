@@ -254,6 +254,50 @@ async def upload(req: Request):
     return {"ref": f"uploads/{name}", "size": len(data)}
 
 
+# ---------------------------------------------------------------- accounts (any number per network)
+@app.get("/api/accounts")
+async def accounts_list():
+    import accounts
+    st = read_json(os.path.join(DATA, "social_status.json"), {}) or {}
+    rows = []
+    for a in accounts.load():
+        p = accounts.public(a)
+        p["status"] = st.get(a["id"])
+        rows.append(p)
+    return {"accounts": rows, "nets": accounts.NETS, "needs": accounts.NEEDS}
+
+
+@app.post("/api/accounts")
+async def accounts_add(req: Request):
+    import accounts
+    b = await req.json()
+    try:
+        a = accounts.add(b.get("net"), label=b.get("label"), phone=b.get("phone"), username=b.get("username"),
+                         password=b.get("password"), totp=b.get("totp"), proxy=b.get("proxy"))
+    except ValueError as exc:
+        raise HTTPException(400, str(exc))
+    return accounts.public(a)
+
+
+@app.post("/api/accounts/{acct_id}/{action}")
+async def accounts_action(acct_id: str, action: str, req: Request):
+    import accounts
+    job = social_jobs.current()
+    if job and job["phase"] in ("running", "waiting") and job.get("account") == acct_id:
+        raise HTTPException(409, "روی این حساب کاری در جریان است")
+    try:
+        if action == "delete":
+            return {"removed": accounts.public(accounts.remove(acct_id))}
+        if action == "default":
+            return accounts.public(accounts.set_default(acct_id))
+        if action == "secrets":
+            b = await req.json()
+            return {"changed": accounts.update_secrets(acct_id, b.get("password"), b.get("totp"), b.get("proxy"))}
+    except ValueError as exc:
+        raise HTTPException(400, str(exc))
+    raise HTTPException(404)
+
+
 @app.post("/api/social/{net}/act")
 async def social_act(net: str, req: Request):
     b = await req.json()
@@ -263,7 +307,7 @@ async def social_act(net: str, req: Request):
               "media": _media_path(b.get("media")), "link": (b.get("link") or "").strip() or None,
               "item_id": b.get("item_id"), "content_type": b.get("content_type"), "product": b.get("product")}
     try:
-        return social_jobs.start(net, "act", params)
+        return social_jobs.start(net, "act", params, account=b.get("account") or None)
     except (ValueError, RuntimeError) as exc:
         raise HTTPException(409, str(exc))
 
@@ -284,9 +328,11 @@ async def social_clear_alert(net: str):
 
 
 @app.get("/api/linkedin/start")
-async def linkedin_start():
+async def linkedin_start(account: str = ""):
+    if not account:
+        raise HTTPException(400, "اول یک حساب لینکدین اضافه کنید")
     try:
-        return linkedin_auth.start()
+        return linkedin_auth.start(account)
     except ValueError as exc:
         raise HTTPException(400, str(exc))
 
@@ -300,8 +346,11 @@ async def linkedin_callback(code: str = "", state: str = "", error: str = "", er
     except (ValueError, RuntimeError) as exc:
         return HTMLResponse(f"<meta charset=utf-8><p dir=rtl>{str(exc)[:300]}</p><a href='/#integrations'>بازگشت</a>", status_code=400)
     sys.path.insert(0, os.path.join(ROOT, "automation", "social"))
+    import accounts
     import login as L
+    L.use(accounts.get_account(r["account"]))
     L.check_linkedin()
+    L.use(None)
     return HTMLResponse(f"<meta charset=utf-8><meta http-equiv=refresh content='2;url=/#integrations'><p dir=rtl>✓ لینکدین وصل شد ({r['name']}) — {r['days']} روز اعتبار. در حال بازگشت…</p>")
 
 
@@ -400,11 +449,11 @@ async def runs():
 
 
 @app.post("/api/social/{net}/{action}")
-async def social_action(net: str, action: str):
+async def social_action(net: str, action: str, account: str = ""):
     if action not in ("login", "logout", "check"):
         raise HTTPException(404)
     try:
-        return social_jobs.start(net, action)
+        return social_jobs.start(net, action, account=account or None)
     except (ValueError, RuntimeError) as exc:
         raise HTTPException(409, str(exc))
 

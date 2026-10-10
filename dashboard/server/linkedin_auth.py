@@ -31,12 +31,12 @@ def redirect_uri():
     return f"{base}/api/linkedin/callback"
 
 
-def start():
+def start(account_id):
     cid = os.environ.get("LINKEDIN_CLIENT_ID")
     if not cid or not os.environ.get("LINKEDIN_CLIENT_SECRET"):
         raise ValueError("اول LINKEDIN_CLIENT_ID و LINKEDIN_CLIENT_SECRET را در تنظیمات وارد کنید.")
     state = secrets.token_urlsafe(24)
-    _states[state] = time.time()
+    _states[state] = (time.time(), account_id)
     scopes = ["openid", "profile", "w_member_social"]
     if os.environ.get("LINKEDIN_ORG_ID"):
         scopes.append("w_organization_social")
@@ -46,7 +46,7 @@ def start():
 
 
 def callback(code, state):
-    t = _states.pop(state or "", None)
+    t, account_id = _states.pop(state or "", (None, None))
     if not t or time.time() - t > 600:
         raise ValueError("این لینک منقضی یا نامعتبر است؛ از داشبورد دوباره «اتصال لینکدین» را بزنید.")
     r = requests.post("https://www.linkedin.com/oauth/v2/accessToken", timeout=30, data={
@@ -59,9 +59,10 @@ def callback(code, state):
                       headers={"Authorization": f"Bearer {tok['access_token']}"}).json()
     data = {"access_token": tok["access_token"], "expires_at": time.time() + int(tok.get("expires_in", 0)),
             "scope": tok.get("scope"), "sub": me.get("sub"), "name": me.get("name"), "connected_at": time.time()}
-    os.makedirs(TOKEN_DIR, mode=0o700, exist_ok=True)
-    path = os.path.join(TOKEN_DIR, "token.json")
+    d = os.path.join(TOKEN_DIR, account_id)
+    os.makedirs(d, mode=0o700, exist_ok=True)
+    path = os.path.join(d, "token.json")
     with open(path, "w", encoding="utf-8") as fh:
         json.dump(data, fh)
     os.chmod(path, 0o600)
-    return {"name": data["name"], "days": int(int(tok.get("expires_in", 0)) / 86400)}
+    return {"name": data["name"], "days": int(int(tok.get("expires_in", 0)) / 86400), "account": account_id}

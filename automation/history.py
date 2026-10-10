@@ -28,14 +28,14 @@ STATUSES = {"published", "sent-to-operator", "failed", "scheduled", "deleted"}
 
 
 def record(network, kind, *, content_type=None, product=None, text=None, media=None, url=None,
-           message_id=None, status="published", plan_ref=None, error=None, stats=None, when=None):
+           message_id=None, status="published", plan_ref=None, error=None, stats=None, when=None, account=None):
     if network not in NETWORKS:
         raise ValueError(f"unknown network {network!r}; one of {', '.join(NETWORKS)}")
     if status not in STATUSES:
         raise ValueError(f"unknown status {status!r}")
     row = {
         "ts": (when or datetime.now(TEHRAN)).isoformat(timespec="seconds"),
-        "network": network, "kind": kind, "content_type": content_type, "product": product,
+        "network": network, "account": account, "kind": kind, "content_type": content_type, "product": product,
         "text": (text or "")[:1500], "media": media, "url": url, "message_id": message_id,
         "status": status, "plan_ref": plan_ref, "error": (error or None) and str(error)[:300], "stats": stats,
     }

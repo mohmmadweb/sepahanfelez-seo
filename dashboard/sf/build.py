@@ -61,7 +61,12 @@ def integrations(gsc, ga4, psi, crawl, comp, cal):
          "status": "ok" if cal and "time.ir" in cal.get("source", []) else "stale" if cal else "pending",
          "detail": "، ".join(cal.get("source", [])) if cal else ""},
     ]
-    social = read_json(os.path.join(DATA, "social_status.json"), {}) or {}
+    social_raw = read_json(os.path.join(DATA, "social_status.json"), {}) or {}
+    social = {}
+    for k, v in social_raw.items():                     # per-account status → per network (any account logged in)
+        n = v.get("net") or k
+        if v.get("logged_in") or n not in social:
+            social[n] = v
     for r in (config("integrations.json", {}) or {}).get("manual", []):
         s = social.get(r["id"])
         if s is not None:

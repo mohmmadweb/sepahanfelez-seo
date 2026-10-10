@@ -80,8 +80,20 @@ def update(changes):
             raise ValueError(f"{k}: مقدار نباید چندخطی باشد")
     vals = _read(ENV)
     vals.update({k: str(v).strip() for k, v in changes.items()})
+    _write(vals)
+    for k, v in changes.items():
+        if str(v).strip():
+            os.environ[k] = str(v).strip()
+        else:
+            os.environ.pop(k, None)
+    return sorted(changes)
 
-    # rewrite in template order, keeping the template's comments; unknown keys kept at the end
+
+ACCT_KEY = re.compile(r"^SF_ACCT_[A-Z0-9]+_(PASSWORD|TOTP|PROXY)$")
+
+
+def _write(vals):
+    """Rewrite .env in template order, keeping the template's comments; other keys (per-account secrets) at the end."""
     lines, written = [], set()
     with open(EXAMPLE, encoding="utf-8") as fh:
         for raw in fh:
@@ -91,17 +103,29 @@ def update(changes):
                 written.add(m.group(1))
             else:
                 lines.append(raw.rstrip("\n"))
-    extra = [k for k in vals if k not in written]
+    extra = [k for k in vals if k not in written and vals[k] != ""]
     if extra:
-        lines += ["", "# ── سایر ──"] + [f"{k}={vals[k]}" for k in extra]
+        lines += ["", "# ── حساب‌های شبکه‌ها (از صفحه‌ی اتصالات؛ دستی ویرایش نکنید) ──"] + [f"{k}={vals[k]}" for k in sorted(extra)]
     fd, tmp = tempfile.mkstemp(dir=ROOT, prefix=".env.")
     with os.fdopen(fd, "w", encoding="utf-8") as fh:
         fh.write("\n".join(lines) + "\n")
     os.chmod(tmp, 0o600)
     os.replace(tmp, ENV)
+
+
+def set_account_secrets(changes, drop=False):
+    """Per-account secrets (SF_ACCT_<ID>_PASSWORD/_TOTP/_PROXY) — the only free-form keys allowed."""
     for k, v in changes.items():
-        if str(v).strip():
-            os.environ[k] = str(v).strip()
-        else:
+        if not ACCT_KEY.match(k):
+            raise ValueError(f"نام نامعتبر: {k}")
+        if "\n" in str(v) or "\r" in str(v):
+            raise ValueError("مقدار نباید چندخطی باشد")
+    vals = _read(ENV)
+    for k, v in changes.items():
+        if drop or str(v).strip() == "":
+            vals.pop(k, None)
             os.environ.pop(k, None)
-    return sorted(changes)
+        else:
+            vals[k] = str(v).strip()
+            os.environ[k] = vals[k]
+    _write(vals)

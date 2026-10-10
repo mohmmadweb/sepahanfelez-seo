@@ -144,7 +144,7 @@ def main():
         subprocess.run([sys.executable, os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
                         "automation", "social", "login.py"), "status"], timeout=900, check=False)
         st = read_json(os.path.join(DATA, "social_status.json"), {}) or {}
-        return f"{sum(1 for v in st.values() if v.get('logged_in'))} از {len(st)} شبکه وارد"
+        return f"{sum(1 for v in st.values() if v.get('logged_in'))} از {len(st)} حساب وارد"
 
     step("crawl", s_crawl)
     step("competitors", s_competitors)

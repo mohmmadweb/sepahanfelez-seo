@@ -28,6 +28,7 @@ ANSWER_TIMEOUT = 300
 class Job:
     def __init__(self, net, action):
         self.id = uuid.uuid4().hex[:10]
+        self.account = None
         self.net, self.action = net, action
         self.phase = "running"            # running | waiting | done | error
         self.prompt, self.secret, self.link_code = None, False, None
@@ -36,7 +37,7 @@ class Job:
         self.answers = queue.Queue()
 
     def view(self):
-        return {"id": self.id, "net": self.net, "net_fa": NETS.get(self.net, self.net), "action": self.action,
+        return {"id": self.id, "account": self.account, "net": self.net, "net_fa": NETS.get(self.net, self.net), "action": self.action,
                 "phase": self.phase, "prompt": self.prompt, "secret": self.secret, "link_code": self.link_code,
                 "messages": self.messages[-20:], "ok": self.ok, "elapsed": int(time.time() - self.started)}
 
@@ -73,7 +74,7 @@ def current():
     return _current.view() if _current else None
 
 
-def start(net, action="login", params=None):
+def start(net, action="login", params=None, account=None):
     global _current
     if net not in NETS:
         raise ValueError("unknown network")
@@ -81,21 +82,29 @@ def start(net, action="login", params=None):
         if _current and _current.phase in ("running", "waiting"):
             raise RuntimeError(f"ورود به {NETS[_current.net]} هنوز در جریان است.")
         job = _current = Job(net, action)
+        job.account = account
 
     def work():
         L.IO = WebIO(job)
+        import accounts
+        acct = accounts.get_account(account) if account else accounts.default(net)
+        L.use(acct)
+        if acct:
+            job.messages.append(f"حساب: {acct['label']} — {acct.get('phone') or acct.get('username') or ''}".strip(" —"))
         try:
             L.load_env()
             if action == "logout":
                 import shutil
-                shutil.rmtree(os.path.join(L.SESSIONS, net), ignore_errors=True)
+                if not acct:
+                    raise ValueError("حسابی انتخاب نشده")
+                shutil.rmtree(os.path.join(L.SESSIONS, net, acct["id"]), ignore_errors=True)
                 L.save_status(net, False, "logged out from dashboard")
                 job.ok = True
                 job.messages.append(f"از {NETS[net]} خارج شدید و نشست پاک شد.")
             elif action == "act":
                 import actions
                 p = params or {}
-                res = actions.act(net, p.get("kind"), target=p.get("target"), text=p.get("text", ""),
+                res = actions.act(net, p.get("kind"), account=(acct or {}).get("id"), target=p.get("target"), text=p.get("text", ""),
                                   media=p.get("media"), link=p.get("link"), item_id=p.get("item_id"),
                                   content_type=p.get("content_type"), product=p.get("product"))
                 job.ok = res.get("status") in ("published", "sent-to-operator")
@@ -123,6 +132,7 @@ def start(net, action="login", params=None):
                 L.save_status(net, False, f"{type(exc).__name__}")
         finally:
             L.IO = L.TerminalIO()
+            L.use(None)
 
     threading.Thread(target=work, daemon=True, name=f"social-{net}").start()
     return job.view()
