@@ -130,6 +130,13 @@ def assemble():
     data["competitor_candidates"] = read_json(os.path.join(DATA, "competitor_candidates.json"), {}) or {}
     data["runs"] = read_json(os.path.join(DATA, "runs.json"), {}) or {}
     data["traces"] = traces_index()
+    from . import brief as _brief
+    data["brief"] = _l("brief", {}) or {}
+    data["brief_index"] = _brief.index()
+    data["goals"] = _l("goals", {}) or {}
+    data["machines"] = read_json(os.path.join(DATA, "health.json"), {}) or {}
+    data["changes"] = (read_json(os.path.join(DATA, "changes", "changes.json"), []) or [])[-300:]
+    data["results"] = read_json(os.path.join(DATA, "results.json"), {}) or {}
     return data
 
 

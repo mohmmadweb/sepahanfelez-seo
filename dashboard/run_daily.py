@@ -23,7 +23,8 @@ from sf.env import load_env  # noqa: E402
 
 load_env()
 
-from sf import build, calendar_ir, competitors, content_plan, crawl, drive_sync, google, issues, publish, serp  # noqa: E402
+from sf import (brief, build, calendar_ir, changes, competitors, content_plan, crawl, drive_sync, goals,  # noqa: E402
+                google, issues, machines, measure, publish, serp)
 from sf.util import DATA, config, jalali, now_tehran, read_json, today_str, write_json  # noqa: E402
 
 LATEST = os.path.join(DATA, "latest")
@@ -45,10 +46,17 @@ def keep_good(name, new):
     return new
 
 
+STEP_FA = {"crawl": "خزش سایت", "competitors": "رصد نقشه‌ی سایت رقبا", "serp": "نتایج جستجو و رقبای تازه",
+           "drive": "عکس‌های درایو", "calendar": "تقویم و برنامه‌ی محتوا", "google": "داده‌ی گوگل",
+           "analyse": "تحلیل مشکلات", "changes": "سیر تغییرات سایت", "measure": "سنجش نتیجه‌ی محتوا",
+           "social": "وضعیت ورود شبکه‌ها", "goals": "سنجش اهداف", "brief": "تحلیل امروز", "backup": "پشتیبان رمزشده"}
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--skip", nargs="*", default=[])
     ap.add_argument("--only", nargs="*", default=None)
+    ap.add_argument("--trigger", default="timer")
     a = ap.parse_args()
     run = lambda step: (a.only is None or step in a.only) and step not in a.skip  # noqa: E731
 
@@ -56,42 +64,71 @@ def main():
     kw = config("keywords.json", {})
     known = config("known_issues.json", {})
     t0 = time.time()
+    run_id = machines.start_run(a.trigger, [s for s in STEP_FA if run(s)])
 
-    if run("crawl"):
-        print("▸ crawl sepahanfelez.ir")
-        write_json(os.path.join(LATEST, "crawl.json"), crawl.crawl(site))
-    if run("competitors"):
-        print("▸ competitor watch")
-        write_json(os.path.join(LATEST, "competitors.json"), competitors.watch())
-    if run("serp"):
-        print("▸ search results + new competitor discovery")
-        write_json(os.path.join(LATEST, "serp.json"), serp.check())
-    if run("drive"):
-        print("▸ product photos from Google Drive")
+    def step(name, fn):
+        """Run one step as a 'machine': its time, result and error are recorded; a failure does not stop the others."""
+        if not run(name):
+            return None
+        print(f"▸ {STEP_FA[name]}")
+        st = time.time()
+        try:
+            summary = fn()
+            machines.record(run_id, name, True, st, summary=summary)
+            if summary:
+                print(f"  {summary}")
+            return summary
+        except Exception as exc:                                       # noqa: BLE001
+            import traceback
+            machines.record(run_id, name, False, st, error=f"{type(exc).__name__}: {str(exc)[:300]}",
+                            trace=traceback.format_exc()[-1500:])
+            print(f"  ✗ {type(exc).__name__}: {exc}")
+            return None
+
+    def s_crawl():
+        r = crawl.crawl(site)
+        write_json(os.path.join(LATEST, "crawl.json"), r)
+        return f"{len(r['pages'])} صفحه در {r['duration_s']} ثانیه"
+
+    def s_competitors():
+        r = competitors.watch()
+        write_json(os.path.join(LATEST, "competitors.json"), r)
+        new = sum(len(c.get("new_today") or []) for c in r["competitors"])
+        return f"{len(r['competitors'])} رقیب · {new} صفحه‌ی تازه"
+
+    def s_serp():
+        r = serp.check()
+        write_json(os.path.join(LATEST, "serp.json"), r)
+        ok = sum(1 for k in r["keywords"] if k["provider"])
+        return f"{ok}/{len(r['keywords'])} کلمه · منبع {r['provider'] or '—'}"
+
+    def s_drive():
         r = drive_sync.sync()
-        print(f"  {r['status']} {r.get('reason') or ''}")
-    if run("calendar"):
-        print("▸ Iranian calendar (time.ir)")
+        return f"{r['status']} {r.get('reason') or ''}".strip()
+
+    def s_calendar():
         cal = calendar_ir.calendar(35, site)
         cal["checked_at"] = now_tehran().isoformat(timespec="seconds")
         write_json(os.path.join(LATEST, "calendar.json"), cal)
-        write_json(os.path.join(LATEST, "content_plan.json"), content_plan.plan(cal, kw, days=28))
-    if run("google"):
+        plan = content_plan.plan(cal, kw, days=28)
+        write_json(os.path.join(LATEST, "content_plan.json"), plan)
+        return f"{len(plan['items'])} آیتم در ۴ هفته · منبع {', '.join(cal['source'])}"
+
+    def s_google():
         # Google answers 403 to this server, so GitHub Actions collects and encrypts it (google-data
         # branch); set SF_GOOGLE_DIRECT=1 to call Google from here instead (e.g. inside Actions).
         if os.environ.get("SF_GOOGLE_DIRECT") == "1":
             bundle = {"gsc": google.collect_gsc(site), "ga4": google.collect_ga4(site), "psi": google.collect_psi(site)}
         else:
-            print("▸ Google data (encrypted bundle from GitHub Actions)")
             got = publish.pull_google()
             bundle = got.get("bundle") or {k: {"status": "blocked", "reason": got.get("reason")} for k in ("gsc", "ga4", "psi")}
+        out = []
         for name in ("gsc", "ga4", "psi", "inspection"):
             if name in bundle:
-                res = keep_good(name, bundle[name])
-                print(f"  {name}: {res['status']} {res.get('reason') or ''}")
+                out.append(f"{name}:{keep_good(name, bundle[name])['status']}")
+        return " ".join(out)
 
-    if run("analyse"):
-        print("▸ issues")
+    def s_analyse():
         cr = latest("crawl")
         found = issues.analyse(site, cr, kw, latest("gsc"), latest("psi"), known)
         n_pages = len([p for p in cr["pages"] if p["status"] == 200 and not p.get("redirect_to")])
@@ -100,23 +137,37 @@ def main():
                                                          "checked_at": now_tehran().isoformat(timespec="seconds")})
         track_issues(found)
         append_history(site, cr, found, score)
-        print(f"  health {score}/100 · {len(found)} issues")
+        return f"سلامت {score}/100 · {len(found)} مشکل"
 
-    if run("social"):
-        print("▸ social login status")
+    def s_social():
         import subprocess
         subprocess.run([sys.executable, os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
-                        "automation", "social", "login.py"), "status"], timeout=600, check=False)
+                        "automation", "social", "login.py"), "status"], timeout=900, check=False)
+        st = read_json(os.path.join(DATA, "social_status.json"), {}) or {}
+        return f"{sum(1 for v in st.values() if v.get('logged_in'))} از {len(st)} شبکه وارد"
+
+    step("crawl", s_crawl)
+    step("competitors", s_competitors)
+    step("serp", s_serp)
+    step("drive", s_drive)
+    step("calendar", s_calendar)
+    step("google", s_google)
+    step("analyse", s_analyse)
+    step("changes", changes.daily)
+    step("measure", measure.run)
+    step("social", s_social)
+    step("goals", goals.evaluate)
+    try:
+        machines.health()
+    except Exception as exc:                                           # noqa: BLE001
+        print(f"  health snapshot failed: {exc}")
+    step("brief", brief.make)
     if run("build") and os.environ.get("SF_PUBLISH_PAGES", "0") == "1":
-        print("▸ build dashboard" + (" (encrypted)" if os.environ.get("SF_DASHBOARD_PASSWORD") else " (PLAIN — local preview only)"))
-        out = build.build()
-        print(f"  → {out}")
+        step("build", lambda: build.build())
     if run("publish") and os.environ.get("SF_PUBLISH_PAGES", "0") == "1":
-        print("▸ publish to sepahanfelezseo.lenzit.ir")
-        print("  →", publish.publish_site(build.SITE))
-    if run("backup"):
-        print("▸ encrypted backup to Drive")
-        print("  →", publish.backup())
+        step("publish", lambda: publish.publish_site(build.SITE))
+    step("backup", publish.backup)
+    machines.finish_run(run_id)
     print(f"done in {round(time.time() - t0)}s")
 
 
