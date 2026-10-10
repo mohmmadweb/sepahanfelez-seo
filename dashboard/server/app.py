@@ -89,6 +89,8 @@ async def guard(req: Request, call_next):
     resp.headers["X-Content-Type-Options"] = "nosniff"
     if path.startswith("/api/"):
         resp.headers["Cache-Control"] = "no-store"
+    elif path.endswith((".css", ".js")):
+        resp.headers["Cache-Control"] = "no-cache"          # revalidate every time; URLs are versioned anyway
     return resp
 
 
@@ -473,9 +475,21 @@ async def robots():
     return HTMLResponse("User-agent: *\nDisallow: /\n", media_type="text/plain")
 
 
+def _v(name):
+    try:
+        return str(int(os.path.getmtime(os.path.join(WEB, name))))
+    except OSError:
+        return "0"
+
+
 @app.get("/")
 async def index():
-    return FileResponse(os.path.join(WEB, "index.html"), headers={"Cache-Control": "no-cache"})
+    """Asset URLs carry the file's mtime, so Cloudflare and browsers never serve a stale CSS/JS."""
+    import re as _re
+    with open(os.path.join(WEB, "index.html"), encoding="utf-8") as fh:
+        html = fh.read()
+    html = _re.sub(r'(app\.css|boot\.js)\?v=[^"]*', lambda m: f"{m.group(1)}?v={_v(m.group(1))}", html)
+    return HTMLResponse(html, headers={"Cache-Control": "no-cache"})
 
 
 app.mount("/", StaticFiles(directory=WEB), name="web")

@@ -1040,7 +1040,9 @@
         area.textContent = "در حال انجام… (" + fd(j.elapsed) + " ثانیه)";
       } else if (j.phase === "done" || j.phase === "error") {
         clearInterval(timer); area.textContent = "";
-        area.appendChild(el("div", { class: "note " + (j.ok ? "" : "warn"), text: j.ok ? "✓ انجام شد." : "✗ انجام نشد." }));
+        var doneTxt = j.action === "check" ? (j.ok ? "✓ این حساب وارد است." : "این حساب وارد نیست — «ورود» را بزنید.")
+          : j.action === "logout" ? (j.ok ? "✓ خارج شدید." : "✗ خروج انجام نشد.") : (j.ok ? "✓ انجام شد." : "✗ انجام نشد.");
+        area.appendChild(el("div", { class: "note " + (j.ok || j.action === "check" ? "" : "warn"), text: doneTxt }));
         area.appendChild(el("div", { class: "mt" }, el("button", { class: "btn primary", type: "button", text: "بستن و تازه‌سازی", onclick: reloadKeepTab })));
         if (onDone) onDone(j);
       }
@@ -1492,6 +1494,9 @@
     { id: "integrations", fa: "اتصالات و تنظیمات", view: viewIntegrations }
   ];
   var nav = document.getElementById("tabs"), view = document.getElementById("view");
+  var pick = el("select", { class: "tab-pick", "aria-label": "همه‌ی بخش‌ها", onchange: function (e) { location.hash = e.target.value; } },
+    TABS.map(function (t) { return el("option", { value: t.id, text: t.fa }); }));
+  nav.appendChild(pick);
   TABS.forEach(function (t) {
     nav.appendChild(el("a", { href: "#" + t.id, "data-tab": t.id }, t.fa, t.badge ? el("span", { class: "badge", text: fn(t.badge), "aria-label": fn(t.badge) + " بحرانی" }) : null));
   });
@@ -1499,6 +1504,7 @@
     var id = (location.hash || "#overview").slice(1);
     var t = TABS.filter(function (x) { return x.id === id; })[0] || TABS[0];
     nav.querySelectorAll("a").forEach(function (a) { if (a.getAttribute("data-tab") === t.id) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current"); });
+    pick.value = t.id;
     view.textContent = "";
     try { add(view, t.view()); } catch (e) { view.appendChild(empty("خطا در نمایش این بخش: " + e.message)); console.error(e); }
     var cur = nav.querySelector('[aria-current="page"]'); if (cur && cur.scrollIntoView) cur.scrollIntoView({ block: "nearest", inline: "nearest" });

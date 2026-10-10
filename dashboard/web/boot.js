@@ -12,7 +12,7 @@
         document.body.classList.remove("locked");
         var lo = document.getElementById("logout"); lo.hidden = false;
         lo.onclick = function () { window.SFAPI.post("/api/logout", {}).then(function () { location.reload(); }); };
-        var s = document.createElement("script"); s.src = "app.js?v=" + Date.now(); document.body.appendChild(s);
+        var s = document.createElement("script"); s.src = "app.js?v=" + (window.SF_V || Date.now()); document.body.appendChild(s);
       });
     });
   }

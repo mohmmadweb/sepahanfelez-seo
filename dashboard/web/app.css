@@ -244,3 +244,11 @@ body.locked nav.tabs,body.locked footer,body.locked #updated{display:none}
 .field .nm{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12.5px;direction:ltr;text-align:right}
 @media (max-width:640px){.field{grid-template-columns:1fr}}
 .code-big{font-size:34px;font-weight:700;letter-spacing:4px;direction:ltr;text-align:center;padding:12px;border:2px dashed var(--border-2);border-radius:12px;margin:10px 0;font-family:ui-monospace,Menlo,monospace}
+/* every tab must be reachable: wrap on wide screens; on phones a section picker + visible scrollbar */
+@media (min-width:761px){nav.tabs .in{flex-wrap:wrap;overflow-x:visible}}
+nav.tabs .tab-pick{display:none}
+@media (max-width:760px){
+  nav.tabs .in{scrollbar-width:thin}
+  nav.tabs .in::-webkit-scrollbar{display:block;height:3px}
+  nav.tabs .tab-pick{display:block;position:sticky;inset-inline-start:0;z-index:2;box-shadow:-8px 0 8px var(--surface);flex:none;margin:8px 0 8px 6px;min-height:34px;border:1px solid var(--border-2);border-radius:8px;background:var(--surface);color:var(--ink);font:inherit;font-size:13.5px;padding:2px 6px}
+}
