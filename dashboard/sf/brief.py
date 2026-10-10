@@ -140,12 +140,24 @@ def tasks(f):
     if not env.get("GA4_PROPERTY_ID"):
         out.append({"sev": "medium", "title": "Property ID آنالیتیکس (GA4_PROPERTY_ID)", "why": "ترافیک و تماس‌ها به تفکیک صفحه", "tab": "integrations"})
     conn = set(f["publishing"]["networks_connected"])
-    for net, fa, need in (("telegram", "تلگرام", "TELEGRAM_API_ID"), ("instagram", "اینستاگرام", "INSTAGRAM_USERNAME"),
+    import sys as _sys
+    _sys.path[:0] = [os.path.join(os.path.dirname(os.path.dirname(DATA)), "automation", "social"),
+                     os.path.join(os.path.dirname(DATA), "server")]
+    try:
+        import accounts as _acc
+        have = {a["net"] for a in _acc.load()}
+    except Exception:                                                  # noqa: BLE001
+        have = set()
+    for net, fa, need in (("telegram", "تلگرام", "TELEGRAM_API_ID"), ("instagram", "اینستاگرام", None),
                           ("linkedin", "لینکدین", "LINKEDIN_CLIENT_ID"), ("bale", "بله", None), ("eitaa", "ایتا", None),
                           ("rubika", "روبیکا", None), ("whatsapp", "واتساپ", None)):
-        if net not in conn:
-            out.append({"sev": "medium", "title": f"ورود به {fa}" + (f" (اول {need} در تنظیمات)" if need and not env.get(need) else ""),
-                        "why": "تا وصل نشود، برنامه‌ی انتشار این شبکه اجرا نمی‌شود", "tab": "integrations"})
+        if net in conn:
+            continue
+        if net not in have:
+            title = f"افزودن حساب {fa}" + (f" (و {need} در تنظیمات)" if need and not env.get(need) else "")
+        else:
+            title = f"ورود به {fa}" + (f" (اول {need} در تنظیمات)" if need and not env.get(need) else "")
+        out.append({"sev": "medium", "title": title, "why": "تا وصل نشود، برنامه‌ی انتشار این شبکه اجرا نمی‌شود", "tab": "integrations"})
     if f["competitors"]["candidates_pending"]:
         out.append({"sev": "low", "title": f"{_fa(f['competitors']['candidates_pending'])} رقیب تازه منتظر بررسی (افزودن/نادیده)",
                     "why": "رقبای کشف‌شده در نتایج جستجو", "tab": "competitors"})
