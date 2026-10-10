@@ -87,7 +87,7 @@ def facts():
         "goals": [{"period": p["label"], "counts": p["counts"], "behind": [g["title"] for g in p["goals"] if g["status"] == "behind"],
                    "unmeasured": [g["title"] for g in p["goals"] if g["status"] == "unmeasured"][:3]} for p in goals.get("periods", [])],
         "publishing": {"planned_today": len(planned_today), "published_today": pub_today,
-                       "networks_connected": [k for k, v in social.items() if v.get("logged_in")]},
+                       "networks_connected": sorted({v.get("net") or k for k, v in social.items() if v.get("logged_in")})},
         "alerts": [{"net": k, "kind": a["kind"]} for k, a in alerts.items() if not a.get("cleared") and a.get("until", "") > now],
         "machines": {"all_ok": health.get("all_ok"), "failed": [s["name"] + ": " + (s["why"] or "")[:80] for s in health.get("steps", [])
                                                                  if s["verdict"] in ("error", "missed", "auth")],

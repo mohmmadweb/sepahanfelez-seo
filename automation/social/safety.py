@@ -88,18 +88,20 @@ def _alerts():
         return {}
 
 
-def active_alert(net):
-    a = _alerts().get(net)
+def active_alert(net, account=None):
+    al = _alerts()
+    a = al.get(account) if account and account in al else al.get(net)
     if not a or a.get("cleared"):
         return None
     until = datetime.fromisoformat(a["until"])
     return a if until > now() else None
 
 
-def raise_alert(net, kind, detail):
+def raise_alert(net, kind, detail, account=None):
     a = _alerts()
+    key = account or net
     hours = config().get("pause_hours_after_alert", 24)
-    a[net] = {"at": now().isoformat(timespec="seconds"), "until": (now() + timedelta(hours=hours)).isoformat(timespec="seconds"),
+    a[key] = {"net": net, "at": now().isoformat(timespec="seconds"), "until": (now() + timedelta(hours=hours)).isoformat(timespec="seconds"),
               "kind": kind, "detail": str(detail)[:300], "cleared": False}
     os.makedirs(DATA, exist_ok=True)
     with open(ALERTS, "w", encoding="utf-8") as fh:
@@ -126,16 +128,17 @@ def _log_rows():
     return rows
 
 
-def check(net, kind):
-    """Raise Blocked with a Persian reason if this action may not run now."""
-    a = active_alert(net)
+def check(net, kind, account=None):
+    """Raise Blocked with a Persian reason if this action may not run now (caps count per account)."""
+    a = active_alert(net, account)
     if a:
         raise Blocked(f"{net} به‌خاطر هشدار «{a['kind']}» تا {a['until'][:16].replace('T', ' ')} متوقف است.")
     cap, gap = (config()["networks"].get(net, {}).get(kind) or [0, 0])
     if cap <= 0:
         raise Blocked(f"اقدام «{kind}» برای {net} خاموش است (social_safety.json).")
     today = now().date().isoformat()
-    mine = [r for r in _log_rows() if r["net"] == net and r["kind"] == kind and r.get("ok")]
+    mine = [r for r in _log_rows() if r["net"] == net and r["kind"] == kind and r.get("ok")
+            and (account is None or r.get("account") in (account, None))]
     n_today = sum(1 for r in mine if r["ts"][:10] == today)
     if n_today >= cap:
         raise Blocked(f"سقف روزانه‌ی «{kind}» در {net} ({cap}) پر شده است.")
@@ -146,8 +149,8 @@ def check(net, kind):
             raise Blocked(f"حداقل فاصله‌ی دو «{kind}» در {net} {gap} دقیقه است؛ {int(wait // 60) + 1} دقیقه‌ی دیگر.")
 
 
-def note(net, kind, ok, detail=""):
+def note(net, kind, ok, detail="", account=None):
     os.makedirs(DATA, exist_ok=True)
     with open(ACTLOG, "a", encoding="utf-8") as fh:
-        fh.write(json.dumps({"ts": now().isoformat(timespec="seconds"), "net": net, "kind": kind, "ok": ok,
+        fh.write(json.dumps({"ts": now().isoformat(timespec="seconds"), "net": net, "account": account, "kind": kind, "ok": ok,
                              "detail": str(detail)[:200]}, ensure_ascii=False) + "\n")

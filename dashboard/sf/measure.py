@@ -56,10 +56,23 @@ def _telegram_reads(todo):
     sys.path.insert(0, os.path.join(root, "automation", "social"))
     import login as L
     import safety
-    if not os.path.exists(os.path.join(L.SESSIONS, "telegram", "user.session")):
-        return {}
+    import accounts
     out = {}
-    with safety.lock("telegram", wait_sec=60):
+    by_acct = {}
+    for r, w in todo:
+        by_acct.setdefault(r.get("account"), []).append((r, w))
+    for acct_id, items in by_acct.items():
+        L.use(accounts.get_account(acct_id) if acct_id else accounts.default("telegram"))
+        if not L.has_session("telegram", "user.session"):
+            continue
+        out.update(_telegram_one(L, safety, items))
+    L.use(None)
+    return out
+
+
+def _telegram_one(L, safety, todo):
+    out = {}
+    with safety.lock(f"telegram-{(L.ACCT or {}).get('id')}", wait_sec=60):
         client = L._telegram_client()
         client.connect()
         try:
@@ -84,10 +97,23 @@ def _instagram_reads(todo):
     sys.path.insert(0, os.path.join(root, "automation", "social"))
     import login as L
     import safety
-    if not os.path.exists(L.IG_SESSION()) or safety.active_alert("instagram"):
-        return {}
+    import accounts
     out = {}
-    with safety.lock("instagram", wait_sec=60):
+    by_acct = {}
+    for r, w in todo:
+        by_acct.setdefault(r.get("account"), []).append((r, w))
+    for acct_id, items in by_acct.items():
+        L.use(accounts.get_account(acct_id) if acct_id else accounts.default("instagram"))
+        if not L.has_session("instagram", "session.json") or safety.active_alert("instagram", (L.ACCT or {}).get("id")):
+            continue
+        out.update(_instagram_one(L, safety, items))
+    L.use(None)
+    return out
+
+
+def _instagram_one(L, safety, todo):
+    out = {}
+    with safety.lock(f"instagram-{(L.ACCT or {}).get('id')}", wait_sec=60):
         cl = L._ig_client()
         for r, _ in todo:
             if r.get("kind") != "post":

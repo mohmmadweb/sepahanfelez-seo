@@ -452,14 +452,19 @@
     return "https://sepahanfelez.lenzit.ir/" + m;
   }
   function pickNetAndSend(it) {
-    var S = D.social_status || {};
-    var nets = SOCIAL.filter(function (n) { return (S[n[0]] || {}).logged_in && (CAN[n[0]] || []).indexOf(it.kind === "story" ? "story" : "post") >= 0; });
-    if (!nets.length) { alert("هنوز به هیچ شبکه‌ای وارد نشده‌اید (تب اتصالات و تنظیمات)."); return; }
-    var box = el("div", { class: "stack" }, el("p", { class: "small ink2", text: "این آیتم در کدام شبکه منتشر شود؟ متن را در مرحله‌ی بعد می‌نویسید؛ ارسال در «روند تولید» همین آیتم ثبت می‌شود." }),
-      el("div", { class: "row", style: "display:flex;gap:8px;flex-wrap:wrap" }, nets.map(function (n) {
-        return el("button", { class: "btn", type: "button", text: n[1], onclick: function () { m.close(); actModal(n[0], n[1], { kind: it.kind === "story" ? "story" : "post", media: it.media && !/\.mp4$/.test(it.media) && it.media.indexOf("/") > 0 && !/^(banner|toloue|videos)/.test(it.media) ? it.media : null, item_id: it.id, content_type: it.type, product: it.product }); } });
-      })));
-    var m = openModal("ارسال دستی: " + it.type + " — " + (it.product || ""), box);
+    var kind = it.kind === "story" ? "story" : "post";
+    API.get("/api/accounts").then(function (r) {
+      var ok = r.accounts.filter(function (a) { return a.status && a.status.logged_in && (CAN[a.net] || []).indexOf(kind) >= 0; });
+      if (!ok.length) { alert("هنوز هیچ حسابی وارد نشده است (تب اتصالات و تنظیمات)."); return; }
+      var m;
+      var box = el("div", { class: "stack" }, el("p", { class: "small ink2", text: "با کدام حساب منتشر شود؟ متن را در مرحله‌ی بعد می‌نویسید؛ ارسال در «روند تولید» همین آیتم ثبت می‌شود." }),
+        el("div", { style: "display:flex;gap:8px;flex-wrap:wrap" }, ok.map(function (a) {
+          return el("button", { class: "btn", type: "button", text: a.net_fa + " · " + (a.label || "") + " " + (a.phone || (a.username ? "@" + a.username : "")), onclick: function () {
+            m.close(); actModal(a.net, a.net_fa, { kind: kind, media: it.media && !/\.mp4$/.test(it.media) && it.media.indexOf("/") > 0 && !/^(banner|toloue|videos)/.test(it.media) ? it.media : null,
+              item_id: it.id, content_type: it.type, product: it.product }, a.id); } });
+        })));
+      m = openModal("ارسال دستی: " + it.type + " — " + (it.product || ""), box);
+    }, function (e) { alert(e.message); });
   }
 
   function slotRow(it) {
@@ -1047,7 +1052,7 @@
     return function () { clearInterval(timer); };
   }
 
-  function actModal(net, netFa, preset) {
+  function actModal(net, netFa, preset, acctId) {
     preset = preset || {};
     var kinds = CAN[net] || [];
     var kindSel = el("select", { style: "min-height:38px;border:1px solid var(--border-2);border-radius:8px;padding:4px 8px;background:var(--surface)" },
@@ -1080,14 +1085,14 @@
       if (!confirmBox.checked) { alert("تیک تأیید را بزنید."); return; }
       if (kindSel.value !== "message" && kindSel.value !== "post" && !mediaRef) { alert("استوری به عکس یا ویدئو نیاز دارد."); return; }
       go.disabled = true;
-      watchJob(area, msgs, API.post("/api/social/" + net + "/act", { kind: kindSel.value, target: target.value, text: text.value, link: link.value,
+      watchJob(area, msgs, API.post("/api/social/" + net + "/act", { account: acctId || null, kind: kindSel.value, target: target.value, text: text.value, link: link.value,
         media: mediaRef, confirm: true, item_id: preset.item_id || null, content_type: preset.content_type || null, product: preset.product || null }));
     };
     openModal("ارسال در " + netFa, form);
   }
 
-  function linkedinConnect() {
-    API.get("/api/linkedin/start").then(function (r) {
+  function linkedinConnect(acctId) {
+    API.get("/api/linkedin/start?account=" + encodeURIComponent(acctId || "")).then(function (r) {
       var box = el("div", { class: "stack small" },
         el("p", { text: "در صفحه‌ی لینکدین وارد شوید و Allow بزنید؛ خودکار به داشبورد برمی‌گردید." }),
         el("p", { class: "muted" }, "این نشانی باید در اپ لینکدین شما به‌عنوان Redirect URL ثبت باشد: ", el("code", { text: r.redirect_uri })),
@@ -1096,14 +1101,14 @@
     }, function (e) { alert(e.message); });
   }
 
-  function socialModal(net, netFa, action) {
-    if (net === "linkedin" && action === "login") { linkedinConnect(); return; }
+  function socialModal(net, netFa, action, acctId) {
+    if (net === "linkedin" && action === "login") { linkedinConnect(acctId); return; }
     var box = el("div"), msgs = el("div", { class: "stack small", style: "margin:8px 0" }), area = el("div");
     box.appendChild(el("p", { class: "small ink2", style: "margin-top:0", text: action === "login" ? "کد تأیید به شماره‌ی ثبت‌شده در تنظیمات فرستاده می‌شود. این پنجره را تا پایان باز نگه دارید." : "" }));
     box.appendChild(msgs); box.appendChild(area);
     var stop = null;
     openModal((action === "login" ? "ورود به " : action === "logout" ? "خروج از " : "بررسی ") + netFa, box, function () { if (stop) stop(); });
-    stop = watchJob(area, msgs, API.post("/api/social/" + net + "/" + action, {}));
+    stop = watchJob(area, msgs, API.post("/api/social/" + net + "/" + action + (acctId ? "?account=" + encodeURIComponent(acctId) : ""), {}));
   }
 
   function driveModal() {
@@ -1194,23 +1199,74 @@
     return holder;
   }
 
+  var NET_ORDER = ["telegram", "instagram", "linkedin", "bale", "eitaa", "rubika", "whatsapp"];
+  function addAccountModal(net, netFa) {
+    var f = {};
+    function inp(name, label, type, ph, hint) {
+      f[name] = el("input", { type: type || "text", placeholder: ph || "", autocomplete: "off", style: "width:100%;padding:8px;border:1px solid var(--border-2);border-radius:8px;background:var(--surface)" + (type === "tel" || name !== "label" ? ";direction:ltr;text-align:left" : "") });
+      return el("label", { class: "stack small", style: "display:block" }, el("span", { class: "ink2", text: label }), f[name], hint ? el("span", { class: "muted", text: hint }) : null);
+    }
+    var fields = [inp("label", "نام دلخواه (مثلاً «شماره‌ی فروش» یا «پیج اصلی»)", "text", "")];
+    if (["telegram", "bale", "eitaa", "rubika", "whatsapp"].indexOf(net) >= 0) fields.push(inp("phone", "شماره‌ی موبایل", "tel", "0912…", "کد ورود به همین شماره فرستاده می‌شود"));
+    if (net === "instagram") {
+      fields.push(inp("username", "نام کاربری اینستاگرام", "text", "sepahanfelez"));
+      fields.push(inp("password", "رمز", "password", "", "فقط در .env سرور ذخیره می‌شود؛ هیچ‌وقت نشان داده نمی‌شود"));
+      fields.push(inp("totp", "کلید ورود دومرحله‌ای (اختیاری)", "password", "", "اگر با اپ احراز هویت وارد می‌شوید؛ وگرنه خالی بگذارید و کد را هنگام ورود وارد کنید"));
+      fields.push(inp("proxy", "پراکسی ثابت (پیشنهادی)", "password", "http://user:pass@ip:port", "یک IP ثابت ایران برای هر حساب؛ ورود از IP خارجی ریسک بررسی امنیتی دارد"));
+    }
+    if (net === "linkedin") fields.push(el("p", { class: "small muted", text: "بعد از افزودن، «اتصال» را بزنید تا با حساب لینکدین مورد نظر وارد شوید. (پیش‌نیاز: LINKEDIN_CLIENT_ID و SECRET در تنظیمات و دامنه‌ی زنده)" }));
+    var msg = el("div", { class: "small", style: "color:var(--critical)" });
+    var go = el("button", { class: "btn primary", type: "submit", text: "افزودن" });
+    var form = el("form", { class: "stack" }, fields, go, msg);
+    var m = openModal("افزودن حساب " + netFa, form);
+    form.onsubmit = function (e) {
+      e.preventDefault(); go.disabled = true; msg.textContent = "";
+      var body = { net: net }; Object.keys(f).forEach(function (k) { body[k] = f[k].value; });
+      API.post("/api/accounts", body).then(function (a) {
+        m.close();
+        if (confirm("حساب اضافه شد. همین حالا وارد شویم؟")) socialModal(net, netFa, "login", a.id); else reloadKeepTab();
+      }, function (er) { go.disabled = false; msg.textContent = er.message; });
+    };
+  }
+
+  function accountsSection(holder) {
+    API.get("/api/accounts").then(function (r) {
+      holder.textContent = "";
+      NET_ORDER.forEach(function (net) {
+        var netFa = r.nets[net], list = r.accounts.filter(function (a) { return a.net === net; });
+        var head = el("div", { class: "card-h" }, el("h3", { text: netFa }), el("span", { class: "sub", text: fn(list.length) + " حساب" }),
+          el("span", { class: "act" }, el("button", { class: "btn small", type: "button", text: "+ افزودن حساب", onclick: function () { addAccountModal(net, netFa); } })));
+        var cards = list.length ? el("div", { class: "grid g3" }, list.map(function (a) {
+          var st = a.status || {}, who = a.phone || (a.username ? "@" + a.username : "");
+          return el("div", { class: "card flat net-card" },
+            el("div", { style: "display:flex;gap:6px;align-items:center;flex-wrap:wrap" }, el("b", { text: a.label || netFa }),
+              st.logged_in ? stChip("ok") : el("span", { class: "st pending", text: "وارد نشده" }), a.default ? el("span", { class: "tag", text: "پیش‌فرض انتشار" }) : null),
+            el("div", { class: "small ltr", style: "margin-top:4px", text: who }),
+            el("div", { class: "small muted", text: st.checked ? "بررسی: " + jdt(st.checked) + (st.detail && !st.logged_in ? " · " + ({ "no session": "نشستی ذخیره نشده", "logged out": "نشست منقضی/خارج‌شده", "logged out by user": "خارج شدید", "logged out from dashboard": "خارج شدید", challenge: "اینستاگرام تأیید در اپ می‌خواهد", "bad password": "رمز اشتباه" }[st.detail] || st.detail) : "") : "هنوز بررسی نشده" }),
+            a.net === "instagram" ? el("div", { class: "small muted", text: "رمز " + (a.has_password ? "✓" : "✗") + " · دومرحله‌ای " + (a.has_totp ? "✓" : "—") + " · پراکسی " + (a.has_proxy ? "✓" : "—") }) : null,
+            alertsBox(a.id),
+            el("div", { class: "row" },
+              st.logged_in ? el("button", { class: "btn primary small", type: "button", text: "ارسال / اقدام", onclick: function () { actModal(net, netFa + " — " + (a.label || who), null, a.id); } }) : null,
+              st.logged_in ? null : el("button", { class: "btn primary small", type: "button", text: net === "linkedin" ? "اتصال" : "ورود", onclick: function () { socialModal(net, netFa, "login", a.id); } }),
+              el("button", { class: "btn small", type: "button", text: "بررسی", onclick: function () { socialModal(net, netFa, "check", a.id); } }),
+              st.logged_in ? el("button", { class: "btn small", type: "button", text: "خروج", onclick: function () { if (confirm("از این حساب خارج شویم؟ نشست روی سرور پاک می‌شود ولی حساب در فهرست می‌ماند.")) socialModal(net, netFa, "logout", a.id); } }) : null,
+              a.default ? null : el("button", { class: "btn small", type: "button", text: "پیش‌فرض کن", onclick: function () { API.post("/api/accounts/" + a.id + "/default", {}).then(reloadKeepTab, function (e) { alert(e.message); }); } }),
+              el("button", { class: "btn small danger", type: "button", text: "حذف حساب", onclick: function () {
+                if (!confirm("حساب «" + (a.label || who) + "» کامل حذف شود؟ نشست، رمزها در .env و وضعیتش پاک می‌شود. تاریخچه‌ی انتشارش می‌ماند.")) return;
+                API.post("/api/accounts/" + a.id + "/delete", {}).then(reloadKeepTab, function (e) { alert(e.message); }); } })));
+        })) : el("div", { class: "small muted", text: "هنوز حسابی اضافه نشده." });
+        holder.appendChild(el("section", { class: "card mt" }, head, cards));
+      });
+    }, function (e) { holder.textContent = e.message; });
+  }
+
   function viewIntegrations() {
     var S = D.social_status || {};
-    var out = [sec("اتصالات و تنظیمات", "ورود و خروج از شبکه‌ها، اتصال درایو، کلیدها و اجرای دستی هر بررسی — همه از همین صفحه.")];
+    var out = [sec("اتصالات و تنظیمات", "هر تعداد حساب در هر شبکه: افزودن، ورود با کد، خروج، حذف، و انتخاب حساب پیش‌فرض برای انتشار. به‌علاوه‌ی اتصال درایو، کلیدها و اجرای دستی بررسی‌ها.")];
     out.push(el("p", { class: "small ink2", text: "ایمنی هر شبکه: یک کار در لحظه، سقف روزانه و فاصله‌ی حداقل برای هر نوع اقدام، و توقف خودکار ۲۴ ساعته با اولین هشدار پلتفرم (همان قواعدی که پیج لنزیت را سالم نگه داشت). هر ارسال در «تاریخچه‌ی انتشار» و «روند تولید» ثبت می‌شود." }));
-    out.push(el("div", { class: "grid g3" }, SOCIAL.map(function (n) {
-      var st = S[n[0]] || {};
-      return el("section", { class: "card net-card" },
-        el("div", { class: "card-h" }, el("h3", { text: n[1] }), st.logged_in ? stChip("ok") : el("span", { class: "st pending", text: "وارد نشده" })),
-        el("div", { class: "small muted", text: st.checked ? "بررسی: " + jdt(st.checked) + (st.detail && !st.logged_in ? " · " + ({ "no session": "نشستی ذخیره نشده", "logged out": "نشست منقضی/خارج‌شده", "logged out by user": "خارج شدید", "logged out from dashboard": "خارج شدید" }[st.detail] || st.detail) : "") : "هنوز بررسی نشده" }),
-        n[2] && !st.logged_in ? el("div", { class: "small muted", text: "پیش‌نیاز در تنظیمات: " + n[2] + ({ telegram: " و TELEGRAM_API_HASH", instagram: " و INSTAGRAM_PASSWORD", linkedin: " و LINKEDIN_CLIENT_SECRET" }[n[0]] || "") }) : null,
-        alertsBox(n[0]),
-        el("div", { class: "row" },
-          st.logged_in ? el("button", { class: "btn primary small", type: "button", text: "ارسال / اقدام", onclick: function () { actModal(n[0], n[1]); } }) : null,
-          st.logged_in ? null : el("button", { class: "btn primary small", type: "button", text: n[0] === "linkedin" ? "اتصال" : "ورود", onclick: function () { socialModal(n[0], n[1], "login"); } }),
-          el("button", { class: "btn small", type: "button", text: "بررسی", onclick: function () { socialModal(n[0], n[1], "check"); } }),
-          st.logged_in || st.checked ? el("button", { class: "btn small danger", type: "button", text: "خروج", onclick: function () { if (confirm("از " + n[1] + " خارج شویم؟ نشست روی سرور پاک می‌شود.")) socialModal(n[0], n[1], "logout"); } }) : null));
-    })));
+    var acctHolder = el("div", { class: "small muted", text: "در حال خواندن حساب‌ها…" });
+    out.push(acctHolder);
+    accountsSection(acctHolder);
 
     var driveBox = el("div", { class: "small muted", text: "…" });
     API.get("/api/drive").then(function (d) {
@@ -1253,7 +1309,7 @@
     var weekAgo = new Date(Date.now() - 7 * 864e5).toISOString();
     out.push(el("div", { class: "grid g4" }, NETS.map(function (n) {
       var rows = P[n[0]] || [], ok = rows.filter(function (r) { return r.status === "published"; });
-      var last = rows.length ? rows[rows.length - 1] : null, st = S[n[0]];
+      var last = rows.length ? rows[rows.length - 1] : null, st = Object.keys(S).map(function (k) { return S[k]; }).filter(function (v) { return v.net === n[0] && v.logged_in; })[0];
       return el("div", { class: "card tile" },
         el("div", { class: "lbl" }, n[1], " ", n[0] !== "site" ? (st && st.logged_in ? el("span", { class: "st ok", text: "وصل" }) : el("span", { class: "st pending", text: "وارد نشده" })) : null),
         el("div", { class: "val" }, fn(ok.length), el("small", { text: "منتشرشده" })),
