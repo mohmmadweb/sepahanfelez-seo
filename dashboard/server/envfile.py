@@ -89,7 +89,7 @@ def update(changes):
     return sorted(changes)
 
 
-ACCT_KEY = re.compile(r"^SF_ACCT_[A-Z0-9]+_(PASSWORD|TOTP|PROXY)$")
+ACCT_KEY = re.compile(r"^(SF_ACCT_[A-Z0-9]+_(NET|LABEL|PHONE|USERNAME|DEFAULT|CREATED|PASSWORD|TOTP|PROXY)|SF_ACCOUNTS_MIGRATED)$")
 
 
 def _write(vals):
@@ -105,7 +105,7 @@ def _write(vals):
                 lines.append(raw.rstrip("\n"))
     extra = [k for k in vals if k not in written and vals[k] != ""]
     if extra:
-        lines += ["", "# ── حساب‌های شبکه‌ها (از صفحه‌ی اتصالات؛ دستی ویرایش نکنید) ──"] + [f"{k}={vals[k]}" for k in sorted(extra)]
+        lines += ["", "# ── حساب‌های شبکه‌ها: هر چه در صفحه‌ی اتصالات وارد شده (منبع اصلی؛ دستی ویرایش نکنید) ──"] + [f"{k}={vals[k]}" for k in sorted(extra)]
     fd, tmp = tempfile.mkstemp(dir=ROOT, prefix=".env.")
     with os.fdopen(fd, "w", encoding="utf-8") as fh:
         fh.write("\n".join(lines) + "\n")
@@ -113,8 +113,13 @@ def _write(vals):
     os.replace(tmp, ENV)
 
 
+def read_all():
+    return _read(ENV)
+
+
 def set_account_secrets(changes, drop=False):
-    """Per-account secrets (SF_ACCT_<ID>_PASSWORD/_TOTP/_PROXY) — the only free-form keys allowed."""
+    """Account keys (SF_ACCT_<ID>_NET/LABEL/PHONE/USERNAME/DEFAULT/CREATED/PASSWORD/TOTP/PROXY) — the only
+    free-form keys allowed. Empty value or drop=True removes the key."""
     for k, v in changes.items():
         if not ACCT_KEY.match(k):
             raise ValueError(f"نام نامعتبر: {k}")
