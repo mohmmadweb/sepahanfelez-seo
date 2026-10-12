@@ -17,6 +17,7 @@ if ! "$CF" tunnel info "$NAME" >/dev/null 2>&1; then
 fi
 ID="$("$CF" tunnel list -o json 2>/dev/null | python3 -c "import json,sys;print(next(t['id'] for t in json.load(sys.stdin) if t['name']=='$NAME'))")"
 cat > "$DIR/$NAME.yml" <<YML
+protocol: http2
 tunnel: $ID
 credentials-file: $DIR/$ID.json
 ingress:

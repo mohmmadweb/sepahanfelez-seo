@@ -213,6 +213,9 @@ def remove(acct_id):
     if not a:
         raise ValueError("حساب پیدا نشد")
     shutil.rmtree(os.path.join(SESSIONS, a["net"], a["id"]), ignore_errors=True)
+    vpath = os.path.join(ROOT, "dashboard", "data", "validation", f"{a['id']}.json")
+    if os.path.exists(vpath):
+        os.remove(vpath)
     set_secrets({f"SF_ACCT_{acct_id.upper()}_{f.upper()}": "" for f in SECRET_FIELDS}, drop=True)
     rows = [r for r in rows if r["id"] != acct_id]
     if a.get("default"):
