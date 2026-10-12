@@ -1041,7 +1041,9 @@
       } else if (j.phase === "done" || j.phase === "error") {
         clearInterval(timer); area.textContent = "";
         var doneTxt = j.action === "check" ? (j.ok ? "✓ این حساب وارد است." : "این حساب وارد نیست — «ورود» را بزنید.")
-          : j.action === "logout" ? (j.ok ? "✓ خارج شدید." : "✗ خروج انجام نشد.") : (j.ok ? "✓ انجام شد." : "✗ انجام نشد.");
+          : j.action === "logout" ? (j.ok ? "✓ خارج شدید." : "✗ خروج انجام نشد.")
+          : j.action === "login" ? (j.ok ? "✓ وارد شدید. حالا روی کارت همین حساب «تست کامل» را بزنید تا همه‌ی توانایی‌ها واقعاً امتحان شود." : "✗ ورود انجام نشد.")
+          : j.action === "validate" ? (j.ok ? "✓ همه‌ی تست‌ها موفق بود." : "بعضی تست‌ها موفق نبود — جدول زیر را ببینید.") : (j.ok ? "✓ انجام شد." : "✗ انجام نشد.");
         area.appendChild(el("div", { class: "note " + (j.ok || j.action === "check" ? "" : "warn"), text: doneTxt }));
         area.appendChild(el("div", { class: "mt" }, el("button", { class: "btn primary", type: "button", text: "بستن و تازه‌سازی", onclick: reloadKeepTab })));
         if (onDone) onDone(j);
@@ -1201,6 +1203,33 @@
     return holder;
   }
 
+
+  var VST = { ok: ["ok", "✓"], fail: ["blocked", "✗"], skip: ["pending", "—"] };
+  function validationTable(v) {
+    return table([
+      { key: "name", label: "توانایی", render: function (r) { return el("b", { text: r.name + (r.public ? " (عمومی)" : "") }); } },
+      { key: "status", label: "نتیجه", render: function (r) { var c = VST[r.status] || ["pending", r.status]; return el("span", { class: "st " + c[0], text: c[1] + " " + ({ ok: "کار می‌کند", fail: "کار نکرد", skip: "تست نشد" }[r.status] || "") }); } },
+      { key: "detail", label: "جزئیات", render: function (r) { return el("span", { class: "small ink2", text: r.detail }); } }
+    ], v.steps || [], { limit: 20 });
+  }
+  function validateModal(net, netFa, a) {
+    var who = a.label + " " + (a.phone || (a.username ? "@" + a.username : ""));
+    var pub = el("input", { type: "checkbox" });
+    var go = el("button", { class: "btn primary", type: "button", text: "شروع تست" });
+    var msgs = el("div", { class: "stack small", style: "margin:8px 0" }), area = el("div"), res = el("div");
+    var canPublic = net === "instagram" || net === "linkedin";
+    var box = el("div", { class: "stack small" },
+      el("p", { style: "margin-top:0", text: "هر کاری که این حساب باید بکند واقعاً انجام می‌شود، ولی خصوصی: پیام و عکس به «پیام‌های ذخیره‌شده»، استوری فقط برای خودتان/دوستان نزدیک. بعد از تست، روی گوشی همان حساب نتیجه را ببینید." }),
+      canPublic ? el("label", { style: "display:flex;gap:6px;align-items:center" }, pub, net === "instagram" ? "تست پست عمومی هم انجام شود (پست منتشر و بلافاصله آرشیو می‌شود)" : "تست پست عمومی هم انجام شود (پست منتشر و بلافاصله حذف می‌شود)") : null,
+      go, msgs, area, res);
+    var m = openModal("تست کامل — " + netFa + " · " + who, box);
+    go.onclick = function () {
+      go.disabled = true;
+      watchJob(area, msgs, API.post("/api/social/" + net + "/validate?account=" + encodeURIComponent(a.id) + (pub.checked ? "&public=1" : ""), {}), function (j) {
+        if (j.result) { res.textContent = ""; res.appendChild(validationTable(j.result)); }
+      });
+    };
+  }
   var NET_ORDER = ["telegram", "instagram", "linkedin", "bale", "eitaa", "rubika", "whatsapp"];
   function addAccountModal(net, netFa) {
     var f = {};
@@ -1246,9 +1275,13 @@
             el("div", { class: "small ltr", style: "margin-top:4px", text: who }),
             el("div", { class: "small muted", text: st.checked ? "بررسی: " + jdt(st.checked) + (st.detail && !st.logged_in ? " · " + ({ "no session": "نشستی ذخیره نشده", "logged out": "نشست منقضی/خارج‌شده", "logged out by user": "خارج شدید", "logged out from dashboard": "خارج شدید", challenge: "اینستاگرام تأیید در اپ می‌خواهد", "bad password": "رمز اشتباه" }[st.detail] || st.detail) : "") : "هنوز بررسی نشده" }),
             a.net === "instagram" ? el("div", { class: "small muted", text: "رمز " + (a.has_password ? "✓" : "✗") + " · دومرحله‌ای " + (a.has_totp ? "✓" : "—") + " · پراکسی " + (a.has_proxy ? "✓" : "—") }) : null,
+            a.validation ? el("div", { class: "small", style: "margin-top:6px;display:flex;gap:4px;flex-wrap:wrap;align-items:center" },
+              el("span", { class: "muted", text: "آخرین تست " + jdt(a.validation.at) + ":" }),
+              (a.validation.steps || []).map(function (st) { var c = VST[st.status] || ["pending", "?"]; return el("span", { class: "st " + c[0], title: st.detail, text: c[1] + " " + st.name }); })) : null,
             alertsBox(a.id),
             el("div", { class: "row" },
-              st.logged_in ? el("button", { class: "btn primary small", type: "button", text: "ارسال / اقدام", onclick: function () { actModal(net, netFa + " — " + (a.label || who), null, a.id); } }) : null,
+              st.logged_in ? el("button", { class: "btn primary small", type: "button", text: "تست کامل", onclick: function () { validateModal(net, netFa, a); } }) : null,
+              st.logged_in ? el("button", { class: "btn small", type: "button", text: "ارسال / اقدام", onclick: function () { actModal(net, netFa + " — " + (a.label || who), null, a.id); } }) : null,
               st.logged_in ? null : el("button", { class: "btn primary small", type: "button", text: net === "linkedin" ? "اتصال" : "ورود", onclick: function () { socialModal(net, netFa, "login", a.id); } }),
               el("button", { class: "btn small", type: "button", text: "بررسی", onclick: function () { socialModal(net, netFa, "check", a.id); } }),
               st.logged_in ? el("button", { class: "btn small", type: "button", text: "خروج", onclick: function () { if (confirm("از این حساب خارج شویم؟ نشست روی سرور پاک می‌شود ولی حساب در فهرست می‌ماند.")) socialModal(net, netFa, "logout", a.id); } }) : null,
@@ -1419,7 +1452,7 @@
   }
 
   function viewMachines() {
-    var M = D.machines || {}, out = [sec("ماشین‌ها", "هر بررسی خودکار یک «ماشین» است: کِی اجرا شد، سر وقت بود یا نه، چه گفت. نگهبان هر ۲ ساعت ماشینی را که جا مانده یا خطا داده یک‌بار دوباره اجرا می‌کند؛ خطای ورود دوباره اجرا نمی‌شود چون کار شماست.")];
+    var M = D.machines || {}, out = [sec("ماشین‌ها", "هر بررسی خودکار یک «ماشین» است: کِی اجرا شد، سر وقت بود یا نه، چه گفت. نگهبان هر ۱۵ دقیقه سرور و تونل سایت را اگر خاموش شده باشند دوباره روشن می‌کند و ماشینی را که جا مانده یا خطا داده یک‌بار دوباره اجرا می‌کند؛ خطای ورود دوباره اجرا نمی‌شود چون کار شماست.")];
     if (!M.steps) return [out, empty("هنوز گزارش سلامتی ثبت نشده.")];
     var VM = { ok: ["ok", "سالم"], error: ["blocked", "خطا"], missed: ["blocked", "جا ماند"], auth: ["waiting", "نیاز به ورود"], pending: ["pending", "هنوز اجرا نشده"] };
     out.push(el("div", { style: "margin:-8px 0 12px" }, checked(M.checked_at)));

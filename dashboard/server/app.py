@@ -265,6 +265,7 @@ async def accounts_list():
     for a in accounts.load():
         p = accounts.public(a)
         p["status"] = st.get(a["id"])
+        p["validation"] = read_json(os.path.join(DATA, "validation", f"{a['id']}.json"))
         rows.append(p)
     return {"accounts": rows, "nets": accounts.NETS, "needs": accounts.NEEDS}
 
@@ -451,11 +452,11 @@ async def runs():
 
 
 @app.post("/api/social/{net}/{action}")
-async def social_action(net: str, action: str, account: str = ""):
-    if action not in ("login", "logout", "check"):
+async def social_action(net: str, action: str, account: str = "", public: int = 0):
+    if action not in ("login", "logout", "check", "validate"):
         raise HTTPException(404)
     try:
-        return social_jobs.start(net, action, account=account or None)
+        return social_jobs.start(net, action, params={"public": bool(public)}, account=account or None)
     except (ValueError, RuntimeError) as exc:
         raise HTTPException(409, str(exc))
 

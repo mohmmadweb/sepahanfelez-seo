@@ -29,6 +29,7 @@ class Job:
     def __init__(self, net, action):
         self.id = uuid.uuid4().hex[:10]
         self.account = None
+        self.result = None
         self.net, self.action = net, action
         self.phase = "running"            # running | waiting | done | error
         self.prompt, self.secret, self.link_code = None, False, None
@@ -37,7 +38,7 @@ class Job:
         self.answers = queue.Queue()
 
     def view(self):
-        return {"id": self.id, "account": self.account, "net": self.net, "net_fa": NETS.get(self.net, self.net), "action": self.action,
+        return {"id": self.id, "account": self.account, "result": self.result, "net": self.net, "net_fa": NETS.get(self.net, self.net), "action": self.action,
                 "phase": self.phase, "prompt": self.prompt, "secret": self.secret, "link_code": self.link_code,
                 "messages": self.messages[-20:], "ok": self.ok, "elapsed": int(time.time() - self.started)}
 
@@ -111,6 +112,14 @@ def start(net, action="login", params=None, account=None):
                 if res.get("url"):
                     job.messages.append("لینک: " + res["url"])
                 job.messages.append("ثبت در تاریخچه‌ی انتشار و «روند تولید» (" + res["item_id"] + ")")
+            elif action == "validate":
+                import validate
+                if not acct:
+                    raise ValueError("حسابی انتخاب نشده")
+                res = validate.validate(acct, public=bool((params or {}).get("public")))
+                job.ok = res["fail"] == 0
+                job.result = res
+                job.messages.append(f"نتیجه: {res['ok']} موفق، {res['fail']} ناموفق، {res['skip']} رد شده")
             elif action == "check":
                 fn = {"telegram": L.check_telegram, "instagram": L.check_instagram,
                       "linkedin": L.check_linkedin}.get(net, lambda: L.check_web(net))

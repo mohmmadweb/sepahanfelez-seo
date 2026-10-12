@@ -27,7 +27,7 @@ SERVICES = [
     ("sepahanfelez-dashboard.service", "سرور داشبورد", "service"),
     ("sepahanfelez-tunnel.service", "تونل دامنه (Cloudflare)", "service"),
     ("sepahanfelez-seo.timer", "زمان‌بند روزانه ۰۷:۱۵", "timer"),
-    ("sepahanfelez-health.timer", "نگهبان سلامت (هر ۲ ساعت)", "timer"),
+    ("sepahanfelez-health.timer", "نگهبان سلامت (هر ۱۵ دقیقه)", "timer"),
 ]
 
 
@@ -132,7 +132,7 @@ def health():
     if serp and not serp.get("provider"):
         outcomes.append("هیچ منبع جستجویی جواب نداد؛ رتبه‌ها امروز سنجیده نشد.")
     for sv in services:
-        if sv["ok"] or sv["unit"] == "sepahanfelez-tunnel.service":
+        if sv["ok"]:
             continue
         if sv["unit"] == "github:google-data":
             outcomes.append("داده‌ی گوگل (GitHub Actions) هر روز خطا می‌دهد — Secrets گیت‌هاب هنوز تعریف نشده (کار شما).")
@@ -152,6 +152,12 @@ def health():
 def watchdog():
     """Re-run once whatever failed or was missed today (not auth problems — those need a person)."""
     h = health()
+    # the live site depends on these two; earlyoom can stop them under memory pressure from other projects
+    restarted = []
+    for unit in ("sepahanfelez-dashboard.service", "sepahanfelez-tunnel.service"):
+        if _systemctl(unit, "ActiveState") != "active":
+            subprocess.run(["systemctl", "--user", "restart", unit], timeout=60, check=False)
+            restarted.append(unit)
     m = _load()
     today = today_str()
     retried_today = {s for r in m["runs"] if r["started"][:10] == today and r["trigger"] == "watchdog" for s in r["steps"]}
@@ -165,7 +171,7 @@ def watchdog():
         subprocess.run([sys.executable, os.path.join(here, "run_daily.py"), "--only", *steps, "--trigger", "watchdog"],
                        cwd=here, timeout=3600, check=False)
         h = health()
-    return {"retried": todo, "all_ok": h["all_ok"]}
+    return {"retried": todo, "restarted": restarted, "all_ok": h["all_ok"]}
 
 
 if __name__ == "__main__":
