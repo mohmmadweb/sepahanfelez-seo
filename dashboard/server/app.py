@@ -595,7 +595,8 @@ async def google_push_secrets():
         raise HTTPException(409, "دسترسی GitHub (mohmmadweb) روی سرور پیدا نشد")
     sa = os.environ.get("GOOGLE_APPLICATION_CREDENTIALS", "")
     vals = {"GOOGLE_SERVICE_ACCOUNT": open(sa).read() if sa and os.path.exists(sa) else "",
-            "GOOGLE_API_KEY": os.environ.get("GOOGLE_API_KEY", ""), "SF_STATE_KEY": os.environ.get("SF_STATE_KEY", "")}
+            "GOOGLE_API_KEY": os.environ.get("GOOGLE_API_KEY") or (read_json(os.path.expanduser("~/.config/claude-seo/google-api.json"), {}) or {}).get("api_key", ""),
+            "SF_STATE_KEY": os.environ.get("SF_STATE_KEY", "")}
     missing = [k for k, v in vals.items() if not v]
     if missing:
         raise HTTPException(409, "در .env خالی است: " + "، ".join(missing))
