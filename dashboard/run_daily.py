@@ -123,6 +123,10 @@ def main():
         else:
             got = publish.pull_google()
             bundle = got.get("bundle") or {k: {"status": "blocked", "reason": got.get("reason")} for k in ("gsc", "ga4", "psi")}
+            # Analytics' API front-ends do answer this server (measured 2026-11-02); Search Console and
+            # PageSpeed do not. So GA4 is read here directly whenever the Actions bundle has none.
+            if (bundle.get("ga4") or {}).get("status") != "ok":
+                bundle["ga4"] = google.collect_ga4(site)
         out = []
         for name in ("gsc", "ga4", "psi", "inspection"):
             if name in bundle:
