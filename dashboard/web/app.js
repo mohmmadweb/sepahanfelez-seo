@@ -358,6 +358,8 @@
     var prods = pages.filter(function (p) { return p.type === "product"; }).length;
 
     v.push(sec("نمای کلی", "وضعیت امروز سایت sepahanfelez.ir: سلامت فنی، کلمات کلیدی ۱۳ محصول اولویت‌دار، رقبا و برنامه‌ی انتشار. این صفحه هر روز صبح خودکار به‌روز می‌شود."));
+    var cb = connectionsBanner();
+    if (cb) v.push(cb);
     v.push(el("div", { class: "grid g2" }, briefSection(), tasksSection()));
     v.push(el("div", { class: "mt" }));
     v.push(el("div", { class: "grid g2" },
@@ -812,6 +814,9 @@
     var artHolder = el("div", { class: "mt2 small muted", text: "در حال خواندن مقاله‌های سایت…" });
     out.push(artHolder);
     articlesSection(artHolder);
+    var newsHolder = el("div", { class: "mt2 small muted", text: "در حال خواندن خبرهای سایت…" });
+    out.push(newsHolder);
+    newsSection(newsHolder);
     var queueHolder = el("div", { class: "mt2 small muted", text: "در حال خواندن صف انتشار…" });
     out.push(queueHolder);
     queueSection(queueHolder);
@@ -1343,10 +1348,13 @@
 
   function draftModal(id) {
     var box = el("div", { class: "muted", text: "در حال خواندن…" });
-    var m = openModal("پیش‌نمایش مقاله", box);
+    var isNews = id.indexOf("-news-") > 0;
+    var m = openModal(isNews ? "پیش‌نمایش خبر" : "پیش‌نمایش مقاله", box);
     API.get("/api/site/drafts/" + encodeURIComponent(id)).then(function (d) {
       box.textContent = ""; box.className = "stack small";
       var f = d.fields || {};
+      if (isNews && d.source) box.appendChild(el("div", { class: "muted" }, "منبع: ", link(d.source.url, d.source.source_name + " — " + (d.source.title || ""))));
+      if (d.note) box.appendChild(el("div", { class: "note warn", text: d.note }));
       box.appendChild(el("div", null, el("b", { text: f.title || "" }), " ", el("span", { class: "tag", text: d.product || "" }), " ", el("span", { class: "tag", text: d.blog_category || "" })));
       box.appendChild(el("div", { class: "ltr small", text: "/blog/…/" + (f.slug || "") }));
       box.appendChild(el("div", null, el("b", { text: "عنوان سئو: " }), f.meta_title || ""));
@@ -1365,7 +1373,7 @@
           if (!confirm("همین حالا روی sepahanfelez.ir منتشر شود؟")) return;
           var go = function () { m.close(); siteJob("انتشار مقاله", "publish", { item_id: id }, function () { SITE = null; }); };
           if (d.status === "draft") API.post("/api/site/drafts/" + id + "/approve", {}).then(go, function (e) { alert(e.message); }); else go(); } }));
-        row.appendChild(el("button", { class: "btn small", type: "button", text: "دوباره بنویس", onclick: function () {
+        if (!isNews) row.appendChild(el("button", { class: "btn small", type: "button", text: "دوباره بنویس", onclick: function () {
           m.close(); siteJob("نوشتن دوباره", "write", { item_id: id }, function () { SITE = null; }); } }));
         if (d.status !== "rejected") row.appendChild(el("button", { class: "btn small danger", type: "button", text: "رد", onclick: function () {
           var why = prompt("چرا رد می‌شود؟ (برای ثبت در روند تولید)") || "";
@@ -1395,6 +1403,34 @@
       ], s.drafts || [], { sortKey: "date", sortDir: "desc", limit: 30 });
       holder.appendChild(card("مقاله‌های سایت", fn((s.drafts || []).length) + " پیش‌نویس/منتشرشده · نوشتن: Claude روی همین سرور · انتشار: از راه پنل خود سایت",
         el("div", null, head, el("div", { class: "mt" }, (s.drafts || []).length ? list : el("div", { class: "muted small", text: "هنوز پیش‌نویسی نیست — هر روز صبح مقاله‌ی روز کاری بعد نوشته می‌شود." })))));
+    }, function (e) { holder.textContent = e.message; });
+  }
+
+  var NEWS_ST = { draft: ["ready", "آماده‌ی انتشار"], approved: ["ok", "تأییدشده"], published: ["done", "منتشر شد"], dropped: ["pending", "رد کنترل کیفیت"],
+    rejected: ["pending", "رد شد"], sample: ["pending", "نمونه‌ی آزمایشی"], needs_fix: ["blocked", "نیاز به اصلاح"] };
+  function newsSection(holder) {
+    siteData().then(function (s) {
+      holder.textContent = "";
+      var cfg = s.news_cfg || {}, src = (s.news_sources || {}).sources || {};
+      var okSrc = Object.keys(src).filter(function (k) { return src[k].ok; }).length;
+      var head = el("div", { class: "stack small" },
+        el("div", null, "روزی " + fn(cfg.per_day || 1) + " خبر، ساعت " + fd(cfg.time || "10:00") + " (جز جمعه) در دسته‌ی «" + (cfg.category || "") + "» مجله؛ " +
+          (s.autopublish ? "انتشار خودکار" : "با تأیید شما") + " · خلاصه‌اش ۲۰ دقیقه بعد در کانال‌های تلگرام، بله، ایتا، روبیکا و لینکدین."),
+        el("div", { class: "muted" }, "منابع (هر ساعت خوانده می‌شوند): " + (cfg.sources || []).join("، ") + " — " + fn(okSrc) + " از " + fn(Object.keys(src).length) + " در دسترس" +
+          ((s.news_sources || {}).checked ? " · " + jdt(s.news_sources.checked, true) : "")),
+        el("div", { class: "muted" }, "قالب ثابت: لید ← «در یک نگاه» ← «جزئیات» ← «برداشت سپاهان فلز برای خریداران» ← امضای تحریریه و لینک منبع. کنترل کیفیت: بدون کپی (هیچ ۹ کلمه‌ی پشت‌سرهم از منبع)، بدون عدد ساختگی، فقط خبرهای مرتبط با آهن، فولاد، مفتول و توری."),
+        el("div", { class: "row" }, el("button", { class: "btn small", type: "button", text: "پیدا کردن و نوشتن خبر همین حالا", onclick: function () {
+          siteJob("خبر تازه", "news-write", {}, function () { SITE = null; }); } })));
+      var rows = (s.news || []).slice().reverse();
+      var list = table([
+        { key: "date", label: "تاریخ", render: function (r) { return fd(r.date) + " " + fd(r.time || ""); } },
+        { key: "title", label: "تیتر ما", render: function (r) { return el("a", { href: "#", onclick: function (e) { e.preventDefault(); draftModal(r.id); }, text: r.title || "—" }); } },
+        { key: "source", label: "منبع", render: function (r) { return r.source_url ? link(r.source_url, r.source) : (r.source || ""); } },
+        { key: "status", label: "وضعیت", render: function (r) { var c = NEWS_ST[r.status] || ["pending", r.status]; return el("span", { class: "st " + c[0], title: (r.gate_fail || []).join("، ") || r.last_error || r.note || "", text: c[1] }); } },
+        { key: "act", label: "", nosort: true, render: function (r) { return el("span", null, el("button", { class: "btn small", type: "button", text: r.status === "published" ? "مشاهده" : "پیش‌نمایش", onclick: function () { draftModal(r.id); } }), " ", traceButton(r.id, r.title)); } }
+      ], rows, { sortKey: "date", sortDir: "desc", limit: 30 });
+      holder.appendChild(card("خبرهای بازار آهن روی سایت", fn(rows.length) + " خبر در آرشیو · بازنویسی با امضای سپاهان فلز، نه کپی",
+        el("div", null, head, el("div", { class: "mt" }, rows.length ? list : el("div", { class: "muted small", text: "هنوز خبری نوشته نشده." })))));
     }, function (e) { holder.textContent = e.message; });
   }
 
@@ -1549,10 +1585,47 @@
     }, function (e) { holder.textContent = e.message; });
   }
 
+  var CONN_ST = { ok: ["ok", "✓ وصل"], warn: ["waiting", "! توجه"], broken: ["blocked", "✗ قطع"], missing: ["pending", "— وصل نشده"] };
+  function connectionsBanner() {
+    var C = D.connections || {}, bad = C.broken || [];
+    var missing = (C.rows || []).filter(function (r) { return r.state === "missing"; });
+    if (!bad.length && !missing.length) return null;
+    return el("div", { class: "note warn mt", style: bad.length ? "border-color:var(--critical)" : "" },
+      bad.length ? el("div", null, el("b", { style: "color:var(--critical)", text: "⚠ " + fn(bad.length) + " اتصال قطع است — دوباره وصل کنید:" }),
+        el("ul", { style: "margin:6px 0 0;padding-inline-start:20px" }, bad.map(function (r) {
+          return el("li", null, el("b", { text: r.name }), ": " + (r.detail || "") + (r.since ? " (از " + jdt(r.since, true) + ")" : ""),
+            r.fix ? el("div", { class: "small ink2", text: "← " + r.fix }) : null); }))) : null,
+      missing.length ? el("div", { class: bad.length ? "small mt" : "small" }, "هنوز وصل نشده: " + missing.map(function (r) { return r.name; }).join("، ") + " ") : null,
+      el("a", { href: "#integrations", text: "رفتن به «اتصالات و تنظیمات» ←" }));
+  }
+  function connectionsSection(holder) {
+    API.get("/api/connections").then(function (C) {
+      holder.textContent = "";
+      var btn = el("button", { class: "btn small", type: "button", text: C.running ? "در حال بررسی…" : "بررسی همین حالا", disabled: C.running ? "disabled" : null, onclick: function () {
+        btn.disabled = true; btn.textContent = "در حال بررسی… (چند دقیقه)";
+        API.post("/api/connections/check", {}).then(function () { var t = setInterval(function () {
+          API.get("/api/connections").then(function (c2) { if (!c2.running) { clearInterval(t); D.connections = c2; connectionsSection(holder); } }); }, 8000); },
+          function (e) { btn.disabled = false; alert(e.message); }); } });
+      var rows = (C.rows || []).slice().sort(function (a, b) { var o = { broken: 0, warn: 1, missing: 2, ok: 3 }; return o[a.state] - o[b.state]; });
+      holder.appendChild(card("وضعیت همه‌ی اتصال‌ها", "هر روز ۰۷:۴۰ خودکار بررسی می‌شود؛ پنل سایت هر ۲ ساعت · آخرین بررسی " + (C.checked ? jdt(C.checked, true) : "—"),
+        rows.length ? table([
+          { key: "group", label: "بخش" },
+          { key: "name", label: "اتصال", render: function (r) { return el("b", { text: r.name }); } },
+          { key: "state", label: "وضعیت", render: function (r) { var c = CONN_ST[r.state] || ["pending", r.state]; return el("span", { class: "st " + c[0], text: c[1] }); } },
+          { key: "detail", label: "جزئیات و کار لازم", nosort: true, render: function (r) { return el("div", null, r.detail || "",
+            r.fix ? el("div", { class: "small ink2", text: "← " + r.fix }) : null,
+            r.state !== "ok" && r.last_ok ? el("div", { class: "small muted", text: "آخرین بار سالم: " + jdt(r.last_ok, true) }) : null); } }
+        ], rows, { limit: 40 }) : el("div", { class: "small muted", text: "هنوز بررسی نشده — «بررسی همین حالا» را بزنید." }), btn));
+    }, function (e) { holder.textContent = e.message; });
+  }
+
   function viewIntegrations() {
     var S = D.social_status || {};
     var out = [sec("اتصالات و تنظیمات", "پنل سایت (انتشار مقاله و اصلاح نشانی‌ها)، سرچ کنسول و آنالیتیکس، و هر تعداد حساب در هر شبکه: افزودن، ورود با کد، خروج، حذف، و انتخاب حساب پیش‌فرض برای انتشار. به‌علاوه‌ی اتصال درایو، کلیدها و اجرای دستی بررسی‌ها.")];
     out.push(el("p", { class: "small ink2", text: "ایمنی هر شبکه: یک کار در لحظه، سقف روزانه و فاصله‌ی حداقل برای هر نوع اقدام، و توقف خودکار ۲۴ ساعته با اولین هشدار پلتفرم (همان قواعدی که پیج لنزیت را سالم نگه داشت). هر ارسال در «تاریخچه‌ی انتشار» و «روند تولید» ثبت می‌شود." }));
+    var connHolder = el("div", { class: "small muted", text: "…" });
+    out.push(connHolder);
+    connectionsSection(connHolder);
     var siteHolder = el("div", { class: "mt small muted", text: "…" }), googleHolder = el("div", { class: "mt small muted", text: "…" }),
       urlHolder = el("div", { class: "mt small muted", text: "…" });
     out.push(el("div", { class: "grid g2" }, siteHolder, googleHolder));

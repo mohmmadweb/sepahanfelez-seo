@@ -500,9 +500,23 @@ def _draft_summary(d):
         "gate_fail": [g["name"] for g in d.get("gate", []) if not g["ok"]]}
 
 
+def _news_summary(d):
+    src = d.get("source") or {}
+    return {k: d.get(k) for k in ("id", "date", "time", "status", "url", "published_at", "cost_usd", "last_error", "note")} | {
+        "title": (d.get("fields") or {}).get("title"), "source": src.get("source_name"), "source_url": src.get("url"),
+        "source_title": src.get("title"), "gate_fail": [g["name"] for g in d.get("gate", []) if not g["ok"]]}
+
+
+def _draft_module(item_id):
+    import articles
+    import news
+    return news if "-news-" in item_id else articles
+
+
 @app.get("/api/site")
 async def site_view():
     import articles
+    import news
     import panel
     load_env()
     plan = read_json(os.path.join(SITE_DATA, "urlfix_plan.json"), None)
@@ -516,13 +530,42 @@ async def site_view():
                        "result": read_json(os.path.join(SITE_DATA, "urlfix_result.json"), None)},
             "deploy_zip": os.path.exists(zip_path),
             "seo": __import__("seo_tasks").all_proposals()[:30],
+            "news": [_news_summary(d) for d in news.all_drafts()][-60:],
+            "news_sources": read_json(os.path.join(SITE_DATA, "news", "sources_status.json"), {}),
+            "news_cfg": {k: news.cfg().get(k) for k in ("per_day", "time", "category")} | {
+                "sources": [x["name"] for x in news.cfg().get("sources", [])]},
             "google": _google_state()}
+
+
+@app.get("/api/connections")
+async def connections_view():
+    from sf.build import connections
+    return connections() | {"running": CHECKUP.get("running", False)}
+
+
+CHECKUP = {}
+
+
+@app.post("/api/connections/check")
+async def connections_check():
+    """Run the connection check now (same as the 07:40 timer) in the background."""
+    if CHECKUP.get("running"):
+        return {"running": True}
+    CHECKUP["running"] = True
+
+    def work():
+        try:
+            subprocess.run([sys.executable, os.path.join(ROOT, "automation", "checkup.py")], cwd=os.path.join(ROOT, "automation"),
+                           timeout=1500, capture_output=True)
+        finally:
+            CHECKUP["running"] = False
+    threading.Thread(target=work, daemon=True, name="checkup").start()
+    return {"running": True}
 
 
 @app.get("/api/site/drafts/{item_id}")
 async def site_draft(item_id: str):
-    import articles
-    d = articles.load(item_id)
+    d = _draft_module(item_id).load(item_id)
     if not d:
         raise HTTPException(404)
     return {k: v for k, v in d.items() if k != "image"} | {"has_image": bool(d.get("image"))}
@@ -531,7 +574,8 @@ async def site_draft(item_id: str):
 @app.post("/api/site/drafts/{item_id}/{action}")
 async def site_draft_action(item_id: str, action: str, req: Request):
     import articles
-    d = articles.load(item_id)
+    mod = _draft_module(item_id)
+    d = mod.load(item_id)
     if not d or action not in ("approve", "reject", "reopen", "edit"):
         raise HTTPException(404)
     if d.get("status") == "published":
@@ -553,11 +597,11 @@ async def site_draft_action(item_id: str, action: str, req: Request):
                 d["fields"][k] = str(body[k])
         targets = articles.link_targets({"media": d.get("product_slug", "") + "/x"})
         existing = {p.rsplit("/", 1)[-1] for p in targets if p.startswith("/blog/")}
-        d["gate"] = articles.gate(d, existing, targets)
+        d["gate"] = mod.gate(d, existing, targets)
         d["status"] = "draft" if all(g["ok"] for g in d["gate"]) else "needs_fix"
         trace.step(item_id, "write", "ویرایش دستی در داشبورد", "، ".join(k for k in body))
-    articles.save(d)
-    return _draft_summary(d)
+    mod.save(d)
+    return _news_summary(d) if mod is not articles else _draft_summary(d)
 
 
 @app.post("/api/site/seo/{pid}/{action}")

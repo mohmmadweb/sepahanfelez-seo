@@ -22,7 +22,7 @@ import login as L  # noqa: E402
 
 NETS = {"eitaa": "ایتا", "bale": "بله", "rubika": "روبیکا", "whatsapp": "واتساپ",
         "telegram": "تلگرام", "instagram": "اینستاگرام", "linkedin": "لینکدین", "site": "پنل سایت"}
-SITE_ACTIONS = {"login", "check", "logout", "urlfix-plan", "urlfix-apply", "write", "publish", "seo-apply", "social-send"}
+SITE_ACTIONS = {"login", "check", "logout", "urlfix-plan", "urlfix-apply", "write", "publish", "seo-apply", "social-send", "news-write"}
 ANSWER_TIMEOUT = 300
 
 
@@ -189,9 +189,19 @@ def _site_work(job, action, params):
             d = articles.write(params.get("item_id"), say=say)
             job.result = {"id": d["id"], "status": d["status"]}
             job.ok = d["status"] == "draft"
+        elif action == "news-write":
+            import news
+            news.collect(say=say)
+            d = news.write(say=say)
+            if not d:
+                say("الان خبر تازه و مرتبطی (۴۸ ساعت اخیر) در منابع نبود؛ منابع هر ساعت دوباره خوانده می‌شوند.")
+            job.result = {"id": d and d["id"]}
+            job.ok = bool(d)
         elif action == "publish":
             import articles
-            d = articles.publish(params["item_id"], say=say)
+            import news
+            mod = news if "-news-" in params["item_id"] else articles
+            d = mod.publish(params["item_id"], say=say)
             job.result = {"id": d["id"], "url": d.get("url")}
             if d.get("url"):
                 say("لینک: " + d["url"])

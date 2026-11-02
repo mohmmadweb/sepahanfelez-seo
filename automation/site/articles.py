@@ -30,6 +30,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 sys.path.insert(0, os.path.join(os.path.dirname(HERE)))
 import panel  # noqa: E402
+import signature  # noqa: E402
 
 ROOT = panel.ROOT
 sys.path.insert(0, os.path.join(ROOT, "dashboard"))
@@ -205,6 +206,8 @@ def gate(d, existing_slugs, targets):
         ("بدون قیمت", not prices, "، ".join(prices[:2])),
         ("فقط شماره‌های شرکت", found_phones <= allowed_phones(), "، ".join(sorted(found_phones - allowed_phones()))),
         ("بدون «ارزش افزوده»", "ارزش افزوده" not in text, ""),
+        ("امضای سپاهان فلز", signature.cfg()["factory_tip"] in body and signature.MARK in body,
+         f"بخش «{signature.cfg()['factory_tip']}» و امضای تحریریه"),
         ("ساختار", "h2" in tags and tags <= ALLOWED_TAGS, "تگ‌های غیرمجاز: " + "، ".join(sorted(tags - ALLOWED_TAGS)) if tags - ALLOWED_TAGS else ""),
     ]
     return [{"name": n, "ok": bool(ok), "detail": det} for n, ok, det in checks]
@@ -259,6 +262,7 @@ def _prompt(item, product, facts, targets, existing, feedback=None):
 - ساختار HTML فقط با این تگ‌ها: h2, h3, p, ul, ol, li, strong, em, a, table, thead, tbody, tr, th, td. بدون h1 (عنوان جداست)، بدون style و class.
 - پاراگراف اول دو سه جمله و کلمه‌ی کلیدی را دارد. حداقل ۴ زیرعنوان h2. اگر مقایسه یا مشخصه است، یک جدول.
 - یک بخش «پرسش‌های پرتکرار» با ۳ تا ۵ پرسش (h3) و پاسخ کوتاه.
+- امضای ما: پیش از پرسش‌های پرتکرار یک بخش با زیرعنوان دقیقاً «<h2>{signature.cfg()['factory_tip']}</h2>» و یک توصیه‌ی عملی از نگاه تولیدکننده (انبارداری، انتخاب سایز، نصب، کنترل کیفیت هنگام تحویل) — بدون آمار یا ادعای ساختگی. امضای پایانی تحریریه را ننویس؛ خودکار اضافه می‌شود.
 - حداقل ۴ لینک داخلی: حتماً {facts['category_page']} و /price، و ۲ مقاله یا کالای مرتبط از فهرست بالا. متن لینک توصیفی باشد.
 - هیچ قیمتی ننویس (نه عدد ریال/تومان)؛ برای قیمت به «قیمت لحظه‌ای» (/price) ارجاع بده. «ارزش افزوده» ننویس. «نوع کالا» بگو نه «کد کالا».
 - هیچ لینک بیرونی، هیچ شماره‌ای جز شماره‌های بالا. نام رقبا را نبر.
@@ -328,6 +332,7 @@ def write(item_id=None, say=print):
         d["fields"] = {k: str(out.get(k) or "").strip() for k in
                        ("title", "slug", "meta_title", "meta_description", "description", "keyword", "meta_keywords", "body")}
         d["fields"]["slug"] = re.sub(r"[\s_]+", "-", d["fields"]["slug"]).strip("-").replace("؟", "")
+        d["fields"]["body"] = signature.article_byline(d["fields"]["body"])
         d["gate"] = gate(d, existing, targets)
         failed = [g for g in d["gate"] if not g["ok"]]
         trace.step(item["id"], "write", f"نوشته شد (تلاش {_fa(attempt)})", d["fields"]["title"],
@@ -366,6 +371,7 @@ def publish(item_id, say=print, force=False):
         if d["fields"]["slug"] in existing:
             raise RuntimeError("این نامک الان در سایت هست — دوباره بنویسید یا نامک را عوض کنید")
         f = dict(d["fields"])
+        f["body"] = signature.article_byline(f["body"])         # drafts written before the signature get it too
         f["category_id"] = cid
         say("ارسال به پنل سایت…")
         p.create_article(f, image=d.get("image"))

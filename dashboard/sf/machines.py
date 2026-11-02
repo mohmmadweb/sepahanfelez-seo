@@ -27,7 +27,8 @@ SERVICES = [
     ("sepahanfelez-dashboard.service", "سرور داشبورد", "service"),
     ("https://sepahanfelezseo.lenzit.ir:9444/", "آدرس داشبورد (مستقیم، Caddy)", "url"),
     ("sepahanfelez-seo.timer", "زمان‌بند روزانه ۰۷:۱۵", "timer"),
-    ("sepahanfelez-site.timer", "پنل سایت و انتشار مقاله (ساعتی ۹–۱۸)", "timer"),
+    ("sepahanfelez-site.timer", "پنل سایت (تمدید شبانه‌روزی)، خبر و انتشار مقاله (ساعتی)", "timer"),
+    ("sepahanfelez-checkup.timer", "بررسی روزانه‌ی همه‌ی اتصال‌ها (۰۷:۴۰)", "timer"),
     ("sepahanfelez-social.timer", "صف شبکه‌ها و درایو (هر ۱۰ دقیقه ۷–۱۹)", "timer"),
     ("sepahanfelez-health.timer", "نگهبان سلامت (هر ۱۵ دقیقه)", "timer"),
 ]

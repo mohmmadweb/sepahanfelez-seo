@@ -37,6 +37,7 @@ sys.path.insert(0, os.path.dirname(HERE))
 sys.path.insert(0, os.path.join(os.path.dirname(HERE), "site"))
 sys.path.insert(0, os.path.join(ROOT, "dashboard"))
 
+import signature  # noqa: E402
 from sf import trace  # noqa: E402
 from sf.env import load_env  # noqa: E402
 from sf.util import DATA, fetch, now_tehran, read_json, today_str, write_json  # noqa: E402
@@ -214,9 +215,12 @@ def prices():
 
 
 def recent_articles(days=2):
+    """Site news and articles of the last days that the channels have not carried yet."""
     import history
     since = (now_tehran() - timedelta(days=days)).isoformat()
-    return [r for r in history.load().get("site", []) if r.get("kind") == "article" and r.get("ts", "") >= since and r.get("url")]
+    shared = {q.get("link") for q in all_items() if q.get("kind") in ("share", "news-share")}
+    return [r for r in history.load().get("site", []) if r.get("kind") in ("article", "news") and r.get("ts", "") >= since
+            and r.get("url") and r.get("url") not in shared]
 
 
 # ------------------------------------------------------------------ copy
@@ -334,8 +338,9 @@ def prepare_item(item, used, say=print):
                 arts = recent_articles()
                 if arts:
                     a = arts[-1]
-                    extra += f"\nخبر: مقاله‌ی تازه در مجله‌ی سایت منتشر شد: «{a.get('text')}» — لینک: {a.get('url')} (همین لینک را در متن بگذار)"
-                    q["source"] = "مقاله‌ی تازه‌ی سایت"
+                    what = "خبر بازار آهن در سایت" if a.get("kind") == "news" else "مقاله‌ی تازه در مجله‌ی سایت"
+                    extra += f"\nخبر: {what} منتشر شد: «{a.get('text')}» — لینک: {a.get('url')} (همین لینک را در متن بگذار)"
+                    q["source"], q["link"] = what, a.get("url")
                 else:
                     item = dict(item, type="پرسش و پاسخ", product=item.get("product") if item.get("product_rank") else "توری و مفتول")
                     q["source"] = "منبع خبری تعریف نشده → پست پرسش و پاسخ"
@@ -349,6 +354,7 @@ def prepare_item(item, used, say=print):
             q["media"] = _render(card, "post") if photo else None
             q["photo"] = photo
             q["gate"] = _gate(q["text"])
+    q["text"] = signature.caption(q.get("text"))                # the house sign-off, visible in the queue preview
     q["at"] = jitter(item, q.get("after") or item.get("time", "09:00"))
     if q.get("photo"):
         used.add(q["photo"])
@@ -383,9 +389,28 @@ def share_article(draft):
     url = urllib.parse.unquote(draft["url"])
     q = {"id": f"{draft['id']}-share", "created": _now(), "date": when.date().isoformat(), "time": when.strftime("%H:%M"),
          "kind": "share", "type": "مقاله‌ی تازه", "product": draft.get("product"), "action": "post", "nets": ["linkedin", "telegram"],
-         "text": f"📝 {draft['fields']['title']}\n\n{draft['fields'].get('description', '')}\n\nادامه در سایت: {url}",
+         "text": signature.caption(f"📝 {draft['fields']['title']}\n\n{draft['fields'].get('description', '')}\n\nادامه در سایت: {url}"),
          "link": draft["url"], "media": draft.get("image"), "status": "approved", "results": {}, "gate": []}
     trace.step(q["id"], "plan", "اشتراک مقاله", url, decision="مقاله‌ی تأییدشده؛ خلاصه‌اش هم تأییدشده حساب می‌شود")
+    return save(q)
+
+
+def share_news(d):
+    """A news piece is live: its own short channel post (Telegram, Bale, Eitaa, Rubika) + LinkedIn, 20 minutes later.
+    Written from the news itself (lead + «در یک نگاه»), so it is never the same text as the site page."""
+    when = now_tehran() + timedelta(minutes=20)
+    url = urllib.parse.unquote(d["url"])
+    body = d["fields"]["body"]
+    lead = re.sub(r"<[^>]+>", "", (re.search(r"<p>(.*?)</p>", body, re.S) or [None, ""])[1]).strip()
+    glance = re.search(r"در یک نگاه</h2>\s*<ul>(.*?)</ul>", body, re.S)
+    bullets = [re.sub(r"<[^>]+>", "", li).strip() for li in re.findall(r"<li>(.*?)</li>", glance.group(1), re.S)] if glance else []
+    text = (f"📰 {d['fields']['title']}\n\n{lead}\n\n" + "\n".join(f"▫️ {b}" for b in bullets[:3]) +
+            f"\n\nتحلیل کامل و برداشت ما برای خریداران: {url}\nمنبع خبر: {d['source']['source_name']}")
+    q = {"id": f"{d['id']}-share", "created": _now(), "date": when.date().isoformat(), "time": when.strftime("%H:%M"),
+         "kind": "news-share", "type": "خبر بازار", "product": None, "action": "post",
+         "nets": ["telegram", "bale", "eitaa", "rubika", "linkedin"], "text": signature.caption(text),
+         "link": d["url"], "media": d.get("image"), "status": "approved", "results": {}, "gate": []}
+    trace.step(q["id"], "plan", "اشتراک خبر", url, decision="خبر از کنترل کیفیت گذشته؛ خلاصه‌اش خودکار در کانال‌ها می‌رود")
     return save(q)
 
 
@@ -413,7 +438,7 @@ def publish(q, say=print, force=False):
             q["results"][net] = {"status": "skipped", "detail": "حساب وصل نیست", "at": _now()}
             continue
         try:
-            res = actions.act(net, q["action"], text=q.get("text", ""), media=q.get("media"), link=q.get("link"),
+            res = actions.act(net, q["action"], text=signature.caption(q.get("text", "")), media=q.get("media"), link=q.get("link"),
                               item_id=q["id"], content_type=q.get("type"), product=q.get("product"), account=acct["id"])
             q["results"][net] = {"status": res.get("status"), "detail": res.get("detail", ""), "url": res.get("url"), "at": _now()}
             sent += 1

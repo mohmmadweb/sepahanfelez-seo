@@ -269,6 +269,12 @@ class Panel:
         if "/create" in self.page.url:
             raise RuntimeError("پنل مقاله را نساخت (روی فرم ماند)")
 
+    def create_category(self, fields):
+        self.go("/admin/article-category/create")
+        f = self._form("/admin/article-category")
+        self._set(f, fields)
+        self._submit(f)
+
     def edit_category(self, cid, fields):
         f, cur = self.form_values(f"/admin/article-category/{cid}/edit", f"/admin/article-category/{cid}")
         self._backup("categories", cid, cur)
@@ -332,15 +338,35 @@ def login(mobile=None):
 
 
 def check():
-    """Visit the panel (keeps the 3-day session alive) and record the result."""
+    """Visit the panel (keeps the 3-day sliding session alive) and record the result.
+
+    Only a redirect to /login counts as «logged out». A network error or a site outage keeps the
+    last known state and is reported as «unreachable», so a bad minute never cries wolf."""
     if not os.path.exists(state_path()):
         save_status(False, "no session")
         return False
-    with Panel(need_login=False) as p:
-        ok = p.logged_in()
-        if ok:
-            p.ctx.storage_state(path=state_path())
-    save_status(ok, "ok" if ok else "logged out")
+    prev = status()
+    try:
+        with Panel(need_login=False) as p:
+            r = p.page.goto(p.base + "/admin", wait_until="domcontentloaded")
+            if "/login" in p.page.url or "/verify" in p.page.url:
+                ok = False
+            elif r and r.status == 200:
+                ok = True
+                p.ctx.storage_state(path=state_path())
+            else:
+                raise RuntimeError(f"HTTP {r.status if r else '—'}")
+    except Exception as exc:                                         # noqa: BLE001
+        st = save_status(prev.get("logged_in", False), f"unreachable: {type(exc).__name__}")
+        st["fails"] = int(prev.get("fails", 0)) + 1
+        st["last_ok"] = prev.get("last_ok")
+        json.dump(st, open(STATUS, "w", encoding="utf-8"), ensure_ascii=False)
+        return st["logged_in"]
+    st = save_status(ok, "ok" if ok else "logged out")
+    st["last_ok"] = st["checked"] if ok else prev.get("last_ok")
+    if not ok:
+        st["since"] = prev.get("since") if not prev.get("logged_in") and prev.get("since") else st["checked"]
+    json.dump(st, open(STATUS, "w", encoding="utf-8"), ensure_ascii=False)
     return ok
 
 

@@ -76,6 +76,40 @@ def integrations(gsc, ga4, psi, crawl, comp, cal):
     return rows
 
 
+def connections():
+    """The daily connection check (automation/checkup.py), refreshed with anything newer: a login done in
+    the dashboard after the check, or the hourly panel keepalive, shows here right away."""
+    from datetime import datetime
+
+    def newer(a, b):
+        try:
+            return datetime.fromisoformat(a) > datetime.fromisoformat(b)
+        except (TypeError, ValueError):
+            return bool(a) and not b
+    c = read_json(os.path.join(DATA, "connections.json"), {}) or {"rows": []}
+    rows = {r["key"]: dict(r) for r in c.get("rows", [])}
+    panel = read_json(os.path.join(DATA, "site", "panel_status.json"), {}) or {}
+    r = rows.get("site")
+    if r and newer(panel.get("checked"), r.get("checked")):
+        if panel.get("logged_in") and not str(panel.get("detail", "")).startswith("unreachable"):
+            r.update(state="ok", detail="وارد است؛ هر ۲ ساعت تمدید می‌شود", fix="", since=None, checked=panel["checked"])
+        elif panel.get("detail") in ("logged out", "no session", "logged out from dashboard", "code rejected or not an admin"):
+            r.update(state="broken", detail="از پنل بیرون افتاده — انتشار مقاله و خبر متوقف است",
+                     fix="اتصالات و تنظیمات → «پنل سایت» → «ورود» → کد پیامکی", checked=panel["checked"])
+    social = read_json(os.path.join(DATA, "social_status.json"), {}) or {}
+    for key, row in rows.items():
+        st = social.get(key.split(":", 1)[-1]) if key.startswith("acct:") else None
+        if st and newer(st.get("checked"), row.get("checked")):
+            if st.get("logged_in") and row["state"] == "broken":
+                row.update(state="ok", detail="دوباره وصل شد", fix="", since=None, checked=st["checked"])
+            elif not st.get("logged_in") and row["state"] == "ok":
+                row.update(state="broken", detail="از حساب بیرون افتاده", fix="اتصالات و تنظیمات → همین حساب → «ورود»",
+                           checked=st["checked"])
+    out = {"checked": c.get("checked"), "rows": list(rows.values())}
+    out["broken"] = [x for x in out["rows"] if x["state"] == "broken"]
+    return out
+
+
 def published_history(per_network=500):
     """automation/history.py writes dashboard/data/published/<network>.jsonl; read them here."""
     out = {}
@@ -142,6 +176,7 @@ def assemble():
     data["machines"] = read_json(os.path.join(DATA, "health.json"), {}) or {}
     data["changes"] = (read_json(os.path.join(DATA, "changes", "changes.json"), []) or [])[-300:]
     data["results"] = read_json(os.path.join(DATA, "results.json"), {}) or {}
+    data["connections"] = connections()
     return data
 
 
