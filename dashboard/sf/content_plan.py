@@ -117,7 +117,7 @@ def _proto_photos():
     for slug in sorted(os.listdir(PHOTO_ROOT)):
         lib[slug] = sorted((f for f in os.listdir(os.path.join(PHOTO_ROOT, slug)) if f.startswith("photo-")),
                            key=lambda f: int("".join(c for c in f if c.isdigit()) or 0))
-    write_json(path, {"source": "sepahanfelez-prototype/assets/products (public at sepahanfelez.lenzit.ir)",
+    write_json(path, {"source": "sepahanfelez-prototype/assets/products (served by the dashboard at /media/proto)",
                       "by_category": lib})
     return lib
 

@@ -756,6 +756,25 @@ async def media(slug: str, name: str):
     return FileResponse(path, headers={"Cache-Control": "private, max-age=86400"})
 
 
+PROTO_ROOT = "/home/ubuntu/projects/sepahanfelez-prototype"
+PROTO_DIRS = ("assets/", "banner-karkhane/", "toloue-sepahan1/", "toloue-sepahan2/")
+
+
+@app.get("/media/proto/{rel:path}")
+async def media_proto(rel: str):
+    """The prototype's product/factory photos, served here (their old public address is retired).
+    A missing thumb-N falls back to photo-N."""
+    if not rel.startswith(PROTO_DIRS):
+        raise HTTPException(404)
+    base = os.path.realpath(PROTO_ROOT)
+    path = os.path.realpath(os.path.join(base, rel))
+    if not os.path.isfile(path) and "/thumb-" in path:
+        path = path.replace("/thumb-", "/photo-")
+    if not path.startswith(base + os.sep) or not os.path.isfile(path):
+        raise HTTPException(404)
+    return FileResponse(path, headers={"Cache-Control": "private, max-age=86400"})
+
+
 @app.get("/robots.txt")
 async def robots():
     return HTMLResponse("User-agent: *\nDisallow: /\n", media_type="text/plain")

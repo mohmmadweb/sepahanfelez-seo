@@ -448,8 +448,9 @@
     if (!m) return null;
     if (m.indexOf("drive/") === 0) return "/media/photos/" + m.slice(6).split("/").map(encodeURIComponent).join("/");
     if (/\.(mp4)$/.test(m)) return null;
-    if (m.indexOf("/") > 0 && !/^(banner|toloue|videos)/.test(m)) return "https://sepahanfelez.lenzit.ir/assets/products/" + m.replace("photo-", "thumb-");
-    return "https://sepahanfelez.lenzit.ir/" + m;
+    var enc = function (p) { return p.split("/").map(encodeURIComponent).join("/"); };
+    if (m.indexOf("/") > 0 && !/^(banner|toloue|videos|assets)/.test(m)) return "/media/proto/assets/products/" + enc(m.replace("photo-", "thumb-"));
+    return "/media/proto/" + enc(m);
   }
   function pickNetAndSend(it) {
     var kind = it.kind === "story" ? "story" : "post";

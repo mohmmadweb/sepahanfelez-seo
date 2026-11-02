@@ -25,10 +25,23 @@ AUTH_HINTS = ("401", "403", "unauthor", "login", "oauth", "credential", "not log
               "ChallengeRequired", "SF_STATE_KEY", "API_ID", "missing in .env")
 SERVICES = [
     ("sepahanfelez-dashboard.service", "سرور داشبورد", "service"),
-    ("sepahanfelez-tunnel.service", "تونل دامنه (Cloudflare)", "service"),
+    ("https://sepahanfelezseo.lenzit.ir:9444/", "آدرس داشبورد (مستقیم، Caddy)", "url"),
     ("sepahanfelez-seo.timer", "زمان‌بند روزانه ۰۷:۱۵", "timer"),
+    ("sepahanfelez-site.timer", "پنل سایت و انتشار مقاله (ساعتی ۹–۱۸)", "timer"),
+    ("sepahanfelez-social.timer", "صف شبکه‌ها و درایو (هر ۱۰ دقیقه ۷–۱۹)", "timer"),
     ("sepahanfelez-health.timer", "نگهبان سلامت (هر ۱۵ دقیقه)", "timer"),
 ]
+# The dashboard's address is served by Caddy (docker compose in ~/projects/sepahanfelez-prelive, network host),
+# straight from this server on 9444 — Cloudflare's edge stalled for the owner's connection in Iran.
+EDGE_COMPOSE = os.path.expanduser("~/projects/sepahanfelez-prelive")
+
+
+def _url_ok(url):
+    try:
+        with urllib.request.urlopen(url, timeout=20) as r:
+            return r.status == 200
+    except Exception:                                                  # noqa: BLE001
+        return False
 
 
 def _load():
@@ -111,6 +124,10 @@ def health():
                      "fail_streak": (s or {}).get("fail_streak", 0)})
     services = []
     for unit, fa, kind in SERVICES:
+        if kind == "url":
+            ok = _url_ok(unit)
+            services.append({"unit": unit, "name": fa, "state": "active" if ok else "down", "ok": ok, "next": ""})
+            continue
         state = _systemctl(unit, "ActiveState")
         nxt = _systemctl(unit, "NextElapseUSecRealtime") if kind == "timer" else ""
         try:                                   # "Sun 2026-10-11 03:49:37 UTC" → ISO, so the page shows Jalali Tehran time
@@ -135,7 +152,7 @@ def health():
         if sv["ok"]:
             continue
         if sv["unit"] == "github:google-data":
-            outcomes.append("داده‌ی گوگل (GitHub Actions) هر روز خطا می‌دهد — Secrets گیت‌هاب هنوز تعریف نشده (کار شما).")
+            outcomes.append("آخرین جمع‌آوری داده‌ی گوگل در GitHub Actions موفق نبود — لاگ همان اجرا را ببینید.")
         else:
             outcomes.append(f"«{sv['name']}» روشن نیست ({sv['state']}).")
     last_runs = [r for r in m["runs"] if r["started"][:10] == today]
@@ -152,12 +169,14 @@ def health():
 def watchdog():
     """Re-run once whatever failed or was missed today (not auth problems — those need a person)."""
     h = health()
-    # the live site depends on these two; earlyoom can stop them under memory pressure from other projects
+    # the dashboard and its address; earlyoom can stop them under memory pressure from other projects
     restarted = []
-    for unit in ("sepahanfelez-dashboard.service", "sepahanfelez-tunnel.service"):
-        if _systemctl(unit, "ActiveState") != "active":
-            subprocess.run(["systemctl", "--user", "restart", unit], timeout=60, check=False)
-            restarted.append(unit)
+    if _systemctl("sepahanfelez-dashboard.service", "ActiveState") != "active":
+        subprocess.run(["systemctl", "--user", "restart", "sepahanfelez-dashboard.service"], timeout=60, check=False)
+        restarted.append("sepahanfelez-dashboard.service")
+    if not _url_ok(SERVICES[1][0]):
+        subprocess.run(["docker", "compose", "up", "-d", "caddy"], cwd=EDGE_COMPOSE, timeout=120, check=False)
+        restarted.append("caddy")
     m = _load()
     today = today_str()
     retried_today = {s for r in m["runs"] if r["started"][:10] == today and r["trigger"] == "watchdog" for s in r["steps"]}
