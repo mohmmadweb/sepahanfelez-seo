@@ -51,6 +51,80 @@ NET_FA = {"اینستاگرام": "instagram", "روبیکا": "rubika", "ایت
 FA_NET = {v: k for k, v in NET_FA.items()}
 WINDOW_H = 3            # an approved item more than 3 hours late is not sent (stale story / price)
 
+# No two stories alike: each one takes an angle not used for the same product in the last two weeks,
+# a layout different from the previous story, a photo not used in two weeks, and copy that the
+# similarity check finds different from everything sent in the last three weeks.
+ANGLES = [
+    ("mistake", "یک اشتباه رایج در انتخاب یا نصب و راه درستش"),
+    ("question", "یک سؤال کوتاه از مخاطب که جوابش در خود استوری است"),
+    ("number", "یک عدد یا مشخصه‌ی واقعی از کاتالوگ (چشمه، قطر مفتول، عرض، وزن رول) و معنی‌اش برای خریدار"),
+    ("compare", "مقایسه‌ی دو نوع یا دو سایز از همین محصول و این‌که هرکدام برای چه کاری است"),
+    ("usecase", "یک کاربرد مشخص (مرغداری، باغ، بالکن، حصار کارخانه، ساختمان) و نکته‌ی اجرایی‌اش"),
+    ("checklist", "چک‌لیست سه‌قدمی پیش از خرید"),
+    ("myth", "یک باور غلط رایج و واقعیت فنی‌اش"),
+    ("care", "نگهداری و عمر بیشتر محصول در هوای باز"),
+    ("factory", "از دل کارخانه: تولید مستقیم، سالن ۳۰٬۰۰۰ متری، کنترل کیفیت (فقط واقعیت‌های داده‌شده)"),
+]
+LAYOUTS = ["classic", "full", "bold"]
+JITTER_MIN = (-12, 22)  # minutes around the planned slot, different every day, never before 09:00
+
+
+def _tokens(t):
+    t = re.sub(r"[^\w\u0600-\u06FF ]", " ", (t or "").replace("\u200c", " "))
+    return {w for w in t.split() if len(w) > 2}
+
+
+def _similar(a, b):
+    ta, tb = _tokens(a), _tokens(b)
+    return len(ta & tb) / max(1, min(len(ta), len(tb)))
+
+
+def recent(days=21):
+    since = (datetime.fromisoformat(today_str()) - timedelta(days=days)).date().isoformat()
+    return [q for q in all_items() if q.get("date", "") >= since and q.get("status") not in ("rejected",)]
+
+
+def _copy_of(q):
+    c = q.get("card") or {}
+    return " ".join([c.get("title", ""), " ".join(c.get("points", [])), q.get("text", "")])
+
+
+def pick_angle(item, rec, skip=()):
+    """An angle not used today on any story, nor for this product in the last two weeks."""
+    import hashlib
+    today = {q.get("angle") for q in rec if q.get("date") == item.get("date") and q.get("angle")}
+    prod = {q.get("angle") for q in rec if q.get("product") == item.get("product") and q.get("angle")}
+    free = [a for a in ANGLES if a[0] not in today and a[0] not in skip]
+    pref = [a for a in free if a[0] not in prod] or free or ANGLES
+    if item.get("type") in ("معرفی کارخانه", "پشت‌صحنه") and any(a[0] == "factory" for a in pref):
+        return next(a for a in ANGLES if a[0] == "factory")
+    pref = [a for a in pref if a[0] != "factory"] or pref
+    return pref[int(hashlib.md5(item["id"].encode()).hexdigest(), 16) % len(pref)]
+
+
+def pick_layout(item, rec):
+    """A layout different from the last two cards of the same kind."""
+    import hashlib
+    last = [(q.get("card") or {}).get("layout") for q in sorted(rec, key=lambda q: (q.get("date", ""), q.get("at") or q.get("time", "")))
+            if q.get("kind") == item["kind"]][-2:]
+    start = int(hashlib.md5(item["id"].encode()).hexdigest(), 16) % len(LAYOUTS)
+    for l in LAYOUTS[start:] + LAYOUTS[:start]:
+        if l not in last:
+            return l
+    return LAYOUTS[start]
+
+
+def jitter(item, base_time):
+    """The planned slot ± a few minutes, stable for the item, different from day to day."""
+    import hashlib
+    lo, hi = JITTER_MIN
+    off = lo + int(hashlib.md5((item["id"] + "t").encode()).hexdigest(), 16) % (hi - lo + 1)
+    h, m = map(int, base_time.split(":"))
+    t = datetime(2000, 1, 1, h, m) + timedelta(minutes=off)
+    if t.hour < 9:
+        t = t.replace(hour=9, minute=abs(off) % 15)
+    return t.strftime("%H:%M")
+
 
 def _now():
     return now_tehran().isoformat(timespec="seconds")
@@ -152,10 +226,14 @@ def _llm(prompt):
     return out, cost
 
 
-def _story_copy(item, prod, facts):
+def _story_copy(item, prod, facts, angle, avoid, feedback=""):
     import articles
     return _llm(f"""متن یک استوری اینستاگرام/تلگرام برای «سپاهان فلز» (تولیدکننده‌ی توری و مفتول، اصفهان) بنویس.
 نوع محتوا: {item.get('type')} · محصول: {item.get('product')} · مناسبت: {item.get('occasion') or '—'}
+زاویه‌ی این استوری (حتماً همین): {angle[1]}
+این‌ها در سه هفته‌ی اخیر رفته‌اند؛ تیتر و نکته‌ها باید کاملاً متفاوت باشند، نه بازنویسی همین‌ها:
+{json.dumps(avoid[:25], ensure_ascii=False)}
+{('ایراد نسخه‌ی قبلی: ' + feedback) if feedback else ''}
 کلمات مرتبط: {'، '.join((prod or {}).get('secondary', [])[:6])}
 کالاهای واقعی کاتالوگ (مشخصات در نامشان): {json.dumps(facts.get('products_in_catalog', [])[:15], ensure_ascii=False)}
 واقعیت‌های کارخانه: {articles.facts()}
@@ -202,18 +280,36 @@ def prepare_item(item, used, say=print):
     q.update({k: item.get(k) for k in ("date", "jalali", "time", "type", "product", "kind")})
     prod, facts = catalog(item)
     cost = 0.0
+    rec = [r for r in recent() if r["id"] != item["id"]]
     if item["kind"] == "story":
         q["nets"] = [NET_FA[c] for c in item.get("channels", []) if c in NET_FA] + ["telegram"]
         q["action"] = "story"
         photo = photo_for(item, used)
-        out, c = _story_copy(item, prod, facts)
-        cost += c
+        angle = pick_angle(item, rec)
+        avoid = [(r.get("card") or {}).get("title", "") for r in rec if (r.get("card") or {}).get("title")]
+        feedback, tried = "", []
+        for attempt in (1, 2, 3):
+            if attempt > 1:                           # too close to something recent: a different angle, not a reworded copy
+                tried.append(angle[0])
+                angle = pick_angle(item, rec, skip=tried)
+            out, c = _story_copy(item, prod, facts, angle, avoid, feedback)
+            cost += c
+            copy = " ".join([str(out.get("title", "")), " ".join(map(str, out.get("points", []))), str(out.get("caption", ""))])
+            near = max(rec, key=lambda r: _similar(copy, _copy_of(r)), default=None)
+            score = _similar(copy, _copy_of(near)) if near else 0
+            if score < 0.55:
+                break
+            feedback = f"خیلی شبیه «{(near.get('card') or {}).get('title', '')}» ({near['date']}) بود؛ زاویه و کلمات دیگری انتخاب کن"
+        q["angle"], q["similarity"] = angle[0], round(score, 2)
         q["text"] = str(out.get("caption", "")).strip()
         card = {"id": item["id"], "type": item.get("type"), "title": out.get("title", ""), "points": out.get("points", [])[:3],
-                "photo": photo, "cta": out.get("cta") or "استعلام قیمت روز"}
+                "photo": photo, "cta": out.get("cta") or "استعلام قیمت روز", "layout": pick_layout(item, rec)}
+        q["card"] = {k: card[k] for k in ("title", "points", "cta", "layout")}
         q["media"] = _render(card, "story") if photo else None
         q["photo"] = photo
         q["gate"] = _gate(" ".join([card["title"], " ".join(card["points"]), q["text"]]))
+        q["gate"].append({"name": "تکراری نبودن", "ok": score < 0.55,
+                          "detail": f"شباهت با نزدیک‌ترین مورد اخیر {round(score * 100)}٪" if near else ""})
         if not photo:
             q["gate"].append({"name": "عکس", "ok": False, "detail": "برای این دسته عکسی نیست"})
     elif item["kind"] == "telegram":
@@ -232,12 +328,13 @@ def prepare_item(item, used, say=print):
             q["gate"] = _gate(q["text"], extra_allowed=("prices",))
             q["source"] = "صفحه‌ی قیمت سایت"
         else:
-            extra = ""
+            avoid = [(r.get("card") or {}).get("title", "") or (r.get("text") or "")[:80] for r in rec if r.get("kind") == "telegram"]
+            extra = "این‌ها اخیراً در کانال رفته‌اند؛ موضوع و جمله‌ها نباید تکرار شوند: " + json.dumps(avoid[:20], ensure_ascii=False)
             if item.get("type") == "خبری":
                 arts = recent_articles()
                 if arts:
                     a = arts[-1]
-                    extra = f"خبر: مقاله‌ی تازه در مجله‌ی سایت منتشر شد: «{a.get('text')}» — لینک: {a.get('url')} (همین لینک را در متن بگذار)"
+                    extra += f"\nخبر: مقاله‌ی تازه در مجله‌ی سایت منتشر شد: «{a.get('text')}» — لینک: {a.get('url')} (همین لینک را در متن بگذار)"
                     q["source"] = "مقاله‌ی تازه‌ی سایت"
                 else:
                     item = dict(item, type="پرسش و پاسخ", product=item.get("product") if item.get("product_rank") else "توری و مفتول")
@@ -247,10 +344,12 @@ def prepare_item(item, used, say=print):
             q["text"] = str(out.get("text", "")).strip()
             photo = photo_for(dict(item, media=item.get("media") or (f"{(prod or {}).get('target_url', '').rsplit('/', 1)[-1]}/x" if prod else "")), used)
             card = {"id": item["id"], "type": item.get("type"), "title": out.get("title", ""), "points": out.get("points", [])[:3],
-                    "photo": photo, "cta": out.get("cta") or "قیمت روز در سایت"}
+                    "photo": photo, "cta": out.get("cta") or "قیمت روز در سایت", "layout": pick_layout(item, rec)}
+            q["card"] = {k: card[k] for k in ("title", "points", "cta", "layout")}
             q["media"] = _render(card, "post") if photo else None
             q["photo"] = photo
             q["gate"] = _gate(q["text"])
+    q["at"] = jitter(item, q.get("after") or item.get("time", "09:00"))
     if q.get("photo"):
         used.add(q["photo"])
     q["cost_usd"] = round(q.get("cost_usd", 0) + cost, 3)
@@ -267,7 +366,7 @@ def prepare(days=1, say=print):
     plan = read_json(PLAN, {}) or {}
     today = today_str()
     last = (datetime.fromisoformat(today) + timedelta(days=days)).date().isoformat()
-    used = {q.get("photo") for q in all_items() if q.get("date", "") >= (datetime.fromisoformat(today) - timedelta(days=7)).date().isoformat()}
+    used = {q.get("photo") for q in all_items() if q.get("date", "") >= (datetime.fromisoformat(today) - timedelta(days=14)).date().isoformat()}
     made = []
     for it in plan.get("items", []):
         if it["kind"] in ("story", "telegram") and today <= it["date"] <= last and not load(it["id"]):
@@ -299,9 +398,13 @@ def _logged(net):
 
 
 def publish(q, say=print, force=False):
+    import random
+    import time
     import actions
     sent = 0
-    for net in q.get("nets", []):
+    for i, net in enumerate(q.get("nets", [])):
+        if i and sent:
+            time.sleep(random.randint(25, 110))        # not the same second on every network
         prev = (q.get("results") or {}).get(net, {}).get("status")
         if prev in ("published", "sent-to-operator") or (prev == "failed" and not force):
             continue                                   # a failure is looked at by a person, not retried every 10 minutes
@@ -332,7 +435,7 @@ def due(say=print):
             ok = True
         if not ok:
             continue
-        at = datetime.fromisoformat(f"{q['date']}T{q.get('after') or q.get('time', '09:00')}").replace(tzinfo=now.tzinfo)
+        at = datetime.fromisoformat(f"{q['date']}T{q.get('at') or q.get('after') or q.get('time', '09:00')}").replace(tzinfo=now.tzinfo)
         if at <= now <= at + timedelta(hours=WINDOW_H):
             out.append(publish(q, say=say))
         elif now > at + timedelta(hours=WINDOW_H) and q.get("status") != "partial":

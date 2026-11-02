@@ -8,7 +8,7 @@ contact, prices in ریال, the company's numbers from .env (SITE_CONTACT_PHONE
 card), sepahanfelez.ir.
 
     ~/.venvs/pw/bin/python automation/render_card.py cards.json out_dir/
-cards.json: [{"id", "format": "story|post", "type", "title", "points": [...], "photo", "cta"}]
+cards.json: [{"id", "format": "story|post", "layout": "classic|full|bold", "type", "title", "points": [...], "photo", "cta"}]
 """
 
 import base64
@@ -55,6 +55,8 @@ def page(card):
     photo = data_uri(card["photo"])
     points = "".join(f"<li>{html.escape(fa_digits(p))}</li>" for p in card.get("points", []))
     photo_h = 900 if story else 620
+    h1 = f'<h1>{html.escape(fa_digits(card["title"]))}</h1>'
+    head_first, head_after = (h1, "") if card.get("layout") == "bold" else ("", h1)
     return f"""<!doctype html><html lang="fa" dir="rtl"><head><meta charset="utf-8"><style>
 {fonts}
 *{{box-sizing:border-box;margin:0}}
@@ -69,15 +71,35 @@ body{{width:{w}px;height:{h}px;font-family:Estedad;background:#F3F6FA;color:#0B1
 h1{{margin:{50 if story else 34}px 70px 0;font-size:{70 if story else 58}px;line-height:1.35;font-weight:700;color:#123152}}
 ul{{margin:{26 if story else 16}px 70px 0;padding:0 40px 0 0;font-size:{36 if story else 32}px;line-height:1.75;color:#24344A}}
 li::marker{{color:#123152}}
+/* layout «full»: the photo fills the card, copy on a dark gradient */
+body.full .photo{{position:absolute;inset:0;margin:0;height:auto;border-radius:0;box-shadow:none}}
+body.full .photo::after{{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,18,32,.55) 0%,rgba(11,18,32,0) 28%,rgba(11,18,32,0) 45%,rgba(11,18,32,.88) 78%)}}
+body.full .top,body.full .chip,body.full h1,body.full ul{{position:relative;z-index:2}}
+body.full .top b,body.full .top span,body.full h1,body.full ul{{color:#fff}}
+body.full .top{{background:rgba(255,255,255,.0)}}
+body.full .top img{{background:#fff;border-radius:18px;padding:6px}}
+body.full h1{{position:absolute;left:0;right:0;bottom:{480 if story else 320}px}}
+body.full ul{{position:absolute;left:0;right:0;bottom:{210 if story else 140}px}}
+body.full li::marker{{color:#fff}}
+body.full .chip{{background:#fff;color:#123152}}
+/* layout «bold»: navy card, big headline first, smaller photo */
+body.bold{{background:#123152;color:#fff}}
+body.bold .top b,body.bold .top span{{color:#fff}}
+body.bold .top img{{background:#fff;border-radius:18px;padding:6px}}
+body.bold .chip{{background:#fff;color:#123152}}
+body.bold h1{{color:#fff;font-size:{82 if story else 64}px;margin-top:{60 if story else 30}px}}
+body.bold ul{{color:#DCE6F2}}
+body.bold li::marker{{color:#fff}}
+body.bold .photo{{height:{640 if story else 420}px;box-shadow:none;border:6px solid rgba(255,255,255,.18)}}
 .cta{{position:absolute;left:0;right:0;bottom:0;background:#B42332;color:#fff;padding:{44 if story else 34}px 70px;display:flex;justify-content:space-between;align-items:center}}
 .cta .t{{font-size:{40 if story else 34}px;font-weight:700}}
 .cta .n{{font-size:{44 if story else 38}px;font-weight:700;direction:ltr}}
 .cta .w{{font-size:26px;opacity:.9;direction:ltr;text-align:left}}
-</style></head><body>
+</style></head><body class="{html.escape(card.get("layout", "classic"))}">
 <div class="top"><img src="{data_uri(LOGO)}" alt=""><div><b>سپاهان فلز</b><span>صنایع مفتولی طلوع سپاهان</span></div></div>
 <div class="chip">{html.escape(card.get("type", ""))}</div>
-<div class="photo"><img src="{photo}" alt=""></div>
-<h1>{html.escape(fa_digits(card["title"]))}</h1>
+{head_first}<div class="photo"><img src="{photo}" alt=""></div>
+{head_after}
 <ul>{points}</ul>
 <div class="cta"><div class="t">{html.escape(card.get("cta", "استعلام قیمت روز"))}</div>
 <div><div class="n">{html.escape(card_phone())}</div><div class="w">sepahanfelez.ir</div></div></div>

@@ -9,7 +9,8 @@ Every run lists the whole tree and compares it with the last run (data/photos/ma
 
 Folder names are free text («توری مرغی», «Chicken wire», «عکس کارخانه»…) at any depth; a photo
 belongs to the nearest folder above it whose name matches a category. «_factory» collects the
-factory/production-line folders. Anything else lands in _unmatched/<folder> and is listed in the
+factory/production-line folders; «_docs» (old price lists, documents) and «_logo» are kept but never
+used as content photos. Anything else lands in _unmatched/<folder> and is listed in the
 dashboard for a decision.
 """
 
@@ -34,7 +35,10 @@ CATEGORIES = {
     "توری-کششی": ["کششی", "لوزی", "expanded"],
     "_factory": ["کارخانه", "خط تولید", "سوله", "تولید", "انبار", "بارگیری", "factory", "production"],
     "_logo": ["لوگو", "logo", "برند"],
+    "_docs": ["document", "documents", "مدارک", "سند", "اسناد", "لیست قیمت", "price list"],
 }
+# never used as content photos: documents (old price lists with handwriting), logos, unmatched
+NOT_CONTENT = ("_docs", "_logo", "_unmatched")
 # the plan used the old slugs before the URL clean-up; keep reading photos synced under them
 ALIASES = {"توری-جوشی--گالوانیزه-رول": "توری-جوشی-گالوانیزه-رول", "توری-کششی(expanded-metal)": "توری-کششی"}
 IMAGE_MIME = ("image/jpeg", "image/png", "image/webp", "image/heic")
@@ -157,7 +161,7 @@ def library():
     if os.path.isdir(PHOTOS):
         for slug in os.listdir(PHOTOS):
             d = os.path.join(PHOTOS, slug)
-            if slug.startswith("_unmatched") or not os.path.isdir(d):
+            if slug.startswith(NOT_CONTENT) or not os.path.isdir(d):
                 continue
             files = sorted(x for x in os.listdir(d) if not x.endswith(".part") and x.lower().endswith((".jpg", ".jpeg", ".png", ".webp")))
             if files:
