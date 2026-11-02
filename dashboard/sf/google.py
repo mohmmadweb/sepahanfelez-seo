@@ -132,13 +132,40 @@ def inspect_urls(site, urls, limit=40):
 
 
 # ---------------------------------------------------------------- GA4
+def find_ga4_property(creds, measurement_id):
+    """The property whose web stream carries the site's tag (G-…), among those the account can read.
+    Returns (property id or None, list of visible property names) — the list is the diagnosis when
+    the account has not been given access yet."""
+    from google.auth.transport.requests import AuthorizedSession
+    s = AuthorizedSession(creds)
+    base = "https://analyticsadmin.googleapis.com/v1beta"
+    r = s.get(f"{base}/accountSummaries", params={"pageSize": 200}, timeout=30)
+    r.raise_for_status()
+    props = [p for a in r.json().get("accountSummaries", []) for p in a.get("propertySummaries", [])]
+    for p in props:
+        rs = s.get(f"{base}/{p['property']}/dataStreams", timeout=30)
+        if rs.ok and any((d.get("webStreamData") or {}).get("measurementId") == measurement_id
+                         for d in rs.json().get("dataStreams", [])):
+            return p["property"].split("/")[-1], [p.get("displayName", p["property"]) for p in props]
+    return None, [p.get("displayName", p["property"]) for p in props]
+
+
 def collect_ga4(site, days=90):
-    prop = os.environ.get("GA4_PROPERTY_ID") or os.environ.get("GA4_PROPERTY") or site.get("ga4_property")
-    if not prop:
-        return {"status": "blocked", "reason": "GA4 property id not set (.env → GA4_PROPERTY_ID)"}
     creds, reason = _credentials(["https://www.googleapis.com/auth/analytics.readonly"])
     if not creds:
         return {"status": "blocked", "reason": reason}
+    prop = os.environ.get("GA4_PROPERTY_ID") or os.environ.get("GA4_PROPERTY") or site.get("ga4_property")
+    if not prop and site.get("ga4_measurement_id"):
+        try:
+            prop, visible = find_ga4_property(creds, site["ga4_measurement_id"])
+        except Exception as exc:                                      # noqa: BLE001
+            return {"status": "blocked", "reason": "GA4 lookup failed: " + _err(exc)}
+        if not prop:
+            return {"status": "blocked",
+                    "reason": f"service account has no access to the GA4 property with tag {site['ga4_measurement_id']} "
+                              f"(visible: {', '.join(visible) or 'none'})"}
+    if not prop:
+        return {"status": "blocked", "reason": "GA4 property id not set (.env → GA4_PROPERTY_ID)"}
     try:
         from google.analytics.data_v1beta import BetaAnalyticsDataClient
         from google.analytics.data_v1beta.types import DateRange, Dimension, Metric, RunReportRequest
