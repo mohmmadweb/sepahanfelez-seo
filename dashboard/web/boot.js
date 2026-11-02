@@ -23,32 +23,83 @@
   }
   function done() { if (box) { box.remove(); box = null; } }
   var attempt = 0;
+  var FA = "۰۱۲۳۴۵۶۷۸۹";
+  function fa(n) { return String(n).replace(/[0-9]/g, function (d) { return FA[d]; }); }
+  // one small request, its own 20-second limit, up to 4 tries
+  function getJSON(url, tries) {
+    tries = tries || 4;
+    var ctl = window.AbortController ? new AbortController() : null;
+    var timer = setTimeout(function () { if (ctl) ctl.abort(); }, 20000);
+    return fetch(url, { credentials: "same-origin", cache: "no-store", signal: ctl ? ctl.signal : undefined }).then(function (r) {
+      clearTimeout(timer);
+      if (r.status === 401) { var e = new Error("login"); e.login = true; throw e; }
+      if (r.status === 409) { var s = new Error("stale"); s.stale = true; throw s; }
+      if (!r.ok) throw new Error("HTTP " + r.status);
+      return r.json();
+    }).catch(function (e) {
+      clearTimeout(timer);
+      if (e.login || e.stale || tries <= 1) throw e;
+      return getJSON(url, tries - 1);
+    });
+  }
+  function getText(url, tries) {
+    tries = tries || 4;
+    var ctl = window.AbortController ? new AbortController() : null;
+    var timer = setTimeout(function () { if (ctl) ctl.abort(); }, 30000);
+    return fetch(url, { credentials: "same-origin", signal: ctl ? ctl.signal : undefined }).then(function (r) {
+      clearTimeout(timer);
+      if (!r.ok) throw new Error("HTTP " + r.status);
+      return r.text();
+    }).catch(function (e) {
+      clearTimeout(timer);
+      if (tries <= 1) throw e;
+      return getText(url, tries - 1);
+    });
+  }
+  // the data in small pieces (see /api/data/part on the server), three at a time
+  function fetchData() {
+    return getJSON("/api/data/index").then(function (ix) {
+      var parts = new Array(ix.count), next = 0, got = 0;
+      function worker() {
+        if (next >= ix.count) return Promise.resolve();
+        var i = next++;
+        return getJSON("/api/data/part/" + i + "?stamp=" + ix.stamp).then(function (p) {
+          parts[i] = p; got += 1;
+          status("در حال دریافت داده‌ها… " + fa(got) + " از " + fa(ix.count));
+          return worker();
+        });
+      }
+      return Promise.all([worker(), worker(), worker()]).then(function () {
+        var texts = {}, d = {};
+        parts.forEach(function (p) { (texts[p.key] = texts[p.key] || [])[p.n] = p.text; });
+        Object.keys(texts).forEach(function (k) { d[k] = JSON.parse(texts[k].join("")); });
+        return d;
+      });
+    });
+  }
   function loadApp() {
     attempt += 1;
-    status(attempt === 1 ? "در حال دریافت داده‌ها…" : "اتصال کند بود؛ تلاش دوباره (" + attempt + " از ۳)…");
-    var ctl = window.AbortController ? new AbortController() : null;
-    var timer = setTimeout(function () { if (ctl) ctl.abort(); }, 45000);
-    return fetch("/api/data", { credentials: "same-origin", cache: "no-store", signal: ctl ? ctl.signal : undefined }).then(function (r) {
-      if (r.status === 401) { clearTimeout(timer); done(); showGate(); return; }
-      if (!r.ok) throw new Error("HTTP " + r.status);
-      return r.json().then(function (d) {
-        clearTimeout(timer);
-        window.SF = d;
-        gate.hidden = true;
-        document.body.classList.remove("locked");
-        var lo = document.getElementById("logout"); lo.hidden = false;
-        lo.onclick = function () { window.SFAPI.post("/api/logout", {}).then(function () { location.reload(); }); };
-        status("در حال آماده کردن صفحه…");
-        var s = document.createElement("script"); s.src = "app.js?v=" + (window.SF_V || Date.now());
-        s.onload = done;
-        window.addEventListener("error", function (ev) {
-          if ((ev.filename || "").indexOf("app.js") >= 0) status("خطا در نمایش داشبورد: " + (ev.message || "") + " — این پیام را برای پشتیبانی بفرستید.", true);
-        });
-        s.onerror = function () { status("فایل برنامه‌ی داشبورد نرسید. اتصال را بررسی کنید.", true); };
+    status(attempt === 1 ? "در حال دریافت داده‌ها…" : "اتصال کند بود؛ تلاش دوباره (" + fa(attempt) + " از ۳)…");
+    return fetchData().then(function (d) {
+      window.SF = d;
+      gate.hidden = true;
+      document.body.classList.remove("locked");
+      var lo = document.getElementById("logout"); lo.hidden = false;
+      lo.onclick = function () { window.SFAPI.post("/api/logout", {}).then(function () { location.reload(); }); };
+      status("در حال آماده کردن صفحه…");
+      return getText("app.js?v=" + (window.SF_V || Date.now())).then(function (code) {
+        // an inline script runs synchronously on append, so this listener sees only its first run
+        var failed = null;
+        function onErr(ev) { failed = ev.message || "خطای نامشخص"; }
+        window.addEventListener("error", onErr);
+        var s = document.createElement("script"); s.text = code + "\n//# sourceURL=app.js";
         document.body.appendChild(s);
+        window.removeEventListener("error", onErr);
+        if (failed) status("خطا در نمایش داشبورد: " + failed + " — این پیام را برای پشتیبانی بفرستید.", true);
+        else done();
       });
-    }).catch(function () {
-      clearTimeout(timer);
+    }).catch(function (e) {
+      if (e && e.login) { done(); showGate(); return; }
       if (attempt < 3) return loadApp();
       status("داده‌ها نرسید — اتصال به سرور قطع یا خیلی کند است. اگر Chrome است، صفحه را یک بار با Ctrl+Shift+R باز کنید.", true);
     });

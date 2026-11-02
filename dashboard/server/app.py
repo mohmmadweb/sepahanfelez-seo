@@ -135,6 +135,43 @@ async def data():
     return build.assemble()
 
 
+# The same data in small pieces. Some connections from Iran to Cloudflare stall on any response
+# above a few tens of KB while small ones go through; the loader fetches these one by one, each
+# with its own retry, and puts them back together. The assembled data is cached for five minutes so
+# the pieces of one page load come from the same snapshot.
+_parts = {"at": 0.0, "parts": None}
+PART_CHARS = 60000
+
+
+def _split():
+    if _parts["parts"] is None or time.time() - _parts["at"] > 300:
+        d = build.assemble()
+        parts = []
+        for k, v in d.items():
+            txt = json.dumps(v, ensure_ascii=False, separators=(",", ":"))
+            pieces = [txt[i:i + PART_CHARS] for i in range(0, len(txt), PART_CHARS)] or [""]
+            for n, piece in enumerate(pieces):
+                parts.append({"key": k, "n": n, "of": len(pieces), "text": piece})
+        _parts.update(at=time.time(), parts=parts)
+    return _parts["parts"]
+
+
+@app.get("/api/data/index")
+async def data_index():
+    parts = _split()
+    return {"count": len(parts), "stamp": int(_parts["at"])}
+
+
+@app.get("/api/data/part/{i}")
+async def data_part(i: int, stamp: int = 0):
+    parts = _split()
+    if stamp and stamp != int(_parts["at"]):
+        raise HTTPException(409, "stale")
+    if not 0 <= i < len(parts):
+        raise HTTPException(404)
+    return parts[i]
+
+
 @app.get("/api/trace/{item_id}")
 async def get_trace(item_id: str):
     steps = trace.read(item_id)
