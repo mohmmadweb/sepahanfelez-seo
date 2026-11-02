@@ -21,7 +21,8 @@ sys.path.insert(0, os.path.join(ROOT, "automation"))
 import login as L  # noqa: E402
 
 NETS = {"eitaa": "ایتا", "bale": "بله", "rubika": "روبیکا", "whatsapp": "واتساپ",
-        "telegram": "تلگرام", "instagram": "اینستاگرام", "linkedin": "لینکدین"}
+        "telegram": "تلگرام", "instagram": "اینستاگرام", "linkedin": "لینکدین", "site": "پنل سایت"}
+SITE_ACTIONS = {"login", "check", "logout", "urlfix-plan", "urlfix-apply", "write", "publish", "seo-apply"}
 ANSWER_TIMEOUT = 300
 
 
@@ -85,6 +86,12 @@ def start(net, action="login", params=None, account=None):
         job = _current = Job(net, action)
         job.account = account
 
+    if net == "site":
+        if action not in SITE_ACTIONS:
+            raise ValueError("unknown action")
+        threading.Thread(target=_site_work, args=(job, action, params or {}), daemon=True, name="site").start()
+        return job.view()
+
     def work():
         L.IO = WebIO(job)
         import accounts
@@ -145,6 +152,61 @@ def start(net, action="login", params=None, account=None):
 
     threading.Thread(target=work, daemon=True, name=f"social-{net}").start()
     return job.view()
+
+
+def _site_work(job, action, params):
+    """Site panel jobs: same window, same code prompt as the networks."""
+    sys.path.insert(0, os.path.join(ROOT, "automation", "site"))
+    import panel
+    say = WebIO(job).say
+    panel.IO = WebIO(job)
+    try:
+        if action == "login":
+            job.ok = bool(panel.login(params.get("mobile")))
+        elif action == "check":
+            job.ok = bool(panel.check())
+            say("وارد پنل سایت هستید." if job.ok else "وارد پنل سایت نیستید.")
+        elif action == "logout":
+            job.ok = panel.logout()
+            say("نشست پنل سایت پاک شد.")
+        elif action == "urlfix-plan":
+            import urlfix
+            say("خواندن مقاله‌ها، دسته‌ها و ریدایرکت‌ها از پنل… (چند دقیقه)")
+            res = urlfix.plan()
+            job.result = {"counts": res["counts"], "middleware_live": res["middleware_live"]}
+            c = res["counts"]
+            say(f"{c['article']} مقاله، {c['blog_category'] + c['product_category']} دسته، {c['redirect_add'] + c['redirect_fix']} ریدایرکت، "
+                f"{c['body_links']} مقاله با لینک قدیمی." + ("" if res["middleware_live"] else " — میان‌افزار ۳۰۱ هنوز روی سایت نیست."))
+            job.ok = True
+        elif action == "urlfix-apply":
+            import urlfix
+            res = urlfix.apply(say=say)
+            bad = [v for v in res["verify"] if not v["ok"]]
+            job.result = {"applied": res["applied"], "bad": len(bad)}
+            job.ok = not bad
+        elif action == "write":
+            import articles
+            d = articles.write(params.get("item_id"), say=say)
+            job.result = {"id": d["id"], "status": d["status"]}
+            job.ok = d["status"] == "draft"
+        elif action == "publish":
+            import articles
+            d = articles.publish(params["item_id"], say=say)
+            job.result = {"id": d["id"], "url": d.get("url")}
+            if d.get("url"):
+                say("لینک: " + d["url"])
+            job.ok = d.get("status") == "published"
+        elif action == "seo-apply":
+            import seo_tasks
+            seo_tasks.apply(params["id"], say=say)
+            job.ok = True
+        job.phase = "done"
+    except Exception as exc:                   # noqa: BLE001
+        job.ok, job.phase = False, "error"
+        friendly = type(exc).__name__ in ("NotLoggedIn", "RuntimeError", "ValueError", "TimeoutError")
+        job.messages.append(str(exc) if friendly else f"{type(exc).__name__}: {str(exc)[:240]}")
+    finally:
+        panel.IO = panel.TerminalIO()
 
 
 def answer(text):

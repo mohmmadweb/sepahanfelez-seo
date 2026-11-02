@@ -451,6 +451,173 @@ async def runs():
     return {"steps": STEPS, "runs": read_json(RUNS, {}) or {}, "busy": _run_lock.locked()}
 
 
+# ---------------------------------------------------------------- site: panel, URLs, articles
+SITE_DATA = os.path.join(DATA, "site")
+sys.path.insert(0, os.path.join(ROOT, "automation", "site"))
+
+
+def _draft_summary(d):
+    return {k: d.get(k) for k in ("id", "date", "jalali", "time", "product", "type", "status", "url", "published_at",
+                                  "cost_usd", "last_error", "blog_category")} | {
+        "title": (d.get("fields") or {}).get("title"), "keyword": (d.get("fields") or {}).get("keyword"),
+        "gate_fail": [g["name"] for g in d.get("gate", []) if not g["ok"]]}
+
+
+@app.get("/api/site")
+async def site_view():
+    import articles
+    import panel
+    load_env()
+    plan = read_json(os.path.join(SITE_DATA, "urlfix_plan.json"), None)
+    zip_path = os.path.expanduser("~/projects/sepahanfelez-staging/golive/sepahanfelez-redirects.zip")
+    return {"panel": panel.status(), "mobile": os.environ.get("SITE_ADMIN_MOBILE", ""),
+            "autopublish": articles.autopublish(),
+            "drafts": [_draft_summary(d) for d in articles.all_drafts()],
+            "next_item": articles.next_item(),
+            "urlfix": {"plan": plan and {k: plan[k] for k in ("at", "base", "middleware_live", "counts", "steps",
+                                                             "keep_owner_redirects", "merge_suggestions")},
+                       "result": read_json(os.path.join(SITE_DATA, "urlfix_result.json"), None)},
+            "deploy_zip": os.path.exists(zip_path),
+            "seo": __import__("seo_tasks").all_proposals()[:30],
+            "google": _google_state()}
+
+
+@app.get("/api/site/drafts/{item_id}")
+async def site_draft(item_id: str):
+    import articles
+    d = articles.load(item_id)
+    if not d:
+        raise HTTPException(404)
+    return {k: v for k, v in d.items() if k != "image"} | {"has_image": bool(d.get("image"))}
+
+
+@app.post("/api/site/drafts/{item_id}/{action}")
+async def site_draft_action(item_id: str, action: str, req: Request):
+    import articles
+    d = articles.load(item_id)
+    if not d or action not in ("approve", "reject", "reopen", "edit"):
+        raise HTTPException(404)
+    if d.get("status") == "published":
+        raise HTTPException(409, "این مقاله منتشر شده است")
+    if action == "approve":
+        if any(not g["ok"] for g in d.get("gate", [])):
+            raise HTTPException(409, "کنترل کیفیت رد شده؛ اول اصلاح یا دوباره نوشتن")
+        d["status"] = "approved"
+        trace.step(item_id, "approve", "تأیید شد", "در زمان برنامه منتشر می‌شود (یا «انتشار همین حالا»)")
+    elif action == "reject":
+        d["status"] = "rejected"
+        trace.step(item_id, "approve", "رد شد", (await req.json()).get("why", ""))
+    elif action == "reopen":
+        d["status"] = "draft"
+    elif action == "edit":
+        body = await req.json()
+        for k in ("title", "slug", "meta_title", "meta_description", "description", "keyword", "meta_keywords", "body"):
+            if k in body:
+                d["fields"][k] = str(body[k])
+        targets = articles.link_targets({"media": d.get("product_slug", "") + "/x"})
+        existing = {p.rsplit("/", 1)[-1] for p in targets if p.startswith("/blog/")}
+        d["gate"] = articles.gate(d, existing, targets)
+        d["status"] = "draft" if all(g["ok"] for g in d["gate"]) else "needs_fix"
+        trace.step(item_id, "write", "ویرایش دستی در داشبورد", "، ".join(k for k in body))
+    articles.save(d)
+    return _draft_summary(d)
+
+
+@app.post("/api/site/seo/{pid}/{action}")
+async def site_seo_action(pid: str, action: str):
+    import seo_tasks
+    p = read_json(os.path.join(SITE_DATA, "seo", f"{os.path.basename(pid)}.json"), None)
+    if not p or action not in ("approve", "reject") or p.get("status") == "applied":
+        raise HTTPException(404)
+    if action == "approve" and not all(g["ok"] for g in p.get("gate", [])):
+        raise HTTPException(409, "کنترل کیفیت رد شده")
+    p["status"] = "approved" if action == "approve" else "rejected"
+    seo_tasks.save(p)
+    if action == "approve":
+        try:
+            return social_jobs.start("site", "seo-apply", params={"id": p["id"]})
+        except (ValueError, RuntimeError) as exc:
+            raise HTTPException(409, str(exc))
+    return {"ok": True}
+
+
+@app.post("/api/site/{action}")
+async def site_action(action: str, req: Request):
+    try:
+        body = await req.json()
+    except Exception:                                                  # noqa: BLE001
+        body = {}
+    if action == "login" and body.get("mobile"):
+        envfile.update({"SITE_ADMIN_MOBILE": body["mobile"].strip()})       # kept in .env like every other entry
+    try:
+        return social_jobs.start("site", action, params=body)
+    except (ValueError, RuntimeError) as exc:
+        raise HTTPException(409, str(exc))
+
+
+# ---------------------------------------------------------------- Google data (GitHub Actions)
+GH_REPO = "mohmmadweb/sepahanfelez-seo"
+
+
+def _gh_token():
+    try:
+        for line in open(os.path.expanduser("~/.git-credentials"), encoding="utf-8"):
+            if "mohmmadweb" in line and "github.com" in line:
+                return line.strip().split("://", 1)[1].split("@", 1)[0].split(":", 1)[1]
+    except OSError:
+        pass
+    return None
+
+
+def _google_state():
+    g = read_json(os.path.join(DATA, "latest", "gsc.json"), {}) or {}
+    a = read_json(os.path.join(DATA, "latest", "ga4.json"), {}) or {}
+    sa = os.environ.get("GOOGLE_APPLICATION_CREDENTIALS", "")
+    email = None
+    try:
+        email = json.load(open(sa)).get("client_email") if sa and os.path.exists(sa) else None
+    except (OSError, ValueError):
+        pass
+    return {"service_account": email, "gsc": {"status": g.get("status"), "reason": g.get("reason")},
+            "ga4": {"status": a.get("status"), "reason": a.get("reason"), "property": a.get("property")},
+            "secrets_pushed": read_json(os.path.join(DATA, "google_secrets.json"), None),
+            "measurement_id": (read_json(os.path.join(DASH, "config", "site.json"), {}) or {}).get("ga4_measurement_id")}
+
+
+@app.post("/api/google/push-secrets")
+async def google_push_secrets():
+    """Owner-initiated: put the three values the Google workflow needs into the repo's Actions secrets
+    (encrypted with the repo's public key; GitHub never shows them again), then run the workflow once."""
+    import requests
+    from nacl import encoding, public
+    tok = _gh_token()
+    if not tok:
+        raise HTTPException(409, "دسترسی GitHub (mohmmadweb) روی سرور پیدا نشد")
+    sa = os.environ.get("GOOGLE_APPLICATION_CREDENTIALS", "")
+    vals = {"GOOGLE_SERVICE_ACCOUNT": open(sa).read() if sa and os.path.exists(sa) else "",
+            "GOOGLE_API_KEY": os.environ.get("GOOGLE_API_KEY", ""), "SF_STATE_KEY": os.environ.get("SF_STATE_KEY", "")}
+    missing = [k for k, v in vals.items() if not v]
+    if missing:
+        raise HTTPException(409, "در .env خالی است: " + "، ".join(missing))
+    H = {"Authorization": "token " + tok, "Accept": "application/vnd.github+json"}
+    R = f"https://api.github.com/repos/{GH_REPO}/actions"
+    k = requests.get(R + "/secrets/public-key", headers=H, timeout=30).json()
+    box = public.SealedBox(public.PublicKey(k["key"].encode(), encoding.Base64Encoder()))
+    done = []
+    for n, v in vals.items():
+        r = requests.put(f"{R}/secrets/{n}", headers=H, timeout=30,
+                         json={"encrypted_value": base64.b64encode(box.encrypt(v.encode())).decode(), "key_id": k["key_id"]})
+        if r.status_code not in (201, 204):
+            raise HTTPException(502, f"GitHub {n}: {r.status_code}")
+        done.append(n)
+    if os.environ.get("GA4_PROPERTY_ID"):
+        requests.post(f"{R}/variables", headers=H, timeout=30, json={"name": "GA4_PROPERTY_ID", "value": os.environ["GA4_PROPERTY_ID"]})
+    r = requests.post(f"{R}/workflows/google-data.yml/dispatches", headers=H, timeout=30, json={"ref": "main"})
+    state = {"at": now_tehran().isoformat(timespec="seconds"), "secrets": done, "dispatched": r.status_code == 204}
+    write_json(os.path.join(DATA, "google_secrets.json"), state)
+    return state
+
+
 @app.post("/api/social/{net}/{action}")
 async def social_action(net: str, action: str, account: str = "", public: int = 0):
     if action not in ("login", "logout", "check", "validate"):

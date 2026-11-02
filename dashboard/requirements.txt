@@ -13,3 +13,4 @@ python-multipart>=0.0.9
 playwright>=1.45
 telethon>=1.36
 instagrapi>=2.1
+pynacl>=1.5

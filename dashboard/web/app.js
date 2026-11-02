@@ -808,6 +808,12 @@
       tile("استوری در ۴ هفته‌ی آینده", fn(stories), "۵ شبکه برای هر کدام"),
       tile("مقاله در ۴ هفته‌ی آینده", fn(arts), "۳ ← ۵ ← ۶ در هفته"),
       tile("عکس محصول آماده", fn(((plan.priority || []).reduce(function (a, p) { return a + (p.photos || 0); }, 0))), "تا اتصال درایو: عکس‌های پروتوتایپ"))];
+    var artHolder = el("div", { class: "mt2 small muted", text: "در حال خواندن مقاله‌های سایت…" });
+    out.push(artHolder);
+    articlesSection(artHolder);
+    var seoHolder = el("div", { class: "mt2 small muted", text: "…" });
+    out.push(seoHolder);
+    seoSection(seoHolder);
 
     // calendar next 10 working days
     var days = []; items.forEach(function (it) { if (days.indexOf(it.date) < 0) days.push(it.date); });
@@ -1230,6 +1236,188 @@
       });
     };
   }
+  // ------------------------------------------------------------------ site: panel, Google, URLs, articles
+  var SITE = null;
+  function siteData() { return SITE ? Promise.resolve(SITE) : API.get("/api/site").then(function (s) { SITE = s; return s; }); }
+  function siteJob(title, action, params, onDone) {
+    var box = el("div"), msgs = el("div", { class: "stack small", style: "margin:8px 0" }), area = el("div");
+    box.appendChild(msgs); box.appendChild(area);
+    var stop = null;
+    openModal(title, box, function () { if (stop) stop(); });
+    stop = watchJob(area, msgs, API.post("/api/site/" + action, params || {}), onDone);
+  }
+  var DRAFT_ST = { draft: ["ready", "آماده‌ی تأیید"], needs_fix: ["blocked", "نیاز به اصلاح"], approved: ["ok", "تأییدشده"],
+    published: ["done", "منتشر شد"], rejected: ["pending", "رد شد"] };
+
+  function sitePanelSection(holder) {
+    siteData().then(function (s) {
+      holder.textContent = "";
+      var st = s.panel || {};
+      var mob = el("input", { type: "tel", value: s.mobile || "", placeholder: "0913…", style: "width:160px;padding:6px 8px;border:1px solid var(--border-2);border-radius:8px;direction:ltr;background:var(--surface)" });
+      holder.appendChild(card("پنل مدیریت سایت (sepahanfelez.ir)", "انتشار مقاله و اصلاح نشانی‌ها فقط از راه فرم‌های خود پنل",
+        el("div", { class: "stack small" },
+          el("div", { style: "display:flex;gap:8px;align-items:center;flex-wrap:wrap" },
+            st.logged_in ? stChip("ok") : el("span", { class: "st pending", text: "وارد نشده" }),
+            el("span", { class: "muted", text: st.checked ? "بررسی: " + jdt(st.checked) : "هنوز وارد نشده" })),
+          el("div", { style: "display:flex;gap:8px;align-items:center;flex-wrap:wrap" },
+            el("span", { class: "ink2", text: "موبایل مدیر سایت:" }), mob,
+            st.logged_in ? null : el("button", { class: "btn primary small", type: "button", text: "ورود", onclick: function () {
+              if (!mob.value.trim()) { alert("شماره‌ی موبایل مدیر را وارد کنید."); return; }
+              siteJob("ورود به پنل سایت", "login", { mobile: mob.value.trim() }); } }),
+            el("button", { class: "btn small", type: "button", text: "بررسی", onclick: function () { siteJob("بررسی پنل سایت", "check"); } }),
+            st.logged_in ? el("button", { class: "btn small", type: "button", text: "خروج", onclick: function () { if (confirm("نشست پنل سایت پاک شود؟")) siteJob("خروج از پنل سایت", "logout"); } }) : null),
+          el("p", { class: "muted", style: "margin:0", text: "کد پیامکی به همین شماره می‌آید (همان ورود همیشگی شما به پنل). سایت هر ۱۰ دقیقه فقط ۳ کد می‌فرستد. بعد از یک بار ورود، نشست با بازدید خودکار هر چند ساعت زنده می‌ماند." }))));
+    }, function (e) { holder.textContent = e.message; });
+  }
+
+  function googleSection(holder) {
+    siteData().then(function (s) {
+      holder.textContent = "";
+      var g = s.google || {};
+      function line(name, x) {
+        return el("div", null, el("b", { text: name + ": " }), x.status === "ok" ? stChip("ok") : el("span", { class: "st blocked", text: "وصل نیست" }),
+          x.reason ? el("span", { class: "small muted ltr", text: " " + x.reason }) : null);
+      }
+      var pushed = g.secrets_pushed;
+      var btn = el("button", { class: "btn primary small", type: "button", text: "ارسال کلیدها به GitHub و اجرای جمع‌آوری", onclick: function () {
+        if (!confirm("سه مقدار (کلید حساب سرویس گوگل، کلید API و کلید رمزگذاری) رمزشده در Secrets مخزن GitHub ذخیره و جمع‌آوری یک بار اجرا شود؟")) return;
+        btn.disabled = true;
+        API.post("/api/google/push-secrets", {}).then(function (r) { alert("✓ ذخیره شد و جمع‌آوری شروع شد. حدود ۵ دقیقه بعد «بررسی دوباره»ی داده‌ی گوگل را از «ماشین‌ها» بزنید."); SITE = null; googleSection(holder); },
+          function (e) { btn.disabled = false; alert(e.message); }); } });
+      holder.appendChild(card("سرچ کنسول و آنالیتیکس گوگل", "گوگل به IP این سرور جواب نمی‌دهد؛ داده را GitHub Actions هر روز ۰۶:۳۰ رمزشده می‌آورد",
+        el("div", { class: "stack small" },
+          line("Search Console", g.gsc || {}), line("Analytics (GA4)", g.ga4 || {}),
+          el("ol", { class: "steps" },
+            el("li", null, "در Search Console (پراپرتی sepahanfelez.ir) → Settings → Users and permissions → Add user: ",
+              el("code", { class: "ltr", text: g.service_account || "—" }), " با دسترسی Full."),
+            el("li", null, "در Google Analytics → Admin → Property access management → + : همین ایمیل با نقش Viewer (پراپرتی‌ای که تگ ",
+              el("code", { class: "ltr", text: g.measurement_id || "G-…" }), " دارد؛ شناسه‌ی پراپرتی خودکار پیدا می‌شود)."),
+            el("li", null, "این دکمه را بزنید: ", btn,
+              pushed ? el("span", { class: "muted", text: " · آخرین ارسال " + jdt(pushed.at) }) : null)))));
+    }, function (e) { holder.textContent = e.message; });
+  }
+
+  var URL_KIND = { blog_category: "دسته‌ی مجله", product_category: "دسته‌ی کالا", article: "مقاله", body_links: "لینک داخل متن",
+    redirect_add: "ریدایرکت تازه", redirect_fix: "اصلاح ریدایرکت", missing: "پیدا نشد" };
+  function urlSection(holder) {
+    siteData().then(function (s) {
+      holder.textContent = "";
+      var u = s.urlfix || {}, pl = u.plan, res = u.result;
+      var live = pl && pl.middleware_live;
+      var body = el("div", { class: "stack small" });
+      body.appendChild(el("p", { style: "margin:0", text: "۴۱ مقاله‌ی قدیمی نشانی‌های نامرتب دارند: انگلیسی و فارسی قاطی، «؟» در نشانی، حروف بزرگ، خط‌تیره‌ی دوتایی، دسته‌ی اشتباه. نقشه‌ی اصلاح، هر نشانی قدیمی را با ۳۰۱ به نشانی تازه می‌برد تا اعتبار گوگل و لینک‌های بیرونی از دست نرود." }));
+      body.appendChild(el("div", { class: "note " + (live ? "" : "warn") },
+        live ? "✓ میان‌افزار ۳۰۱ روی سایت زنده فعال است." :
+          "قدم ۱ (یک بار، کار شما): ریدایرکت‌های فعلی پنل روی sepahanfelez.ir اصلاً کار نمی‌کنند (۳۰۲ هستند و نشانی فارسی را نمی‌گیرند). فایل sepahanfelez-redirects.zip (۳ فایل، از ~/projects/sepahanfelez-staging/golive) را در cPanel → File Manager → پوشه‌ی /home/ahanamnc آپلود و Extract کنید (Overwrite). بعد «بررسی نقشه» را بزنید."));
+      body.appendChild(el("div", { class: "row" },
+        el("button", { class: "btn small", type: "button", text: "بررسی نقشه (فقط خواندن)", onclick: function () { siteJob("بررسی نقشه‌ی نشانی‌ها", "urlfix-plan", {}, function () { SITE = null; }); } }),
+        el("button", { class: "btn primary small", type: "button", text: "اعمال روی سایت", disabled: !live || null, onclick: function () {
+          if (!confirm("نامک‌ها در پنل عوض و ریدایرکت‌های ۳۰۱ ثبت شود؟ از هر فرم قبل از ذخیره پشتیبان گرفته می‌شود.")) return;
+          siteJob("اعمال اصلاح نشانی‌ها", "urlfix-apply", {}, function () { SITE = null; }); } })));
+      if (pl) {
+        var c = pl.counts || {};
+        body.appendChild(el("div", { class: "muted", text: "نقشه‌ی " + jdt(pl.at) + ": " + fn(c.article || 0) + " مقاله، " + fn((c.blog_category || 0) + (c.product_category || 0)) + " دسته، " +
+          fn((c.redirect_add || 0) + (c.redirect_fix || 0)) + " ریدایرکت، " + fn(c.body_links || 0) + " مقاله با لینک قدیمی در متن" + (c.missing ? "، " + fn(c.missing) + " مورد پیدا نشد" : "") }));
+        body.appendChild(table([
+          { key: "kind", label: "نوع", render: function (r) { return el("span", { class: "tag", text: URL_KIND[r.kind] || r.kind }); } },
+          { key: "from", label: "از", render: function (r) { return el("span", { class: "small ltr", text: r.from || r.title || r.what || "" }); } },
+          { key: "to", label: "به", render: function (r) { return el("span", { class: "small ltr", text: r.to || (r.links ? r.links.length + " لینک" : "") }); } },
+          { key: "why", label: "چرا", nosort: true, render: function (r) { return el("span", { class: "small ink2", text: r.why || "" }); } }
+        ], pl.steps || [], { limit: 200 }));
+        if ((pl.keep_owner_redirects || []).length) body.appendChild(el("div", { class: "note" }, el("b", { text: "تصمیم‌های قبلی تیم شما در پنل که حالا اجرا می‌شوند: " }),
+          el("ul", null, pl.keep_owner_redirects.map(function (k) { return el("li", null, el("span", { class: "ltr", text: k.from + " → " + k.to }), " — ", k.why); }))));
+        if ((pl.merge_suggestions || []).length) body.appendChild(el("details", null, el("summary", { text: "پیشنهاد ادغام مقاله‌های هم‌موضوع (اجرا نمی‌شود؛ تصمیم با شما)" }),
+          el("ul", null, pl.merge_suggestions.map(function (m) { return el("li", null, m.pages.join(" + "), " — ", m.why); }))));
+      }
+      if (res) {
+        var bad = (res.verify || []).filter(function (v) { return !v.ok; });
+        body.appendChild(el("div", { class: "note " + (bad.length ? "warn" : "") , text: "اعمال‌شده " + jdt(res.at) + ": " + fn(res.applied) + " تغییر · بررسی روی سایت: " + fn((res.verify || []).length - bad.length) + " از " + fn((res.verify || []).length) + " نشانی قدیمی درست ۳۰۱ می‌دهند." }));
+      }
+      holder.appendChild(card("اصلاح نشانی‌های مقاله‌ها و دسته‌ها (URL)", "اسلاگ فارسی تمیز + ریدایرکت ۳۰۱ از هر نشانی قدیمی", body));
+    }, function (e) { holder.textContent = e.message; });
+  }
+
+  function draftModal(id) {
+    var box = el("div", { class: "muted", text: "در حال خواندن…" });
+    var m = openModal("پیش‌نمایش مقاله", box);
+    API.get("/api/site/drafts/" + encodeURIComponent(id)).then(function (d) {
+      box.textContent = ""; box.className = "stack small";
+      var f = d.fields || {};
+      box.appendChild(el("div", null, el("b", { text: f.title || "" }), " ", el("span", { class: "tag", text: d.product || "" }), " ", el("span", { class: "tag", text: d.blog_category || "" })));
+      box.appendChild(el("div", { class: "ltr small", text: "/blog/…/" + (f.slug || "") }));
+      box.appendChild(el("div", null, el("b", { text: "عنوان سئو: " }), f.meta_title || ""));
+      box.appendChild(el("div", null, el("b", { text: "توضیح متا: " }), f.meta_description || ""));
+      box.appendChild(el("div", null, el("b", { text: "خلاصه: " }), f.description || ""));
+      box.appendChild(el("div", { style: "display:flex;gap:4px;flex-wrap:wrap" }, (d.gate || []).map(function (g) {
+        return el("span", { class: "st " + (g.ok ? "ok" : "blocked"), title: g.detail, text: (g.ok ? "✓ " : "✗ ") + g.name + (g.ok ? "" : " — " + g.detail) }); })));
+      var fr = el("iframe", { sandbox: "", title: "متن مقاله", style: "width:100%;height:55vh;border:1px solid var(--border-2);border-radius:8px;background:#fff" });
+      fr.srcdoc = '<!doctype html><html dir="rtl" lang="fa"><meta charset="utf-8"><body style="font-family:Tahoma,sans-serif;line-height:1.9;padding:12px 18px;color:#222">' + (f.body || "") + "</body></html>";
+      box.appendChild(fr);
+      var row = el("div", { class: "row" });
+      if (d.status !== "published") {
+        if (d.status === "draft") row.appendChild(el("button", { class: "btn primary small", type: "button", text: "تأیید (انتشار در زمان برنامه)", onclick: function () {
+          API.post("/api/site/drafts/" + id + "/approve", {}).then(function () { m.close(); SITE = null; reloadKeepTab(); }, function (e) { alert(e.message); }); } }));
+        if (d.status === "draft" || d.status === "approved") row.appendChild(el("button", { class: "btn small", type: "button", text: "انتشار همین حالا", onclick: function () {
+          if (!confirm("همین حالا روی sepahanfelez.ir منتشر شود؟")) return;
+          var go = function () { m.close(); siteJob("انتشار مقاله", "publish", { item_id: id }, function () { SITE = null; }); };
+          if (d.status === "draft") API.post("/api/site/drafts/" + id + "/approve", {}).then(go, function (e) { alert(e.message); }); else go(); } }));
+        row.appendChild(el("button", { class: "btn small", type: "button", text: "دوباره بنویس", onclick: function () {
+          m.close(); siteJob("نوشتن دوباره", "write", { item_id: id }, function () { SITE = null; }); } }));
+        if (d.status !== "rejected") row.appendChild(el("button", { class: "btn small danger", type: "button", text: "رد", onclick: function () {
+          var why = prompt("چرا رد می‌شود؟ (برای ثبت در روند تولید)") || "";
+          API.post("/api/site/drafts/" + id + "/reject", { why: why }).then(function () { m.close(); SITE = null; reloadKeepTab(); }, function (e) { alert(e.message); }); } }));
+      } else row.appendChild(el("a", { class: "btn small", href: d.url, target: "_blank", rel: "noopener", text: "دیدن روی سایت ↗" }));
+      row.appendChild(traceButton(id, f.title));
+      box.appendChild(row);
+    }, function (e) { box.textContent = e.message; });
+  }
+
+  function articlesSection(holder) {
+    siteData().then(function (s) {
+      holder.textContent = "";
+      var nx = s.next_item;
+      var head = el("div", { class: "stack small" },
+        el("div", null, "حالت انتشار: ", el("b", { text: s.autopublish ? "خودکار — پیش‌نویسِ قبول‌شده در کنترل کیفیت، سر ساعت برنامه منتشر می‌شود" : "با تأیید شما — هیچ مقاله‌ای بدون «تأیید» منتشر نمی‌شود" }),
+          el("span", { class: "muted", text: " (تنظیم SITE_AUTOPUBLISH در «تنظیمات»)" })),
+        el("div", null, "پنل سایت: ", (s.panel || {}).logged_in ? stChip("ok") : el("span", { class: "st waiting", text: "وارد نشده — از «اتصالات و تنظیمات»" })),
+        nx ? el("div", { class: "row" }, el("span", { text: "مقاله‌ی بعدی برنامه: " + fd(nx.jalali || nx.date) + " — " + (nx.title || nx.product) }),
+          el("button", { class: "btn primary small", type: "button", text: "نوشتن همین حالا", onclick: function () { siteJob("نوشتن مقاله", "write", { item_id: nx.id }, function () { SITE = null; }); } })) : null);
+      var list = table([
+        { key: "date", label: "تاریخ", render: function (r) { return fd(r.jalali || r.date) + " " + fd(r.time || ""); } },
+        { key: "title", label: "عنوان", render: function (r) { return el("a", { href: "#", onclick: function (e) { e.preventDefault(); draftModal(r.id); }, text: r.title || "—" }); } },
+        { key: "product", label: "محصول" },
+        { key: "status", label: "وضعیت", render: function (r) { var c = DRAFT_ST[r.status] || ["pending", r.status]; return el("span", { class: "st " + c[0], title: (r.gate_fail || []).join("، ") || r.last_error || "", text: c[1] }); } },
+        { key: "act", label: "", nosort: true, render: function (r) { return el("span", null, el("button", { class: "btn small", type: "button", text: r.status === "published" ? "مشاهده" : "پیش‌نمایش و تأیید", onclick: function () { draftModal(r.id); } }), " ", traceButton(r.id, r.title)); } }
+      ], s.drafts || [], { sortKey: "date", sortDir: "desc", limit: 30 });
+      holder.appendChild(card("مقاله‌های سایت", fn((s.drafts || []).length) + " پیش‌نویس/منتشرشده · نوشتن: Claude روی همین سرور · انتشار: از راه پنل خود سایت",
+        el("div", null, head, el("div", { class: "mt" }, (s.drafts || []).length ? list : el("div", { class: "muted small", text: "هنوز پیش‌نویسی نیست — هر روز صبح مقاله‌ی روز کاری بعد نوشته می‌شود." })))));
+    }, function (e) { holder.textContent = e.message; });
+  }
+
+  var SEO_ST = { draft: ["ready", "آماده‌ی تأیید"], needs_fix: ["blocked", "رد کنترل کیفیت"], approved: ["waiting", "در حال اعمال"],
+    applied: ["done", "اعمال شد"], rejected: ["pending", "رد شد"] };
+  function seoSection(holder) {
+    siteData().then(function (s) {
+      holder.textContent = "";
+      var g = (s.google || {}).gsc || {};
+      var rows = s.seo || [];
+      var body = rows.length ? table([
+        { key: "path", label: "صفحه", render: function (r) { return el("div", null, link(r.url, r.path), el("div", { class: "small muted", text: "رتبه " + fn(r.gsc.position, 1) + " · " + fn(r.gsc.impressions) + " نمایش · CTR " + fn(r.gsc.ctr, 2) + "٪" })); } },
+        { key: "new", label: "پیشنهاد", nosort: true, render: function (r) { return el("div", { class: "small" },
+          el("div", null, el("span", { class: "muted", text: "قبلی: " }), r.old.meta_title || "—"),
+          el("div", null, el("b", { text: "تازه: " }), r.new.meta_title), el("div", { class: "ink2", text: r.new.meta_description }),
+          r.why ? el("div", { class: "muted", text: "چرا: " + r.why }) : null); } },
+        { key: "status", label: "وضعیت", render: function (r) { var c = SEO_ST[r.status] || ["pending", r.status]; return el("span", { class: "st " + c[0], text: c[1] }); } },
+        { key: "act", label: "", nosort: true, render: function (r) { return r.status === "draft" ? el("span", null,
+          el("button", { class: "btn primary small", type: "button", text: "تأیید و اعمال", onclick: function () {
+            API.post("/api/site/seo/" + r.id + "/approve", {}).then(function (j) { SITE = null; var box = el("div"), msgs = el("div", { class: "stack small" }), area = el("div");
+              box.appendChild(msgs); box.appendChild(area); openModal("اعمال در پنل سایت", box); watchJob(area, msgs, Promise.resolve(j)); }, function (e) { alert(e.message); }); } }), " ",
+          el("button", { class: "btn small", type: "button", text: "رد", onclick: function () { API.post("/api/site/seo/" + r.id + "/reject", {}).then(function () { SITE = null; seoSection(holder); }); } })) : traceButton("seo-" + r.id, r.path); } }
+      ], rows, { limit: 30 }) : el("div", { class: "small muted", text: g.status === "ok" ? "امروز صفحه‌ای با نمایش زیاد و کلیک کم پیدا نشد." : "بعد از وصل شدن سرچ کنسول، هر روز صبح تا ۲ صفحه‌ای که در صفحه‌ی اول گوگل‌اند ولی کم کلیک می‌خورند این‌جا با عنوان و توضیح تازه پیشنهاد می‌شوند." });
+      holder.appendChild(card("کار روزانه‌ی سئو از سرچ کنسول", "پیشنهاد ← تأیید شما ← اعمال در پنل ← سنجش نرخ کلیک ۲۸ روز بعد در «سیر تغییرات»", body));
+    }, function (e) { holder.textContent = e.message; });
+  }
+
   var NET_ORDER = ["telegram", "instagram", "linkedin", "bale", "eitaa", "rubika", "whatsapp"];
   function addAccountModal(net, netFa) {
     var f = {};
@@ -1297,8 +1485,13 @@
 
   function viewIntegrations() {
     var S = D.social_status || {};
-    var out = [sec("اتصالات و تنظیمات", "هر تعداد حساب در هر شبکه: افزودن، ورود با کد، خروج، حذف، و انتخاب حساب پیش‌فرض برای انتشار. به‌علاوه‌ی اتصال درایو، کلیدها و اجرای دستی بررسی‌ها.")];
+    var out = [sec("اتصالات و تنظیمات", "پنل سایت (انتشار مقاله و اصلاح نشانی‌ها)، سرچ کنسول و آنالیتیکس، و هر تعداد حساب در هر شبکه: افزودن، ورود با کد، خروج، حذف، و انتخاب حساب پیش‌فرض برای انتشار. به‌علاوه‌ی اتصال درایو، کلیدها و اجرای دستی بررسی‌ها.")];
     out.push(el("p", { class: "small ink2", text: "ایمنی هر شبکه: یک کار در لحظه، سقف روزانه و فاصله‌ی حداقل برای هر نوع اقدام، و توقف خودکار ۲۴ ساعته با اولین هشدار پلتفرم (همان قواعدی که پیج لنزیت را سالم نگه داشت). هر ارسال در «تاریخچه‌ی انتشار» و «روند تولید» ثبت می‌شود." }));
+    var siteHolder = el("div", { class: "mt small muted", text: "…" }), googleHolder = el("div", { class: "mt small muted", text: "…" }),
+      urlHolder = el("div", { class: "mt small muted", text: "…" });
+    out.push(el("div", { class: "grid g2" }, siteHolder, googleHolder));
+    out.push(urlHolder);
+    sitePanelSection(siteHolder); googleSection(googleHolder); urlSection(urlHolder);
     var acctHolder = el("div", { class: "small muted", text: "در حال خواندن حساب‌ها…" });
     out.push(acctHolder);
     accountsSection(acctHolder);

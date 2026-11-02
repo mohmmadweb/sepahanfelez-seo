@@ -49,7 +49,8 @@ def keep_good(name, new):
 STEP_FA = {"crawl": "خزش سایت", "competitors": "رصد نقشه‌ی سایت رقبا", "serp": "نتایج جستجو و رقبای تازه",
            "drive": "عکس‌های درایو", "calendar": "تقویم و برنامه‌ی محتوا", "google": "داده‌ی گوگل",
            "analyse": "تحلیل مشکلات", "changes": "سیر تغییرات سایت", "measure": "سنجش نتیجه‌ی محتوا",
-           "social": "وضعیت ورود شبکه‌ها", "goals": "سنجش اهداف", "brief": "تحلیل امروز", "backup": "پشتیبان رمزشده"}
+           "site": "مقاله‌ی سایت و نشست پنل", "social": "وضعیت ورود شبکه‌ها", "goals": "سنجش اهداف", "brief": "تحلیل امروز",
+           "backup": "پشتیبان رمزشده"}
 
 
 def main():
@@ -146,12 +147,32 @@ def main():
         st = read_json(os.path.join(DATA, "social_status.json"), {}) or {}
         return f"{sum(1 for v in st.values() if v.get('logged_in'))} از {len(st)} حساب وارد"
 
+    def s_site():
+        """Keep the panel session alive and write the next planned article's draft ahead of its day,
+        so there is time to read and approve it."""
+        sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "automation", "site"))
+        import articles
+        import panel
+        logged = panel.check() if os.path.exists(panel.state_path()) else False
+        nxt = articles.next_item()
+        wrote = None
+        from datetime import date
+        if nxt and (date.fromisoformat(nxt["date"]) - date.fromisoformat(today_str())).days <= 2:
+            wrote = articles.write(nxt["id"], say=lambda *_: None)
+        import seo_tasks
+        props = seo_tasks.propose(say=lambda *_: None)
+        waiting = sum(1 for d in articles.all_drafts() if d.get("status") in ("draft", "needs_fix"))
+        return (("پنل: وارد" if logged else "پنل: وارد نیست") + (f" · {len(props)} پیشنهاد سئو از سرچ کنسول" if props else "") +
+                (f" · پیش‌نویس تازه: {wrote['fields']['title']} ({wrote['status']})" if wrote else " · پیش‌نویس تازه لازم نبود") +
+                f" · {waiting} منتظر تأیید")
+
     step("crawl", s_crawl)
     step("competitors", s_competitors)
     step("serp", s_serp)
     step("drive", s_drive)
     step("calendar", s_calendar)
     step("google", s_google)
+    step("site", s_site)
     step("analyse", s_analyse)
     step("changes", changes.daily)
     step("measure", measure.run)

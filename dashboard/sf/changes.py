@@ -23,7 +23,7 @@ SNAP = os.path.join(DATA, "changes", "crawl_snapshot.json")
 FIELD_FA = {"title": "عنوان", "description": "توضیحات متا", "h1": "H1", "words": "حجم متن", "schema": "داده‌ی ساختاریافته",
             "status": "وضعیت پاسخ", "new": "صفحه‌ی تازه", "removed": "صفحه حذف شد"}
 METRIC_FA = {"page_pos": "رتبه‌ی صفحه برای کلمه‌ی هدفش", "page_gsc_pos": "رتبه‌ی میانگین صفحه در گوگل",
-             "page_clicks": "کلیک گوگل صفحه (۲۸ روز)"}
+             "page_clicks": "کلیک گوگل صفحه (۲۸ روز)", "page_ctr": "نرخ کلیک صفحه در گوگل (٪، ۲۸ روز)"}
 
 
 def _load():
@@ -61,10 +61,11 @@ def page_metric(url):
 
 
 def metric_value(metric, ref=None):
-    if metric in ("page_pos", "page_gsc_pos", "page_clicks"):
-        if metric == "page_clicks":
+    if metric in ("page_pos", "page_gsc_pos", "page_clicks", "page_ctr"):
+        if metric in ("page_clicks", "page_ctr"):
             gsc = read_json(os.path.join(DATA, "latest", "gsc.json"), {}) or {}
-            return next((r["clicks"] for r in gsc.get("pages", []) if canon_url(r["page"]) == ref), None)
+            key = "clicks" if metric == "page_clicks" else "ctr"
+            return next((r[key] for r in gsc.get("pages", []) if canon_url(r["page"]) == ref), None)
         m, v = page_metric(ref)
         return v if m == metric else None
     from .goals import measure                                         # goal metrics
