@@ -1,0 +1,370 @@
+"""
+The content calendar, carried out on the networks.
+
+    python3 publisher.py prepare   # make tomorrow's (and today's missing) items: copy + image
+    python3 publisher.py due       # publish what is approved and due (every 10 min, 09–18 Tehran)
+    python3 publisher.py tick      # both — what the timer runs
+
+Per plan item (dashboard/data/latest/content_plan.json):
+  story    → one 1080×1920 card (product photo from Drive + short copy), to every network in the
+             item's list plus Telegram: Instagram (real story), Telegram (real story), Bale / Eitaa /
+             Rubika / WhatsApp (their web apps have no story button: the card is delivered to
+             Saved Messages for a one-tap repost, recorded as «sent-to-operator»).
+  telegram → a channel post on Telegram, Bale, Eitaa, Rubika: «قیمت روز» from the site's own price
+             table after 12:30, «خبری» from the site's own news (new articles) until the owner gives
+             news sources, otherwise a teaching/FAQ post with a 1080×1350 card.
+  article  → after the article is live: a short summary + link on LinkedIn and the Telegram channel.
+
+Copy is written by one `claude -p` call per item from facts we hold (catalog names, factory facts),
+never prices except those read from the site's price page. Each item waits for approval in the
+dashboard unless SOCIAL_AUTOPUBLISH=1. A network without a logged-in default account is skipped
+and noted — nothing is retried blindly. Every send goes through actions.act → safety (caps, gaps,
+24h pause) → publishing history («تاریخچه‌ی انتشار») and the item's trace.
+"""
+
+import html
+import json
+import os
+import re
+import sys
+import urllib.parse
+from datetime import datetime, timedelta
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+ROOT = os.path.dirname(os.path.dirname(HERE))
+sys.path.insert(0, HERE)
+sys.path.insert(0, os.path.dirname(HERE))
+sys.path.insert(0, os.path.join(os.path.dirname(HERE), "site"))
+sys.path.insert(0, os.path.join(ROOT, "dashboard"))
+
+from sf import trace  # noqa: E402
+from sf.env import load_env  # noqa: E402
+from sf.util import DATA, fetch, now_tehran, read_json, today_str, write_json  # noqa: E402
+
+QUEUE = os.path.join(DATA, "social", "queue")
+CARDS = os.path.join(DATA, "social", "cards")
+PLAN = os.path.join(DATA, "latest", "content_plan.json")
+PHOTOS_DRIVE = os.path.join(DATA, "photos")
+PHOTOS_PROTO = "/home/ubuntu/projects/sepahanfelez-prototype/assets/products"
+NET_FA = {"اینستاگرام": "instagram", "روبیکا": "rubika", "ایتا": "eitaa", "بله": "bale", "واتساپ": "whatsapp",
+          "تلگرام": "telegram", "لینکدین": "linkedin"}
+FA_NET = {v: k for k, v in NET_FA.items()}
+WINDOW_H = 3            # an approved item more than 3 hours late is not sent (stale story / price)
+
+
+def _now():
+    return now_tehran().isoformat(timespec="seconds")
+
+
+def _fa(s):
+    return str(s).translate(str.maketrans("0123456789", "۰۱۲۳۴۵۶۷۸۹"))
+
+
+def autopublish():
+    load_env()
+    return os.environ.get("SOCIAL_AUTOPUBLISH", "0").strip() == "1"
+
+
+def path(item_id):
+    return os.path.join(QUEUE, f"{item_id}.json")
+
+
+def load(item_id):
+    return read_json(path(item_id), None)
+
+
+def save(q):
+    os.makedirs(QUEUE, exist_ok=True)
+    q["updated"] = _now()
+    write_json(path(q["id"]), q)
+    return q
+
+
+def all_items():
+    if not os.path.isdir(QUEUE):
+        return []
+    out = [read_json(os.path.join(QUEUE, f), {}) for f in os.listdir(QUEUE) if f.endswith(".json")]
+    return sorted([q for q in out if q], key=lambda q: (q.get("date", ""), q.get("time", "")))
+
+
+# ------------------------------------------------------------------ inputs we trust
+def photo_for(item, used):
+    """A photo that exists *now* for the item's category: Drive photos first (a photo deleted on
+    Drive is gone from the library, so it is never picked), the prototype's as a fallback; factory
+    photos lead for factory/behind-the-scenes items; unused in the last week if possible."""
+    import hashlib
+    from sf.drive_sync import ALIASES, library
+    slug = (item.get("media") or "").split("/")[0]
+    if slug == "drive":
+        slug = (item.get("media") or "").split("/")[1]
+    lib = library()
+    real = ALIASES.get(slug, slug)
+    cands = [os.path.join(PHOTOS_DRIVE, real, f) for f in lib.get(real, []) if os.path.isdir(os.path.join(PHOTOS_DRIVE, real))]
+    if item.get("type") in ("معرفی کارخانه", "پشت‌صحنه") and lib.get("_factory"):
+        cands = [os.path.join(PHOTOS_DRIVE, "_factory", f) for f in lib["_factory"]] + cands
+    if not cands and slug and os.path.isdir(os.path.join(PHOTOS_PROTO, slug)):
+        cands = [os.path.join(PHOTOS_PROTO, slug, f) for f in sorted(os.listdir(os.path.join(PHOTOS_PROTO, slug))) if f.startswith("photo-")]
+    pool = [c for c in cands if os.path.isfile(c) and c not in used] or [c for c in cands if os.path.isfile(c)]
+    if not pool:
+        return None
+    return pool[int(hashlib.md5(item["id"].encode()).hexdigest(), 16) % len(pool)]
+
+
+def catalog(item):
+    import articles
+    prod = articles._product({"product_rank": item.get("product_rank")})
+    facts = articles.catalog_facts(item, prod) if prod else {"products_in_catalog": [], "category_page": "/price"}
+    return prod, facts
+
+
+def prices():
+    """[(name, price text, unit)] from the site's price page, as shown to visitors."""
+    r, _, _ = fetch("https://sepahanfelez.ir/price")
+    if r is None or r.status_code != 200:
+        return []
+    out, seen = [], set()
+    for row in re.findall(r"<tr.*?</tr>", r.text, re.S):
+        name = re.search(r'<a [^>]*href="/category/[^"]+"[^>]*>(.*?)</a>', row, re.S)
+        price = re.search(r'<b class="num">([^<]+)</b>\s*(?:<span class="riyal">([^<]+)</span>)?', row)
+        if not (name and price):
+            continue
+        n = re.sub(r"\s+", " ", html.unescape(re.sub(r"<[^>]+>", "", name.group(1)))).strip()
+        unit = re.sub(r"\s+", " ", (price.group(2) or "ریال")).strip()
+        tail = re.search(r'class="riyal">[^<]*</span>\s*(/\s*[^<]{1,20})', row)
+        if tail:
+            unit = f"{unit} {tail.group(1).strip()}"
+        if n and n not in seen:
+            seen.add(n)
+            out.append((n, price.group(1).strip(), unit))
+    return out
+
+
+def recent_articles(days=2):
+    import history
+    since = (now_tehran() - timedelta(days=days)).isoformat()
+    return [r for r in history.load().get("site", []) if r.get("kind") == "article" and r.get("ts", "") >= since and r.get("url")]
+
+
+# ------------------------------------------------------------------ copy
+def _llm(prompt):
+    import articles
+    out, cost = articles._llm(prompt)
+    return out, cost
+
+
+def _story_copy(item, prod, facts):
+    import articles
+    return _llm(f"""متن یک استوری اینستاگرام/تلگرام برای «سپاهان فلز» (تولیدکننده‌ی توری و مفتول، اصفهان) بنویس.
+نوع محتوا: {item.get('type')} · محصول: {item.get('product')} · مناسبت: {item.get('occasion') or '—'}
+کلمات مرتبط: {'، '.join((prod or {}).get('secondary', [])[:6])}
+کالاهای واقعی کاتالوگ (مشخصات در نامشان): {json.dumps(facts.get('products_in_catalog', [])[:15], ensure_ascii=False)}
+واقعیت‌های کارخانه: {articles.facts()}
+قواعد: هیچ قیمت و عددی که این‌جا نیست ننویس؛ ادعای ساختگی (گواهی، رتبه، «بهترین») نه؛ فارسی ساده؛ ارقام فارسی.
+خروجی فقط JSON: {{"title": "تیتر حداکثر ۴۰ نویسه", "points": ["۲ یا ۳ نکته‌ی کوتاه، هر کدام حداکثر ۴۵ نویسه"],
+"cta": "دعوت کوتاه حداکثر ۲۲ نویسه", "caption": "کپشن کوتاه ۱ تا ۲ جمله برای پیام همراه"}}""")
+
+
+def _channel_copy(item, prod, facts, extra=""):
+    import articles
+    return _llm(f"""یک پست کانال تلگرام/بله/ایتا/روبیکا برای «سپاهان فلز» (تولیدکننده‌ی توری و مفتول، اصفهان) بنویس.
+نوع: {item.get('type')} · موضوع: {item.get('product')}
+{extra}
+کالاهای واقعی کاتالوگ: {json.dumps(facts.get('products_in_catalog', [])[:15], ensure_ascii=False)}
+واقعیت‌های کارخانه: {articles.facts()}
+قواعد: ۴۰۰ تا ۸۰۰ نویسه؛ خط اول قلاب؛ ۳ تا ۵ خط کوتاه یا بولت؛ آخر یک خط «قیمت روز: sepahanfelez.ir/price» و شماره‌ی تماس؛
+بدون قیمت عددی (مگر در داده‌ی بالا)؛ بدون ادعای ساختگی؛ ۲ تا ۴ هشتگ فارسی مرتبط در آخر؛ ارقام فارسی.
+خروجی فقط JSON: {{"text": "متن کامل پست", "title": "تیتر کارت حداکثر ۴۰ نویسه", "points": ["۲ تا ۳ نکته‌ی کوتاه برای کارت"], "cta": "حداکثر ۲۲ نویسه"}}""")
+
+
+def _gate(text, extra_allowed=()):
+    import articles
+    digits = text.translate(str.maketrans("۰۱۲۳۴۵۶۷۸۹", "0123456789"))
+    phones = {re.sub(r"\D", "", m) for m in re.findall(r"0\d{2,3}[\s\-]?\d{3,4}[\s\-]?\d{4}|09\d{9}", digits)}
+    price = re.findall(r"\d[\d,٬\.]*\s*(?:ریال|تومان)", digits)
+    checks = [("فقط شماره‌های شرکت", phones <= articles.allowed_phones(), "، ".join(phones - articles.allowed_phones())),
+              ("بدون قیمت ساختگی", not price or bool(extra_allowed), "، ".join(price[:2])),
+              ("بدون «ارزش افزوده»", "ارزش افزوده" not in text, "")]
+    return [{"name": n, "ok": bool(ok), "detail": d} for n, ok, d in checks]
+
+
+# ------------------------------------------------------------------ prepare
+def _render(card, fmt):
+    import render_card
+    card = dict(card, format=fmt)
+    out = render_card.render([card], CARDS)
+    return out[0] if out else None
+
+
+def prepare_item(item, used, say=print):
+    q = load(item["id"]) or {"id": item["id"], "created": _now()}
+    if q.get("status") in ("approved", "done", "partial", "rejected"):
+        return q
+    q.update({k: item.get(k) for k in ("date", "jalali", "time", "type", "product", "kind")})
+    prod, facts = catalog(item)
+    cost = 0.0
+    if item["kind"] == "story":
+        q["nets"] = [NET_FA[c] for c in item.get("channels", []) if c in NET_FA] + ["telegram"]
+        q["action"] = "story"
+        photo = photo_for(item, used)
+        out, c = _story_copy(item, prod, facts)
+        cost += c
+        q["text"] = str(out.get("caption", "")).strip()
+        card = {"id": item["id"], "type": item.get("type"), "title": out.get("title", ""), "points": out.get("points", [])[:3],
+                "photo": photo, "cta": out.get("cta") or "استعلام قیمت روز"}
+        q["media"] = _render(card, "story") if photo else None
+        q["photo"] = photo
+        q["gate"] = _gate(" ".join([card["title"], " ".join(card["points"]), q["text"]]))
+        if not photo:
+            q["gate"].append({"name": "عکس", "ok": False, "detail": "برای این دسته عکسی نیست"})
+    elif item["kind"] == "telegram":
+        q["nets"] = [NET_FA[c] for c in item.get("channels", []) if c in NET_FA]
+        q["action"] = "post"
+        if item.get("type") == "قیمت روز":
+            rows = prices()
+            if not rows:
+                q.update(status="needs_fix", gate=[{"name": "جدول قیمت", "ok": False, "detail": "صفحه‌ی قیمت خوانده نشد"}])
+                return save(q)
+            lines = [f"▫️ {n}: {p} {u}" for n, p, u in rows[:12]]
+            q["text"] = ("📊 قیمت امروز سپاهان فلز — " + _fa(item.get("jalali", "")) + "\n\n" + "\n".join(lines) +
+                         "\n\nقیمت همه‌ی کالاها: sepahanfelez.ir/price\n#قیمت_روز #توری #مفتول")
+            q["media"] = None
+            q["after"] = "12:35"                                    # the site updates at 12:30
+            q["gate"] = _gate(q["text"], extra_allowed=("prices",))
+            q["source"] = "صفحه‌ی قیمت سایت"
+        else:
+            extra = ""
+            if item.get("type") == "خبری":
+                arts = recent_articles()
+                if arts:
+                    a = arts[-1]
+                    extra = f"خبر: مقاله‌ی تازه در مجله‌ی سایت منتشر شد: «{a.get('text')}» — لینک: {a.get('url')} (همین لینک را در متن بگذار)"
+                    q["source"] = "مقاله‌ی تازه‌ی سایت"
+                else:
+                    item = dict(item, type="پرسش و پاسخ", product=item.get("product") if item.get("product_rank") else "توری و مفتول")
+                    q["source"] = "منبع خبری تعریف نشده → پست پرسش و پاسخ"
+            out, c = _channel_copy(item, prod, facts, extra)
+            cost += c
+            q["text"] = str(out.get("text", "")).strip()
+            photo = photo_for(dict(item, media=item.get("media") or (f"{(prod or {}).get('target_url', '').rsplit('/', 1)[-1]}/x" if prod else "")), used)
+            card = {"id": item["id"], "type": item.get("type"), "title": out.get("title", ""), "points": out.get("points", [])[:3],
+                    "photo": photo, "cta": out.get("cta") or "قیمت روز در سایت"}
+            q["media"] = _render(card, "post") if photo else None
+            q["photo"] = photo
+            q["gate"] = _gate(q["text"])
+    if q.get("photo"):
+        used.add(q["photo"])
+    q["cost_usd"] = round(q.get("cost_usd", 0) + cost, 3)
+    q["status"] = "draft" if all(g["ok"] for g in q.get("gate", [])) else "needs_fix"
+    q.setdefault("results", {})
+    trace.step(item["id"], "write", "متن و تصویر آماده شد", (q.get("text") or "")[:120],
+               decision=("در انتظار تأیید شما در داشبورد" if not autopublish() else "انتشار خودکار در زمان برنامه"),
+               data={"nets": q["nets"], "usd": q["cost_usd"]})
+    say(f"آماده شد: {item['id']} ({q['status']})")
+    return save(q)
+
+
+def prepare(days=1, say=print):
+    plan = read_json(PLAN, {}) or {}
+    today = today_str()
+    last = (datetime.fromisoformat(today) + timedelta(days=days)).date().isoformat()
+    used = {q.get("photo") for q in all_items() if q.get("date", "") >= (datetime.fromisoformat(today) - timedelta(days=7)).date().isoformat()}
+    made = []
+    for it in plan.get("items", []):
+        if it["kind"] in ("story", "telegram") and today <= it["date"] <= last and not load(it["id"]):
+            try:
+                made.append(prepare_item(it, used, say=say))
+            except Exception as exc:                                    # noqa: BLE001
+                say(f"✗ {it['id']}: {type(exc).__name__}: {str(exc)[:160]}")
+    return made
+
+
+def share_article(draft):
+    """After an article is live: a summary + link for LinkedIn and the Telegram channel, 30 minutes later."""
+    when = now_tehran() + timedelta(minutes=30)
+    url = urllib.parse.unquote(draft["url"])
+    q = {"id": f"{draft['id']}-share", "created": _now(), "date": when.date().isoformat(), "time": when.strftime("%H:%M"),
+         "kind": "share", "type": "مقاله‌ی تازه", "product": draft.get("product"), "action": "post", "nets": ["linkedin", "telegram"],
+         "text": f"📝 {draft['fields']['title']}\n\n{draft['fields'].get('description', '')}\n\nادامه در سایت: {url}",
+         "link": draft["url"], "media": draft.get("image"), "status": "approved", "results": {}, "gate": []}
+    trace.step(q["id"], "plan", "اشتراک مقاله", url, decision="مقاله‌ی تأییدشده؛ خلاصه‌اش هم تأییدشده حساب می‌شود")
+    return save(q)
+
+
+# ------------------------------------------------------------------ publish
+def _logged(net):
+    import accounts
+    acct = accounts.default(net)
+    st = (read_json(os.path.join(DATA, "social_status.json"), {}) or {}).get(acct["id"] if acct else "", {})
+    return acct, bool(acct and st.get("logged_in"))
+
+
+def publish(q, say=print, force=False):
+    import actions
+    sent = 0
+    for net in q.get("nets", []):
+        prev = (q.get("results") or {}).get(net, {}).get("status")
+        if prev in ("published", "sent-to-operator") or (prev == "failed" and not force):
+            continue                                   # a failure is looked at by a person, not retried every 10 minutes
+        acct, ok = _logged(net)
+        if not ok:
+            q["results"][net] = {"status": "skipped", "detail": "حساب وصل نیست", "at": _now()}
+            continue
+        try:
+            res = actions.act(net, q["action"], text=q.get("text", ""), media=q.get("media"), link=q.get("link"),
+                              item_id=q["id"], content_type=q.get("type"), product=q.get("product"), account=acct["id"])
+            q["results"][net] = {"status": res.get("status"), "detail": res.get("detail", ""), "url": res.get("url"), "at": _now()}
+            sent += 1
+        except Exception as exc:                                       # noqa: BLE001
+            q["results"][net] = {"status": "failed", "detail": f"{type(exc).__name__}: {str(exc)[:200]}", "at": _now()}
+        say(f"{FA_NET.get(net, net)}: {q['results'][net]['status']}")
+    st = [r["status"] for r in q["results"].values()]
+    q["status"] = "done" if st and all(s in ("published", "sent-to-operator") for s in st) else ("partial" if sent else q["status"])
+    q["published_at"] = _now() if sent else q.get("published_at")
+    return save(q)
+
+
+def due(say=print):
+    now = now_tehran()
+    out = []
+    for q in all_items():
+        ok = q.get("status") == "approved" or (autopublish() and q.get("status") == "draft")
+        if q.get("status") == "partial":
+            ok = True
+        if not ok:
+            continue
+        at = datetime.fromisoformat(f"{q['date']}T{q.get('after') or q.get('time', '09:00')}").replace(tzinfo=now.tzinfo)
+        if at <= now <= at + timedelta(hours=WINDOW_H):
+            out.append(publish(q, say=say))
+        elif now > at + timedelta(hours=WINDOW_H) and q.get("status") != "partial":
+            q["status"] = "expired"
+            trace.step(q["id"], "publish", "منقضی شد", f"تا {WINDOW_H} ساعت بعد از زمانش تأیید/ارسال نشد")
+            save(q)
+    return out
+
+
+def drive_refresh(say=print, every_h=3):
+    """Pick up photos the owner added or deleted on Drive within a few hours, not only at 07:15."""
+    from sf import drive_sync
+    last = (read_json(os.path.join(DATA, "latest", "drive.json"), {}) or {}).get("synced_at")
+    if last and now_tehran() - datetime.fromisoformat(last) < timedelta(hours=every_h):
+        return None
+    r = drive_sync.sync(log=lambda *_: None)
+    if r.get("status") == "ok":
+        say(f"درایو: {r['photos']} عکس · {r['added']} تازه · {r['removed']} حذف‌شده")
+    return r
+
+
+def tick(say=print):
+    now = now_tehran()
+    try:
+        drive_refresh(say=say)
+    except Exception as exc:                                           # noqa: BLE001
+        say(f"درایو: {exc}")
+    if now.hour >= 7:
+        prepare(days=1, say=say)
+    return due(say=say)
+
+
+if __name__ == "__main__":
+    cmd = sys.argv[1] if len(sys.argv) > 1 else "tick"
+    {"prepare": lambda: prepare(), "due": lambda: due(), "tick": lambda: tick()}[cmd]()

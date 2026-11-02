@@ -105,7 +105,9 @@ def main():
 
     def s_drive():
         r = drive_sync.sync()
-        return f"{r['status']} {r.get('reason') or ''}".strip()
+        if r["status"] != "ok":
+            raise RuntimeError(r.get("reason") or "درایو در دسترس نیست")
+        return f"{r['photos']} عکس · {r['added']} تازه · {r['removed']} حذف‌شده"
 
     def s_calendar():
         cal = calendar_ir.calendar(35, site)

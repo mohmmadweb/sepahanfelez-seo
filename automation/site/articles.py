@@ -382,7 +382,14 @@ def publish(item_id, say=print, force=False):
     changes.add("article", f"مقاله‌ی تازه: {f['title']}", "از برنامه‌ی محتوا؛ اثرش روی بازدید صفحه‌ی محصول سنجیده می‌شود",
                 ref=d["category_page"], eval_days=28, new=url, source="site")
     say(f"✓ منتشر شد: {urllib.parse.unquote(url)}")
-    return save(d)
+    save(d)
+    try:                                                    # summary + link on LinkedIn and the Telegram channel
+        sys.path.insert(0, os.path.join(os.path.dirname(HERE), "social"))
+        import publisher
+        publisher.share_article(d)
+    except Exception as exc:                                # noqa: BLE001
+        say(f"اشتراک در شبکه‌ها آماده نشد: {exc}")
+    return d
 
 
 def due(say=print):

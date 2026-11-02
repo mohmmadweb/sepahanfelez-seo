@@ -656,6 +656,86 @@ async def google_push_secrets():
     return state
 
 
+# ---------------------------------------------------------------- the calendar on the networks
+sys.path.insert(0, os.path.join(ROOT, "automation", "social"))
+
+
+def _q_summary(q):
+    return {k: q.get(k) for k in ("id", "date", "jalali", "time", "after", "kind", "type", "product", "nets", "status",
+                                  "results", "source", "published_at", "cost_usd")} | {
+        "text": (q.get("text") or "")[:1200], "has_media": bool(q.get("media") and os.path.isfile(q["media"])),
+        "gate_fail": [g["name"] + (" — " + g["detail"] if g.get("detail") else "") for g in q.get("gate", []) if not g["ok"]]}
+
+
+@app.get("/api/social/queue")
+async def social_queue():
+    import publisher
+    items = [q for q in publisher.all_items() if q.get("date", "") >= (now_tehran().date().isoformat())
+             or q.get("status") in ("draft", "approved", "partial")]
+    return {"autopublish": publisher.autopublish(), "items": [_q_summary(q) for q in items][-120:]}
+
+
+@app.get("/api/social/queue/{item_id}/card")
+async def social_queue_card(item_id: str):
+    import publisher
+    q = publisher.load(os.path.basename(item_id))
+    if not q or not q.get("media") or not os.path.isfile(q["media"]):
+        raise HTTPException(404)
+    return FileResponse(q["media"], headers={"Cache-Control": "no-store"})
+
+
+@app.post("/api/social/queue/approve-day")
+async def social_queue_approve_day(req: Request):
+    import publisher
+    day = (await req.json()).get("date", "")
+    n = 0
+    for q in publisher.all_items():
+        if q.get("date") == day and q.get("status") == "draft":
+            q["status"] = "approved"
+            trace.step(q["id"], "approve", "تأیید شد (همه‌ی روز)", day)
+            publisher.save(q)
+            n += 1
+    return {"approved": n}
+
+
+@app.post("/api/social/queue/{item_id}/{action}")
+async def social_queue_action(item_id: str, action: str, req: Request):
+    import publisher
+    q = publisher.load(os.path.basename(item_id))
+    if not q or action not in ("approve", "reject", "edit", "send-now", "reopen"):
+        raise HTTPException(404)
+    try:
+        body = await req.json()
+    except Exception:                                                  # noqa: BLE001
+        body = {}
+    if action == "approve":
+        if q.get("status") == "needs_fix":
+            raise HTTPException(409, "کنترل کیفیت رد شده؛ اول متن را اصلاح کنید")
+        q["status"] = "approved"
+        trace.step(q["id"], "approve", "تأیید شد", "در زمان برنامه منتشر می‌شود")
+    elif action == "reject":
+        q["status"] = "rejected"
+        trace.step(q["id"], "approve", "رد شد", body.get("why", ""))
+    elif action == "reopen":
+        q["status"] = "draft"
+    elif action == "edit":
+        q["text"] = str(body.get("text", q.get("text", "")))
+        q["gate"] = publisher._gate(q["text"], extra_allowed=("prices",) if q.get("type") == "قیمت روز" else ())
+        q["status"] = "draft" if all(g["ok"] for g in q["gate"]) else "needs_fix"
+        trace.step(q["id"], "write", "ویرایش دستی متن در داشبورد", q["text"][:120])
+    elif action == "send-now":
+        if q.get("status") in ("needs_fix", "rejected"):
+            raise HTTPException(409, "این مورد تأیید نشده")
+        q["status"] = "approved"
+        publisher.save(q)
+        try:
+            return social_jobs.start("site", "social-send", params={"id": q["id"]})
+        except (ValueError, RuntimeError) as exc:
+            raise HTTPException(409, str(exc))
+    publisher.save(q)
+    return _q_summary(q)
+
+
 @app.post("/api/social/{net}/{action}")
 async def social_action(net: str, action: str, account: str = "", public: int = 0):
     if action not in ("login", "logout", "check", "validate"):

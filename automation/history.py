@@ -19,7 +19,7 @@ TEHRAN = timezone(timedelta(hours=3, minutes=30))
 
 NETWORKS = {
     "site": "سایت", "telegram": "تلگرام", "bale": "بله", "eitaa": "ایتا",
-    "rubika": "روبیکا", "whatsapp": "واتساپ", "instagram": "اینستاگرام",
+    "rubika": "روبیکا", "whatsapp": "واتساپ", "instagram": "اینستاگرام", "linkedin": "لینکدین",
 }
 KINDS = {"article": "مقاله", "post": "پست", "story": "استوری", "reel": "ریلز", "carousel": "کاروسل",
          "message": "پیام کانال", "comment": "کامنت", "like": "لایک"}

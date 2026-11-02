@@ -22,7 +22,7 @@ import login as L  # noqa: E402
 
 NETS = {"eitaa": "ایتا", "bale": "بله", "rubika": "روبیکا", "whatsapp": "واتساپ",
         "telegram": "تلگرام", "instagram": "اینستاگرام", "linkedin": "لینکدین", "site": "پنل سایت"}
-SITE_ACTIONS = {"login", "check", "logout", "urlfix-plan", "urlfix-apply", "write", "publish", "seo-apply"}
+SITE_ACTIONS = {"login", "check", "logout", "urlfix-plan", "urlfix-apply", "write", "publish", "seo-apply", "social-send"}
 ANSWER_TIMEOUT = 300
 
 
@@ -196,6 +196,12 @@ def _site_work(job, action, params):
             if d.get("url"):
                 say("لینک: " + d["url"])
             job.ok = d.get("status") == "published"
+        elif action == "social-send":
+            sys.path.insert(0, os.path.join(ROOT, "automation", "social"))
+            import publisher
+            q = publisher.publish(publisher.load(params["id"]), say=say, force=True)
+            job.result = {"status": q["status"], "results": q.get("results")}
+            job.ok = q["status"] == "done"
         elif action == "seo-apply":
             import seo_tasks
             seo_tasks.apply(params["id"], say=say)

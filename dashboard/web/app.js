@@ -811,6 +811,9 @@
     var artHolder = el("div", { class: "mt2 small muted", text: "در حال خواندن مقاله‌های سایت…" });
     out.push(artHolder);
     articlesSection(artHolder);
+    var queueHolder = el("div", { class: "mt2 small muted", text: "در حال خواندن صف انتشار…" });
+    out.push(queueHolder);
+    queueSection(queueHolder);
     var seoHolder = el("div", { class: "mt2 small muted", text: "…" });
     out.push(seoHolder);
     seoSection(seoHolder);
@@ -1415,6 +1418,68 @@
           el("button", { class: "btn small", type: "button", text: "رد", onclick: function () { API.post("/api/site/seo/" + r.id + "/reject", {}).then(function () { SITE = null; seoSection(holder); }); } })) : traceButton("seo-" + r.id, r.path); } }
       ], rows, { limit: 30 }) : el("div", { class: "small muted", text: g.status === "ok" ? "امروز صفحه‌ای با نمایش زیاد و کلیک کم پیدا نشد." : "بعد از وصل شدن سرچ کنسول، هر روز صبح تا ۲ صفحه‌ای که در صفحه‌ی اول گوگل‌اند ولی کم کلیک می‌خورند این‌جا با عنوان و توضیح تازه پیشنهاد می‌شوند." });
       holder.appendChild(card("کار روزانه‌ی سئو از سرچ کنسول", "پیشنهاد ← تأیید شما ← اعمال در پنل ← سنجش نرخ کلیک ۲۸ روز بعد در «سیر تغییرات»", body));
+    }, function (e) { holder.textContent = e.message; });
+  }
+
+  var NET_FA_Q = { instagram: "اینستاگرام", telegram: "تلگرام", bale: "بله", eitaa: "ایتا", rubika: "روبیکا", whatsapp: "واتساپ", linkedin: "لینکدین" };
+  var Q_ST = { draft: ["ready", "آماده‌ی تأیید"], needs_fix: ["blocked", "نیاز به اصلاح"], approved: ["ok", "تأییدشده"], done: ["done", "منتشر شد"],
+    partial: ["waiting", "بخشی منتشر شد"], rejected: ["pending", "رد شد"], expired: ["pending", "گذشت"] };
+  var R_ST = { published: ["ok", "✓"], "sent-to-operator": ["waiting", "↪ ذخیره‌شده (یک لمس)"], skipped: ["pending", "وصل نیست"], failed: ["blocked", "✗"] };
+  function netChips(r) {
+    return el("span", { style: "display:inline-flex;gap:4px;flex-wrap:wrap" }, (r.nets || []).map(function (n) {
+      var res = (r.results || {})[n], c = res ? (R_ST[res.status] || ["pending", res.status]) : null;
+      return el("span", { class: "st " + (c ? c[0] : "pending"), title: res ? (res.detail || "") : "", text: NET_FA_Q[n] + (c ? " " + c[1] : "") });
+    }));
+  }
+  function queueModal(r, holder) {
+    var box = el("div", { class: "stack small" });
+    var m = openModal((r.kind === "story" ? "استوری" : "پست") + " · " + fd(r.jalali || r.date) + " " + fd(r.after || r.time), box);
+    if (r.has_media) box.appendChild(el("img", { src: "/api/social/queue/" + encodeURIComponent(r.id) + "/card?t=" + Date.now(), alt: "تصویر", style: "max-width:" + (r.kind === "story" ? "260px" : "340px") + ";border-radius:10px;border:1px solid var(--border-2)" }));
+    box.appendChild(el("div", null, el("b", { text: r.type || "" }), r.product ? " · " + r.product : "", r.source ? el("span", { class: "muted", text: " · منبع: " + r.source }) : null));
+    box.appendChild(netChips(r));
+    var ta = el("textarea", { rows: "8", style: "width:100%;padding:8px;border:1px solid var(--border-2);border-radius:8px;background:var(--surface);font:inherit" });
+    ta.value = r.text || "";
+    box.appendChild(ta);
+    if ((r.gate_fail || []).length) box.appendChild(el("div", { class: "note warn", text: "کنترل کیفیت: " + r.gate_fail.join("، ") }));
+    function act(a, body) { return API.post("/api/social/queue/" + encodeURIComponent(r.id) + "/" + a, body || {}); }
+    var row = el("div", { class: "row" });
+    if (["done", "rejected"].indexOf(r.status) < 0) {
+      row.appendChild(el("button", { class: "btn small", type: "button", text: "ذخیره‌ی متن", onclick: function () { act("edit", { text: ta.value }).then(function () { m.close(); queueSection(holder); }, function (e) { alert(e.message); }); } }));
+      if (r.status === "draft") row.appendChild(el("button", { class: "btn primary small", type: "button", text: "تأیید", onclick: function () { act("approve").then(function () { m.close(); queueSection(holder); }, function (e) { alert(e.message); }); } }));
+      row.appendChild(el("button", { class: "btn small", type: "button", text: "انتشار همین حالا", onclick: function () {
+        if (!confirm("همین حالا روی شبکه‌های وصل منتشر شود؟")) return;
+        act("send-now").then(function (j) { m.close(); var b = el("div"), ms = el("div", { class: "stack small" }), ar = el("div"); b.appendChild(ms); b.appendChild(ar);
+          openModal("انتشار", b); watchJob(ar, ms, Promise.resolve(j)); }, function (e) { alert(e.message); }); } }));
+      row.appendChild(el("button", { class: "btn small danger", type: "button", text: "رد", onclick: function () { act("reject", { why: prompt("چرا؟") || "" }).then(function () { m.close(); queueSection(holder); }); } }));
+    }
+    row.appendChild(traceButton(r.id, r.type));
+    box.appendChild(row);
+  }
+  function queueSection(holder) {
+    API.get("/api/social/queue").then(function (s) {
+      holder.textContent = "";
+      var days = [];
+      s.items.forEach(function (q) { if (days.indexOf(q.date) < 0) days.push(q.date); });
+      var body = el("div", { class: "stack small" },
+        el("div", null, "حالت انتشار: ", el("b", { text: s.autopublish ? "خودکار — هر مورد قبول‌شده در کنترل کیفیت سر ساعتش منتشر می‌شود" : "با تأیید شما — موردِ تأییدنشده منتشر نمی‌شود" }),
+          el("span", { class: "muted", text: " (SOCIAL_AUTOPUBLISH در «تنظیمات») · هر روز صبح موارد فردا آماده می‌شود؛ هر ۱۰ دقیقه (۹ تا ۱۸) موارد سررسیده منتشر می‌شوند." })));
+      if (!s.items.length) body.appendChild(el("div", { class: "muted", text: "هنوز موردی آماده نشده." }));
+      days.forEach(function (d) {
+        var its = s.items.filter(function (q) { return q.date === d; });
+        var drafts = its.filter(function (q) { return q.status === "draft"; }).length;
+        body.appendChild(el("div", { class: "mt" }, el("div", { class: "row", style: "align-items:center" }, el("b", { text: fd((its[0] || {}).jalali || d) }),
+          drafts ? el("button", { class: "btn primary small", type: "button", text: "تأیید همه‌ی این روز (" + fn(drafts) + ")", onclick: function () {
+            API.post("/api/social/queue/approve-day", { date: d }).then(function () { queueSection(holder); }); } }) : null),
+          table([
+            { key: "time", label: "ساعت", render: function (r) { return fd(r.after || r.time); } },
+            { key: "type", label: "محتوا", render: function (r) { return el("a", { href: "#", onclick: function (e) { e.preventDefault(); queueModal(r, holder); } },
+              (r.kind === "story" ? "استوری · " : r.kind === "share" ? "اشتراک مقاله · " : "کانال · ") + (r.type || "")); } },
+            { key: "product", label: "محصول/موضوع", render: function (r) { return el("span", { class: "small ink2", text: (r.product || "").slice(0, 40) }); } },
+            { key: "nets", label: "شبکه‌ها", nosort: true, render: netChips },
+            { key: "status", label: "وضعیت", render: function (r) { var c = Q_ST[r.status] || ["pending", r.status]; return el("span", { class: "st " + c[0], title: (r.gate_fail || []).join("، "), text: c[1] }); } }
+          ], its, { sortKey: "time", sortDir: "asc", limit: 30 })));
+      });
+      holder.appendChild(card("صف انتشار شبکه‌ها", "استوری‌ها، پست‌های کانال، قیمت روز و اشتراک مقاله‌ها — با پیش‌نمایش تصویر و متن", body));
     }, function (e) { holder.textContent = e.message; });
   }
 

@@ -4,7 +4,8 @@ Branded story/post renderer: product photo + Persian copy → 1080×1920 story o
 
 Rendered through headless Chromium so Persian shaping, the Estedad font and RTL are exact
 (Pillow without libraqm breaks Persian letters). Brand rules from the site: red only for
-contact, prices in ریال, office 021-91326030, mobile 0913-000-0000, sepahanfelez.ir.
+contact, prices in ریال, the company's numbers from .env (SITE_CONTACT_PHONES; the mobile goes on the
+card), sepahanfelez.ir.
 
     ~/.venvs/pw/bin/python automation/render_card.py cards.json out_dir/
 cards.json: [{"id", "format": "story|post", "type", "title", "points": [...], "photo", "cta"}]
@@ -15,6 +16,7 @@ import html
 import json
 import mimetypes
 import os
+import re
 import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -32,6 +34,16 @@ def data_uri(path):
 
 def fa_digits(s):
     return str(s).translate(str.maketrans("0123456789", "۰۱۲۳۴۵۶۷۸۹"))
+
+
+def card_phone():
+    """The mobile from SITE_CONTACT_PHONES (.env) — kept out of this public repo — spaced for reading."""
+    sys.path.insert(0, os.path.join(os.path.dirname(HERE), "dashboard"))
+    from sf.env import load_env
+    load_env()
+    nums = [re.sub(r"\D", "", x) for x in os.environ.get("SITE_CONTACT_PHONES", "").split(",") if x.strip()]
+    mob = next((n for n in nums if n.startswith("09")), nums[0] if nums else "")
+    return fa_digits(f"{mob[:4]} {mob[4:7]} {mob[7:]}" if len(mob) == 11 else mob)
 
 
 def page(card):
@@ -68,7 +80,7 @@ li::marker{{color:#123152}}
 <h1>{html.escape(fa_digits(card["title"]))}</h1>
 <ul>{points}</ul>
 <div class="cta"><div class="t">{html.escape(card.get("cta", "استعلام قیمت روز"))}</div>
-<div><div class="n">۰۹۱۳ ۰۰۰ ۰۰۰۰</div><div class="w">sepahanfelez.ir</div></div></div>
+<div><div class="n">{html.escape(card_phone())}</div><div class="w">sepahanfelez.ir</div></div></div>
 </body></html>"""
 
 
