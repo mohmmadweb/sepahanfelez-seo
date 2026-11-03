@@ -79,7 +79,9 @@ def score(text):
     t = " " + re.sub(r"[^\w\u0600-\u06FF]+", " ", (text or "").replace("\u200c", " ")) + " "
     if any(f" {x.strip()} " in t for x in c.get("exclude", [])):      # whole words: «جام» must not hit «انجام»
         return 0
-    return sum(w for k, w in c.get("keywords", {}).items() if k.replace("\u200c", " ") in t)
+    # a keyword must start a word («توری» in «توری مرغی»، «فولادی» ok; never inside «رگولاتوری»)
+    return sum(w for k, w in c.get("keywords", {}).items()
+               if re.search(r"(?<![\w\u0600-\u06FF])" + re.escape(k.replace("\u200c", " ")), t))
 
 
 def _rss(src):
@@ -152,6 +154,7 @@ def candidates():
               if d.get("created", "") >= (now - timedelta(days=14)).isoformat()]
     out = []
     for v in (read_json(SEEN, {}) or {}).values():
+        v["score"] = score(v["title"] + " " + v.get("summary", ""))   # today's keywords and rules, not those of when it was seen
         if v.get("used") or v["score"] < c.get("min_title_score", 3):
             continue
         if (v.get("published") or v["first_seen"]) < fresh:
@@ -478,16 +481,18 @@ def publish(nid, say=print, force=False):
     return d
 
 
-def due(say=print):
+def due(say=print, can_publish=True):
     """Hourly: collect, write today's piece once its time is near, publish what is due."""
     c = cfg()
     now = now_tehran()
     if now.weekday() in c.get("skip_weekdays", []):
         return []
-    today = [x for x in all_drafts() if x.get("date") == today_str() and x.get("status") != "dropped"]
+    today = [x for x in all_drafts() if x.get("date") == today_str() and x.get("status") not in ("dropped", "sample")]
     if len(today) < c.get("per_day", 1) and now.strftime("%H:%M") >= "08:00":
         write(say=say)                                    # sources are read every hour by tick.py
     out = []
+    if not can_publish:
+        return out
     for d in all_drafts():
         ok = d.get("status") == "approved" or (articles.autopublish() and d.get("status") == "draft")
         if ok and d.get("date") == today_str() and d.get("time", "10:00") <= now.strftime("%H:%M"):

@@ -27,8 +27,10 @@ if __name__ == "__main__":
         news.collect(say=lambda *_: None)
     except Exception as exc:                               # noqa: BLE001
         print("news sources:", exc)
-    if 8 <= now_tehran().hour < 22 and panel.status().get("logged_in"):
-        for d in articles.due():
-            print("published:", d.get("url"))
-        for d in news.due():
+    if 8 <= now_tehran().hour < 22:
+        # the news draft is written even while the panel is signed out, so it is ready the moment it is back
+        for d in news.due(can_publish=bool(panel.status().get("logged_in"))):
             print("news published:", d.get("url"))
+        if panel.status().get("logged_in"):
+            for d in articles.due():
+                print("published:", d.get("url"))
