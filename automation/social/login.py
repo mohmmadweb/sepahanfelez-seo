@@ -42,7 +42,8 @@ WEB = {
     "rubika": {"url": "https://web.rubika.ir/", "fa": "روبیکا", "phone_env": "RUBIKA_PHONE", "locale": "fa-IR",
                "login_marker": "input[name=phone_number]", "ok_markers": [".chatlist", "#column-left .sidebar-header"]},
     "bale": {"url": "https://web.bale.ai/", "fa": "بله", "phone_env": "BALE_PHONE", "locale": "en-US",
-             "login_marker": "input[inputmode=numeric], [data-testid=submit-button]", "ok_markers": [], "login_url": "/login"},
+             "login_marker": "input[inputmode=numeric], [data-testid=submit-button]", "login_url": "/login",
+             "ok_markers": ["[data-testid=dialog-tab]", "[data-testid=virtuoso-scroller]", "svg[aria-label='AddStatus-icon']"]},
     "whatsapp": {"url": "https://web.whatsapp.com/", "fa": "واتساپ", "phone_env": "WHATSAPP_PHONE", "locale": "en-US",
                  "login_marker": "canvas, [data-ref]", "ok_markers": ["#pane-side", "div[aria-label='Chat list']"]},
 }

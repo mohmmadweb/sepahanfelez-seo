@@ -226,7 +226,9 @@ def _web(net, kind, target, text, media, link):
     send from the dashboard is the test, and every send leaves a screenshot in the job log."""
     from playwright.sync_api import sync_playwright
     cfg = L.WEB[net]
-    if kind == "story":                         # no story API on the web apps → operator one-tap
+    if kind == "story" and net == "bale":
+        return _bale_story(media, text)
+    if kind == "story":                         # no story button found in this web app yet → operator one-tap
         target = "me"
         text = ("📌 استوری برای انتشار — " + (text or "")).strip()
     target = (target or "me").strip()
@@ -291,6 +293,44 @@ def _web(net, kind, target, text, media, link):
             return {"status": "sent-to-operator" if kind == "story" else ("published" if sent else "failed"),
                     "detail": (f"فرستاده شد به {target}" if sent else "ارسال تأیید نشد — تصویر: " + shot), "url": None, "message_id": None,
                     "screenshot": shot}
+        finally:
+            ctx.close()
+
+
+def _bale_story(media, text=""):
+    """A real Bale story («ماجرا») from web.bale.ai: (+) AddStatus → «نگارخانه» → file → «تایید و ارسال».
+    Audience is Bale's own setting for the account (contacts by default)."""
+    from playwright.sync_api import sync_playwright
+    if not media or not os.path.exists(media):
+        raise ValueError("استوری بله به عکس یا ویدئو نیاز دارد")
+    shot = os.path.join(L.profile_dir("bale"), "last-story.png")
+    with sync_playwright() as p:
+        ctx = L._browser(p, "bale")
+        page = ctx.pages[0] if ctx.pages else ctx.new_page()
+        try:
+            page.goto("https://web.bale.ai/chat", wait_until="domcontentloaded")
+            page.wait_for_timeout(10000)
+            if not L._logged_in(page, "bale"):
+                raise NotLoggedIn("بله وارد نشده است.")
+            page.locator("svg[aria-label='AddStatus-icon']").first.click(timeout=15000)
+            page.wait_for_timeout(1500)
+            with page.expect_file_chooser(timeout=10000) as fc:
+                page.get_by_text("نگارخانه", exact=True).first.click()
+            fc.value.set_files(media if _is_video(media) else _jpeg(media))
+            send = page.get_by_role("button", name=re.compile("تایید و ارسال"))
+            send.first.wait_for(timeout=30000)
+            page.wait_for_timeout(1500)
+            send.first.click()
+            for _ in range(40):                                 # upload, then the editor closes
+                page.wait_for_timeout(1500)
+                if not send.count() or not send.first.is_visible():
+                    break
+            page.wait_for_timeout(2000)
+            page.screenshot(path=shot)
+            ok = not (send.count() and send.first.is_visible())
+            return {"status": "published" if ok else "failed",
+                    "detail": "ماجرای بله منتشر شد" if ok else "پنجره‌ی ارسال ماجرا بسته نشد — تصویر: " + shot,
+                    "url": None, "message_id": None, "screenshot": shot}
         finally:
             ctx.close()
 

@@ -80,7 +80,8 @@ def social(prev):
                 days = int("".join(ch for ch in detail.split("·")[-1] if ch.isdigit()) or 99)
                 if days <= 10:
                     state, fix = "warn", "تا چند روز دیگر توکن لینکدین تمام می‌شود: «اتصال لینکدین» را دوباره بزنید"
-            if ok and net in L.CHANNEL_ENV and not get(L.CHANNEL_ENV[net], ""):
+            channels = [n.strip() for n in get("SOCIAL_CHANNEL_NETS", "telegram").split(",")]
+            if ok and net in L.CHANNEL_ENV and net in channels and not get(L.CHANNEL_ENV[net], ""):
                 state, fix = "warn", f"حساب وصل است ولی نشانی کانال ({L.CHANNEL_ENV[net]}) در «تنظیمات» خالی است"
             rows.append(_row(key, "شبکه‌ها", name, state, REASON_FA.get(detail, detail), fix, prev.get(key)))
     return rows

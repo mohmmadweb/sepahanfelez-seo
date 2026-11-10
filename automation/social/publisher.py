@@ -135,6 +135,21 @@ def _fa(s):
     return str(s).translate(str.maketrans("0123456789", "۰۱۲۳۴۵۶۷۸۹"))
 
 
+def _nets(name, default):
+    load_env()
+    return [n.strip() for n in os.environ.get(name, default).split(",") if n.strip() in FA_NET]
+
+
+def story_nets():
+    """Where every story goes (SOCIAL_STORY_NETS): a real story on each."""
+    return _nets("SOCIAL_STORY_NETS", "instagram,telegram,whatsapp,bale,eitaa,rubika")
+
+
+def channel_nets():
+    """Where channel posts go (SOCIAL_CHANNEL_NETS): only networks where the company has a channel."""
+    return _nets("SOCIAL_CHANNEL_NETS", "telegram")
+
+
 def autopublish():
     load_env()
     return os.environ.get("SOCIAL_AUTOPUBLISH", "0").strip() == "1"
@@ -286,7 +301,7 @@ def prepare_item(item, used, say=print):
     cost = 0.0
     rec = [r for r in recent() if r["id"] != item["id"]]
     if item["kind"] == "story":
-        q["nets"] = [NET_FA[c] for c in item.get("channels", []) if c in NET_FA] + ["telegram"]
+        q["nets"] = story_nets()
         q["action"] = "story"
         photo = photo_for(item, used)
         angle = pick_angle(item, rec)
@@ -317,7 +332,7 @@ def prepare_item(item, used, say=print):
         if not photo:
             q["gate"].append({"name": "عکس", "ok": False, "detail": "برای این دسته عکسی نیست"})
     elif item["kind"] == "telegram":
-        q["nets"] = [NET_FA[c] for c in item.get("channels", []) if c in NET_FA]
+        q["nets"] = channel_nets()
         q["action"] = "post"
         if item.get("type") == "قیمت روز":
             rows = prices()
@@ -397,7 +412,7 @@ def share_article(draft):
     when = now_tehran() + timedelta(minutes=30)
     url = urllib.parse.unquote(draft["url"])
     q = {"id": f"{draft['id']}-share", "created": _now(), "date": when.date().isoformat(), "time": when.strftime("%H:%M"),
-         "kind": "share", "type": "مقاله‌ی تازه", "product": draft.get("product"), "action": "post", "nets": ["linkedin", "telegram"],
+         "kind": "share", "type": "مقاله‌ی تازه", "product": draft.get("product"), "action": "post", "nets": ["linkedin"] + channel_nets(),
          "text": signature.caption(f"📝 {draft['fields']['title']}\n\n{draft['fields'].get('description', '')}\n\nادامه در سایت: {url}"),
          "link": draft["url"], "media": draft.get("image"), "status": "approved", "results": {}, "gate": []}
     trace.step(q["id"], "plan", "اشتراک مقاله", url, decision="مقاله‌ی تأییدشده؛ خلاصه‌اش هم تأییدشده حساب می‌شود")
@@ -417,7 +432,7 @@ def share_news(d):
             f"\n\nتحلیل کامل و برداشت ما برای خریداران: {url}\nمنبع خبر: {d['source']['source_name']}")
     q = {"id": f"{d['id']}-share", "created": _now(), "date": when.date().isoformat(), "time": when.strftime("%H:%M"),
          "kind": "news-share", "type": "خبر بازار", "product": None, "action": "post",
-         "nets": ["telegram", "bale", "eitaa", "rubika", "linkedin"], "text": signature.caption(text),
+         "nets": channel_nets() + ["linkedin"], "text": signature.caption(text),
          "link": d["url"], "media": d.get("image"), "status": "approved", "results": {}, "gate": []}
     trace.step(q["id"], "plan", "اشتراک خبر", url, decision="خبر از کنترل کیفیت گذشته؛ خلاصه‌اش خودکار در کانال‌ها می‌رود")
     return save(q)
