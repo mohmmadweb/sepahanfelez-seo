@@ -217,13 +217,14 @@ def _web(net, run, public):
         return "در پیام‌های ذخیره‌شده" + (" — تصویر صفحه: " + r["screenshot"] if r.get("screenshot") else "")
     run.step("message", lambda: send(f"🔧 تست اتصال سپاهان فلز — {stamp}", None))
     run.step("photo", lambda: send(f"🔧 تست عکس — {stamp}", story))
-    if net == "bale":                     # a real story: visible to contacts — so it is the next real card of the queue
+    if net in ("bale", "whatsapp"):       # a real story: visible to contacts — so it is the next real card of the queue
         if public or STORY_TEST:
-            run.step("story", lambda: _queue_story("bale", lambda media: actions._bale_story(media)), public=True)
+            post = (lambda media: actions._bale_story(media)) if net == "bale" else (lambda media: actions._whatsapp_status(media))
+            run.step("story", lambda: _queue_story(net, post), public=True)
         else:
             run.steps.append({"cap": "story", "name": CAPS_FA["story"], "status": "skip", "public": False, "seconds": 0,
                               "ts": _now().isoformat(timespec="seconds"),
-                              "detail": "استوری بله واقعی و برای مخاطبین منتشر می‌شود؛ در تست خصوصی فرستاده نمی‌شود (با «تست عمومی» امتحان می‌شود)"})
+                              "detail": "استوری واقعی و برای مخاطبین منتشر می‌شود؛ در تست خصوصی فرستاده نمی‌شود (با «تست عمومی» امتحان می‌شود)"})
     else:
         run.steps.append({"cap": "story", "name": CAPS_FA["story"], "status": "ok" if run.steps[-1]["status"] == "ok" else "fail",
                           "public": False, "seconds": 0, "ts": _now().isoformat(timespec="seconds"),

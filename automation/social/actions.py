@@ -235,6 +235,8 @@ def _web(net, kind, target, text, media, link):
     cfg = L.WEB[net]
     if kind == "story" and net == "bale":
         return _bale_story(media, text)
+    if kind == "story" and net == "whatsapp":
+        return _whatsapp_status(media, text)
     if kind == "story":                         # no story button found in this web app yet → operator one-tap
         target = "me"
         text = ("📌 استوری برای انتشار — " + (text or "")).strip()
@@ -252,11 +254,13 @@ def _web(net, kind, target, text, media, link):
                 phone = L.local_phone(L.ACCT["phone"]) if target == "me" else re.sub(r"\D", "", target)
                 phone = phone if phone.startswith("98") else "98" + phone.lstrip("0")
                 page.goto(f"https://web.whatsapp.com/send?phone={phone}", wait_until="domcontentloaded")
-                page.wait_for_timeout(12000)
-                if not L._logged_in(page, net):
-                    raise NotLoggedIn("واتساپ وارد نشده است.")
                 box = page.locator("footer div[contenteditable=true]").first
-                box.wait_for(timeout=30000)
+                try:                                   # WhatsApp loads the chats for ~25 s after opening
+                    box.wait_for(timeout=75000)
+                except Exception:                      # noqa: BLE001
+                    if not L._logged_in(page, net) and page.locator("canvas").count():
+                        raise NotLoggedIn("واتساپ وارد نشده است (QR نشان می‌دهد).")
+                    raise RuntimeError("گفتگوی واتساپ باز نشد")
             else:
                 page.goto(cfg["url"], wait_until="domcontentloaded")
                 page.wait_for_timeout(10000)
@@ -267,7 +271,15 @@ def _web(net, kind, target, text, media, link):
                                               "[contenteditable=true][role=textbox]", "textarea"], timeout=20000)
                 if not box:
                     raise RuntimeError("جعبه‌ی پیام پیدا نشد")
-            if media:
+            wa_sent = None
+            if media and net == "whatsapp":               # Attach → (image input) → caption → Send
+                btn = _wa_attach_and_send(page, page.locator("footer button[aria-label=Attach]").first, media, text)
+                for _ in range(40):                       # the preview closes once the photo is sent
+                    page.wait_for_timeout(1500)
+                    if not btn.count() or not btn.is_visible():
+                        break
+                wa_sent = not (btn.count() and btn.is_visible())
+            elif media:
                 files = page.locator("input[type=file]")
                 if files.count() == 0:
                     for sel in ("[data-icon=plus]", "[data-icon=attach-menu-plus]", ".attach-file", "button[aria-label*=Attach]",
@@ -298,10 +310,82 @@ def _web(net, kind, target, text, media, link):
             page.wait_for_timeout(5000)
             page.screenshot(path=shot)
             body = page.inner_text("body")
-            sent = _seen(text, body) if text else True
+            sent = wa_sent if wa_sent is not None else (_seen(text, body) if text else True)
             return {"status": "sent-to-operator" if kind == "story" else ("published" if sent else "failed"),
                     "detail": (f"فرستاده شد به {target}" if sent else "ارسال تأیید نشد — تصویر: " + shot), "url": None, "message_id": None,
                     "screenshot": shot}
+        finally:
+            ctx.close()
+
+
+def _wa_attach_and_send(page, opener, media, text):
+    """WhatsApp Web: open the attach/add menu, give the image to its file input, caption, Send.
+    Only visible controls: the page keeps hidden copies of these menus (seen 11-10)."""
+    photos = page.locator("button[aria-label='Photos & videos']:visible, li:has-text('Photos & videos'):visible, "
+                          "[role=button]:has-text('Photos & videos'):visible").first
+    page.wait_for_timeout(3000)                        # the chat settles (drafts, scroll) before the menu answers
+    opened = False
+    for i in range(5):
+        try:
+            target = opener if i % 2 == 0 else opener.locator("span").first      # the button, then its icon
+            target.click(timeout=10000)               # a real click: a forced one only shows the tooltip
+        except Exception:                              # noqa: BLE001
+            opener.click(force=True)
+        try:
+            photos.wait_for(state="visible", timeout=4000)
+            opened = True
+            break
+        except Exception:                                              # noqa: BLE001
+            page.mouse.move(10, 10)
+            page.wait_for_timeout(1500)
+    if not opened:
+        raise RuntimeError("منوی پیوست واتساپ باز نشد")
+    with page.expect_file_chooser(timeout=10000) as fc:
+        photos.click(force=True)
+    fc.value.set_files(media if _is_video(media) else _jpeg(media))
+    send = page.locator("[aria-label^='Send']:visible, [data-icon=send]:visible, [data-icon=wds-ic-send-filled]:visible").first
+    send.wait_for(timeout=30000)
+    cap = page.locator("[aria-label='Add a caption']:visible, [aria-placeholder*='caption' i]:visible").first
+    if text:
+        try:
+            cap.wait_for(timeout=5000)
+            cap.click()
+            page.keyboard.insert_text(text[:700])
+        except Exception:                                              # noqa: BLE001
+            pass
+    send.click(force=True)
+    return send
+
+
+def _whatsapp_status(media, text=""):
+    """A real WhatsApp status from WhatsApp Web: Status → Add status → Photos & videos → file → Send."""
+    from playwright.sync_api import sync_playwright
+    if not media or not os.path.exists(media):
+        raise ValueError("استوری واتساپ به عکس یا ویدئو نیاز دارد")
+    shot = os.path.join(L.profile_dir("whatsapp"), "last-story.png")
+    with sync_playwright() as p:
+        ctx = L._browser(p, "whatsapp")
+        page = ctx.pages[0] if ctx.pages else ctx.new_page()
+        try:
+            page.goto("https://web.whatsapp.com/", wait_until="domcontentloaded")
+            try:
+                page.locator("#pane-side").wait_for(timeout=75000)
+            except Exception:                                          # noqa: BLE001
+                raise NotLoggedIn("واتساپ وارد نشده است.")
+            page.locator("[aria-label=Status]").first.click()
+            page.locator("[aria-label='Add status']").first.wait_for(timeout=20000)
+            page.wait_for_timeout(2000)
+            cap = _wa_attach_and_send(page, page.locator("[aria-label='Add status']").first, media, text)
+            for _ in range(40):                                 # upload; the editor closes when it is posted
+                page.wait_for_timeout(1500)
+                if not cap.count() or not cap.is_visible():
+                    break
+            page.wait_for_timeout(3000)
+            page.screenshot(path=shot)
+            ok = not (cap.count() and cap.is_visible())
+            return {"status": "published" if ok else "failed",
+                    "detail": "استوری (Status) واتساپ منتشر شد" if ok else "پنجره‌ی ارسال استوری واتساپ بسته نشد — تصویر: " + shot,
+                    "url": None, "message_id": None, "screenshot": shot}
         finally:
             ctx.close()
 

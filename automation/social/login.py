@@ -220,15 +220,47 @@ def _code_and_password(page, net, shot, seconds=60):
     if not code_box:
         msg = re.sub(r"\s+", " ", page.inner_text("body"))[:200]
         raise RuntimeError(f"صفحه‌ی کد بعد از {seconds} ثانیه نیامد؛ پیام صفحه: «{msg}» — تصویر: {shot}")
-    code = _ask_code(net)
-    code_box.click()
-    page.keyboard.type(code, delay=90)
-    page.keyboard.press("Enter")
-    page.wait_for_timeout(5000)
+    _dismiss(page)
+    where = re.search(r"[^.\n]*(?:ارسال شد|ارسال شده|ارسال گردید|sent)[^.\n]*", page.inner_text("body"))
+    if where:
+        say(f"پیام {WEB[net]['fa']}: «{where.group(0).strip()}» — کد داخل خود اپ {WEB[net]['fa']} می‌آید (پیامک نیست)؛ اگر چند کد آمده، جدیدترین را بزنید.")
+    for attempt in range(3):
+        code = _ask_code(net) if attempt == 0 else IO.ask(f"{WEB[net]['fa']} گفت کد نامعتبر است؛ جدیدترین کدی را که در اپ {WEB[net]['fa']} آمده وارد کنید")
+        _dismiss(page)
+        code_box.click(force=True)
+        page.keyboard.press("Control+A")
+        page.keyboard.press("Backspace")
+        page.keyboard.type(re.sub(r"\D", "", code.translate(str.maketrans("۰۱۲۳۴۵۶۷۸۹", "0123456789"))), delay=90)
+        page.keyboard.press("Enter")
+        page.wait_for_timeout(6000)
+        page.screenshot(path=shot)
+        body = page.inner_text("body")
+        if _logged_in(page, net) or not re.search(r"نامعتبر|اشتباه|invalid|incorrect|wrong", body, re.I):
+            break
     pw = _first_visible(page, ["input[type=password]"], timeout=4000)
     if pw:
         pw.fill(IO.ask("رمز دومرحله‌ای حساب", secret=True))
         page.keyboard.press("Enter")
+
+
+def _dismiss(page):
+    """Close an info popup («کد ورود … ارسال گردید» → «تایید») that covers the code box. Only a button that sits in
+    the same small box as such a message is pressed — never the form's own submit button."""
+    try:
+        page.evaluate("""()=>{
+          const msgs=[...document.querySelectorAll('body *')].filter(e=>e.offsetParent && e.children.length<3
+              && /ارسال (گردید|شد)|sent/i.test(e.innerText||''));
+          for (const m of msgs) {
+            let box=m;
+            for (let k=0;k<4 && box;k++,box=box.parentElement) {
+              const b=[...box.querySelectorAll('button,a,[role=button]')].find(x=>x.offsetParent && /^\\s*(تایید|تأیید|باشه|OK)\\s*$/.test(x.innerText||''));
+              if (b && box.getBoundingClientRect().height<320 && !box.querySelector('input')) { b.click(); return true; }
+            }
+          }
+          return false}""")
+        page.wait_for_timeout(800)
+    except Exception:                                                  # noqa: BLE001
+        pass
 
 
 DRY = os.environ.get("SOCIAL_DRY") == "1"   # fill the phone form, screenshot, do NOT submit
@@ -348,7 +380,7 @@ def check_web(net):
         page = ctx.pages[0] if ctx.pages else ctx.new_page()
         page.goto(WEB[net]["url"], wait_until="domcontentloaded")
         page.wait_for_timeout(10000)               # let client-side redirects (→ /login) happen first
-        ok = _wait_logged_in(page, net, 15)
+        ok = _wait_logged_in(page, net, 60 if net == "whatsapp" else 20)    # WhatsApp loads its chats for ~25 s
         ctx.close()
     save_status(net, ok, "session ok" if ok else "logged out")
     return ok
