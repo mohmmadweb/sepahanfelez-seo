@@ -1064,10 +1064,23 @@
         if (onDone) onDone(j);
       }
     }
-    startPromise.then(function (j) {
+    function follow(j) {
       draw(j);
       timer = setInterval(function () { API.get("/api/social/job").then(function (r) { if (r.job) draw(r.job); }); }, 1500);
-    }, function (e) { area.textContent = e.message; });
+    }
+    startPromise.then(follow, function (e) {
+      // a job is already running (e.g. its window was closed while it waited for the code): reopen it here
+      API.get("/api/social/job").then(function (r) {
+        var j = r.job;
+        if (!j || (j.phase !== "running" && j.phase !== "waiting")) { area.textContent = e.message; return; }
+        var banner = el("div", { class: "stack small" },
+          el("div", { class: "note warn", text: "یک ورود قبلی هنوز باز است و همین‌جا ادامه پیدا می‌کند. اگر کدش را ندارید، «لغو و شروع دوباره» را بزنید." }),
+          el("div", { class: "row" }, el("button", { class: "btn small", type: "button", text: "لغو و شروع دوباره", onclick: function () {
+            API.post("/api/social/cancel", {}).then(function () { clearInterval(timer); banner.textContent = ""; area.textContent = "لغو شد؛ این پنجره را ببندید و دوباره «ورود» را بزنید."; }); } })));
+        if (msgs.parentNode) msgs.parentNode.insertBefore(banner, msgs);
+        follow(j);
+      }, function () { area.textContent = e.message; });
+    });
     return function () { clearInterval(timer); };
   }
 
@@ -1256,7 +1269,7 @@
     stop = watchJob(area, msgs, API.post("/api/site/" + action, params || {}), onDone);
   }
   var DRAFT_ST = { draft: ["ready", "آماده‌ی تأیید"], needs_fix: ["blocked", "نیاز به اصلاح"], approved: ["ok", "تأییدشده"],
-    published: ["done", "منتشر شد"], rejected: ["pending", "رد شد"] };
+    published: ["done", "منتشر شد"], rejected: ["pending", "رد شد"], expired: ["pending", "گذشت — منتشر نشد"] };
 
   function sitePanelSection(holder) {
     siteData().then(function (s) {
@@ -1407,7 +1420,7 @@
   }
 
   var NEWS_ST = { draft: ["ready", "آماده‌ی انتشار"], approved: ["ok", "تأییدشده"], published: ["done", "منتشر شد"], dropped: ["pending", "رد کنترل کیفیت"],
-    rejected: ["pending", "رد شد"], sample: ["pending", "نمونه‌ی آزمایشی"], needs_fix: ["blocked", "نیاز به اصلاح"] };
+    rejected: ["pending", "رد شد"], sample: ["pending", "نمونه‌ی آزمایشی"], expired: ["pending", "گذشت — منتشر نشد"], needs_fix: ["blocked", "نیاز به اصلاح"] };
   function newsSection(holder) {
     siteData().then(function (s) {
       holder.textContent = "";
@@ -1460,8 +1473,10 @@
 
   var NET_FA_Q = { instagram: "اینستاگرام", telegram: "تلگرام", bale: "بله", eitaa: "ایتا", rubika: "روبیکا", whatsapp: "واتساپ", linkedin: "لینکدین" };
   var Q_ST = { draft: ["ready", "آماده‌ی تأیید"], needs_fix: ["blocked", "نیاز به اصلاح"], approved: ["ok", "تأییدشده"], done: ["done", "منتشر شد"],
-    partial: ["waiting", "بخشی منتشر شد"], rejected: ["pending", "رد شد"], expired: ["pending", "گذشت"] };
-  var R_ST = { published: ["ok", "✓"], "sent-to-operator": ["waiting", "↪ ذخیره‌شده (یک لمس)"], skipped: ["pending", "وصل نیست"], failed: ["blocked", "✗"] };
+    partial: ["waiting", "بخشی منتشر شد"], rejected: ["pending", "رد شد"], expired: ["pending", "گذشت — منتشر نشد"],
+    waiting: ["waiting", "منتظر ورود حساب"], operator: ["waiting", "منتظر یک لمس شما"] };
+  var R_ST = { published: ["ok", "✓"], "sent-to-operator": ["waiting", "↪ ذخیره‌شده (یک لمس)"], skipped: ["pending", "منتظر ورود"],
+    waiting: ["pending", "منتظر ورود"], failed: ["blocked", "✗"], expired: ["pending", "گذشت"] };
   function netChips(r) {
     return el("span", { style: "display:inline-flex;gap:4px;flex-wrap:wrap" }, (r.nets || []).map(function (n) {
       var res = (r.results || {})[n], c = res ? (R_ST[res.status] || ["pending", res.status]) : null;
@@ -1508,7 +1523,8 @@
           drafts ? el("button", { class: "btn primary small", type: "button", text: "تأیید همه‌ی این روز (" + fn(drafts) + ")", onclick: function () {
             API.post("/api/social/queue/approve-day", { date: d }).then(function () { queueSection(holder); }); } }) : null),
           table([
-            { key: "time", label: "ساعت", render: function (r) { return fd(r.after || r.time); } },
+            { key: "time", label: "ساعت", render: function (r) { return el("span", null, fd(r.at || r.after || r.time),
+              r.retry_at ? el("div", { class: "small muted", text: "زمان تازه: " + jdt(r.retry_at, true) }) : null); } },
             { key: "type", label: "محتوا", render: function (r) { return el("a", { href: "#", onclick: function (e) { e.preventDefault(); queueModal(r, holder); } },
               (r.kind === "story" ? "استوری · " : r.kind === "share" ? "اشتراک مقاله · " : "کانال · ") + (r.type || "")); } },
             { key: "product", label: "محصول/موضوع", render: function (r) { return el("span", { class: "small ink2", text: (r.product || "").slice(0, 40) }); } },

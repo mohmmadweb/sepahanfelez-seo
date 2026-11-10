@@ -710,7 +710,7 @@ sys.path.insert(0, os.path.join(ROOT, "automation", "social"))
 
 
 def _q_summary(q):
-    return {k: q.get(k) for k in ("id", "date", "jalali", "time", "after", "kind", "type", "product", "nets", "status",
+    return {k: q.get(k) for k in ("id", "date", "jalali", "time", "after", "at", "retry_at", "kind", "type", "product", "nets", "status",
                                   "results", "source", "published_at", "cost_usd")} | {
         "text": (q.get("text") or "")[:1200], "has_media": bool(q.get("media") and os.path.isfile(q["media"])),
         "gate_fail": [g["name"] + (" — " + g["detail"] if g.get("detail") else "") for g in q.get("gate", []) if not g["ok"]]}
@@ -720,7 +720,7 @@ def _q_summary(q):
 async def social_queue():
     import publisher
     items = [q for q in publisher.all_items() if q.get("date", "") >= (now_tehran().date().isoformat())
-             or q.get("status") in ("draft", "approved", "partial")]
+             or q.get("status") in ("draft", "approved", "partial", "waiting", "operator")]
     return {"autopublish": publisher.autopublish(), "items": [_q_summary(q) for q in items][-120:]}
 
 

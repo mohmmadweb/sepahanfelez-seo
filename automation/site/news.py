@@ -493,6 +493,40 @@ def due(say=print, can_publish=True):
     out = []
     if not can_publish:
         return out
+    # news is worth publishing for two days: a draft left behind while the panel was signed out goes out
+    # when it is back (oldest first, 2 hours apart); an older one is marked «گذشت» and kept in the archive
+    yesterday = (now - timedelta(days=1)).date().isoformat()
+    published = sorted(x.get("published_at") for x in all_drafts() if x.get("published_at"))
+    if published and now - datetime.fromisoformat(published[-1]) < timedelta(hours=2):
+        return out
+    if sum(1 for p in published if p[:10] == today_str()) >= c.get("per_day", 1) + 1:
+        return out
+    for d in all_drafts():
+        ok = d.get("status") == "approved" or (articles.autopublish() and d.get("status") == "draft")
+        if not ok:
+            continue
+        if d.get("date", "") < yesterday:
+            d["status"], d["note"] = "expired", "تا دو روز بعد از نوشتن، پنل سایت وصل نبود؛ خبر کهنه منتشر نمی‌شود"
+            save(d)
+            continue
+        if d.get("date") == today_str() and d.get("time", "10:00") > now.strftime("%H:%M"):
+            continue
+        try:
+            out.append(publish(d["id"], say=say))
+        except Exception as exc:                                       # noqa: BLE001
+            d["last_error"] = str(exc)[:300]
+            save(d)
+            try:
+                sys.path.insert(0, os.path.dirname(HERE))
+                import alert
+                alert.send("site:publish", "انتشار خبر روی سایت انجام نشد",
+                           f"«{(d.get('fields') or {}).get('title', d['id'])}»: {str(exc)[:200]}",
+                           "داشبورد → تولید محتوا → همین خبر → «انتشار همین حالا»؛ اگر پنل وارد نیست اول «پنل سایت» → «ورود»")
+            except Exception:                                          # noqa: BLE001
+                pass
+            say(f"✗ {d['id']}: {exc}")
+        break                                         # one per hour at most
+    return out
     for d in all_drafts():
         ok = d.get("status") == "approved" or (articles.autopublish() and d.get("status") == "draft")
         if ok and d.get("date") == today_str() and d.get("time", "10:00") <= now.strftime("%H:%M"):

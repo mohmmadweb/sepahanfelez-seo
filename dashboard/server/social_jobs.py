@@ -136,6 +136,9 @@ def start(net, action="login", params=None, account=None):
                 fn = {"telegram": L.login_telegram, "instagram": L.login_instagram,
                       "linkedin": L.login_linkedin}.get(net, lambda: L.login_web(net))
                 job.ok = bool(fn())
+                if job.ok:
+                    _kick("social", "reschedule")
+                    job.messages.append("محتوای عقب‌افتاده‌ی این شبکه دوباره زمان‌بندی شد؛ از این به بعد خودکار منتشر می‌شود (صف انتشار).")
             job.phase = "done"
         except SystemExit as exc:              # login.py exits with a message when .env is missing a value
             job.ok, job.phase = False, "error"
@@ -154,6 +157,17 @@ def start(net, action="login", params=None, account=None):
     return job.view()
 
 
+def _kick(kind, what):
+    """Run the publishing tick in the background right after a sign-in, instead of waiting for the timer."""
+    import subprocess
+    py = os.path.join(ROOT, ".venv", "bin", "python")
+    if kind == "site":
+        cmd, cwd = [py, "tick.py"], os.path.join(ROOT, "automation", "site")
+    else:
+        cmd, cwd = [py, "publisher.py", what], os.path.join(ROOT, "automation", "social")
+    subprocess.Popen(cmd, cwd=cwd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, start_new_session=True)
+
+
 def _site_work(job, action, params):
     """Site panel jobs: same window, same code prompt as the networks."""
     sys.path.insert(0, os.path.join(ROOT, "automation", "site"))
@@ -163,6 +177,9 @@ def _site_work(job, action, params):
     try:
         if action == "login":
             job.ok = bool(panel.login(params.get("mobile")))
+            if job.ok:
+                _kick("site", "tick.py")
+                say("مقاله و خبرهای منتظر از همین حالا (یکی‌یکی، با فاصله) روی سایت منتشر می‌شوند.")
         elif action == "check":
             job.ok = bool(panel.check())
             say("وارد پنل سایت هستید." if job.ok else "وارد پنل سایت نیستید.")

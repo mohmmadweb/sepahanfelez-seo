@@ -24,7 +24,7 @@ import re
 import subprocess
 import sys
 import urllib.parse
-from datetime import datetime
+from datetime import datetime, timedelta
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
@@ -62,8 +62,11 @@ def phones():
     return [x.strip() for x in os.environ.get("SITE_CONTACT_PHONES", "").split(",") if x.strip()]
 
 
-def facts():
+def factory_facts():
     return FACTS.format(phones="، ".join(_fa(p) for p in phones()) or "—")
+
+
+facts = factory_facts      # publisher.py calls articles.facts()
 
 
 def allowed_phones():
@@ -247,7 +250,7 @@ def _prompt(item, product, facts, targets, existing, feedback=None):
 محصول: {item.get('product')} — صفحه‌ی محصول در سایت: {facts['category_page']}
 
 واقعیت‌های کارخانه (فقط همین‌ها؛ هیچ ادعا، آمار، گواهی یا استانداردی که این‌جا نیست نساز):
-{facts()}
+{factory_facts()}
 
 کالاهای همین دسته در کاتالوگ سایت (مشخصه‌ها در نامشان است؛ از همین‌ها مثال بزن):
 {json.dumps(facts['products_in_catalog'], ensure_ascii=False)}
@@ -303,8 +306,11 @@ def _image(item):
 def next_item():
     have = {d["id"] for d in all_drafts()}
     today = today_str()
+    # the plan rolls forward every day, so a topic missed earlier comes back under a new date: a topic that
+    # already has a draft (waiting or published) is never written twice
+    titles = {d.get("plan_title") for d in all_drafts() if d.get("status") not in ("rejected",)}
     for it in _plan_items():
-        if it["date"] >= today and it["id"] not in have:
+        if it["date"] >= today and it["id"] not in have and it.get("title") not in titles:
             return it
     return None
 
@@ -402,9 +408,11 @@ def due(say=print):
     """Publish approved (or auto) drafts whose planned time has come. Runs hourly in working hours."""
     now = now_tehran().strftime("%Y-%m-%dT%H:%M")
     out = []
-    for d in all_drafts():
+    if any((d.get("published_at") or "")[:10] == today_str() for d in all_drafts()):
+        return out                                    # one article a day: a backlog (panel was signed out) drains one per day
+    for d in all_drafts():                            # oldest first
         ok = d.get("status") == "approved" or (autopublish() and d.get("status") == "draft")
-        if ok and f"{d['date']}T{d.get('time', '11:00')}" <= now:
+        if ok and f"{d['date']}T{d.get('time', '11:00')}" <= now and not out:
             try:
                 out.append(publish(d["id"], say=say))
             except Exception as exc:                                   # noqa: BLE001

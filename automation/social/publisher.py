@@ -446,6 +446,12 @@ def _logged(net):
     return acct, bool(acct and st.get("logged_in"))
 
 
+def _was_connected(acct):
+    rows = (read_json(os.path.join(DATA, "connections.json"), {}) or {}).get("rows", [])
+    row = next((r for r in rows if r.get("key") == f"acct:{acct['id']}"), {})
+    return bool(row.get("last_ok"))
+
+
 def _alert(net, q, detail, fix):
     """One message per network per 6 hours to the person who fixes it (automation/alert.py)."""
     try:
@@ -457,22 +463,73 @@ def _alert(net, q, detail, fix):
         pass
 
 
-def publish(q, say=print, force=False):
+# per network: published (live) · sent-to-operator (in Saved Messages, one tap left) · waiting (account not
+# signed in: rescheduled once it is) · failed (a person looks) · expired (its moment passed, not sent)
+SETTLED = ("published", "sent-to-operator", "failed", "expired")
+TIME_BOUND = ("قیمت روز", "خبری")    # worthless late: never rescheduled (a news share keeps 2 days)
+CATCHUP_DAYS = 7          # missed evergreen items up to a week old are rescheduled once their account is back
+CATCHUP_PER_DAY = 2       # … and at most this many a day (story caps are 4–6 a day, the plan uses 3), between 09:00 and 19:00, not on Friday
+
+
+def _at(q):
+    return datetime.fromisoformat(f"{q['date']}T{q.get('at') or q.get('after') or q.get('time', '09:00')}").replace(
+        tzinfo=now_tehran().tzinfo)
+
+
+def _res(q, net):
+    return ((q.get("results") or {}).get(net) or {}).get("status")
+
+
+def _pending(q):
+    return [n for n in q.get("nets", []) if _res(q, n) not in SETTLED]
+
+
+def _retarget(q):
+    """Networks not yet reached follow today's setup (SOCIAL_STORY_NETS / SOCIAL_CHANNEL_NETS); reached ones stay."""
+    want = story_nets() if q.get("action") == "story" else channel_nets() + (["linkedin"] if "linkedin" in q.get("nets", []) else [])
+    done = [n for n in q.get("nets", []) if _res(q, n) in SETTLED]
+    new = done + [n for n in want if n not in done]
+    if new != q.get("nets"):
+        q["nets"] = new
+        for n in list((q.get("results") or {})):
+            if n not in new:
+                q["results"].pop(n)
+        return True
+    return False
+
+
+def _settle(q):
+    """Item status from its networks — «done» only when every network really has it live."""
+    st = [_res(q, n) for n in q.get("nets", [])]
+    if st and all(s == "published" for s in st):
+        q["status"] = "done"
+    elif any(s in ("published", "sent-to-operator") for s in st):
+        q["status"] = "operator" if not _pending(q) and "sent-to-operator" in st and "failed" not in st and "expired" not in st else "partial"
+    elif any(s in ("waiting", "skipped") for s in st):
+        q["status"] = "waiting"
+    elif st and all(s in ("expired", "failed") for s in st):
+        q["status"] = "expired" if "failed" not in st else "partial"
+    return q["status"]
+
+
+def publish(q, say=print, force=False, nets=None):
     import random
     import time
     import actions
     sent = 0
-    for i, net in enumerate(q.get("nets", [])):
+    q.setdefault("results", {})
+    for i, net in enumerate(nets or q.get("nets", [])):
         if i and sent:
             time.sleep(random.randint(25, 110))        # not the same second on every network
-        prev = (q.get("results") or {}).get(net, {}).get("status")
-        if prev in ("published", "sent-to-operator") or (prev == "failed" and not force):
+        prev = _res(q, net)
+        if prev in ("published", "sent-to-operator", "expired") or (prev == "failed" and not force):
             continue                                   # a failure is looked at by a person, not retried every 10 minutes
         acct, ok = _logged(net)
         if not ok:
-            q["results"][net] = {"status": "skipped", "detail": "حساب وصل نیست", "at": _now()}
-            if acct:                                   # an account that was connected and dropped out (none added yet: no alarm)
-                _alert(net, q, "حساب از برنامه بیرون افتاده و این محتوا ارسال نشد",
+            q["results"][net] = {"status": "waiting", "at": _now(),
+                                 "detail": "حساب وصل نیست — بعد از ورود دوباره زمان‌بندی و منتشر می‌شود"}
+            if acct and _was_connected(acct):         # an account that was connected and dropped out (never connected: no alarm)
+                _alert(net, q, "حساب از برنامه بیرون افتاده؛ این محتوا و بعدی‌ها منتظر می‌مانند و بعد از ورود دوباره زمان‌بندی می‌شوند",
                        "داشبورد → اتصالات و تنظیمات → همین حساب → «ورود»")
             continue
         try:
@@ -481,40 +538,150 @@ def publish(q, say=print, force=False):
             q["results"][net] = {"status": res.get("status"), "detail": res.get("detail", ""), "url": res.get("url"), "at": _now()}
             sent += 1
         except Exception as exc:                                       # noqa: BLE001
-            q["results"][net] = {"status": "failed", "detail": f"{type(exc).__name__}: {str(exc)[:200]}", "at": _now()}
+            if type(exc).__name__ == "Blocked":        # daily cap full or a 24h platform pause: not a failure, another day
+                q["results"][net] = {"status": "waiting", "detail": f"{exc} — دوباره زمان‌بندی می‌شود", "at": _now()}
+                q["retry_at"] = None
+            elif type(exc).__name__ == "NotLoggedIn":  # the session ended between the check and the send
+                q["results"][net] = {"status": "waiting", "at": _now(),
+                                     "detail": "حساب وسط کار بیرون افتاد — بعد از ورود دوباره زمان‌بندی و منتشر می‌شود"}
+                try:
+                    import login as Lg
+                    Lg.use(acct)
+                    Lg.save_status(net, False, "logged out")
+                    Lg.use(None)
+                except Exception:                      # noqa: BLE001
+                    pass
+                _alert(net, q, "حساب از برنامه بیرون افتاده؛ انتشار در این شبکه متوقف است تا دوباره وارد شوید",
+                       "داشبورد → اتصالات و تنظیمات → همین حساب → «ورود»")
+            else:
+                q["results"][net] = {"status": "failed", "detail": f"{type(exc).__name__}: {str(exc)[:200]}", "at": _now()}
         if q["results"][net]["status"] == "failed":
             _alert(net, q, "ارسال خطا داد: " + q["results"][net]["detail"],
                    "داشبورد → تولید محتوا → صف انتشار → همین مورد → «ارسال دوباره»؛ اگر تکرار شد «تست کامل» حساب")
+        elif q["results"][net]["status"] == "sent-to-operator":
+            _alert(net, q, "این استوری در «پیام‌های ذخیره‌شده»ی همین اپ آماده است؛ وب این اپ دکمه‌ی استوری ندارد",
+                   "در گوشی همان پیام را باز کنید و با یک لمس به استوری بفرستید")
         say(f"{FA_NET.get(net, net)}: {q['results'][net]['status']}")
-    st = [r["status"] for r in q["results"].values()]
-    q["status"] = "done" if st and all(s in ("published", "sent-to-operator") for s in st) else ("partial" if sent else q["status"])
+    _settle(q)
     q["published_at"] = _now() if sent else q.get("published_at")
     return save(q)
+
+
+def _expire(q, nets, why):
+    for n in nets:
+        q["results"][n] = {"status": "expired", "detail": why, "at": _now()}
+    _settle(q)
+    trace.step(q["id"], "publish", "زمانش گذشت", why)
+    save(q)
+
+
+CATCHUP_TIMES = ("11:20", "14:40")   # between the plan's slots (stories 9/13/16, channel 10:30/12:30/17:30)
+
+
+def _next_slot(t, used):
+    """The first catch-up time ≥ t, not on Friday, on a day with room left."""
+    day = t.replace(second=0, microsecond=0)
+    for _ in range(60):
+        if day.weekday() != 4 and used.get(day.date().isoformat(), 0) < CATCHUP_PER_DAY:
+            for hm in CATCHUP_TIMES:
+                h, m = map(int, hm.split(":"))
+                cand = day.replace(hour=h, minute=m)
+                if cand >= t and not used.get(cand.isoformat(timespec="minutes")):
+                    return cand
+        day = (day + timedelta(days=1)).replace(hour=0, minute=0)
+    return t
+
+
+def reschedule(say=print):
+    """Content that could not go out (account signed out, or never connected yet) is given a new time as soon as
+    the account is back: oldest first, a few hours apart, a few a day — never a burst."""
+    import hashlib
+    now = now_tehran()
+    logged = {n for n in FA_NET if _logged(n)[1]}
+    if not logged:
+        return []
+    items = all_items()
+    used, last = {}, now + timedelta(minutes=10)
+    for q in items:
+        if q.get("retry_at"):
+            t = datetime.fromisoformat(q["retry_at"])
+            if t > now:
+                used[t.date().isoformat()] = used.get(t.date().isoformat(), 0) + 1
+                last = max(last, t + timedelta(minutes=1))
+    out = []
+    for q in sorted(items, key=_at):
+        if q.get("retry_at") or q.get("status") in ("done", "rejected", "needs_fix", "expired") or not _eligible(q):
+            continue
+        if _at(q) + timedelta(hours=WINDOW_H) > now:
+            continue                                   # its own slot is still ahead or open
+        ready = [n for n in _pending(q) if n in logged]
+        if not ready:
+            continue
+        slot = _next_slot(last, used)
+        used[slot.isoformat(timespec="minutes")] = 1
+        used[slot.date().isoformat()] = used.get(slot.date().isoformat(), 0) + 1
+        t = slot + timedelta(minutes=int(hashlib.md5(q["id"].encode()).hexdigest(), 16) % 13)
+        q["retry_at"] = t.isoformat(timespec="minutes")
+        last = slot + timedelta(minutes=1)
+        trace.step(q["id"], "plan", "زمان تازه", f"{t.strftime('%Y-%m-%d %H:%M')} برای {', '.join(FA_NET[n] for n in ready)}",
+                   decision="در زمان خودش حساب وصل نبود؛ حالا که وصل است دوباره زمان‌بندی شد")
+        save(q)
+        out.append(q)
+    if out:
+        say(f"زمان‌بندی دوباره: {len(out)} مورد عقب‌افتاده")
+    return out
+
+
+def _eligible(q):
+    return q.get("status") in ("approved", "partial", "waiting", "operator") or (autopublish() and q.get("status") == "draft")
 
 
 def due(say=print):
     now = now_tehran()
     out = []
     for q in all_items():
-        ok = q.get("status") == "approved" or (autopublish() and q.get("status") == "draft")
-        if q.get("status") == "partial":
-            ok = True
-        if not ok:
+        st = q.get("status")
+        if st in ("done", "rejected", "needs_fix", "expired"):
             continue
-        at = datetime.fromisoformat(f"{q['date']}T{q.get('at') or q.get('after') or q.get('time', '09:00')}").replace(tzinfo=now.tzinfo)
-        if at <= now <= at + timedelta(hours=WINDOW_H):
-            out.append(publish(q, say=say))
-        elif now > at + timedelta(hours=WINDOW_H) and q.get("status") != "partial":
-            q["status"] = "expired"
-            trace.step(q["id"], "publish", "منقضی شد", f"تا {WINDOW_H} ساعت بعد از زمانش تأیید/ارسال نشد")
+        at = _at(q)
+        if _retarget(q):
+            _settle(q)
             save(q)
-            try:
-                import alert
-                alert.send("expired", "محتوای شبکه‌ها بدون تأیید ماند و منتشر نشد",
-                           f"«{q.get('type') or ''}» {q.get('date')} {q.get('at') or q.get('time') or ''} تا {WINDOW_H} ساعت بعد از زمانش تأیید نشد.",
-                           "داشبورد → تولید محتوا → صف انتشار → «تأیید همه‌ی این روز»؛ یا SOCIAL_AUTOPUBLISH=1 در «تنظیمات» تا بدون تأیید برود")
-            except Exception:                                          # noqa: BLE001
-                pass
+        if not _eligible(q):
+            if st == "draft" and now > at + timedelta(hours=WINDOW_H):
+                q["status"] = "expired"
+                trace.step(q["id"], "publish", "منقضی شد", f"تا {WINDOW_H} ساعت بعد از زمانش تأیید نشد")
+                save(q)
+                try:
+                    import alert
+                    alert.send("expired", "محتوای شبکه‌ها بدون تأیید ماند و منتشر نشد",
+                               f"«{q.get('type') or ''}» {q.get('date')} {q.get('at') or q.get('time') or ''} تا {WINDOW_H} ساعت بعد از زمانش تأیید نشد.",
+                               "داشبورد → تولید محتوا → صف انتشار → «تأیید همه‌ی این روز»؛ یا SOCIAL_AUTOPUBLISH=1 در «تنظیمات» تا بدون تأیید برود")
+                except Exception:                                      # noqa: BLE001
+                    pass
+            continue
+        pending = _pending(q)
+        if not pending:
+            if _settle(q) != st:
+                save(q)
+            continue
+        if at <= now <= at + timedelta(hours=WINDOW_H):
+            out.append(publish(q, say=say, nets=pending))          # its own slot (an account that is back mid-slot still gets it)
+        elif now > at + timedelta(hours=WINDOW_H):
+            late = [n for n in pending if _res(q, n) is None]       # tried at its slot? no — the timer was off: same as waiting
+            if q.get("type") in TIME_BOUND or q.get("kind") == "news-share" and now > at + timedelta(days=2):
+                _expire(q, pending, "زمانش گذشت و در آن موقع حساب وصل نبود؛ این نوع محتوا دیر منتشر نمی‌شود")
+            elif at < now - timedelta(days=CATCHUP_DAYS):
+                _expire(q, pending, f"بیش از {CATCHUP_DAYS} روز منتظر ورود حساب ماند")
+            elif q.get("retry_at") and datetime.fromisoformat(q["retry_at"]) <= now:
+                q["retry_at"] = None
+                out.append(publish(q, say=say, nets=pending))
+            elif late:
+                for n in late:
+                    q["results"][n] = {"status": "waiting", "at": _now(), "detail": "در زمان خودش ارسال نشد — منتظر زمان‌بندی دوباره"}
+                _settle(q)
+                save(q)
+    reschedule(say=say)
     return out
 
 
@@ -543,4 +710,5 @@ def tick(say=print):
 
 if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else "tick"
-    {"prepare": lambda: prepare(), "due": lambda: due(), "tick": lambda: tick()}[cmd]()
+    {"prepare": lambda: prepare(), "due": lambda: due(), "tick": lambda: tick(),
+     "reschedule": lambda: (due(), reschedule())}[cmd]()
