@@ -13,6 +13,8 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import articles  # noqa: E402
 import news  # noqa: E402
 import panel  # noqa: E402
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import alert  # noqa: E402
 from sf.util import now_tehran  # noqa: E402
 
 KEEPALIVE = timedelta(minutes=110)
@@ -22,7 +24,19 @@ if __name__ == "__main__":
         st = panel.status()
         last = st.get("checked")
         if not last or datetime.now().astimezone() - datetime.fromisoformat(last) > KEEPALIVE:
-            print("panel:", "ok" if panel.check() else "logged out / unreachable")
+            ok = panel.check()
+            print("panel:", "ok" if ok else "logged out / unreachable")
+            st2 = panel.status()
+            if not st2.get("logged_in"):
+                alert.send("conn:site", "اتصال قطع: پنل مدیریت sepahanfelez.ir",
+                           "داشبورد از پنل سایت بیرون افتاده؛ انتشار مقاله و خبر متوقف است.",
+                           "اتصالات و تنظیمات → «پنل سایت» → موبایل مدیر → «ورود» → کد پیامکی", every_h=12)
+            elif int(st2.get("fails", 0) or 0) >= 6:
+                alert.send("site:down", "سایت sepahanfelez.ir جواب نمی‌دهد",
+                           f"{st2.get('fails')} بار پشت‌سرهم پنل سایت باز نشد ({st2.get('detail')}).",
+                           "سایت را در مرورگر باز کنید؛ اگر باز نمی‌شود هاست (cPanel) را بررسی کنید", every_h=6)
+            else:
+                alert.resolved("conn:site", "پنل مدیریت sepahanfelez.ir")
     try:                                                   # news sources hold ~30 items each: read them every hour
         news.collect(say=lambda *_: None)
     except Exception as exc:                               # noqa: BLE001

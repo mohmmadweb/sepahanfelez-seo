@@ -164,24 +164,21 @@ def run(parts=("site", "google", "news", "social")):
 
 
 def notify(out, prev, last):
-    """A Telegram message to the owner (TELEGRAM_BOT_TOKEN + TELEGRAM_ADMIN_CHAT_ID) when something newly breaks,
-    and once a day while anything stays broken. Without those two settings the dashboard banner is the only alert."""
-    from sf.env import get
-    token, chat = get("TELEGRAM_BOT_TOKEN", ""), get("TELEGRAM_ADMIN_CHAT_ID", "")
-    broken = [r for r in out["rows"] if r["state"] == "broken"]
-    new = [r for r in broken if (prev.get(r["key"]) or {}).get("state") != "broken"]
-    daily = broken and (not last or (_age_h(last) or 99) >= 23)
-    if not (token and chat and (new or daily)):
-        return last
-    lines = ["⚠️ داشبورد سپاهان فلز — اتصال قطع:"] + [f"• {r['name']}: {r['detail']}\n  ← {r['fix']}" for r in broken]
-    lines.append("\nhttps://sepahanfelezseo.lenzit.ir:9444/#integrations")
-    try:
-        import requests
-        requests.post(f"https://api.telegram.org/bot{token}/sendMessage", timeout=20,
-                      data={"chat_id": chat, "text": "\n".join(lines), "disable_web_page_preview": "true"})
-        return _now()
-    except Exception:                                                   # noqa: BLE001
-        return last
+    """Each broken connection (or a warning that stops publishing) → a message from @sepahanfelezbot to
+    SF_ALERT_MOBILE, repeated every 12 hours while it stays broken; «✅ دوباره سالم» when it is fixed."""
+    import alert
+    sent = None
+    for r in out["rows"]:
+        key = "conn:" + r["key"]
+        transient = r["state"] == "warn" and (r["key"] == "site" or r["detail"].startswith("بررسی نشد"))
+        never = r["group"] == "شبکه‌ها" and not r.get("last_ok")      # added but not connected yet: the dashboard shows it, no alarm
+        if not never and (r["state"] == "broken" or (r["state"] == "warn" and not transient and r["group"] == "شبکه‌ها")):
+            if alert.send(key, ("اتصال قطع: " if r["state"] == "broken" else "مانع انتشار: ") + r["name"],
+                          r["detail"] + (f" (از {r['since'][:16].replace('T', ' ')})" if r.get("since") else ""), r["fix"], every_h=12):
+                sent = _now()
+        elif r["state"] == "ok":
+            alert.resolved(key, r["name"])
+    return sent or last
 
 
 if __name__ == "__main__":

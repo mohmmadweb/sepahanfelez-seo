@@ -364,6 +364,15 @@ def prepare_item(item, used, say=print):
     trace.step(item["id"], "write", "متن و تصویر آماده شد", (q.get("text") or "")[:120],
                decision=("در انتظار تأیید شما در داشبورد" if not autopublish() else "انتشار خودکار در زمان برنامه"),
                data={"nets": q["nets"], "usd": q["cost_usd"]})
+    if q["status"] == "needs_fix":
+        try:
+            import alert
+            bad = "، ".join(f"{g['name']} ({g['detail']})" if g.get("detail") else g["name"] for g in q["gate"] if not g["ok"])
+            alert.send(f"fix:{item['id']}", "یک محتوای شبکه‌ها از کنترل کیفیت رد شد و منتشر نمی‌شود",
+                       f"{item.get('type')} · {item.get('product') or ''} · {item.get('jalali') or item.get('date')}: {bad}",
+                       "داشبورد → تولید محتوا → صف انتشار → همین مورد → «ویرایش» یا «دوباره بساز»", every_h=24 * 30)
+        except Exception:                                              # noqa: BLE001
+            pass
     say(f"آماده شد: {item['id']} ({q['status']})")
     return save(q)
 
@@ -422,6 +431,17 @@ def _logged(net):
     return acct, bool(acct and st.get("logged_in"))
 
 
+def _alert(net, q, detail, fix):
+    """One message per network per 6 hours to the person who fixes it (automation/alert.py)."""
+    try:
+        import alert
+        what = {"story": "استوری", "post": "پست"}.get(q.get("action"), q.get("action"))
+        alert.send(f"pub:{net}", f"انتشار در {FA_NET.get(net, net)} انجام نشد",
+                   f"{what} «{q.get('type') or ''}» برای {q.get('jalali') or q.get('date')} {q.get('at') or q.get('time') or ''}: {detail}", fix)
+    except Exception:                                                  # noqa: BLE001
+        pass
+
+
 def publish(q, say=print, force=False):
     import random
     import time
@@ -436,6 +456,9 @@ def publish(q, say=print, force=False):
         acct, ok = _logged(net)
         if not ok:
             q["results"][net] = {"status": "skipped", "detail": "حساب وصل نیست", "at": _now()}
+            if acct:                                   # an account that was connected and dropped out (none added yet: no alarm)
+                _alert(net, q, "حساب از برنامه بیرون افتاده و این محتوا ارسال نشد",
+                       "داشبورد → اتصالات و تنظیمات → همین حساب → «ورود»")
             continue
         try:
             res = actions.act(net, q["action"], text=signature.caption(q.get("text", "")), media=q.get("media"), link=q.get("link"),
@@ -444,6 +467,9 @@ def publish(q, say=print, force=False):
             sent += 1
         except Exception as exc:                                       # noqa: BLE001
             q["results"][net] = {"status": "failed", "detail": f"{type(exc).__name__}: {str(exc)[:200]}", "at": _now()}
+        if q["results"][net]["status"] == "failed":
+            _alert(net, q, "ارسال خطا داد: " + q["results"][net]["detail"],
+                   "داشبورد → تولید محتوا → صف انتشار → همین مورد → «ارسال دوباره»؛ اگر تکرار شد «تست کامل» حساب")
         say(f"{FA_NET.get(net, net)}: {q['results'][net]['status']}")
     st = [r["status"] for r in q["results"].values()]
     q["status"] = "done" if st and all(s in ("published", "sent-to-operator") for s in st) else ("partial" if sent else q["status"])
@@ -467,6 +493,13 @@ def due(say=print):
             q["status"] = "expired"
             trace.step(q["id"], "publish", "منقضی شد", f"تا {WINDOW_H} ساعت بعد از زمانش تأیید/ارسال نشد")
             save(q)
+            try:
+                import alert
+                alert.send("expired", "محتوای شبکه‌ها بدون تأیید ماند و منتشر نشد",
+                           f"«{q.get('type') or ''}» {q.get('date')} {q.get('at') or q.get('time') or ''} تا {WINDOW_H} ساعت بعد از زمانش تأیید نشد.",
+                           "داشبورد → تولید محتوا → صف انتشار → «تأیید همه‌ی این روز»؛ یا SOCIAL_AUTOPUBLISH=1 در «تنظیمات» تا بدون تأیید برود")
+            except Exception:                                          # noqa: BLE001
+                pass
     return out
 
 

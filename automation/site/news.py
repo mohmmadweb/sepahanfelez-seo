@@ -501,6 +501,14 @@ def due(say=print, can_publish=True):
             except Exception as exc:                                   # noqa: BLE001
                 d["last_error"] = str(exc)[:300]
                 save(d)
+                try:
+                    sys.path.insert(0, os.path.dirname(HERE))
+                    import alert
+                    alert.send("site:publish", "انتشار خبر روی سایت انجام نشد",
+                               f"«{(d.get('fields') or {}).get('title', d['id'])}»: {str(exc)[:200]}",
+                               "داشبورد → تولید محتوا → همین خبر → «انتشار همین حالا»؛ اگر پنل وارد نیست اول «پنل سایت» → «ورود»")
+                except Exception:                                      # noqa: BLE001
+                    pass
                 say(f"✗ {d['id']}: {exc}")
     return out
 

@@ -13,6 +13,7 @@ import contextlib
 import fcntl
 import json
 import os
+import sys
 import time
 from datetime import datetime, timedelta, timezone
 
@@ -80,6 +81,10 @@ def lock(net, wait_sec=600):
         fh.close()
 
 
+NET_FA = {"instagram": "اینستاگرام", "telegram": "تلگرام", "whatsapp": "واتساپ", "bale": "بله", "eitaa": "ایتا",
+          "rubika": "روبیکا", "linkedin": "لینکدین"}
+
+
 def _alerts():
     try:
         with open(ALERTS, encoding="utf-8") as fh:
@@ -106,6 +111,15 @@ def raise_alert(net, kind, detail, account=None):
     os.makedirs(DATA, exist_ok=True)
     with open(ALERTS, "w", encoding="utf-8") as fh:
         json.dump(a, fh, ensure_ascii=False, indent=1)
+    try:                                                   # the person who fixes it hears about it now, not tomorrow
+        sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+        import alert
+        alert.send(f"pause:{key}", f"انتشار در {NET_FA.get(net, net)} {hours} ساعت متوقف شد",
+                   f"پلتفرم هشدار داد ({kind}): {str(detail)[:200]}",
+                   "در اپ همین حساب پیام‌های امنیتی را بررسی و تأیید کنید؛ بعد در داشبورد «ادامه‌ی دستی» یا صبر تا پایان توقف",
+                   every_h=hours)
+    except Exception:                                      # noqa: BLE001
+        pass
 
 
 def clear_alert(net):
