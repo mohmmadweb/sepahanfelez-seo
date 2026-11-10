@@ -84,7 +84,10 @@ def social(prev):
             channels = [n.strip() for n in get("SOCIAL_CHANNEL_NETS", "telegram").split(",")]
             if ok and net in CHANNEL_ENV and net in channels and not get(CHANNEL_ENV[net], ""):
                 state, fix = "warn", f"حساب وصل است ولی نشانی کانال ({CHANNEL_ENV[net]}) در «تنظیمات» خالی است"
-            rows.append(_row(key, "شبکه‌ها", name, state, REASON_FA.get(detail, detail), fix, prev.get(key)))
+            reason = REASON_FA.get(detail, detail)
+            if not ok and not (prev.get(key) or {}).get("last_ok"):
+                reason = "هنوز وارد نشده"                  # never connected: not «signed out»
+            rows.append(_row(key, "شبکه‌ها", name, state, reason, fix, prev.get(key)))
     return rows
 
 
