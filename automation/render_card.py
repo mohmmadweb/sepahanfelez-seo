@@ -46,6 +46,14 @@ def card_phone():
     return fa_digits(f"{mob[:4]} {mob[4:7]} {mob[7:]}" if len(mob) == 11 else mob)
 
 
+def cta_text(cta):
+    """The footer's call to action — never a number (the phone is printed once, next to it)."""
+    cta = (cta or "").strip()
+    if not cta or re.search(r"[0-9۰-۹]", cta) or len(cta) > 24:
+        return "استعلام قیمت روز"
+    return cta
+
+
 def page(card):
     w, h = SIZES[card.get("format", "story")]
     story = card.get("format", "story") == "story"
@@ -54,7 +62,7 @@ def page(card):
         for n, wt in (("Regular", 400), ("Medium", 500), ("Bold", 700)))
     photo = data_uri(card["photo"])
     points = "".join(f"<li>{html.escape(fa_digits(p))}</li>" for p in card.get("points", []))
-    photo_h = 900 if story else 620
+    photo_h = 960 if story else 660
     h1 = f'<h1>{html.escape(fa_digits(card["title"]))}</h1>'
     head_first, head_after = (h1, "") if card.get("layout") == "bold" else ("", h1)
     return f"""<!doctype html><html lang="fa" dir="rtl"><head><meta charset="utf-8"><style>
@@ -66,7 +74,7 @@ body{{width:{w}px;height:{h}px;font-family:Estedad;background:#F3F6FA;color:#0B1
 .top b{{font-size:{46 if story else 40}px;font-weight:700;color:#123152;display:block;line-height:1.3}}
 .top span{{font-size:26px;color:#4A5B70}}
 .chip{{display:inline-block;margin:{46 if story else 30}px 70px 0;padding:6px 26px;border-radius:999px;background:#123152;color:#fff;font-size:28px;font-weight:500}}
-.photo{{margin:{28 if story else 22}px 70px 0;height:{photo_h}px;border-radius:36px;overflow:hidden;box-shadow:0 20px 50px rgba(18,49,82,.18)}}
+.photo{{margin:{60 if story else 40}px 70px 0;height:{photo_h}px;border-radius:36px;overflow:hidden;box-shadow:0 20px 50px rgba(18,49,82,.18)}}
 .photo img{{width:100%;height:100%;object-fit:cover;display:block}}
 h1{{margin:{50 if story else 34}px 70px 0;font-size:{70 if story else 58}px;line-height:1.35;font-weight:700;color:#123152}}
 ul{{margin:{26 if story else 16}px 70px 0;padding:0 40px 0 0;font-size:{36 if story else 32}px;line-height:1.75;color:#24344A}}
@@ -97,11 +105,10 @@ body.bold .photo{{height:{640 if story else 420}px;box-shadow:none;border:6px so
 .cta .w{{font-size:26px;opacity:.9;direction:ltr;text-align:left}}
 </style></head><body class="{html.escape(card.get("layout", "classic"))}">
 <div class="top"><img src="{data_uri(LOGO)}" alt=""><div><b>سپاهان فلز</b><span>صنایع مفتولی طلوع سپاهان</span></div></div>
-<div class="chip">{html.escape(card.get("type", ""))}</div>
 {head_first}<div class="photo"><img src="{photo}" alt=""></div>
 {head_after}
 <ul>{points}</ul>
-<div class="cta"><div class="t">{html.escape(card.get("cta", "استعلام قیمت روز"))}</div>
+<div class="cta"><div class="t">{html.escape(cta_text(card.get("cta")))}</div>
 <div><div class="n">{html.escape(card_phone())}</div><div class="w">sepahanfelez.ir</div></div></div>
 </body></html>"""
 

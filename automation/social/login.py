@@ -196,13 +196,30 @@ def _ask_code(net):
     return IO.ask(f"کد تأییدی که {name} برای شماره‌تان فرستاد")
 
 
-def _code_and_password(page, net, shot):
-    code_box = _first_visible(page, ["input[inputmode=numeric]:not([disabled])", "input[type=tel]:not([name=phone_country]):not([name=phone_number])",
-                                     "input[autocomplete=one-time-code]", ".input-field-input[contenteditable=true]",
-                                     "input[type=text]:not([disabled])"], timeout=25000)
+MARK_OLD = "()=>document.querySelectorAll('input,[contenteditable=true]').forEach(e=>e.setAttribute('data-sf-old','1'))"
+NEW_FIELD = ("input:not([data-sf-old]):not([type=hidden]):not([disabled]), "
+             "[contenteditable=true]:not([data-sf-old])")
+
+
+def _code_and_password(page, net, shot, seconds=60):
+    """After the phone form is sent the app shows a spinner, then a code page. The phone field stays in the
+    page for a while, so the code box is the first *new* visible field (the old ones were marked before sending)."""
+    code_box, end = None, time.time() + seconds
+    while time.time() < end and not code_box:
+        loc = page.locator(NEW_FIELD)
+        for i in range(min(loc.count(), 8)):
+            try:
+                if loc.nth(i).is_visible():
+                    code_box = loc.nth(i)
+                    break
+            except Exception:                                          # noqa: BLE001
+                pass
+        if not code_box:
+            page.wait_for_timeout(1000)
     page.screenshot(path=shot)
     if not code_box:
-        raise RuntimeError(f"صفحه‌ی کد پیدا نشد؛ تصویر: {shot}")
+        msg = re.sub(r"\s+", " ", page.inner_text("body"))[:200]
+        raise RuntimeError(f"صفحه‌ی کد بعد از {seconds} ثانیه نیامد؛ پیام صفحه: «{msg}» — تصویر: {shot}")
     code = _ask_code(net)
     code_box.click()
     page.keyboard.type(code, delay=90)
@@ -255,6 +272,7 @@ def login_web(net):
             btn.wait_for(state="visible", timeout=15000)
             if DRY:
                 return _dry_stop(page, net, shot)
+            page.evaluate(MARK_OLD)
             btn.click()
             _code_and_password(page, net, shot)
 
@@ -268,8 +286,8 @@ def login_web(net):
             page.locator("input[inputmode=numeric]").first.fill(local_phone(phone))
             if DRY:
                 return _dry_stop(page, net, shot)
+            page.evaluate(MARK_OLD)
             page.get_by_role("button", name=re.compile("Submit|Continue|ادامه|تأیید")).first.click()
-            page.wait_for_timeout(3000)
             _code_and_password(page, net, shot)
 
         elif net == "whatsapp":
@@ -292,6 +310,13 @@ def _whatsapp_qr(ctx, page, shot, seconds=240):
     while time.time() < end:
         if _logged_in(page, "whatsapp"):
             break
+        reload = page.get_by_role("button", name=re.compile(r"reload|Reload|بارگذاری")).first
+        try:
+            if reload.count() and reload.is_visible(timeout=300):
+                reload.click()                             # WhatsApp stops refreshing the QR after a few rounds
+                page.wait_for_timeout(2500)
+        except Exception:                                              # noqa: BLE001
+            pass
         canvas = page.locator("canvas").first
         try:
             if canvas.is_visible(timeout=1000):

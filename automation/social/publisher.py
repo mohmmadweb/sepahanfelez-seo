@@ -66,7 +66,7 @@ ANGLES = [
     ("care", "نگهداری و عمر بیشتر محصول در هوای باز"),
     ("factory", "از دل کارخانه: تولید مستقیم، سالن ۳۰٬۰۰۰ متری، کنترل کیفیت (فقط واقعیت‌های داده‌شده)"),
 ]
-LAYOUTS = ["classic", "full", "bold"]
+LAYOUTS = ["classic"]      # the owner chose this one template for everything (11-10); variety comes from copy and photo
 JITTER_MIN = (-12, 22)  # minutes around the planned slot, different every day, never before 09:00
 
 
@@ -194,6 +194,11 @@ def photo_for(item, used):
         cands = [os.path.join(PHOTOS_DRIVE, "_factory", f) for f in lib["_factory"]] + cands
     if not cands and slug and os.path.isdir(os.path.join(PHOTOS_PROTO, slug)):
         cands = [os.path.join(PHOTOS_PROTO, slug, f) for f in sorted(os.listdir(os.path.join(PHOTOS_PROTO, slug))) if f.startswith("photo-")]
+    if not cands:                                      # the plan's media is a video or missing: the product's own photos
+        from sf.drive_sync import match
+        by_name = match(item.get("product") or "")
+        if by_name and lib.get(by_name):
+            cands = [os.path.join(PHOTOS_DRIVE, by_name, f) for f in lib[by_name]]
     pool = [c for c in cands if os.path.isfile(c) and c not in used] or [c for c in cands if os.path.isfile(c)]
     if not pool:
         return None
@@ -202,9 +207,28 @@ def photo_for(item, used):
 
 def catalog(item):
     import articles
+    from sf import product_pages
     prod = articles._product({"product_rank": item.get("product_rank")})
     facts = articles.catalog_facts(item, prod) if prod else {"products_in_catalog": [], "category_page": "/price"}
+    page = product_pages.facts(facts.get("category_page")) if prod else {}
+    facts["page"] = page
+    if page.get("products"):
+        facts["products_in_catalog"] = page["products"]
     return prod, facts
+
+
+def _page_brief(facts):
+    """The product's own page on the site, as the writer sees it."""
+    p = facts.get("page") or {}
+    if not p:
+        return ""
+    return (f"صفحه‌ی همین کالا در سایت (مرجع اصلی عنوان و متن؛ از همین واژه‌ها و مشخصات استفاده کن):\n"
+            f"عنوان صفحه: {p.get('h1') or p.get('title')}\nتوضیح صفحه: {p.get('description')}\n"
+            f"بخش‌های صفحه: {'، '.join(p.get('sections', [])[:8])}\n")
+
+
+VOICE = ("لحن: رسمی و شرکتی (شرکت تولیدی)، بدون محاوره و شوخی؛ تیتر رسمی و دقیق. «سپاهان فلز» کارخانه است: "
+         "واژه‌ی «کارگاه» را اصلاً به کار نبر. از «ما/کارخانه/تولید مستقیم» استفاده کن.")
 
 
 def prices():
@@ -255,8 +279,9 @@ def _story_copy(item, prod, facts, angle, avoid, feedback=""):
 {('ایراد نسخه‌ی قبلی: ' + feedback) if feedback else ''}
 کلمات مرتبط: {'، '.join((prod or {}).get('secondary', [])[:6])}
 کالاهای واقعی کاتالوگ (مشخصات در نامشان): {json.dumps(facts.get('products_in_catalog', [])[:15], ensure_ascii=False)}
-واقعیت‌های کارخانه: {articles.facts()}
-قواعد: هیچ قیمت و عددی که این‌جا نیست ننویس؛ ادعای ساختگی (گواهی، رتبه، «بهترین») نه؛ فارسی ساده؛ ارقام فارسی.
+{_page_brief(facts)}واقعیت‌های کارخانه: {articles.facts()}
+{VOICE}
+قواعد: هیچ قیمت و عددی که این‌جا نیست ننویس؛ ادعای ساختگی (گواهی، رتبه، «بهترین») نه؛ فارسی روشن؛ ارقام فارسی؛ در cta هیچ عدد یا شماره‌ای ننویس.
 خروجی فقط JSON: {{"title": "تیتر حداکثر ۴۰ نویسه", "points": ["۲ یا ۳ نکته‌ی کوتاه، هر کدام حداکثر ۴۵ نویسه"],
 "cta": "دعوت کوتاه حداکثر ۲۲ نویسه", "caption": "کپشن کوتاه ۱ تا ۲ جمله برای پیام همراه"}}""")
 
@@ -267,7 +292,8 @@ def _channel_copy(item, prod, facts, extra=""):
 نوع: {item.get('type')} · موضوع: {item.get('product')}
 {extra}
 کالاهای واقعی کاتالوگ: {json.dumps(facts.get('products_in_catalog', [])[:15], ensure_ascii=False)}
-واقعیت‌های کارخانه: {articles.facts()}
+{_page_brief(facts)}واقعیت‌های کارخانه: {articles.facts()}
+{VOICE}
 قواعد: ۴۰۰ تا ۸۰۰ نویسه؛ خط اول قلاب؛ ۳ تا ۵ خط کوتاه یا بولت؛ آخر یک خط «قیمت روز: sepahanfelez.ir/price» و شماره‌ی تماس؛
 بدون قیمت عددی (مگر در داده‌ی بالا)؛ بدون ادعای ساختگی؛ ۲ تا ۴ هشتگ فارسی مرتبط در آخر؛ ارقام فارسی.
 خروجی فقط JSON: {{"text": "متن کامل پست", "title": "تیتر کارت حداکثر ۴۰ نویسه", "points": ["۲ تا ۳ نکته‌ی کوتاه برای کارت"], "cta": "حداکثر ۲۲ نویسه"}}""")
@@ -278,7 +304,10 @@ def _gate(text, extra_allowed=()):
     digits = text.translate(str.maketrans("۰۱۲۳۴۵۶۷۸۹", "0123456789"))
     phones = {re.sub(r"\D", "", m) for m in re.findall(r"0\d{2,3}[\s\-]?\d{3,4}[\s\-]?\d{4}|09\d{9}", digits)}
     price = re.findall(r"\d[\d,٬\.]*\s*(?:ریال|تومان)", digits)
+    informal = [w for w in ("میشه", "نمیشه", "اینو", "اونو", "چیه", "داری؟", "هستش", "بزنید رو", "رو ببینید") if w in text]
     checks = [("فقط شماره‌های شرکت", phones <= articles.allowed_phones(), "، ".join(phones - articles.allowed_phones())),
+              ("بدون «کارگاه» (ما کارخانه‌ایم)", "کارگاه" not in text, ""),
+              ("لحن رسمی", not informal and "!!" not in text, "، ".join(informal)),
               ("بدون قیمت ساختگی", not price or bool(extra_allowed), "، ".join(price[:2])),
               ("بدون «ارزش افزوده»", "ارزش افزوده" not in text, "")]
     return [{"name": n, "ok": bool(ok), "detail": d} for n, ok, d in checks]
@@ -298,12 +327,14 @@ def prepare_item(item, used, say=print):
         return q
     q.update({k: item.get(k) for k in ("date", "jalali", "time", "type", "product", "kind")})
     prod, facts = catalog(item)
+    q["plan_item"] = {k: v for k, v in item.items() if k != "_photo"}
+    q["source_fp"] = (facts.get("page") or {}).get("fp")
     cost = 0.0
     rec = [r for r in recent() if r["id"] != item["id"]]
     if item["kind"] == "story":
         q["nets"] = story_nets()
         q["action"] = "story"
-        photo = photo_for(item, used)
+        photo = item.get("_photo") or photo_for(item, used)
         angle = pick_angle(item, rec)
         avoid = [(r.get("card") or {}).get("title", "") for r in rec if (r.get("card") or {}).get("title")]
         feedback, tried = "", []
@@ -362,7 +393,7 @@ def prepare_item(item, used, say=print):
             out, c = _channel_copy(item, prod, facts, extra)
             cost += c
             q["text"] = str(out.get("text", "")).strip()
-            photo = photo_for(dict(item, media=item.get("media") or (f"{(prod or {}).get('target_url', '').rsplit('/', 1)[-1]}/x" if prod else "")), used)
+            photo = item.get("_photo") or photo_for(dict(item, media=item.get("media") or (f"{(prod or {}).get('target_url', '').rsplit('/', 1)[-1]}/x" if prod else "")), used)
             card = {"id": item["id"], "type": item.get("type"), "title": out.get("title", ""), "points": out.get("points", [])[:3],
                     "photo": photo, "cta": out.get("cta") or "قیمت روز در سایت", "layout": pick_layout(item, rec)}
             q["card"] = {k: card[k] for k in ("title", "points", "cta", "layout")}
@@ -697,6 +728,65 @@ def drive_refresh(say=print, every_h=3):
     return r
 
 
+def _plan_item_of(q):
+    """The plan item a queue item was made from (kept since 11-10; rebuilt for older ones)."""
+    if q.get("plan_item"):
+        return q["plan_item"]
+    plan = (read_json(PLAN, {}) or {}).get("items", [])
+    hit = next((i for i in plan if i["id"] == q["id"]), None)
+    if hit:
+        return hit
+    same = [i for i in plan if i.get("product") == q.get("product")]
+    rank = next((i.get("product_rank") for i in same if i.get("product_rank")), None)
+    media = next((i.get("media") for i in same if i.get("media")), None)        # tells photo_for which product's photos
+    return {"id": q["id"], "date": q.get("date"), "jalali": q.get("jalali"), "time": q.get("time"), "type": q.get("type"),
+            "product": q.get("product"), "kind": "story" if q.get("action") == "story" else "telegram",
+            "channels": [], "product_rank": rank, "media": media}
+
+
+def _unsent(q):
+    return q.get("kind") in ("story", "telegram") and q.get("status") not in ("done", "rejected", "expired", "operator") \
+        and not any(_res(q, n) in ("published", "sent-to-operator") for n in q.get("nets", []))
+
+
+def rewrite(q, why, say=print, used=None):
+    """Write an unsent item again from today's facts (same photo, same time)."""
+    item = dict(_plan_item_of(q), _photo=q.get("photo"))
+    if item.get("type") in TIME_BOUND:
+        return None
+    trace.step(q["id"], "write", "بازنویسی", why)
+    keep = {k: q.get(k) for k in ("retry_at", "results", "at")}
+    q2 = prepare_item(item, used if used is not None else set(), say=say)
+    for k, v in keep.items():
+        if v:
+            q2[k] = v
+    _settle(q2) if q2.get("results") else None
+    return save(q2)
+
+
+def watch_pages(say=print, every_h=3):
+    """The owner edited a product or category page → its content not yet published is written again from it."""
+    from sf import product_pages
+    state = os.path.join(DATA, "social", "page_watch.json")
+    last = (read_json(state, {}) or {}).get("at")
+    if last and now_tehran() - datetime.fromisoformat(last) < timedelta(hours=every_h):
+        return []
+    done = []
+    for q in all_items():
+        if not _unsent(q) or not q.get("source_fp"):
+            continue
+        prod, facts = catalog(_plan_item_of(q))
+        fp = (facts.get("page") or {}).get("fp")
+        if fp and fp != q["source_fp"]:
+            r = rewrite(q, f"صفحه‌ی «{q.get('product')}» در سایت عوض شده بود؛ متن از روی صفحه‌ی تازه نوشته شد", say=say)
+            if r:
+                done.append(r["id"])
+    write_json(state, {"at": now_tehran().isoformat(timespec="minutes"), "rewritten": done})
+    if done:
+        say(f"صفحه‌ی محصول عوض شده بود: {len(done)} محتوا دوباره نوشته شد")
+    return done
+
+
 def tick(say=print):
     now = now_tehran()
     try:
@@ -705,6 +795,10 @@ def tick(say=print):
         say(f"درایو: {exc}")
     if now.hour >= 7:
         prepare(days=1, say=say)
+        try:
+            watch_pages(say=say)
+        except Exception as exc:                                       # noqa: BLE001
+            say(f"پایش صفحه‌ها: {exc}")
     return due(say=say)
 
 
