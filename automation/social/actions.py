@@ -68,6 +68,13 @@ def _jpeg(path):
     return out
 
 
+def _seen(text, body):
+    """Is the sent text on the page? Emoji are often drawn as images and spacing differs, so compare letters only."""
+    norm = lambda t: re.sub(r"[^\w\u0600-\u06FF]+", "", (t or "").replace("\u200c", ""))  # noqa: E731
+    core = norm(text)[:24]
+    return bool(core) and core in norm(body)
+
+
 def _is_video(path):
     return bool(path) and path.lower().endswith((".mp4", ".mov", ".m4v"))
 
@@ -235,6 +242,8 @@ def _web(net, kind, target, text, media, link):
     shot = os.path.join(L.profile_dir(net), "last-send.png")
     if link:
         text = (text + "\n" + link).strip()
+    if net == "bale":
+        return _bale_send(target, text, media, shot)
     with sync_playwright() as p:
         ctx = L._browser(p, net)
         page = ctx.pages[0] if ctx.pages else ctx.new_page()
@@ -289,10 +298,70 @@ def _web(net, kind, target, text, media, link):
             page.wait_for_timeout(5000)
             page.screenshot(path=shot)
             body = page.inner_text("body")
-            sent = (text[:25] in body) if text else True
+            sent = _seen(text, body) if text else True
             return {"status": "sent-to-operator" if kind == "story" else ("published" if sent else "failed"),
                     "detail": (f"فرستاده شد به {target}" if sent else "ارسال تأیید نشد — تصویر: " + shot), "url": None, "message_id": None,
                     "screenshot": shot}
+        finally:
+            ctx.close()
+
+
+def _bale_me_uid(page):
+    """Bale's Saved Messages is «فضای شخصی» in the profile menu — never found by search, because public channels
+    named «پیام‌های ذخیره شده» come up there. Its chat address (uid) is remembered after the first visit."""
+    f = os.path.join(L.profile_dir("bale"), "me_uid")
+    if os.path.exists(f):
+        return open(f, encoding="utf-8").read().strip()
+    page.goto("https://web.bale.ai/chat", wait_until="domcontentloaded")
+    page.wait_for_timeout(9000)
+    if not L._logged_in(page, "bale"):
+        raise NotLoggedIn("بله وارد نشده است.")
+    page.locator("[aria-label=profile]").first.click(force=True)
+    page.wait_for_timeout(1500)
+    page.get_by_text("فضای شخصی", exact=True).first.click(force=True)
+    page.wait_for_timeout(3500)
+    m = re.search(r"uid=(\d+)", page.url)
+    if not m:
+        raise RuntimeError("«فضای شخصی» بله باز نشد")
+    with open(f, "w", encoding="utf-8") as fh:
+        fh.write(m.group(1))
+    return m.group(1)
+
+
+def _bale_send(target, text, media, shot):
+    """Bale web: only the account's own «فضای شخصی» (Saved Messages) — the company has no Bale channel."""
+    from playwright.sync_api import sync_playwright
+    if target not in ("me", ""):
+        raise ValueError("در بله فقط استوری و «فضای شخصی» استفاده می‌شود (کانال بله تعریف نشده).")
+    with sync_playwright() as p:
+        ctx = L._browser(p, "bale")
+        page = ctx.pages[0] if ctx.pages else ctx.new_page()
+        try:
+            uid = _bale_me_uid(page)
+            page.goto(f"https://web.bale.ai/chat?uid={uid}", wait_until="domcontentloaded")
+            page.wait_for_timeout(8000)
+            if not L._logged_in(page, "bale"):
+                raise NotLoggedIn("بله وارد نشده است.")
+            if media:
+                page.locator("input[type=file]").first.set_input_files(_jpeg(media) if not _is_video(media) else media)
+                cap = page.locator("textarea[aria-label='توضیحات فایل']").first
+                cap.wait_for(timeout=15000)
+                if text:
+                    cap.fill(text)
+                page.locator("[data-testid=confirm-button]").first.click()
+            else:
+                box = page.locator("#editable-message-text").first
+                box.wait_for(timeout=15000)
+                box.click(force=True)
+                page.keyboard.insert_text(text)
+                page.wait_for_timeout(400)
+                page.keyboard.press("Enter")
+            page.wait_for_timeout(6000)
+            page.screenshot(path=shot)
+            sent = _seen(text, page.inner_text("body")) if text else True
+            return {"status": "published" if sent else "failed",
+                    "detail": "فرستاده شد به «فضای شخصی» بله" if sent else "ارسال تأیید نشد — تصویر: " + shot,
+                    "url": None, "message_id": None, "screenshot": shot}
         finally:
             ctx.close()
 
@@ -312,15 +381,23 @@ def _bale_story(media, text=""):
             page.wait_for_timeout(10000)
             if not L._logged_in(page, "bale"):
                 raise NotLoggedIn("بله وارد نشده است.")
-            page.locator("svg[aria-label='AddStatus-icon']").first.click(timeout=15000)
+            page.locator("svg[aria-label='AddStatus-icon']").first.click(timeout=15000, force=True)
             page.wait_for_timeout(1500)
             with page.expect_file_chooser(timeout=10000) as fc:
                 page.get_by_text("نگارخانه", exact=True).first.click()
             fc.value.set_files(media if _is_video(media) else _jpeg(media))
-            send = page.get_by_role("button", name=re.compile("تایید و ارسال"))
+            send = page.locator("button", has_text=re.compile(r"^\s*تایید و ارسال\s*$"))
             send.first.wait_for(timeout=30000)
             page.wait_for_timeout(1500)
-            send.first.click()
+            for _ in range(2):
+                send.first.click(force=True)
+                page.wait_for_timeout(2500)
+                save = page.locator("button", has_text=re.compile(r"^\s*ذخیره\s*$"))
+                if save.count() and save.first.is_visible():     # the audience window: keep the account's own choice
+                    save.first.click(force=True)
+                    page.wait_for_timeout(1500)
+                    continue
+                break
             for _ in range(40):                                 # upload, then the editor closes
                 page.wait_for_timeout(1500)
                 if not send.count() or not send.first.is_visible():
@@ -336,6 +413,9 @@ def _bale_story(media, text=""):
 
 
 def _open_chat(page, net, target):
+    if target == "me" and net in ("eitaa", "rubika"):
+        # never through search: public channels named «پیام‌های ذخیره‌شده» come up there (seen on Bale)
+        raise RuntimeError(f"مسیر امن «پیام‌های ذخیره‌شده» در {L.WEB[net]['fa']} هنوز تنظیم نشده؛ بعد از اولین ورود ساخته می‌شود")
     if target == "me":
         names = SAVED_NAMES
     else:

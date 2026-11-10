@@ -62,6 +62,9 @@ class TerminalIO:
         self.say(how)
         self.say(f"  کد:  {code}")
 
+    def qr(self, png_b64):
+        self.say("[QR تازه آماده است]")
+
 
 IO = TerminalIO()
 
@@ -248,9 +251,11 @@ def login_web(net):
             else:
                 page.locator("input[name=phone_number]").first.fill(local_phone(phone))
             page.wait_for_timeout(600)
+            btn = page.get_by_role("button", name=re.compile(r"^\s*(ادامه|بعدی|Next|Continue)\s*$")).first
+            btn.wait_for(state="visible", timeout=15000)
             if DRY:
                 return _dry_stop(page, net, shot)
-            page.locator("button[type=submit]").first.click()
+            btn.click()
             _code_and_password(page, net, shot)
 
         elif net == "bale":
@@ -268,23 +273,7 @@ def login_web(net):
             _code_and_password(page, net, shot)
 
         elif net == "whatsapp":
-            page.get_by_text(re.compile(r"^Log in with phone number$", re.I)).last.click(timeout=15000)
-            page.wait_for_timeout(2500)
-            tel = _first_visible(page, ["input[type=text]", "input[type=tel]", "div[contenteditable=true]"], timeout=10000)
-            tel.click()
-            page.keyboard.press("Control+A")
-            page.keyboard.type("+98" + local_phone(phone), delay=60)
-            if DRY:
-                return _dry_stop(page, net, shot)
-            page.get_by_role("button", name=re.compile("Next", re.I)).first.click()
-            page.wait_for_timeout(5000)
-            page.screenshot(path=shot)
-            code = page.locator("[data-link-code]").first.get_attribute("data-link-code") if page.locator("[data-link-code]").count() else None
-            if not code:
-                text = page.inner_text("body")
-                m = re.search(r"\b([A-Z0-9]{4}[-\s]?[A-Z0-9]{4})\b", text)
-                code = m.group(1) if m else None
-            IO.link_code(code or "?", "روی گوشی: واتساپ ← Linked devices ← Link a device ← Link with phone number instead ← این کد را وارد کنید (تا ۳ دقیقه)")
+            return _whatsapp_qr(ctx, page, shot)
 
         ok = _wait_logged_in(page, net, 180 if net == "whatsapp" else 60)
         page.screenshot(path=shot)
@@ -292,6 +281,36 @@ def login_web(net):
         say(f"{'✓' if ok else '✗'} {cfg['fa']}: {'وارد شدید؛ نشست ذخیره شد.' if ok else 'ورود تأیید نشد. تصویر: ' + shot}")
         ctx.close()
         return ok
+
+
+def _whatsapp_qr(ctx, page, shot, seconds=240):
+    """WhatsApp Web shows a QR that changes every ~20 s: its picture goes to the dashboard window, refreshed,
+    until the phone has scanned it (WhatsApp → Linked devices → Link a device)."""
+    import base64
+    say("روی گوشی: واتساپ ← ⋮ یا Settings ← Linked devices ← Link a device ← QR داخل همین پنجره را اسکن کنید.")
+    end, last = time.time() + seconds, None
+    while time.time() < end:
+        if _logged_in(page, "whatsapp"):
+            break
+        canvas = page.locator("canvas").first
+        try:
+            if canvas.is_visible(timeout=1000):
+                png = canvas.screenshot()
+                if png != last:
+                    last = png
+                    if hasattr(IO, "qr"):
+                        IO.qr(base64.b64encode(png).decode())
+        except Exception:                                              # noqa: BLE001
+            pass
+        page.wait_for_timeout(2500)
+    if hasattr(IO, "qr"):
+        IO.qr(None)
+    ok = _wait_logged_in(page, "whatsapp", 45)             # after the scan WhatsApp loads the chats
+    page.screenshot(path=shot)
+    save_status("whatsapp", ok, "logged in" if ok else f"not confirmed — see {shot}")
+    say("✓ واتساپ: وارد شدید؛ نشست ذخیره شد." if ok else "✗ واتساپ: QR در ۴ دقیقه اسکن نشد؛ دوباره «ورود» را بزنید.")
+    ctx.close()
+    return ok
 
 
 def check_web(net):

@@ -1043,6 +1043,9 @@
         msgs.appendChild(m ? el("div", null, "لینک: ", el("a", { href: m[1], target: "_blank", rel: "noopener", class: "ltr", text: m[1] })) : el("div", { text: t }));
       });
       if (j.link_code) msgs.appendChild(el("div", { class: "code-big", text: j.link_code }));
+      if (j.qr) msgs.appendChild(el("div", { style: "text-align:center;margin:10px 0" },
+        el("img", { src: "data:image/png;base64," + j.qr, alt: "QR واتساپ", style: "width:260px;max-width:100%;background:#fff;padding:12px;border-radius:10px;border:1px solid var(--border-2)" }),
+        el("div", { class: "small muted", text: "QR هر چند ثانیه تازه می‌شود؛ همین را با گوشی اسکن کنید." })));
       if (j.phase === "waiting" && j.prompt !== lastPrompt) {
         lastPrompt = j.prompt; area.textContent = "";
         var inp = el("input", { type: j.secret ? "password" : "text", inputmode: j.secret ? null : (/حرف/.test(j.prompt || "") ? "text" : "numeric"), autocomplete: "one-time-code",

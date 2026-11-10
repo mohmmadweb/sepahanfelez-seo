@@ -211,12 +211,22 @@ def _web(net, run, public):
         return "در پیام‌های ذخیره‌شده" + (" — تصویر صفحه: " + r["screenshot"] if r.get("screenshot") else "")
     run.step("message", lambda: send(f"🔧 تست اتصال سپاهان فلز — {stamp}", None))
     run.step("photo", lambda: send(f"🔧 تست عکس — {stamp}", story))
-    run.steps.append({"cap": "story", "name": CAPS_FA["story"], "status": "ok" if run.steps[-1]["status"] == "ok" else "fail",
-                      "public": False, "seconds": 0, "ts": _now().isoformat(timespec="seconds"),
-                      "detail": "این اپ برای استوری API ندارد؛ فایل آماده‌ی استوری با همین مسیر به پیام‌های ذخیره‌شده می‌رود و از گوشی با دو لمس استوری می‌شود"})
+    if net == "bale":                     # a real story: visible to contacts — so it is the next real card of the queue
+        if public or STORY_TEST:
+            run.step("story", lambda: _queue_story("bale", lambda media: actions._bale_story(media)), public=True)
+        else:
+            run.steps.append({"cap": "story", "name": CAPS_FA["story"], "status": "skip", "public": False, "seconds": 0,
+                              "ts": _now().isoformat(timespec="seconds"),
+                              "detail": "استوری بله واقعی و برای مخاطبین منتشر می‌شود؛ در تست خصوصی فرستاده نمی‌شود (با «تست عمومی» امتحان می‌شود)"})
+    else:
+        run.steps.append({"cap": "story", "name": CAPS_FA["story"], "status": "ok" if run.steps[-1]["status"] == "ok" else "fail",
+                          "public": False, "seconds": 0, "ts": _now().isoformat(timespec="seconds"),
+                          "detail": "وب این اپ دکمه‌ی استوری ندارد؛ فایل استوری به پیام‌های ذخیره‌شده می‌رود و از گوشی با یک لمس استوری می‌شود"})
     chan_env = {"bale": "BALE_CHANNEL", "eitaa": "EITAA_CHANNEL", "rubika": "RUBIKA_CHANNEL"}.get(net)
 
     def ch():
+        if net not in [n.strip() for n in get("SOCIAL_CHANNEL_NETS", "telegram").split(",")]:
+            raise SkipStep("کانال فقط در تلگرام است")
         if not chan_env or not get(chan_env):
             raise SkipStep(f"{chan_env} در تنظیمات خالی است" if chan_env else "واتساپ کانال ندارد")
         from playwright.sync_api import sync_playwright
@@ -235,7 +245,34 @@ def _web(net, run, public):
     run.step("channel", ch)
 
 
-def validate(acct, public=False):
+STORY_TEST = False
+
+
+def _queue_story(net, post):
+    """Stage two of a new connection: a real story, using the next card waiting in the queue for this network
+    (real content, not a test picture); that item is then marked published on this network."""
+    import publisher
+    cand = [q for q in publisher.all_items() if q.get("action") == "story" and net in q.get("nets", [])
+            and publisher._res(q, net) not in publisher.SETTLED and q.get("media") and os.path.isfile(q["media"])
+            and q.get("status") not in ("rejected", "needs_fix", "expired")]
+    if not cand:
+        raise SkipStep("کارت استوری آماده‌ای در صف نیست")
+    q = sorted(cand, key=publisher._at)[0]
+    res = post(q["media"])
+    if res.get("status") != "published":
+        raise RuntimeError(res.get("detail") or "استوری منتشر نشد")
+    q.setdefault("results", {})[net] = {"status": "published", "detail": "تست استوری هنگام اتصال", "at": _now().isoformat(timespec="seconds")}
+    publisher._settle(q)
+    publisher.save(q)
+    from history import record
+    record(net, "story", content_type=q.get("type"), product=q.get("product"), text=(q.get("card") or {}).get("title"),
+           media=q["media"], plan_ref=q["id"], account=L.ACCT["id"] if L.ACCT else None)
+    return f"استوری واقعی منتشر شد: «{(q.get('card') or {}).get('title', q['id'])}» (از صف {q.get('date')})"
+
+
+def validate(acct, public=False, story=False):
+    global STORY_TEST
+    STORY_TEST = story
     L.use(acct)
     run = Run(acct)
     try:

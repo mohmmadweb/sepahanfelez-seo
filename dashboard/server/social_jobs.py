@@ -33,14 +33,14 @@ class Job:
         self.result = None
         self.net, self.action = net, action
         self.phase = "running"            # running | waiting | done | error
-        self.prompt, self.secret, self.link_code = None, False, None
+        self.prompt, self.secret, self.link_code, self.qr = None, False, None, None
         self.messages, self.ok = [], None
         self.started = time.time()
         self.answers = queue.Queue()
 
     def view(self):
         return {"id": self.id, "account": self.account, "result": self.result, "net": self.net, "net_fa": NETS.get(self.net, self.net), "action": self.action,
-                "phase": self.phase, "prompt": self.prompt, "secret": self.secret, "link_code": self.link_code,
+                "phase": self.phase, "prompt": self.prompt, "secret": self.secret, "link_code": self.link_code, "qr": self.qr,
                 "messages": self.messages[-20:], "ok": self.ok, "elapsed": int(time.time() - self.started)}
 
 
@@ -66,6 +66,9 @@ class WebIO:
     def link_code(self, code, how):
         self.job.link_code = code
         self.say(how)
+
+    def qr(self, png_b64):
+        self.job.qr = png_b64
 
 
 _lock = threading.Lock()
@@ -136,6 +139,13 @@ def start(net, action="login", params=None, account=None):
                 fn = {"telegram": L.login_telegram, "instagram": L.login_instagram,
                       "linkedin": L.login_linkedin}.get(net, lambda: L.login_web(net))
                 job.ok = bool(fn())
+                if job.ok and net != "linkedin":       # the two-stage test right away: connected? can it post a story?
+                    import validate
+                    job.messages.append("— تست ۲ مرحله‌ای: ۱) اتصال  ۲) گذاشتن استوری —")
+                    res = validate.validate(acct, story=True)    # each step reports itself in this window
+                    job.messages.append(f"نتیجه‌ی تست: {res['ok']} موفق، {res['fail']} ناموفق، {res['skip']} رد شده")
+                    job.result = res
+                    L.use(acct)
                 if job.ok:
                     _kick("social", "reschedule")
                     job.messages.append("محتوای عقب‌افتاده‌ی این شبکه دوباره زمان‌بندی شد؛ از این به بعد خودکار منتشر می‌شود (صف انتشار).")
