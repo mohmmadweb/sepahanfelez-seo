@@ -47,6 +47,7 @@ def _row(key, group, name, state, detail="", fix="", prev=None):
 def social(prev):
     import accounts
     import login as L
+    from actions import CHANNEL_ENV
     from sf.env import get
     rows = []
     accts = accounts.load()
@@ -81,8 +82,8 @@ def social(prev):
                 if days <= 10:
                     state, fix = "warn", "تا چند روز دیگر توکن لینکدین تمام می‌شود: «اتصال لینکدین» را دوباره بزنید"
             channels = [n.strip() for n in get("SOCIAL_CHANNEL_NETS", "telegram").split(",")]
-            if ok and net in L.CHANNEL_ENV and net in channels and not get(L.CHANNEL_ENV[net], ""):
-                state, fix = "warn", f"حساب وصل است ولی نشانی کانال ({L.CHANNEL_ENV[net]}) در «تنظیمات» خالی است"
+            if ok and net in CHANNEL_ENV and net in channels and not get(CHANNEL_ENV[net], ""):
+                state, fix = "warn", f"حساب وصل است ولی نشانی کانال ({CHANNEL_ENV[net]}) در «تنظیمات» خالی است"
             rows.append(_row(key, "شبکه‌ها", name, state, REASON_FA.get(detail, detail), fix, prev.get(key)))
     return rows
 
@@ -150,7 +151,8 @@ def news_sources(prev):
 def run(parts=("site", "google", "news", "social")):
     old = read_json(OUT, {}) or {}
     prev = {r["key"]: r for r in old.get("rows", [])}
-    rows = {r["key"]: r for r in old.get("rows", [])} if parts != ("site", "google", "news", "social") else {}
+    rows = {r["key"]: r for r in old.get("rows", [])
+            if not ("social" in parts and r["key"].startswith("acct:")) and r["key"] not in {f"err:{x}" for x in parts}} if parts != ("site", "google", "news", "social") else {}
     for name in parts:
         try:
             for r in {"site": site, "google": google, "news": news_sources, "social": social}[name](prev):
