@@ -325,13 +325,36 @@ def _telegram_client():
                           device_model="SepahanFelez Server", system_version="Linux", app_version="1.0")
 
 
+def ensure_telegram_keys():
+    """No TELEGRAM_API_ID/HASH yet: get them from my.telegram.org with this account's number (one code in the
+    Telegram app), save them in .env, and go on — the owner never visits my.telegram.org."""
+    if get("TELEGRAM_API_ID") and get("TELEGRAM_API_HASH"):
+        return
+    import tg_apikeys
+    from dashboard_env import set_settings
+    phone = _acct("telegram").get("phone")
+    if not phone:
+        sys.exit("برای این حساب تلگرام شماره ثبت نشده است.")
+    say("۱ از ۲ — گرفتن کلید تلگرام از my.telegram.org با همین شماره…")
+    api_id, api_hash = tg_apikeys.fetch(phone, lambda prompt: IO.ask(prompt), say=say)
+    set_settings({"TELEGRAM_API_ID": api_id, "TELEGRAM_API_HASH": api_hash})
+    os.environ["TELEGRAM_API_ID"], os.environ["TELEGRAM_API_HASH"] = api_id, api_hash
+    say("✓ کلید تلگرام گرفته و در تنظیمات ذخیره شد. ۲ از ۲ — ورود خود حساب (کد دوم هم در اپ تلگرام می‌آید)…")
+
+
 def login_telegram():
+    ensure_telegram_keys()
     client = _telegram_client()
     client.start(phone=lambda: _acct("telegram")["phone"], code_callback=lambda: _ask_code("telegram"),
                  password=lambda: IO.ask("رمز دومرحله‌ای تلگرام", secret=True))
     me = client.get_me()
     say(f"✓ تلگرام: وارد شدید به‌عنوان {me.first_name} (@{me.username or '—'})")
     save_status("telegram", True, f"user {me.id}")
+    try:                                     # the channel's name, description and photo, once
+        import channel_profile
+        channel_profile.apply(client, say=say)
+    except Exception as exc:                 # noqa: BLE001
+        say(f"پروفایل کانال: {exc}")
     client.disconnect()
     return True
 

@@ -8,3 +8,8 @@ import envfile  # noqa: E402
 
 def set_secrets(changes, drop=False):
     return envfile.set_account_secrets(changes, drop=drop)
+
+
+def set_settings(changes):
+    """Ordinary settings from .env.example (e.g. TELEGRAM_API_ID) through the same writer as the dashboard."""
+    return envfile.update(changes)

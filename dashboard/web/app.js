@@ -1045,7 +1045,7 @@
       if (j.link_code) msgs.appendChild(el("div", { class: "code-big", text: j.link_code }));
       if (j.phase === "waiting" && j.prompt !== lastPrompt) {
         lastPrompt = j.prompt; area.textContent = "";
-        var inp = el("input", { type: j.secret ? "password" : "text", inputmode: j.secret ? null : "numeric", autocomplete: "one-time-code",
+        var inp = el("input", { type: j.secret ? "password" : "text", inputmode: j.secret ? null : (/حرف/.test(j.prompt || "") ? "text" : "numeric"), autocomplete: "one-time-code",
           style: "width:100%;padding:10px;border:1px solid var(--border-2);border-radius:8px;font-size:20px;letter-spacing:3px;direction:ltr;text-align:center;background:var(--surface)" });
         var send = el("button", { class: "btn primary", type: "submit", text: "ارسال" });
         var f = el("form", { class: "stack" }, el("label", { class: "small", text: j.prompt }), inp, send);
