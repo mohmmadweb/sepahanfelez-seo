@@ -42,18 +42,24 @@ def _now():
 
 
 def _assets():
-    """A story frame (1080×1920) and a feed frame (1080×1350) made from the brand sample."""
+    """A story card (1080×1920) and a feed card (1080×1350) in the house template, with a product photo —
+    exactly what real posts look like (rebuilt whenever the template changes)."""
+    import render_card
     os.makedirs(ASSETS, exist_ok=True)
     story, post = os.path.join(ASSETS, "test-story.jpg"), os.path.join(ASSETS, "test-post.jpg")
-    if not (os.path.exists(story) and os.path.exists(post)):
-        from PIL import Image, ImageDraw
-        src = os.path.join(ROOT, "dashboard", "web", "samples", "story-1300-product.jpg")
-        im = Image.open(src).convert("RGB").resize((1080, 1920))
-        d = ImageDraw.Draw(im)
-        d.rectangle((0, 0, 1080, 90), fill=(18, 49, 82))
-        d.text((40, 30), "TEST - Sepahan Felez connection check", fill=(255, 255, 255))
-        im.save(story, quality=90)
-        im.crop((0, 285, 1080, 1635)).save(post, quality=90)
+    tpl = os.path.getmtime(os.path.join(os.path.dirname(HERE), "render_card.py"))
+    if os.path.exists(story) and os.path.exists(post) and os.path.getmtime(story) > tpl:
+        return story, post
+    from sf.drive_sync import library
+    lib = library()
+    slug = next((k for k in ("توری-مرغی", "سیم-خاردار") if lib.get(k)), next(iter(lib), None))
+    photo = os.path.join(ROOT, "dashboard", "data", "photos", slug, lib[slug][0]) if slug else None
+    card = {"title": "آزمون اتصال حساب سپاهان فلز", "photo": photo, "layout": "classic", "cta": "استعلام قیمت روز",
+            "points": ["این پیام فقط برای بررسی اتصال است", "انتشار خودکار محتوا از همین حساب انجام می‌شود"]}
+    for fmt, out in (("story", story), ("post", post)):
+        made = render_card.render([dict(card, id=f"test-{fmt}", format=fmt)], ASSETS)
+        if made:
+            os.replace(made[0], out)
     return story, post
 
 
