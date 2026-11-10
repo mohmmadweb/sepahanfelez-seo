@@ -540,7 +540,12 @@ async def site_view():
 @app.get("/api/connections")
 async def connections_view():
     from sf.build import connections
-    return connections() | {"running": CHECKUP.get("running", False)}
+    sys.path.insert(0, os.path.join(ROOT, "automation"))
+    import alert
+    load_env()
+    tail = (os.environ.get("SF_ALERT_MOBILE") or "")[-4:]
+    return connections() | {"running": CHECKUP.get("running", False),
+                             "alert": {"to": tail, "ready": bool(alert.chat_id() and alert.token())}}
 
 
 CHECKUP = {}

@@ -1607,7 +1607,8 @@
           API.get("/api/connections").then(function (c2) { if (!c2.running) { clearInterval(t); D.connections = c2; connectionsSection(holder); } }); }, 8000); },
           function (e) { btn.disabled = false; alert(e.message); }); } });
       var rows = (C.rows || []).slice().sort(function (a, b) { var o = { broken: 0, warn: 1, missing: 2, ok: 3 }; return o[a.state] - o[b.state]; });
-      holder.appendChild(card("وضعیت همه‌ی اتصال‌ها", "هر روز ۰۷:۴۰ خودکار بررسی می‌شود؛ پنل سایت هر ۲ ساعت · آخرین بررسی " + (C.checked ? jdt(C.checked, true) : "—"),
+      holder.appendChild(card("وضعیت همه‌ی اتصال‌ها", "هر روز ۰۷:۴۰، ۱۲:۴۰ و ۱۷:۴۰ خودکار بررسی می‌شود؛ پنل سایت هر ۲ ساعت · آخرین بررسی " + (C.checked ? jdt(C.checked, true) : "—") +
+          (C.alert && C.alert.ready ? " · هشدار قطعی و خطای انتشار: ربات @sepahanfelezbot به شماره‌ی …" + fd(C.alert.to) : " · هشدار تلگرامی: گیرنده پیدا نشد (SF_ALERT_MOBILE باید یک بار در @sepahanfelezbot وارد شده باشد)"),
         rows.length ? table([
           { key: "group", label: "بخش" },
           { key: "name", label: "اتصال", render: function (r) { return el("b", { text: r.name }); } },
