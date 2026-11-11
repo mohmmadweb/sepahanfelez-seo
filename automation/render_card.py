@@ -46,6 +46,22 @@ def card_phone():
     return fa_digits(f"{mob[:4]} {mob[4:7]} {mob[7:]}" if len(mob) == 11 else mob)
 
 
+# Story viewers (Bale, Instagram, WhatsApp, Telegram) draw their own bars over a story — progress bar and name at
+# the top, reply box at the bottom — and taller phones crop the sides. Everything that matters stays inside
+# x 110…970, y 250…1650; the edges keep only the background colour.
+SAFE = {"top": 250, "bottom": 270, "side": 110}
+STORY_SAFE = f"""
+body.story .top{{padding:{SAFE['top']}px {SAFE['side']}px 0}}
+body.story .photo{{margin:36px {SAFE['side']}px 0;height:600px}}
+body.story h1{{margin:38px {SAFE['side']}px 0;font-size:62px}}
+body.story ul{{margin:18px {SAFE['side']}px 0;font-size:34px;line-height:1.7}}
+body.story .cta{{left:{SAFE['side']}px;right:{SAFE['side']}px;bottom:{SAFE['bottom']}px;border-radius:30px;padding:30px 44px}}
+body.story.tight .photo{{height:500px}}
+body.story.tight h1{{font-size:54px}}
+body.story.tight ul{{font-size:31px}}
+"""
+
+
 def cta_text(cta):
     """The footer's call to action — never a number (the phone is printed once, next to it)."""
     cta = (cta or "").strip()
@@ -103,7 +119,8 @@ body.bold .photo{{height:{640 if story else 420}px;box-shadow:none;border:6px so
 .cta .t{{font-size:{40 if story else 34}px;font-weight:700}}
 .cta .n{{font-size:{44 if story else 38}px;font-weight:700;direction:ltr}}
 .cta .w{{font-size:26px;opacity:.9;direction:ltr;text-align:left}}
-</style></head><body class="{html.escape(card.get("layout", "classic"))}">
+{STORY_SAFE if story else ""}
+</style></head><body class="{html.escape(card.get("layout", "classic"))}{' story' if story else ''}">
 <div class="top"><img src="{data_uri(LOGO)}" alt=""><div><b>سپاهان فلز</b><span>صنایع مفتولی طلوع سپاهان</span></div></div>
 {head_first}<div class="photo"><img src="{photo}" alt=""></div>
 {head_after}
@@ -124,6 +141,20 @@ def render(cards, out_dir):
             pg = b.new_page(viewport={"width": w, "height": h})
             pg.set_content(page(c), wait_until="load")
             pg.wait_for_timeout(300)
+            if c.get("format", "story") == "story":
+                for _ in range(2):
+                    fit = pg.evaluate("""()=>{const r=s=>document.querySelector(s).getBoundingClientRect();
+                        const els=['.top img','.top b','.photo','h1','ul','.cta'].map(r);
+                        return {gap: r('.cta').top-r('ul').bottom, top: Math.min(...els.map(e=>e.top)),
+                                bottom: Math.max(...els.map(e=>e.bottom)), left: Math.min(...els.map(e=>e.left)),
+                                right: Math.max(...els.map(e=>e.right))}}""")
+                    fit["safe"] = (fit["gap"] >= 24 and fit["top"] >= SAFE["top"] - 10 and fit["bottom"] <= 1920 - SAFE["bottom"] + 10
+                                   and fit["left"] >= SAFE["side"] - 10 and fit["right"] <= 1080 - SAFE["side"] + 10)
+                    if fit["safe"]:
+                        break
+                    pg.evaluate("document.body.classList.add('tight')")
+                    pg.wait_for_timeout(150)
+                c["fit"] = fit
             path = os.path.join(out_dir, f"{c['id']}.jpg")
             pg.screenshot(path=path, type="jpeg", quality=82)
             pg.close()

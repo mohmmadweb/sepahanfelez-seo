@@ -205,6 +205,23 @@ def photo_for(item, used):
     return pool[int(hashlib.md5(item["id"].encode()).hexdigest(), 16) % len(pool)]
 
 
+def _photo_folder_for(item):
+    """The photo folder that belongs to an item's product (plan media folder, or matched from the product name)."""
+    from sf.drive_sync import ALIASES, match
+    media = item.get("media") or ""
+    slug = media.split("/")[1] if media.startswith("drive/") else media.split("/")[0]
+    if not slug or slug in ("videos", "toloue-sepahan1", "toloue-sepahan2", "banner-karkhane") or slug.endswith((".mp4", ".mov")):
+        slug = match(item.get("product") or "") or ""
+    return ALIASES.get(slug, slug)
+
+
+def _photo_fits(photo, item):
+    from sf.drive_sync import ALIASES
+    want = _photo_folder_for(item)
+    have = os.path.basename(os.path.dirname(photo or ""))
+    return not want or ALIASES.get(have, have) == want or have == "_factory"
+
+
 def catalog(item):
     import articles
     from sf import product_pages
@@ -358,6 +375,8 @@ def prepare_item(item, used, say=print):
         q["media"] = _render(card, "story") if photo else None
         q["photo"] = photo
         q["gate"] = _gate(" ".join([card["title"], " ".join(card["points"]), q["text"]]))
+        q["gate"].append({"name": "عکس همان محصول", "ok": bool(photo) and _photo_fits(photo, item),
+                          "detail": f"عکس از «{os.path.basename(os.path.dirname(photo or ''))}» برای «{item.get('product')}»"})
         q["gate"].append({"name": "تکراری نبودن", "ok": score < 0.55,
                           "detail": f"شباهت با نزدیک‌ترین مورد اخیر {round(score * 100)}٪" if near else ""})
         if not photo:
@@ -751,7 +770,8 @@ def _unsent(q):
 
 def rewrite(q, why, say=print, used=None):
     """Write an unsent item again from today's facts (same photo, same time)."""
-    item = dict(_plan_item_of(q), _photo=q.get("photo"))
+    item = _plan_item_of(q)
+    item = dict(item, _photo=q.get("photo") if _photo_fits(q.get("photo"), item) else None)   # the plan may have moved the slot to another product
     if item.get("type") in TIME_BOUND:
         return None
     trace.step(q["id"], "write", "بازنویسی", why)
