@@ -18,7 +18,7 @@ from sf.env import get, load_env  # noqa: E402
 from sf.util import DATA, read_json, write_json  # noqa: E402
 
 DONE = os.path.join(DATA, "channel_profile.json")
-PHOTO = os.path.expanduser("~/projects/sepahanfelez-staging/pricebot/brand/avatar-640.png")
+PHOTO = os.path.expanduser("~/projects/sepahanfelez-pricebot/brand/avatar-640.png")
 TITLE = "سپاهان فلز | مفتول، سیم و توری"
 
 

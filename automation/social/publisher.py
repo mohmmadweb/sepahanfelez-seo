@@ -46,7 +46,7 @@ QUEUE = os.path.join(DATA, "social", "queue")
 CARDS = os.path.join(DATA, "social", "cards")
 PLAN = os.path.join(DATA, "latest", "content_plan.json")
 PHOTOS_DRIVE = os.path.join(DATA, "photos")
-PHOTOS_PROTO = "/home/ubuntu/projects/sepahanfelez-prototype/assets/products"
+PHOTOS_PROTO = "/home/ubuntu/projects/sepahanfelez-seo/media/proto/assets/products"
 NET_FA = {"اینستاگرام": "instagram", "روبیکا": "rubika", "ایتا": "eitaa", "بله": "bale", "واتساپ": "whatsapp",
           "تلگرام": "telegram", "لینکدین": "linkedin"}
 FA_NET = {v: k for k, v in NET_FA.items()}

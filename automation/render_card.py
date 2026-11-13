@@ -20,7 +20,7 @@ import re
 import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-PROTO = "/home/ubuntu/projects/sepahanfelez-prototype"
+PROTO = "/home/ubuntu/projects/sepahanfelez-seo/media/proto"
 FONT_DIR = os.path.join(os.path.dirname(HERE), "dashboard", "web", "fonts")
 LOGO = os.path.join(PROTO, "assets", "brand", "logo.svg")
 SIZES = {"story": (1080, 1920), "post": (1080, 1350)}

@@ -1333,7 +1333,7 @@
       body.appendChild(el("p", { style: "margin:0", text: "۴۱ مقاله‌ی قدیمی نشانی‌های نامرتب دارند: انگلیسی و فارسی قاطی، «؟» در نشانی، حروف بزرگ، خط‌تیره‌ی دوتایی، دسته‌ی اشتباه. نقشه‌ی اصلاح، هر نشانی قدیمی را با ۳۰۱ به نشانی تازه می‌برد تا اعتبار گوگل و لینک‌های بیرونی از دست نرود." }));
       body.appendChild(el("div", { class: "note " + (live ? "" : "warn") },
         live ? "✓ میان‌افزار ۳۰۱ روی سایت زنده فعال است." :
-          "قدم ۱ (یک بار، کار شما): ریدایرکت‌های فعلی پنل روی sepahanfelez.ir اصلاً کار نمی‌کنند (۳۰۲ هستند و نشانی فارسی را نمی‌گیرند). فایل sepahanfelez-redirects.zip (۳ فایل، از ~/projects/sepahanfelez-staging/golive) را در cPanel → File Manager → پوشه‌ی /home/ahanamnc آپلود و Extract کنید (Overwrite). بعد «بررسی نقشه» را بزنید."));
+          "قدم ۱ (یک بار، کار شما): ریدایرکت‌های فعلی پنل روی sepahanfelez.ir اصلاً کار نمی‌کنند (۳۰۲ هستند و نشانی فارسی را نمی‌گیرند). فایل sepahanfelez-redirects.zip (۳ فایل، از ~/projects/sepahanfelez-seo/media/golive) را در cPanel → File Manager → پوشه‌ی /home/ahanamnc آپلود و Extract کنید (Overwrite). بعد «بررسی نقشه» را بزنید."));
       body.appendChild(el("div", { class: "row" },
         el("button", { class: "btn small", type: "button", text: "بررسی نقشه (فقط خواندن)", onclick: function () { siteJob("بررسی نقشه‌ی نشانی‌ها", "urlfix-plan", {}, function () { SITE = null; }); } }),
         el("button", { class: "btn primary small", type: "button", text: "اعمال روی سایت", disabled: !live || null, onclick: function () {

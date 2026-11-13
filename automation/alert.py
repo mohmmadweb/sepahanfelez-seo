@@ -26,7 +26,7 @@ from sf.util import DATA, read_json, write_json  # noqa: E402
 
 load_env()
 BOT_ENV = os.path.expanduser("~/.secrets/sepahanfelez-pricebot.env")
-BOT_USERS = os.path.expanduser("~/projects/sepahanfelez-staging/pricebot/data/users.json")
+BOT_USERS = os.path.expanduser("~/projects/sepahanfelez-pricebot/data/users.json")
 CHAT_FILE = os.path.join(DATA, "alert_chat.json")
 SENT = os.path.join(DATA, "alerts_sent.json")
 LOG = os.path.join(DATA, "alerts_log.jsonl")

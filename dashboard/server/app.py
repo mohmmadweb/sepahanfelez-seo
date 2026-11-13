@@ -266,7 +266,7 @@ def _media_path(ref):
     elif ref.startswith("drive/"):
         base, rel = os.path.join(DATA, "photos"), ref[6:]
     else:
-        base, rel = "/home/ubuntu/projects/sepahanfelez-prototype/assets/products", ref
+        base, rel = "/home/ubuntu/projects/sepahanfelez-seo/media/proto/assets/products", ref
     base = os.path.realpath(base)
     path = os.path.realpath(os.path.join(base, rel))
     if not path.startswith(base + os.sep) or not os.path.isfile(path):
@@ -520,7 +520,7 @@ async def site_view():
     import panel
     load_env()
     plan = read_json(os.path.join(SITE_DATA, "urlfix_plan.json"), None)
-    zip_path = os.path.expanduser("~/projects/sepahanfelez-staging/golive/sepahanfelez-redirects.zip")
+    zip_path = os.path.expanduser("~/projects/sepahanfelez-seo/media/golive/sepahanfelez-redirects.zip")
     return {"panel": panel.status(), "mobile": os.environ.get("SITE_ADMIN_MOBILE", ""),
             "autopublish": articles.autopublish(),
             "drafts": [_draft_summary(d) for d in articles.all_drafts()],
@@ -805,7 +805,7 @@ async def media(slug: str, name: str):
     return FileResponse(path, headers={"Cache-Control": "private, max-age=86400"})
 
 
-PROTO_ROOT = "/home/ubuntu/projects/sepahanfelez-prototype"
+PROTO_ROOT = "/home/ubuntu/projects/sepahanfelez-seo/media/proto"
 PROTO_DIRS = ("assets/", "banner-karkhane/", "toloue-sepahan1/", "toloue-sepahan2/")
 
 

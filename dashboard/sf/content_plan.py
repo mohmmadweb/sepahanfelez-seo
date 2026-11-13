@@ -69,7 +69,7 @@ INDUSTRY_OCCASIONS = ["استاندارد", "ایمنی", "آتش", "صنعت", 
                       "درختکاری", "منابع طبیعی", "صادرات", "ساخت", "بنا", "مسکن", "پدافند", "نوروز", "یلدا",
                       "حمل و نقل", "دامپزشکی", "محیط زیست", "زمین"]
 
-PHOTO_ROOT = "/home/ubuntu/projects/sepahanfelez-prototype/assets/products"
+PHOTO_ROOT = "/home/ubuntu/projects/sepahanfelez-seo/media/proto/assets/products"
 FACTORY_MEDIA = [
     "banner-karkhane/عکس-خط-تولید-بدون-آدم.jpg", "banner-karkhane/عکس-قرقره-ها-بدون-آدم.jpg",
     "banner-karkhane/دو-خط-تولید-کامل.jpg", "toloue-sepahan1/طلوع-سپاهان1-عکس-هوایی.jpg",
@@ -117,7 +117,7 @@ def _proto_photos():
     for slug in sorted(os.listdir(PHOTO_ROOT)):
         lib[slug] = sorted((f for f in os.listdir(os.path.join(PHOTO_ROOT, slug)) if f.startswith("photo-")),
                            key=lambda f: int("".join(c for c in f if c.isdigit()) or 0))
-    write_json(path, {"source": "sepahanfelez-prototype/assets/products (served by the dashboard at /media/proto)",
+    write_json(path, {"source": "media/proto/assets/products (from the sepahanfelez-prototype repo; served by the dashboard at /media/proto)",
                       "by_category": lib})
     return lib
 

@@ -1,0 +1,2915 @@
+/* ==========================================================================
+   سپاهان فلز — سیستم طراحی نسخه ۵
+   --------------------------------------------------------------------------
+   مخاطب: خریدار +۴۰ سال (پیمانکار، باغدار، خریدار پروژه، دلال).
+   کار صفحه: یک کار — گرفتن تماس روی 021-91326030.
+   موضع: مرجع قیمت صنایع مفتولی.
+
+   چهار قانون که هیچ‌جا شکسته نمی‌شود:
+   1. قرمز برند فقط و فقط معنی «تماس» دارد. هیچ عنوان، هیچ لینک، هیچ آیکون
+      تزئینی قرمز نیست. یک رنگ، یک معنی.
+   2. متن پایه ۱۸px دسکتاپ / ۱۷px موبایل. کنتراست متن ثانویه حداقل ۷:۱.
+      مخاطب +۴۰ سال است؛ ۱۵px «ظریف» نیست، نخواندنی است.
+   3. هیچ ناحیه لمس زیر ۴۸px. فاصله بین دو ناحیه لمس حداقل ۸px.
+   4. یک خانواده فونت (استعداد)، سلسله‌مراتب فقط با وزن و اندازه.
+      اعداد همیشه tabular و ltr — ستون قیمت نباید بلرزد.
+   ========================================================================== */
+
+/* ---------- فونت: استعداد، لوکال، بدون اینترنت هم رندر می‌شود ---------- */
+@font-face{font-family:Estedad;font-display:swap;font-weight:400;
+  src:url('fonts/Estedad-Regular.woff2') format('woff2')}
+@font-face{font-family:Estedad;font-display:swap;font-weight:500;
+  src:url('fonts/Estedad-Medium.woff2') format('woff2')}
+@font-face{font-family:Estedad;font-display:swap;font-weight:600;
+  src:url('fonts/Estedad-SemiBold.woff2') format('woff2')}
+@font-face{font-family:Estedad;font-display:swap;font-weight:700;
+  src:url('fonts/Estedad-Bold.woff2') format('woff2')}
+@font-face{font-family:Estedad;font-display:swap;font-weight:800;
+  src:url('fonts/Estedad-ExtraBold.woff2') format('woff2')}
+@font-face{font-family:Estedad;font-display:swap;font-weight:900;
+  src:url('fonts/Estedad-Black.woff2') format('woff2')}
+
+/* ---------------------------------------------------------------------------
+   تم روشن. مخاطب بالای ۴۰ سال است و سطح تیره‌ی بزرگ، هم خیرگی می‌سازد و هم
+   در نور روز روی موبایل خوانایی را پایین می‌آورد. سطح‌ها سفید و طوسیِ کم‌رنگ
+   شدند، متن نزدیک به سیاه، و قرمز فقط برای «تماس» نگه داشته شد.
+   --------------------------------------------------------------------------- */
+:root{
+  /* ---- رنگ ---- */
+  --board:      #F1F5FA;   /* تابلوی قیمت — طوسی آبی بسیار روشن */
+  --board-2:    #E6EDF6;
+  --board-line: #C6D4E4;
+  --steel:      #F6F8FB;   /* سرصفحه، پاصفحه */
+  --steel-2:    #E9EFF6;
+  --steel-ink:  #123152;   /* متن روی سطح‌های روشنِ بالا */
+
+  --ink:        #0B1220;   /* متن اصلی — 17.4:1 روی سفید */
+  --ink-2:      #3A4757;   /* متن ثانویه — 9.1:1 (قبلاً 4A5568 بود) */
+  --ink-3:      #59677A;   /* کم‌اهمیت — 5.6:1، فقط برچسب کوتاه */
+
+  --brand:      #B42332;   /* فقط «تماس» */
+  --brand-dark: #8E1A26;
+  --brand-soft: #FEF3F4;
+
+  --up:         #0A6E44;
+  --down:       #B42332;
+  --fresh:      #B4770F;   /* فقط نشان «بروزرسانی امروز» */
+  --fresh-soft: #FDF6E7;
+
+  --bg:         #FFFFFF;
+  --surface:    #F5F7FA;
+  --surface-2:  #EAEFF5;
+  --line:       #DCE3EB;
+  --line-2:     #C2CDDA;
+
+  /* ---- فاصله ۴/۸ ---- */
+  --s1:4px; --s2:8px; --s3:12px; --s4:16px; --s5:24px;
+  --s6:32px; --s7:48px; --s8:64px; --s9:96px;
+
+  /* ---- تایپوگرافی ---- */
+  --t-xs:15px; --t-sm:16px; --t-base:18px; --t-lg:20px;
+  --t-xl:24px; --t-2xl:29px; --t-3xl:36px; --t-4xl:46px;
+
+  --radius:8px;
+  --radius-lg:12px;
+  --ring:0 0 0 3px #fff, 0 0 0 6px var(--steel);
+  --sh-1:0 1px 2px rgba(11,18,32,.05), 0 1px 3px rgba(11,18,32,.06);
+  --sh-2:0 6px 18px rgba(11,18,32,.09);
+  --sh-board:0 12px 34px rgba(14,36,54,.22);
+
+  --container:1300px;
+}
+
+/* ---------- پایه ---------- */
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%; scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:.001ms !important; transition-duration:.001ms !important}
+}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:Estedad, Tahoma, "Segoe UI", sans-serif;
+  font-size:var(--t-base); line-height:1.85; font-weight:400;
+  -webkit-font-smoothing:antialiased;
+}
+img{max-width:100%; height:auto; display:block}
+a{color:inherit; text-decoration:none}
+h1,h2,h3,h4{margin:0; line-height:1.42; font-weight:800; color:var(--steel-ink);
+  text-wrap:balance; letter-spacing:-.01em}
+p{margin:0}
+ul{margin:0; padding:0; list-style:none}
+button{font:inherit; cursor:pointer}
+table{border-collapse:collapse}
+.container{max-width:var(--container); margin-inline:auto; padding-inline:var(--s5)}
+.vh{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;
+  clip:rect(0 0 0 0);white-space:nowrap;border:0}
+
+/* اعداد: همیشه tabular و ltr. ستون قیمت نمی‌لرزد و شماره تلفن در RTL
+   معکوس نمی‌شود. این تنها جایی است که جهت متن را دستی می‌گیریم. */
+.num{font-variant-numeric:tabular-nums; font-feature-settings:"tnum" 1;
+  direction:ltr; unicode-bidi:isolate; display:inline-block}
+/* روی <span> به inline-block نیاز است، ولی وقتی همین کلاس روی <td> بنشیند
+   سلول از table-cell خارج می‌شود و ستون‌های بدنه از سرستون‌ها جدا می‌افتند —
+   دقیقاً همان به‌هم‌ریختگی جدول مشخصات. سلول جدول باید سلول بماند. */
+td.num,th.num{display:table-cell}
+
+:focus-visible{outline:3px solid var(--steel); outline-offset:3px; border-radius:4px}
+
+/* fixed + top منفی، نه inset افقی منفی: در RTL یک offset افقی منفی
+   scrollWidth را بزرگ می‌کند و کل صفحه اسکرول افقی می‌گیرد. */
+.skip{background:var(--steel-ink); color:#fff; position:fixed; inset-inline-start:var(--s4); top:-120px; z-index:999;
+   padding:var(--s3) var(--s5); font-weight:600;
+  border-radius:0 0 var(--radius) var(--radius)}
+.skip:focus{top:0}
+
+/* ==========================================================================
+   نوار اعلام پروتوتایپ
+   ========================================================================== */
+.pv-strip{background:var(--board-2); color:var(--ink-2); font-size:var(--t-xs);
+  border-bottom:2px solid var(--brand)}
+.pv-strip .container{display:flex; align-items:center; justify-content:space-between;
+  gap:var(--s4); min-height:48px; flex-wrap:wrap}
+.pv-strip a{color:var(--brand-dark); text-decoration:underline; text-underline-offset:3px;
+  display:inline-block; padding-block:var(--s3)}
+.pv-strip .dotp{width:8px;height:8px;border-radius:50%;background:var(--brand);
+  display:inline-block; margin-inline-end:var(--s2)}
+
+/* ==========================================================================
+   ۱. نوار خدماتی
+   ========================================================================== */
+.utilbar{background:var(--steel); color:var(--ink-2); font-size:var(--t-sm);
+  border-bottom:1px solid var(--line)}
+.utilbar .container{display:flex; align-items:center; justify-content:space-between;
+  gap:var(--s4); min-height:36px}
+.utilbar ul{display:flex; gap:var(--s5); flex-wrap:wrap}
+.utilbar li{display:flex; align-items:center; gap:var(--s2)}
+.utilbar a{display:inline-flex; align-items:center; gap:var(--s2); min-height:48px}
+.utilbar a:hover{color:var(--steel-ink); text-decoration:underline; text-underline-offset:3px}
+.utilbar svg{width:18px; height:18px; flex:none; opacity:.9}
+
+/* ==========================================================================
+   ۲. سرصفحه — بلوک تلفن بزرگ‌ترین عنصر صفحه است
+   ========================================================================== */
+.masthead{background:#fff; border-bottom:1px solid var(--line);
+  position:relative; z-index:40}
+.masthead .container{display:grid; grid-template-columns:auto 1fr auto;
+  align-items:center; gap:var(--s4); padding-block:var(--s4)}
+
+.brand{display:flex; align-items:center; gap:var(--s3); min-height:56px}
+.brand .mark{width:54px; height:54px; flex:none}
+.brand .name{font-weight:900; font-size:var(--t-xl); color:var(--steel-ink);
+  line-height:1.2; white-space:nowrap; letter-spacing:-.02em}
+.brand .sub{font-size:var(--t-xs); color:var(--ink-2); font-weight:500}
+
+.search{position:relative; max-width:520px; width:100%}
+/* padding و موقعیت دکمه هر دو منطقی‌اند. با `padding:0 52px 0 16px` فاصله
+   در RTL سمت راست می‌افتد و دکمه که سمت چپ است روی placeholder می‌نشیند. */
+.search input{width:100%; height:58px;
+  padding-inline-start:var(--s4); padding-inline-end:56px;
+  border:1.5px solid var(--line-2); border-radius:var(--radius);
+  font:inherit; font-size:var(--t-base); background:var(--surface); color:var(--ink)}
+.search input::placeholder{color:var(--ink-3)}
+.search input:focus{background:#fff; border-color:var(--line-2); outline:none;
+  box-shadow:0 0 0 3px rgba(22,50,79,.18)}
+.search button{position:absolute; inset-inline-end:6px; top:6px;
+  width:46px; height:46px; border:0; border-radius:var(--radius);
+  background:transparent; color:var(--steel-ink); display:grid; place-items:center}
+.search button svg{width:23px;height:23px}
+
+/* ★ بلوک تماس سرصفحه */
+.callbox{display:flex; align-items:center; gap:var(--s3);
+  border:2px solid var(--brand); border-radius:var(--radius-lg);
+  background:var(--brand-soft); padding:var(--s3) var(--s5);
+  min-height:82px; transition:background .18s ease, border-color .18s ease}
+.callbox:hover{background:#fff; border-color:var(--brand-dark)}
+.callbox .icon{width:40px; height:40px; flex:none; border-radius:50%;
+  background:var(--brand); color:#fff; display:grid; place-items:center}
+.callbox .icon svg{width:24px; height:24px}
+.callbox .label{font-size:var(--t-xs); color:var(--brand-dark); font-weight:600;
+  display:block; line-height:1.3}
+.callbox .number{font-size:var(--t-3xl); font-weight:900; color:var(--brand-dark);
+  display:block; line-height:1.1; letter-spacing:-.015em}
+.callbox .hint{font-size:var(--t-xs); color:var(--ink-2); line-height:1.4; display:block}
+
+/* ==========================================================================
+   ۳. منوی اصلی
+   ========================================================================== */
+.mainnav{background:#fff; border-bottom:2px solid var(--steel-ink);
+  position:sticky; top:0; z-index:30}
+.mainnav .container{display:flex; align-items:center; gap:var(--s3)}
+.mainnav .burger{display:none}
+.nav-scroll{display:flex; align-items:center; gap:var(--s1); flex:1;
+  overflow-x:auto; scrollbar-width:thin}
+.nav-scroll a{display:inline-flex; align-items:center; min-height:56px;
+  padding:0 var(--s4); font-size:var(--t-sm); font-weight:600; color:var(--steel-ink);
+  white-space:nowrap; border-bottom:3px solid transparent}
+.nav-scroll a:hover{background:var(--surface); border-bottom-color:var(--line-2)}
+.nav-scroll a[aria-current="page"]{border-bottom-color:var(--brand); color:var(--brand-dark)}
+.nav-scroll .spacer{flex:1}
+.nav-call{display:none}
+
+/* ==========================================================================
+   ۴. ★ نوار تولیدکننده — تنها تفاوتی که رقیب نمی‌تواند کپی کند
+   ========================================================================== */
+.factorybar{background:var(--surface); border-bottom:1px solid var(--line)}
+.factorybar .container{display:flex; align-items:center; justify-content:space-between;
+  gap:var(--s5); padding-block:var(--s3); flex-wrap:wrap}
+.factorybar .lead{display:flex; align-items:center; gap:var(--s3)}
+.factorybar .lead > svg{width:32px; height:32px; color:var(--steel-ink); flex:none}
+.factorybar .t{display:block; font-weight:800; color:var(--steel-ink); font-size:var(--t-base);
+  line-height:1.4}
+.factorybar .s{display:block; font-size:var(--t-xs); color:var(--ink-2); line-height:1.5}
+.factorybar ul{display:flex; gap:var(--s5); flex-wrap:wrap}
+.factorybar li{display:flex; flex-direction:column; gap:2px;
+  border-inline-start:2px solid var(--line-2); padding-inline-start:var(--s4)}
+.factorybar .k{font-size:var(--t-xs); color:var(--ink-2)}
+.factorybar .v{font-size:var(--t-lg); font-weight:800; color:var(--steel-ink); line-height:1.2}
+
+/* ==========================================================================
+   ۵. ★★ تابلوی قیمت — امضای طراحی
+   یک پنل فولادی تیره که مثل تابلوی بورس رفتار می‌کند. رقبا جدول وردپرسی
+   دارند؛ این چیزی است که خریدار از آن اسکرین‌شات می‌گیرد و می‌فرستد.
+   ========================================================================== */
+.board{background:var(--board); color:var(--ink); padding-block:var(--s6);
+  position:relative; overflow:hidden; border-block:1px solid var(--line)}
+/* بافت توری — خود محصول، نه تزئین تصادفی */
+.board::before{content:""; position:absolute; inset:0; opacity:.16;
+  background-image:
+    linear-gradient(var(--board-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--board-line) 1px, transparent 1px);
+  background-size:34px 34px; pointer-events:none}
+.board > .container{position:relative}
+.board-head{display:flex; justify-content:space-between; align-items:flex-end;
+  gap:var(--s5); flex-wrap:wrap; margin-bottom:var(--s6)}
+.board h1{color:var(--ink); font-size:var(--t-3xl); font-weight:900; max-width:20ch;
+  line-height:1.3; letter-spacing:-.02em}
+.board h1 span{color:var(--ink-2); display:block; font-weight:700}
+.board .lede{color:var(--ink-2); font-size:var(--t-lg); margin-top:var(--s3); max-width:56ch;
+  line-height:1.7}
+
+/* flex:none + nowrap در ۳۲۰px از کادر بیرون می‌زد؛ اجازه‌ی جمع‌شدن
+   می‌گیرد و در تنگ‌ترین عرض متن می‌شکند. */
+.stamp{display:inline-flex; align-items:center; gap:var(--s2); flex:0 1 auto;
+  max-width:100%; min-width:0;
+  background:var(--fresh-soft); color:#6B4708; border:1px solid #E8CD94;
+  border-radius:999px; padding:var(--s2) var(--s4); font-size:var(--t-xs);
+  font-weight:700; white-space:nowrap}
+.stamp .dot{width:9px; height:9px; border-radius:50%; background:var(--fresh);
+  flex:none; box-shadow:0 0 0 3px rgba(180,119,15,.22)}
+
+/* شبکه شاخص دسته‌ها */
+.ixgrid{display:grid; grid-template-columns:repeat(5,1fr); gap:var(--s3)}
+.ixgrid.ix-4{grid-template-columns:repeat(4,1fr)}
+.ixgrid.ix-3{grid-template-columns:repeat(3,1fr)}
+.catjump{margin-top:var(--s7)}
+.chiprow{display:flex; flex-wrap:wrap; gap:var(--s2); justify-content:flex-start}
+.spectable.narrow{max-width:640px}
+.tnote{font-size:var(--t-sm); color:var(--ink-2)}
+.ix{background:var(--board-2); border:1px solid var(--board-line);
+  border-radius:var(--radius); padding:var(--s4); display:flex; flex-direction:column;
+  gap:var(--s2); min-height:132px; transition:border-color .18s ease, background .18s ease}
+/* بازمانده‌ی تم تیره: کاشی هنگام hover سرمه‌ای می‌شد ولی متنش تیره
+   می‌ماند و کنتراست به ۱٫۲ می‌افتاد — یعنی عملاً ناخوانا. hover باید
+   نشان بدهد که عنصر تعاملی است، نه اینکه متن را از بین ببرد. */
+.ix:hover{background:var(--surface); border-color:var(--brand);
+  box-shadow:var(--sh-1)}
+.ix .k{font-size:var(--t-xs); color:var(--ink-2); font-weight:600; line-height:1.4}
+.ix .v{font-size:var(--t-xl); font-weight:900; color:var(--ink); line-height:1.15;
+  letter-spacing:-.02em}
+.ix .u{font-size:var(--t-xs); font-weight:500; color:var(--ink-3)}
+.ix .d{display:flex; align-items:center; justify-content:space-between; gap:var(--s2);
+  margin-top:auto}
+.ix .range{font-size:var(--t-xs); color:var(--ink-2)}
+
+.delta{display:inline-flex; align-items:center; gap:4px; font-weight:800;
+  font-size:var(--t-sm); white-space:nowrap; border-radius:5px; padding:2px 7px}
+.delta svg{width:13px; height:13px}
+.delta.up{color:#0A6E44; background:#E4F4EC}
+.delta.down{color:#9B1B28; background:#FCEBEC}
+.delta.flat{color:var(--ink-2); background:var(--surface-2)}
+/* روی زمینه روشن */
+.on-light .delta.up{color:#0A6E44; background:#E4F4EC}
+.on-light .delta.down{color:#9B1B28; background:#FCEBEC}
+.on-light .delta.flat{color:#44546A; background:var(--surface-2)}
+
+/* خط تماس روی خود تابلو */
+.board-call{display:flex; align-items:center; justify-content:space-between;
+  gap:var(--s5); flex-wrap:wrap; margin-top:var(--s5);
+  background:var(--brand); border-radius:var(--radius-lg); padding:var(--s4) var(--s5)}
+/* این نوار روی قرمز برند است، پس متنش سفید می‌ماند — در تبدیل تم روشن
+   اشتباهاً تیره شده بود و روی قرمز خوانا نبود. */
+.board-call .say{font-size:var(--t-base); font-weight:600; color:#FFE1E4; max-width:52ch;
+  line-height:1.6}
+.board-call .say b{color:#fff; font-weight:800}
+.board-call .tel{display:flex; align-items:center; gap:var(--s3); background:#fff;
+  border-radius:var(--radius); padding:var(--s3) var(--s5); min-height:72px}
+.board-call .tel svg{width:28px; height:28px; color:var(--brand); flex:none}
+.board-call .tel .l{display:block; font-size:var(--t-xs); color:var(--ink-2); font-weight:600}
+.board-call .tel .n{display:block; font-size:var(--t-2xl); font-weight:900;
+  color:var(--brand-dark); line-height:1.15; letter-spacing:-.015em}
+
+/* ==========================================================================
+   ۶. سیاست قیمت
+   ========================================================================== */
+.policy{display:flex; gap:var(--s4); align-items:flex-start; background:var(--surface);
+  border:1px solid var(--line); border-inline-start:4px solid var(--steel);
+  border-radius:var(--radius); padding:var(--s4) var(--s5); margin-bottom:var(--s6)}
+.policy > svg{width:26px; height:26px; color:var(--steel-ink); flex:none; margin-top:3px}
+.policy .t{font-weight:800; color:var(--steel-ink); font-size:var(--t-base)}
+.policy .d{font-size:var(--t-sm); color:var(--ink-2); line-height:1.75; margin-top:var(--s1)}
+
+/* ==========================================================================
+   ۷. جدول قیمت
+   ========================================================================== */
+.section{padding-block:var(--s7)}
+.section.tight{padding-block:var(--s6)}
+.section.alt{background:var(--surface); border-block:1px solid var(--line)}
+.section-head{display:flex; align-items:flex-end; justify-content:space-between;
+  gap:var(--s4); margin-bottom:var(--s5); flex-wrap:wrap}
+.section-head h2{font-size:var(--t-2xl)}
+.section-head .sub{font-size:var(--t-sm); color:var(--ink-2); margin-top:var(--s1)}
+.section-head a{color:var(--steel); font-size:var(--t-sm); font-weight:700;
+  display:inline-flex; align-items:center; gap:var(--s2); min-height:48px}
+.section-head a:hover{text-decoration:underline; text-underline-offset:4px}
+.section-head a svg{width:18px;height:18px}
+
+/* اسکرول افقی فقط روی خود جدول، نه روی صفحه. هرگز overflow:hidden — چون
+   ستون آخر «استعلام تلفنی» است و بی‌صدا بریده‌شدنش یعنی از دست دادن تماس.
+   ستون‌های کم‌اولویت (.spec-lo) هم زیر ۱۶۰۰px پنهان می‌شوند تا اصلاً کار به
+   اسکرول نکشد. */
+.ptable-wrap{overflow-x:auto; overscroll-behavior-x:contain; padding-bottom:var(--s2)}
+.ptable{width:100%; min-width:920px; font-size:var(--t-sm)}
+@media (max-width:1600px){.ptable .spec-lo{display:none}}
+.ptable caption{text-align:start; font-size:var(--t-sm); color:var(--ink-2);
+  padding-bottom:var(--s3)}
+.ptable th{background:var(--steel-2); color:var(--steel-ink); font-size:var(--t-sm); font-weight:800;
+  border-bottom:2px solid var(--line-2);
+  text-align:start; padding:var(--s3) var(--s3); white-space:nowrap; line-height:1.4}
+.ptable th:first-child{border-start-start-radius:var(--radius)}
+.ptable th:last-child{border-start-end-radius:var(--radius)}
+.ptable td{padding:var(--s3); border-bottom:1px solid var(--line); vertical-align:middle;
+  font-size:var(--t-sm)}
+.ptable tbody tr:nth-child(even){background:#FAFCFE}
+.ptable tbody tr:hover{background:var(--surface-2)}
+.ptable .c{text-align:center}
+
+.p-name a{font-weight:700; color:var(--steel-ink); font-size:var(--t-base); line-height:1.5;
+  display:flex; align-items:center; min-height:44px}
+.p-name a:hover{text-decoration:underline; text-underline-offset:3px}
+.p-meta{font-size:var(--t-xs); color:var(--ink-2); margin-top:3px; line-height:1.6}
+.mine{display:inline-flex; align-items:center; gap:4px; background:#E9F2FA;
+  color:var(--steel-ink); border-radius:5px; padding:1px 7px; font-weight:700; font-size:13px}
+.mine svg{width:13px;height:13px}
+
+.cell-price{white-space:nowrap}
+.p-price{font-size:var(--t-xl); font-weight:900; color:var(--ink); letter-spacing:-.02em}
+.riyal{font-size:var(--t-xs); font-weight:600; color:var(--ink-2);
+  margin-inline-start:5px}
+.toman{display:block; font-size:13px; color:var(--ink-3); margin-top:1px}
+
+.stock{display:inline-flex; align-items:center; gap:5px; font-size:13px; font-weight:700;
+  border-radius:5px; padding:1px 7px}
+.stock::before{content:""; width:7px; height:7px; border-radius:50%; background:currentColor}
+.stock-in{color:#075B38; background:#E4F4EC}
+.stock-low{color:#8A5A05; background:var(--fresh-soft)}
+.stock-out{color:#5A2B30; background:#F3E7E8}
+
+.review{display:inline-flex; align-items:center; gap:5px; font-size:13px; font-weight:700;
+  border-radius:5px; padding:1px 7px; color:#8A5A05; background:var(--fresh-soft);
+  border:1px solid #E8CD94}
+.review::before{content:"!"; font-weight:900}
+
+.rowactions{display:flex; gap:var(--s2); justify-content:center}
+.btn{display:inline-flex; align-items:center; justify-content:center; gap:var(--s2);
+  min-height:48px; padding:0 var(--s4); border-radius:var(--radius);
+  font-size:var(--t-sm); font-weight:700; white-space:nowrap; border:1.5px solid transparent;
+  transition:background .16s ease, border-color .16s ease, color .16s ease}
+.btn svg{width:19px; height:19px; flex:none}
+.btn-call{background:var(--brand); color:#fff}
+.btn-call:hover{background:var(--brand-dark)}
+.btn-ghost{background:#fff; color:var(--steel-ink); border-color:var(--line-2)}
+.btn-ghost:hover{background:var(--surface); border-color:var(--line-2)}
+.btn-icon{width:48px; padding:0}
+.btn-lg{min-height:62px; font-size:var(--t-lg); padding:0 var(--s6);
+  border-radius:var(--radius-lg)}
+.btn-block{width:100%}
+
+.tfoot{display:flex; align-items:center; justify-content:space-between; gap:var(--s4);
+  padding-top:var(--s4); flex-wrap:wrap}
+.tfoot p{font-size:var(--t-sm); color:var(--ink-2); margin:0}
+
+/* ==========================================================================
+   ۸. باند تماس
+   ========================================================================== */
+.callband{background:var(--board-2); color:var(--ink); padding-block:var(--s6);
+  border-block:1px solid var(--line)}
+/* بدون min-width:0 ستون گرید زیر عرض محتوایش جمع نمی‌شود و در ۳۲۰px
+   هشت پیکسل از کادر بیرون می‌زند. */
+.callband .container{display:grid; grid-template-columns:1.15fr 1fr; gap:var(--s7);
+  align-items:center}
+.callband .container > *{min-width:0}
+.callband h2{color:var(--ink); font-size:var(--t-2xl); line-height:1.45}
+.callband p{color:var(--ink-2); font-size:var(--t-base); margin-top:var(--s3); max-width:58ch;
+  line-height:1.75}
+.callband .hours{display:flex; align-items:center; gap:var(--s2); margin-top:var(--s4);
+  font-size:var(--t-sm); color:var(--ink-2)}
+.callband .hours svg{width:19px;height:19px}
+.lines{display:grid; gap:var(--s3)}
+.line{background:#fff; border:1.5px solid var(--line-2);
+  border-radius:var(--radius-lg); padding:var(--s4) var(--s5); display:block;
+  min-height:96px; transition:background .18s ease, border-color .18s ease}
+.line:hover{background:var(--surface); border-color:var(--brand)}
+.line.primary{background:var(--brand); border-color:var(--brand)}
+.line.primary:hover{background:var(--brand-dark)}
+.line .label{font-size:var(--t-xs); color:var(--ink-2); font-weight:600}
+.line.primary .label{color:#FFD9DD}
+.line .number{font-size:var(--t-3xl); font-weight:900; color:var(--ink); line-height:1.15;
+  display:block; letter-spacing:-.02em}
+.line .who{font-size:var(--t-xs); color:var(--ink-2)}
+.line.primary .who{color:#FFE1E4}
+.line.primary .number{color:#fff}
+
+/* ==========================================================================
+   ۹. کارت دسته
+   ========================================================================== */
+/* شبکه‌ی دسته‌ها سیال است نه ۵ ستون ثابت: کارت صفحه‌ی /category/ متن
+   بلندتری دارد و با ستون ثابت از لبه بیرون می‌زد. */
+.catgrid{display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+  gap:var(--s3)}
+.catgrid > *{min-width:0}
+.catcard{background:#fff; border:1.5px solid var(--line); border-radius:var(--radius-lg);
+  padding:var(--s4); display:flex; flex-direction:column; gap:var(--s2); min-height:150px;
+  transition:border-color .18s ease, box-shadow .18s ease, transform .18s ease}
+.catcard:hover{border-color:var(--line-2); box-shadow:var(--sh-2); transform:translateY(-2px)}
+.catcard .t{font-weight:800; color:var(--steel-ink); font-size:var(--t-base); line-height:1.4}
+.catcard .n{font-size:var(--t-xs); color:var(--ink-2)}
+.catcard .pr{margin-top:auto; font-size:var(--t-sm); color:var(--ink-2)}
+.catcard .pr b{color:var(--ink); font-weight:800; font-size:var(--t-base)}
+.catcard .u{font-size:13px; color:var(--ink-3)}
+
+/* ==========================================================================
+   ۱۰. اعتماد
+   ========================================================================== */
+.trustgrid{display:grid; grid-template-columns:repeat(3,1fr); gap:var(--s5)}
+.trustitem{display:flex; gap:var(--s3); align-items:flex-start}
+.trustitem > svg{width:30px; height:30px; color:var(--steel-ink); flex:none; margin-top:2px}
+.trustitem .t{font-weight:800; color:var(--steel-ink); font-size:var(--t-base)}
+.trustitem .d{font-size:var(--t-sm); color:var(--ink-2); line-height:1.7}
+
+/* اعداد قابل اثبات کارخانه */
+.factnums{display:grid; grid-template-columns:repeat(4,1fr); gap:var(--s3);
+  margin-top:var(--s5)}
+.factnum{background:#fff; border:1.5px solid var(--line); border-radius:var(--radius-lg);
+  padding:var(--s4) var(--s5)}
+.factnum .v{font-size:var(--t-3xl); font-weight:900; color:var(--steel-ink); line-height:1.1;
+  letter-spacing:-.03em}
+.factnum .k{font-size:var(--t-sm); color:var(--ink-2); margin-top:var(--s1); line-height:1.5}
+
+/* ==========================================================================
+   ۱۱. فرم درخواست تماس
+   ========================================================================== */
+.callback{display:grid; grid-template-columns:1fr 1fr; gap:var(--s7); align-items:center;
+  background:var(--surface); border:1.5px solid var(--line); border-radius:var(--radius-lg);
+  padding:var(--s6)}
+.callback h3{font-size:var(--t-xl)}
+.callback p{color:var(--ink-2); font-size:var(--t-sm); margin-top:var(--s2); line-height:1.75}
+.callback .f{margin-bottom:var(--s4)}
+.callback label{display:block; font-size:var(--t-sm); font-weight:700; color:var(--steel-ink);
+  margin-bottom:var(--s2)}
+.callback input{width:100%; height:58px; padding-inline:var(--s4);
+  border:1.5px solid var(--line-2); border-radius:var(--radius); font:inherit;
+  font-size:var(--t-base); background:#fff; color:var(--ink)}
+.callback input:focus{border-color:var(--line-2); outline:none;
+  box-shadow:0 0 0 3px rgba(22,50,79,.18)}
+
+/* ==========================================================================
+   ۱۲. محتوای مقاله‌ای (صفحه دسته و محصول)
+   ========================================================================== */
+.prose{max-width:76ch}
+.prose h2{font-size:var(--t-2xl); margin-top:var(--s7); margin-bottom:var(--s4)}
+.prose h2:first-child{margin-top:0}
+.prose h3{font-size:var(--t-lg); margin-top:var(--s5); margin-bottom:var(--s3);
+  color:var(--steel-ink)}
+.prose p{margin-bottom:var(--s4); color:var(--ink); line-height:1.9}
+.prose ul.bul{margin-bottom:var(--s4)}
+.prose ul.bul li{position:relative; padding-inline-start:var(--s5); margin-bottom:var(--s2);
+  line-height:1.85}
+.prose ul.bul li::before{content:""; position:absolute; inset-inline-start:6px; top:13px;
+  width:7px; height:7px; border-radius:2px; background:var(--steel-ink)}
+.prose strong{font-weight:800; color:var(--steel-ink)}
+
+.tablescroll{overflow-x:auto; overscroll-behavior-x:contain; margin-bottom:var(--s5)}
+.spectable{width:100%; font-size:var(--t-sm)}
+.spectable th,.spectable td{white-space:nowrap}
+.spectable td:first-child,.spectable th:first-child{white-space:normal; min-width:200px}
+.spectable caption{text-align:start; font-weight:800; color:var(--steel-ink);
+  font-size:var(--t-lg); padding-bottom:var(--s3)}
+.spectable th{background:var(--surface-2); color:var(--steel-ink); text-align:start;
+  padding:var(--s3); font-weight:700; border:1px solid var(--line)}
+.spectable td{padding:var(--s3); border:1px solid var(--line)}
+.spectable tbody tr:nth-child(even){background:var(--surface)}
+/* لینک درون سلول و درون فهرست، ناحیه لمس واقعی می‌خواهد — این‌ها متن روان
+   نیستند، مقصد کلیک‌اند. */
+.spectable td a,.prose ul.bul li > a{display:inline-flex; align-items:center;
+  min-height:44px; font-weight:700; color:var(--steel-ink);
+  text-decoration:underline; text-underline-offset:4px}
+.spectable td a:hover,.prose ul.bul li > a:hover{color:var(--brand-dark)}
+
+/* هشدار / نکته */
+.callout{border:1.5px solid var(--line); border-inline-start:4px solid var(--fresh);
+  background:var(--fresh-soft); border-radius:var(--radius); padding:var(--s4) var(--s5);
+  margin-bottom:var(--s5)}
+.callout .t{font-weight:800; color:#6B4708; margin-bottom:var(--s1)}
+.callout p{font-size:var(--t-sm); color:#4A3A1C; line-height:1.8; margin:0}
+
+/* FAQ — بدون جاوااسکریپت */
+.faq{border:1.5px solid var(--line); border-radius:var(--radius-lg); overflow:hidden}
+.faq details{border-bottom:1px solid var(--line)}
+.faq details:last-child{border-bottom:0}
+.faq summary{padding:var(--s4) var(--s5); font-weight:700; color:var(--steel-ink);
+  cursor:pointer; font-size:var(--t-base); min-height:60px; display:flex;
+  align-items:center; gap:var(--s3); list-style:none; background:#fff}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::before{content:"+"; font-size:var(--t-xl); font-weight:800;
+  color:var(--brand); width:24px; flex:none; line-height:1}
+.faq details[open] summary::before{content:"−"}
+.faq summary:hover{background:var(--surface)}
+.faq .a{padding:0 var(--s5) var(--s5) calc(var(--s5) + 24px); color:var(--ink-2);
+  font-size:var(--t-sm); line-height:1.85}
+
+/* ==========================================================================
+   ۱۳. مسیر راهنما
+   ========================================================================== */
+.crumb{background:var(--surface); border-bottom:1px solid var(--line);
+  font-size:var(--t-sm)}
+.crumb ol{display:flex; align-items:center; gap:var(--s2); flex-wrap:wrap;
+  min-height:32px; list-style:none; margin:0; padding:0}
+.crumb li{display:flex; align-items:center; gap:var(--s2); color:var(--ink-2)}
+.crumb a{color:var(--ink-2); font-weight:600; display:inline-flex;
+  align-items:center; min-height:44px}
+.crumb a:hover{text-decoration:underline; text-underline-offset:3px}
+.crumb .sep{color:var(--ink-3)}
+.crumb [aria-current]{color:var(--ink); font-weight:700}
+
+/* ==========================================================================
+   ۱۴. پاصفحه
+   ========================================================================== */
+footer.site{background:var(--steel); color:var(--ink-2); padding-block:var(--s6) var(--s4);
+  margin-top:var(--s7); font-size:var(--t-sm); border-top:2px solid var(--line-2)}
+footer.site h3{color:var(--ink); font-size:var(--t-base); margin-bottom:var(--s4)}
+.fgrid{display:grid; grid-template-columns:1.3fr 1fr 1fr; gap:var(--s7)}
+/* بدون min-width:0 ستون گرید به عرض محتوای درونش کش می‌آید و در ۳۶۰px سرریز می‌کند */
+.fgrid > *{min-width:0}
+.fcall .number{white-space:nowrap}
+footer.site ul li{margin-bottom:var(--s2)}
+footer.site a{display:inline-flex; align-items:center; gap:var(--s2); min-height:48px}
+footer.site a:hover{color:var(--brand-dark); text-decoration:underline; text-underline-offset:3px}
+footer.site svg{width:18px;height:18px;flex:none}
+.fcall{display:block; background:#fff; border:1.5px solid var(--line-2);
+  border-radius:var(--radius); padding:var(--s3) var(--s4); margin-bottom:var(--s3);
+  min-height:76px}
+.fcall:hover{background:var(--surface)}
+.fcall .label{font-size:var(--t-xs); color:var(--ink-2); display:block}
+.fcall .number{font-size:var(--t-xl); font-weight:900; color:var(--brand-dark); display:block;
+  line-height:1.2; letter-spacing:-.02em}
+.socials{display:flex; gap:var(--s2); margin-top:var(--s4)}
+.socials a{width:48px; height:48px; border-radius:var(--radius); justify-content:center;
+  background:var(--surface); border:1px solid rgba(255,255,255,.16)}
+.socials svg{width:21px;height:21px}
+.newsletter{display:flex; gap:var(--s2)}
+.newsletter input{flex:1; min-width:0; height:52px; padding-inline:var(--s3);
+  border:1.5px solid rgba(255,255,255,.24); border-radius:var(--radius);
+  background:#fff; color:#fff; font:inherit; font-size:var(--t-sm)}
+.newsletter input::placeholder{color:#8FA9BF}
+.newsletter button{height:52px; border:0; border-radius:var(--radius);
+  background:var(--brand); color:#fff; padding:0 var(--s5); font-weight:700}
+.newsletter button:hover{background:var(--brand-dark)}
+.copyright{border-top:1px solid var(--line); margin-top:var(--s6);
+  padding-top:var(--s4); text-align:center; color:var(--ink-2); font-size:var(--t-xs)}
+
+/* ==========================================================================
+   ۱۵. داک تماس موبایل — هیچ رقیبی ندارد
+   ========================================================================== */
+.dock{display:none}
+
+/* ==========================================================================
+   ریسپانسیو
+   ========================================================================== */
+@media (max-width:1200px){
+  .ixgrid,.ixgrid.ix-4{grid-template-columns:repeat(3,1fr)}
+  .catgrid{grid-template-columns:repeat(3,1fr)}
+  .factnums{grid-template-columns:repeat(2,1fr)}
+}
+@media (max-width:1024px){
+  :root{--t-3xl:31px; --t-2xl:25px}
+  .masthead .container{grid-template-columns:auto 1fr; row-gap:var(--s3)}
+  .search{grid-column:1/-1; max-width:none; order:3}
+  .callbox{padding:var(--s3) var(--s4); min-height:72px}
+  .callbox .number{font-size:var(--t-xl)}
+  .callbox .hint{display:none}
+  .callband .container{grid-template-columns:1fr; gap:var(--s5)}
+  .callback{grid-template-columns:1fr; gap:var(--s5); padding:var(--s5)}
+  .trustgrid{grid-template-columns:repeat(2,1fr)}
+  .fgrid{grid-template-columns:1fr 1fr; gap:var(--s5)}
+
+  /* جدول → کارت. دلال روی موبایل قیمت چک می‌کند؛ رقبا اینجا ناخوانا می‌شوند. */
+  .ptable-wrap{overflow-x:visible}
+  .ptable thead{display:none}
+  /* min-width دسکتاپ باید اینجا برداشته شود، وگرنه کارت‌ها صفحه را افقی می‌کشند */
+  .ptable{min-width:0}
+  .ptable .spec-lo{display:flex}
+  .ptable, .ptable tbody, .ptable tr, .ptable td{display:block; width:100%}
+  .ptable caption{padding-bottom:var(--s3)}
+  .ptable tr{border:1.5px solid var(--line); border-radius:var(--radius-lg);
+    margin-bottom:var(--s3); padding:var(--s4); background:#fff}
+  .ptable tbody tr:nth-child(even){background:#fff}
+  .ptable td{border:0; padding:var(--s2) 0; display:flex; justify-content:space-between;
+    align-items:center; gap:var(--s4)}
+  .ptable td::before{content:attr(data-label); font-size:var(--t-xs); color:var(--ink-2);
+    font-weight:600; flex:none}
+  .ptable td.cell-name{display:block; padding-top:0; border-bottom:1px solid var(--line);
+    padding-bottom:var(--s3); margin-bottom:var(--s2)}
+  .ptable td.cell-name::before{display:none}
+  /* قیمت در حالت کارت بلوکی می‌شود؛ به‌صورت flex، «معادل تومان» سرریز می‌کرد */
+  .ptable td.cell-price{display:block; padding-block:var(--s3)}
+  .ptable td.cell-price::before{display:block; margin-bottom:2px}
+  .cell-price .toman{margin-top:2px}
+  .ptable td.cell-act{display:block; padding-top:var(--s3)}
+  .ptable td.cell-act::before{display:none}
+  .rowactions{justify-content:stretch}
+  .rowactions .btn-call{flex:1}
+}
+@media (max-width:860px){
+  :root{--t-base:17px; --t-lg:19px; --t-xl:22px; --t-2xl:23px; --t-3xl:28px}
+  .utilbar .util-left li:first-child{display:none}
+  .masthead .container{grid-template-columns:1fr auto}
+  .brand .sub{display:none}
+  .mainnav{position:static}
+  .board{padding-block:var(--s6) var(--s5)}
+  .ixgrid,.ixgrid.ix-4,.ixgrid.ix-3{grid-template-columns:repeat(2,1fr)}
+  .catgrid{grid-template-columns:repeat(2,1fr)}
+  .board-call{flex-direction:column; align-items:stretch}
+  .board-call .tel{justify-content:center}
+  .factorybar .container{flex-direction:column; align-items:flex-start}
+  .factorybar ul{gap:var(--s4)}
+  /* داک چسبان پایین — بزرگ‌ترین اهرم زنگ‌خور روی موبایل */
+  .dock{display:grid; grid-template-columns:1fr auto auto; gap:1px; position:fixed;
+    inset-inline:0; bottom:0; z-index:60; background:var(--line-2);
+    border-top:1px solid var(--line-2); box-shadow:0 -4px 16px rgba(11,18,32,.12)}
+  .dock a{display:flex; flex-direction:column; align-items:center; justify-content:center;
+    gap:2px; background:#fff; color:var(--steel-ink); font-size:13px; font-weight:700;
+    min-height:68px; padding:0 var(--s4)}
+  .dock a svg{width:22px;height:22px}
+  .dock .primary{background:var(--brand); color:#fff; align-items:flex-start;
+    justify-content:center; padding-inline:var(--s4)}
+  .dock .primary .l{font-size:12px; color:#FFD9DD; font-weight:600}
+  .dock .primary .n{font-size:var(--t-lg); font-weight:900; letter-spacing:-.01em}
+  body{padding-bottom:70px}
+}
+@media (max-width:640px){
+  .container{padding-inline:var(--s4)}
+  .ixgrid,.ixgrid.ix-4,.ixgrid.ix-3{grid-template-columns:1fr}
+  .catgrid{grid-template-columns:1fr}
+  .trustgrid{grid-template-columns:1fr}
+  .factnums{grid-template-columns:1fr}
+  .fgrid{grid-template-columns:1fr}
+  /* زیر ۶۴۰px، شماره تلفن ردیف خودش را می‌گیرد و تمام‌عرض می‌شود.
+     فشردنش کنار لوگو هم سرریز می‌ساخت و هم کوچکش می‌کرد — دقیقاً برعکس
+     کاری که این صفحه باید بکند. */
+  .masthead .container{grid-template-columns:1fr; row-gap:var(--s3)}
+  .callbox{justify-content:center; padding:var(--s3) var(--s4); min-height:68px}
+  .callbox .hint{display:none}
+  .callbox .label{font-size:13px}
+  .callbox .number{font-size:var(--t-xl); white-space:nowrap}
+  .brand .mark{width:46px; height:46px}
+  .search{display:none}
+  .board h1{font-size:var(--t-2xl)}
+  .board .lede{font-size:var(--t-base)}
+}
+
+/* ==========================================================================
+   چاپ — خریدار این جدول را چاپ می‌کند و به دفتر می‌برد
+   ========================================================================== */
+@media print{
+  .pv-strip,.utilbar,.mainnav,.search,.dock,.callback,.newsletter,.socials,
+  .board-call,.callband,.section-head a,.rowactions{display:none !important}
+  body{font-size:11pt; padding:0}
+  .board{background:#fff !important; color:#000; padding-block:0}
+  .board::before{display:none}
+  .board h1,.board h1 span,.board .lede{color:#000 !important}
+  .ix{background:#fff; border:1px solid #999; color:#000}
+  .ix .k,.ix .v,.ix .u,.ix .range{color:#000}
+  .ptable th{background:#EEE !important; color:#000 !important;
+    -webkit-print-color-adjust:exact; print-color-adjust:exact}
+  .ptable tr{page-break-inside:avoid}
+  a[href^="tel:"]::after{content:" (" attr(href) ")"; font-size:9pt}
+  footer.site{background:#fff; color:#000; margin-top:var(--s5)}
+  footer.site h3,.fcall .number{color:#000}
+}
+
+
+
+/* ---- پاصفحه ----
+   نسخه‌ی قبلی سه ستون بلند بود و فهرست ۹ دسته را که در منو هست تکرار
+   می‌کرد. حالا دو ستون: راه تماس و آدرس انبارها. */
+.fgrid{display:grid; grid-template-columns:1fr 1.2fr; gap:var(--s7); align-items:start}
+.fgrid > *{min-width:0}
+footer.site h3{font-size:var(--t-lg); font-weight:800; margin-bottom:var(--s4)}
+
+.fmob{margin-top:var(--s3); font-size:var(--t-sm); color:var(--ink-2)}
+.fmob a{font-weight:800; color:var(--brand-dark); white-space:nowrap}
+/* لینک ایمیل مقصد کلیک است نه متن روان، پس ناحیه‌ی لمسی واقعی می‌خواهد */
+.fmail{display:inline-flex; align-items:center; gap:8px; margin-top:var(--s4);
+  font-size:var(--t-sm); color:var(--ink-2); min-height:44px}
+.fmail svg{width:18px; height:18px; flex:none}
+
+.faddr{list-style:none; padding:0; margin:0; display:grid; gap:var(--s4)}
+.faddr li{line-height:1.8; color:var(--ink-2)}
+/* برچسب باید سطر خودش باشد، وگرنه به ابتدای آدرس می‌چسبد */
+.faddr .a-t{display:block; font-weight:800; color:var(--ink);
+  font-size:var(--t-sm); margin-bottom:2px}
+
+@media (max-width:820px){
+  .fgrid{grid-template-columns:1fr; gap:var(--s5)}
+}
+
+/* ---- آکاردئون راهنما ----
+   محتوا حذف نشده، فقط تا شده. <details> را گوگل می‌خواند، پس چیزی از
+   سئو کم نمی‌شود ولی صفحه سه برابر کوتاه‌تر شروع می‌شود. */
+.guides{display:grid; gap:var(--s3); margin-top:var(--s5)}
+.guide{background:#fff; border:1px solid var(--line);
+  border-radius:var(--radius-lg); overflow:hidden}
+.guide > summary{cursor:pointer; list-style:none; padding:var(--s4) var(--s5);
+  font-size:var(--t-lg); font-weight:800; color:var(--ink);
+  display:flex; align-items:center; justify-content:space-between;
+  gap:var(--s3); min-height:56px}
+.guide > summary::-webkit-details-marker{display:none}
+.guide > summary::after{content:"+"; font-size:var(--t-2xl); font-weight:700;
+  color:var(--brand); line-height:1; flex:none}
+.guide[open] > summary::after{content:"–"}
+.guide > summary:hover{background:var(--surface)}
+.guide > summary:focus-visible{outline:none; box-shadow:var(--ring)}
+.guide[open] > summary{border-bottom:1px solid var(--line)}
+.guide > .prose{padding:var(--s5)}
+.guide > .prose > :first-child{margin-top:0}
+
+/* ---- جست‌وجوی پیشرفته‌ی جدول ----
+   با hidden می‌آید و فقط وقتی جاوااسکریپت واقعاً راه افتاد باز می‌شود. */
+.tfilter[hidden]{display:none}
+.tfilter{background:var(--surface); border:1px solid var(--line);
+  border-radius:var(--radius-lg); padding:var(--s4) var(--s5);
+  margin-bottom:var(--s4)}
+.tfilter-row{display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr));
+  gap:var(--s3) var(--s4)}
+.ffield{display:flex; flex-direction:column; gap:6px; min-width:0}
+.ffield > span{font-size:var(--t-sm); font-weight:700; color:var(--ink-2)}
+.ffield input,.ffield select{height:52px; border:1.5px solid var(--line-2);
+  border-radius:var(--radius); padding-inline:var(--s3);
+  font:inherit; font-size:var(--t-base); color:var(--ink); background:#fff;
+  width:100%; min-width:0}
+.ffield input:focus-visible,.ffield select:focus-visible{outline:none;
+  border-color:var(--brand); box-shadow:var(--ring)}
+.fsearch{grid-column:1/-1}
+@media (min-width:900px){.fsearch{grid-column:span 2}}
+.tfilter-foot{display:flex; align-items:center; justify-content:space-between;
+  gap:var(--s4); margin-top:var(--s4); flex-wrap:wrap}
+.tfilter-foot output{font-size:var(--t-base); font-weight:700; color:var(--ink)}
+.ptable tr[hidden]{display:none}
+.ptable[data-empty="yes"] tbody::after{content:"هیچ کدی با این فیلترها پیدا نشد.";
+  display:block; padding:var(--s6); text-align:center;
+  color:var(--ink-2); font-weight:600}
+
+/* تیتر تابلوی قیمت در صفحه‌ی اصلی h2 است (h1 مال اسلاید است)، ولی باید
+   همان وزن بصری h1 را داشته باشد. */
+.board .board-title{color:var(--ink); font-size:var(--t-3xl); font-weight:900;
+  max-width:20ch; line-height:1.3; letter-spacing:-.02em}
+.board .board-title span{color:var(--ink-2); display:block; font-weight:700}
+
+/* کارت دسته در صفحه‌ی /category/ */
+.catcard h3{font-size:var(--t-lg); font-weight:800; color:var(--ink); margin:0}
+.catcard .rng{font-size:var(--t-sm); color:var(--ink-2); margin-top:auto}
+.catcard .rng b{color:var(--ink); font-weight:800}
+.catcard .go{display:inline-flex; align-items:center; gap:6px;
+  font-size:var(--t-sm); font-weight:700; color:var(--brand-dark)}
+.catcard .go svg{width:16px; height:16px}
+
+/* ---- کارخانه: عکس هوایی دو واحد ---- */
+.plants{display:grid; grid-template-columns:1fr 1fr; gap:var(--s5);
+  margin-bottom:var(--s6)}
+.plants > *{min-width:0}
+.plant{margin:0; background:#fff; border:1px solid var(--line);
+  border-radius:var(--radius-lg); overflow:hidden; box-shadow:var(--sh-1)}
+.plant video,.plant img{display:block; width:100%; height:auto;
+  aspect-ratio:16/9; object-fit:cover; background:var(--surface-2)}
+.plant figcaption{padding:var(--s3) var(--s4); border-top:1px solid var(--line)}
+.plant figcaption b{display:block; font-size:var(--t-base); color:var(--ink);
+  font-weight:800}
+.plant figcaption span{display:block; font-size:var(--t-sm); color:var(--ink-2);
+  margin-top:2px}
+
+/* توضیح کوتاه زیر عنوان پاصفحه: فروشگاه در برابر کارخانه */
+.fwho{font-size:var(--t-sm); color:var(--ink-2); margin:-8px 0 var(--s4)}
+.fwho b{color:var(--ink); font-weight:800}
+
+@media (max-width:820px){
+  .plants{grid-template-columns:1fr; gap:var(--s4)}
+}
+
+@media (max-width:380px){
+  .stamp{white-space:normal; text-align:center; line-height:1.5}
+}
+
+/* دکمه‌ی بزرگ اسلایدهای دوم و سوم — هم‌وزن کارت تلفن اسلاید اول */
+.btn-lg{background:var(--steel-ink); color:#fff; border-color:var(--steel-ink);
+  padding:16px 26px; font-size:var(--t-lg); font-weight:800;
+  border-radius:var(--radius-lg)}
+.btn-lg:hover{background:var(--ink); border-color:var(--ink)}
+.btn-lg svg{width:18px; height:18px}
+
+/* ===========================================================================
+   هدر جمع‌وجور
+   ---------------------------------------------------------------------------
+   هدر ۳۸۲ پیکسل بود — ۴۲٪ ارتفاع صفحه در ۹۰۰px — و جدول قیمت، یعنی دلیل
+   اصلی آمدن بازدیدکننده، زیر خط تا می‌افتاد.
+
+   هیچ المانی حذف نشده: نوار بالا، لوگو، جست‌وجو، کارت تلفن، منو، نوار
+   کارخانه و مسیر راهنما همه سر جایشان‌اند. فقط ارتفاع‌ها فشرده شده‌اند:
+   پدینگ کمتر، کارت تلفن تک‌سطری، و نوار کارخانه در یک خط.
+   =========================================================================== */
+.utilbar{font-size:var(--t-xs)}
+.utilbar .container{min-height:36px; padding-block:0}
+.utilbar a,.utilbar li{min-height:36px}
+
+.masthead{padding-block:var(--s3)}
+.masthead .container{gap:var(--s4); align-items:center}
+.brand .name{font-size:var(--t-xl); line-height:1.2}
+.brand .sub{font-size:var(--t-xs); line-height:1.35}
+.brand img,.brand .logo{width:44px; height:44px}
+
+/* کارت تلفن: از سه سطر به یک سطر با عدد درشت */
+.callbox{padding:var(--s2) var(--s4); gap:var(--s3); align-items:center}
+.callbox .icon{width:40px; height:40px}
+.callbox .num,.callbox .number{font-size:var(--t-2xl); line-height:1.15}
+.callbox .label{font-size:var(--t-xs); line-height:1.3}
+.callbox .hint{display:none}          /* «۱۰ خط ویژه» در نوار بالا هم هست */
+
+.search input{height:46px}
+
+.mainnav a{padding-block:var(--s3); min-height:46px}
+
+.factorybar{padding-block:var(--s2)}
+.factorybar .container{min-height:48px}
+.factorybar .lead .s{display:none}    /* شرح بلند؛ همین متن در بخش کارخانه هست */
+.factorybar ul{gap:var(--s4)}
+.factorybar li{padding-inline:var(--s3)}
+
+.crumb{padding-block:var(--s2)}
+.crumb ol{min-height:34px}
+
+@media (max-width:900px){
+  .factorybar .lead{display:none}     /* در موبایل فقط اعداد می‌مانند */
+}
+
+/* ظرف داخلی هر نوار پدینگ عمودی خودش را دارد و روی پدینگ نوار سوار
+   می‌شود؛ ارتفاع واقعی جمع این دوتاست. اینجا صفر می‌شود و کنترل ارتفاع
+   یک‌جا دست خود نوار می‌ماند. */
+.masthead > .container{padding-block:0}
+.factorybar > .container{padding-block:0}
+.crumb > .container{padding-block:0}
+.utilbar > .container{padding-block:0}
+
+.masthead{padding-block:var(--s3)}
+.masthead > .container{min-height:auto}
+.factorybar{padding-block:var(--s2)}
+.crumb{padding-block:4px}
+.crumb ol{min-height:32px; align-items:center}
+
+/* ---- هدر در موبایل ----
+   نوارها در عرض کم به چند سطر می‌شکستند و هدر ۵۱۲ پیکسل می‌شد؛ یعنی
+   بیش از نیم صفحه پیش از آنکه قیمتی دیده شود. المان‌ها حذف نمی‌شوند،
+   افقی اسکرول می‌شوند یا به یک سطر جمع می‌شوند. */
+@media (max-width:900px){
+  /* نوار بالا: ساعت کاری و ایمیل در یک سطر قابل اسکرول */
+  .utilbar .container{flex-wrap:nowrap; overflow-x:auto; gap:var(--s4);
+    scrollbar-width:none}
+  .utilbar .container::-webkit-scrollbar{display:none}
+  .utilbar ul{flex-wrap:nowrap}
+  .utilbar li{white-space:nowrap}
+
+  /* نوار کارخانه: اعداد در یک سطر قابل اسکرول، بدون شکستن */
+  .factorybar .container{flex-wrap:nowrap; overflow-x:auto; scrollbar-width:none}
+  .factorybar .container::-webkit-scrollbar{display:none}
+  .factorybar ul{flex-wrap:nowrap; gap:var(--s3)}
+  .factorybar li{white-space:nowrap; flex:none}
+
+  .crumb ol{flex-wrap:nowrap; overflow-x:auto; scrollbar-width:none}
+  .crumb ol::-webkit-scrollbar{display:none}
+  .crumb li{white-space:nowrap}
+}
+
+/* ===========================================================================
+   صفحات تماس و درباره
+   =========================================================================== */
+.prose-lead{max-width:66ch}
+.prose-lead .lede{font-size:var(--t-lg); line-height:1.8; color:var(--ink-2)}
+.prose-lead .lede strong{color:var(--ink)}
+
+/* ---- اعداد کارخانه ---- */
+.factnums{display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+  gap:var(--s3); margin:var(--s6) 0}
+.factnums > *{min-width:0}
+.fact{background:#fff; border:1px solid var(--line); border-radius:var(--radius-lg);
+  padding:var(--s4); text-align:center}
+.fact .k{display:block; font-size:var(--t-sm); color:var(--ink-2); font-weight:600}
+.fact .v{display:block; font-size:var(--t-2xl); font-weight:900; color:var(--ink);
+  margin-top:6px; line-height:1.2}
+
+/* ---- تماس ---- */
+.contact-grid{display:grid; grid-template-columns:1fr 1fr; gap:var(--s6);
+  margin:var(--s5) 0 var(--s7)}
+.contact-grid > *{min-width:0}
+
+.contact-tel{display:flex; align-items:center; gap:var(--s4); text-decoration:none;
+  background:#fff; border:2px solid var(--brand); border-radius:var(--radius-lg);
+  padding:var(--s4) var(--s5); box-shadow:var(--sh-1)}
+.contact-tel svg{width:40px; height:40px; color:var(--brand); flex:none}
+.contact-tel .l{display:block; font-size:var(--t-sm); font-weight:600; color:var(--ink-2)}
+.contact-tel .n{display:block; font-size:var(--t-3xl); font-weight:900;
+  color:var(--brand-dark); line-height:1.15; direction:ltr; text-align:right}
+.contact-tel .h{display:block; font-size:var(--t-xs); color:var(--ink-2); margin-top:4px}
+.contact-tel:hover{background:var(--brand-soft)}
+.contact-tel:focus-visible{outline:none; box-shadow:var(--ring)}
+
+.soc-list{display:grid; gap:var(--s2); margin-top:var(--s4)}
+.soc-row{display:flex; align-items:center; gap:var(--s3); text-decoration:none;
+  background:#fff; border:1px solid var(--line); border-radius:var(--radius);
+  padding:var(--s3) var(--s4); min-height:56px; color:var(--ink)}
+.soc-row svg{width:24px; height:24px; color:var(--steel-ink); flex:none}
+.soc-row span{font-weight:700; font-size:var(--t-base)}
+.soc-row b{margin-inline-start:auto; font-weight:800; color:var(--brand-dark)}
+.soc-row:hover{background:var(--surface); border-color:var(--line-2)}
+.soc-row:focus-visible{outline:none; box-shadow:var(--ring)}
+
+.contact-addr h2{font-size:var(--t-xl); margin-bottom:var(--s4)}
+.contact-addr .faddr li{background:#fff; border:1px solid var(--line);
+  border-radius:var(--radius); padding:var(--s3) var(--s4)}
+
+/* ---- فرم ---- */
+.cform{background:var(--surface); border:1px solid var(--line);
+  border-radius:var(--radius-lg); padding:var(--s5)}
+.cform-note{display:flex; align-items:center; gap:var(--s2);
+  background:var(--fresh-soft); border:1px solid #E8CD94; color:#6B4708;
+  border-radius:var(--radius); padding:var(--s3) var(--s4);
+  font-size:var(--t-sm); font-weight:600; margin:0 0 var(--s4)}
+.cform-note svg{width:19px; height:19px; flex:none}
+.cform-note b{color:var(--brand-dark)}
+.cform-grid{display:grid; grid-template-columns:1fr 1fr; gap:var(--s4)}
+.cform-grid > *{min-width:0}
+.cform textarea{border:1.5px solid var(--line-2); border-radius:var(--radius);
+  padding:var(--s3); font:inherit; font-size:var(--t-base); color:var(--ink);
+  background:#fff; width:100%; resize:vertical; min-height:110px}
+.cform :disabled{background:var(--surface-2); color:var(--ink-3); cursor:not-allowed}
+.cform .btn{margin-top:var(--s4)}
+.cform .btn:disabled{opacity:.55; cursor:not-allowed}
+
+@media (max-width:820px){
+  .contact-grid{grid-template-columns:1fr; gap:var(--s5)}
+  .cform-grid{grid-template-columns:1fr}
+  .contact-tel .n{font-size:var(--t-2xl)}
+}
+
+/* یادداشت فرم: شماره‌ی تلفن nowrap است و در ۳۲۰px کل خط را پهن می‌کرد.
+   خط اجازه‌ی شکستن می‌گیرد و خودِ شماره یکپارچه می‌ماند. */
+.cform-note{flex-wrap:wrap; row-gap:4px}
+.cform-note b{white-space:nowrap}
+.cform,.cform *{min-width:0}
+
+/* شماره‌ی تلفن در نوار تماس هم nowrap است و در ۳۲۰px کف عرض صفحه را
+   بالا می‌برد. کارت اجازه‌ی جمع‌شدن می‌گیرد و در تنگ‌ترین عرض، اندازه‌ی
+   شماره یک پله کوچک می‌شود تا یکپارچه بماند و صفحه پهن نشود. */
+.lines,.line,.line *{min-width:0}
+@media (max-width:340px){
+  .line .number,.fcall .number,.callbox .num{font-size:var(--t-xl)}
+  .contact-tel .n{font-size:var(--t-xl)}
+}
+
+/* نوار بالا: ارتفاع نوار ۳۶px است ولی لینک‌های داخلش مقصد کلیک‌اند و
+   باید ناحیه‌ی لمسی واقعی داشته باشند. ارتفاع نوار دست‌نخورده می‌ماند و
+   فقط ناحیه‌ی قابل کلیک با پدینگ عمودی گسترده می‌شود. */
+.utilbar a{min-height:44px; display:inline-flex; align-items:center}
+
+/* ===========================================================================
+   بنر اسلایدری صفحه‌ی اصلی
+   ---------------------------------------------------------------------------
+   الگو از ahanonline: بنر تمام‌عرض که خودِ تصویر محتواست، بدون کادر و
+   بدون حاشیه، با نشانگرهای خطیِ باریک زیر آن.
+
+   نسبت ابعاد ثابت است تا با عوض‌شدن عکس، ارتفاع بنر نپرد و بقیه‌ی صفحه
+   جابه‌جا نشود. عکس با object-fit:cover جا می‌افتد، پس هر عکسی با هر
+   ابعادی بگذارید بنر نمی‌شکند.
+
+   متن روی تصویر اختیاری است: اگر اسلاید تیتر داشته باشد، روی گرادیان
+   خوانا می‌نشیند؛ اگر عکسِ طراحی‌شده بگذارید (مثل خود ahanonline که متن
+   داخل عکس است) کافی است تیتر را در content.SLIDES خالی بگذارید.
+   =========================================================================== */
+.hero{position:relative; background:var(--surface-2);
+  border-bottom:1px solid var(--line)}
+.hero-track{display:flex; overflow-x:auto; scroll-snap-type:x mandatory;
+  scroll-behavior:smooth; scrollbar-width:none; -ms-overflow-style:none}
+.hero-track::-webkit-scrollbar{display:none}
+
+/* نسبت ابعاد شکل بنر را می‌دهد، ولی min-height بر آن مقدم است تا متن
+   در عرض‌های میانی (حدود ۱۰۲۴px) که نسبت، ارتفاع کمی می‌سازد بریده نشود.
+   با عکسِ بدون متن، نسبت حاکم است و بنر دقیقاً باریک می‌ماند. */
+.slide{flex:0 0 100%; scroll-snap-align:start; position:relative;
+  aspect-ratio:1900/470; min-height:210px;
+  background-size:cover; background-position:center;
+  background-repeat:no-repeat; background-color:var(--surface-2);
+  display:flex; align-items:center; overflow:hidden}
+.slide > .container{position:relative; width:100%}
+
+/* عکس نباید محو شود: روکش سفیدِ تمام‌عرض برداشته شد. برای خوانایی عنوان
+   فقط یک سایه‌ی نرم پشت خودِ متن می‌ماند، نه روی تصویر. */
+
+.slide-in{max-width:52ch; padding-block:var(--s5)}
+.slide .eyebrow{display:inline-block; font-size:var(--t-sm); font-weight:700;
+  color:var(--brand-dark); background:var(--brand-soft);
+  border:1px solid rgba(180,35,50,.30); border-radius:999px;
+  padding:5px 13px; margin-bottom:var(--s3)}
+.slide h1,.slide .stitle{font-size:var(--t-3xl); font-weight:900;
+  line-height:1.25; letter-spacing:-.02em; color:var(--ink); margin:0}
+.slide h1 span,.slide .stitle span{display:block; color:var(--steel-ink);
+  font-weight:800; font-size:var(--t-xl); margin-top:6px}
+.slide p.sdesc{color:var(--ink-2); font-size:var(--t-base); line-height:1.7;
+  margin-top:var(--s3); max-width:46ch}
+.slide-cta{display:flex; align-items:center; gap:var(--s3);
+  flex-wrap:wrap; margin-top:var(--s4)}
+
+.slide-tel{display:inline-flex; align-items:center; gap:var(--s3);
+  background:#fff; color:var(--ink); border:2px solid var(--brand);
+  border-radius:var(--radius-lg); padding:10px 18px;
+  box-shadow:var(--sh-1); text-decoration:none}
+.slide-tel svg{width:28px; height:28px; color:var(--brand); flex:none}
+.slide-tel .l{display:block; font-size:var(--t-xs); font-weight:600; color:var(--ink-2)}
+.slide-tel .n{display:block; font-size:var(--t-xl); font-weight:900;
+  color:var(--brand-dark); line-height:1.2; direction:ltr; text-align:right;
+  white-space:nowrap}
+.slide-tel:hover{background:var(--brand-soft)}
+.slide-tel:focus-visible{outline:none; box-shadow:var(--ring)}
+
+/* ---- نشانگرهای خطی، مثل نمونه ---- */
+.hero-dots{position:absolute; inset-inline:0; bottom:14px; z-index:2;
+  display:flex; justify-content:center; gap:10px; pointer-events:none}
+.hero-dots a{pointer-events:auto; width:74px; height:26px;
+  display:grid; place-items:center; text-decoration:none}
+.hero-dots a::before{content:""; width:100%; height:4px; border-radius:2px;
+  background:rgba(18,49,82,.28); transition:background .2s}
+.hero-dots a:hover::before{background:rgba(18,49,82,.55)}
+.hero-dots a[aria-current="true"]::before{background:var(--steel-ink)}
+.hero-dots a:focus-visible{outline:none; box-shadow:var(--ring); border-radius:4px}
+.hero-dots .vh{position:absolute; width:1px; height:1px; overflow:hidden;
+  clip:rect(0 0 0 0); white-space:nowrap}
+
+@media (max-width:1000px){
+  .slide{aspect-ratio:1200/560}
+  .slide h1,.slide .stitle{font-size:var(--t-2xl)}
+}
+@media (max-width:620px){
+  /* نسبت ابعاد در موبایل هم می‌ماند. وقتی اسلاید پر از متن بود، auto
+     لازم بود؛ حالا که فقط عنوان دارد، auto بنر را به ۱۰۲ پیکسل جمع
+     می‌کرد و عکس عملاً دیده نمی‌شد. */
+  .slide{aspect-ratio:16/10}
+  .slide-in{padding-block:var(--s5)}
+  .slide h1 span,.slide .stitle span{font-size:var(--t-lg)}
+  .slide-tel{width:100%; justify-content:center}
+  .hero-dots{position:static; padding:10px 0; background:var(--surface)}
+  .hero-dots a{width:52px}
+}
+@media (prefers-reduced-motion:reduce){
+  .hero-track{scroll-behavior:auto}
+}
+
+/* اسلاید بدون متن: کل سطح، مقصد کلیک است */
+.slide-link{position:absolute; inset:0; z-index:1}
+.slide-link:focus-visible{outline:none; box-shadow:inset var(--ring)}
+
+/* اسلایدِ متن‌دار هیچ‌وقت کوتاه‌تر از محتوایش نشود */
+.slide.has-title{height:auto; min-height:min(56vh, 420px)}
+@media (max-width:620px){ .slide.has-title{min-height:200px} }
+
+/* ---- عنوان روی بنر ----
+   بدون روکش، متن باید خودش خوانا باشد. سایه‌ی متنی نرم این کار را
+   می‌کند بی‌آنکه ذره‌ای از تصویر را بپوشاند. */
+.slide.has-title .slide-in{padding-block:var(--s5)}
+/* عکس محو نمی‌شود، ولی عنوان باید خوانا بماند. اندازه‌گیری روی همین
+   تصویر نشان داد ۳۵٪ ناحیه‌ی عنوان با متن سفید زیر نسبت ۴٫۵ می‌افتد —
+   دیوار روشن و نور پنجره‌ها. راه‌حل: یک پلاک تیره‌ی نیمه‌شفاف که فقط
+   پشت خودِ کلمات است، نه روی تصویر. سطح عکس دست‌نخورده می‌ماند. */
+.slide h1,.slide .stitle{
+  display:inline-block; margin:0;
+  font-size:clamp(24px, 4.2vw, 48px); font-weight:900; color:#fff;
+  line-height:1.25; letter-spacing:-.02em;
+  padding:12px 26px; border-radius:var(--radius-lg);
+  background:rgba(11,18,32,.62);
+  -webkit-backdrop-filter:blur(3px); backdrop-filter:blur(3px);
+  text-shadow:0 1px 3px rgba(0,0,0,.5)}
+
+/* ===========================================================================
+   نسخه‌ی ۱۹ — بازطراحی به خواست کارفرما (شهریور ۱۴۰۵)
+   ---------------------------------------------------------------------------
+   • نوار تولیدکننده حذف شد؛ • جدول قیمت فشرده به سبک آهن آنلاین؛
+   • صفحه‌ی «قیمت لحظه‌ای» با ستون کناری؛ • صفحه‌ی محصول خلوت با گالری؛
+   • مجله به سبک دیجی‌کالا مگ؛ • سه واحد (دو کارخانه + دفتر تهران).
+   =========================================================================== */
+.factorybar{display:none}
+.dim{color:var(--ink-3); font-weight:500}
+.btn-sm{min-height:40px; padding:0 var(--s3); font-size:var(--t-xs)}
+.btn-lg2{min-height:56px; font-size:var(--t-base); padding:0 var(--s5); border-radius:var(--radius-lg); gap:10px}
+.btn-lg2 .num{font-weight:900}
+.btn-cta{min-height:54px; padding:0 var(--s5); font-size:var(--t-base); border-radius:var(--radius-lg)}
+.btn-cta svg{width:20px;height:20px}
+.section-head .btn-cta{color:#fff}
+.section-head .btn-cta:hover{text-decoration:none}
+
+/* ---- برچسب دسته ---- */
+.chip{display:inline-flex; align-items:center; gap:6px; min-height:36px; padding:0 14px;
+  border-radius:999px; background:var(--surface-2); color:var(--steel-ink);
+  font-size:var(--t-xs); font-weight:700; border:1px solid var(--line); white-space:nowrap}
+.chip:hover{background:var(--line); text-decoration:none}
+.chip.is-on{background:var(--steel-ink); color:#fff; border-color:var(--steel-ink)}
+.chiprow .chip{min-height:40px}
+
+/* ---- کارت دسته در صفحه‌ی اصلی و فهرست دسته‌ها ---- */
+.homecats{display:grid; grid-template-columns:repeat(auto-fill,minmax(210px,1fr)); gap:var(--s4)}
+.hc{display:flex; flex-direction:column; gap:6px; background:#fff; border:1.5px solid var(--line);
+  border-radius:var(--radius-lg); overflow:hidden; min-height:220px;
+  transition:border-color .18s ease, box-shadow .18s ease, transform .18s ease}
+.hc:hover{border-color:var(--line-2); box-shadow:var(--sh-2); transform:translateY(-2px)}
+.hc-img{display:block; aspect-ratio:16/10; background:var(--surface-2); overflow:hidden}
+.hc-img img{width:100%; height:100%; object-fit:cover; display:block}
+.hc-t{font-weight:800; color:var(--ink); font-size:var(--t-base); padding:var(--s2) var(--s4) 0; line-height:1.4}
+.hc-n{font-size:var(--t-xs); color:var(--ink-2); padding:0 var(--s4)}
+.hc-pr{font-size:var(--t-xs); color:var(--ink-2); padding:0 var(--s4)}
+.hc-pr b{color:var(--ink); font-weight:800}
+.hc-go{margin-top:auto; padding:var(--s2) var(--s4) var(--s4); display:inline-flex; align-items:center; gap:6px;
+  color:var(--brand-dark); font-weight:700; font-size:var(--t-sm)}
+.hc-go svg{width:16px;height:16px}
+
+/* ===========================================================================
+   جدول قیمت فشرده
+   =========================================================================== */
+.pt-card{background:#fff; border:1px solid var(--line); border-radius:var(--radius-lg);
+  margin-bottom:var(--s5); overflow:hidden}
+.pt-card[hidden]{display:none}
+.pt-head{display:flex; align-items:center; justify-content:space-between; gap:var(--s4);
+  padding:var(--s3) var(--s4); border-bottom:1px solid var(--line); flex-wrap:wrap}
+.pt-title{display:flex; align-items:baseline; gap:var(--s3); flex-wrap:wrap}
+.pt-title h2{font-size:var(--t-lg); font-weight:800; color:var(--ink); margin:0}
+.pt-title h2 a:hover{color:var(--brand-dark)}
+.pt-meta{font-size:var(--t-xs); color:var(--ink-2)}
+.pt-upd{display:inline-flex; align-items:center; gap:6px; font-size:var(--t-xs); color:var(--ink-2)}
+.pt-upd svg{width:16px;height:16px}
+.pt-upd b{color:var(--up); font-weight:800}
+/* تاریخ همه‌جای سایت یک قاعده دارد: «چهارشنبه ۱ مهر ۱۴۰۵».
+   با flex چیده می‌شود نه با direction، چون direction:ltr ترتیب کلمه‌ها را
+   برعکس می‌کرد و <bdi> ایزوله‌ی تودرتو می‌ساخت. flex به bidi کاری ندارد.
+   در ظرف RTL، flex-direction:row یعنی اولین آیتم سمت راست — همان ترتیب
+   خواندن فارسی. (row-reverse قبلی برای کپسولی با آیکن جلو تنظیم شده بود
+   و بدون آیکن ترتیب را برعکس می‌کرد.) */
+.pt-upd time,.stamp time,.chipx time{display:inline-flex; flex-direction:row;
+  gap:.34em; align-items:baseline; white-space:nowrap}
+.pt-upd time .d-w,.stamp time .d-w,.chipx time .d-w{order:0}
+.pt-upd time .d-d,.stamp time .d-d,.chipx time .d-d{order:1}
+.pt-upd time .d-m,.stamp time .d-m,.chipx time .d-m{order:2}
+.pt-upd time .d-y,.stamp time .d-y,.chipx time .d-y{order:3}
+.pt-wrap{overflow-x:auto; overscroll-behavior-x:contain}
+table.pt{width:100%; border-collapse:collapse; font-size:var(--t-sm); min-width:760px}
+table.pt th{background:var(--surface); color:var(--ink-2); font-weight:700; font-size:var(--t-xs);
+  text-align:center; padding:10px 8px; white-space:nowrap; border-bottom:1px solid var(--line)}
+table.pt td{padding:8px 8px; text-align:center; border-bottom:1px solid var(--line); vertical-align:middle;
+  color:var(--ink); white-space:nowrap; line-height:1.5}
+table.pt tbody tr:nth-child(even){background:#F8F9FB}
+table.pt tbody tr:hover{background:var(--surface-2)}
+table.pt tbody tr:last-child td{border-bottom:0}
+table.pt th.pt-name, table.pt td.pt-name{text-align:start; white-space:normal; min-width:220px}
+table.pt td.pt-name a{font-weight:700; color:var(--steel-ink)}
+table.pt td.pt-name a:hover{color:var(--brand-dark); text-decoration:underline; text-underline-offset:3px}
+table.pt td.pt-name .review{margin-inline-start:8px; font-size:12px; padding:0 6px}
+table.pt td.pt-unit{color:var(--ink-2); font-size:var(--t-xs)}
+table.pt td.pt-price b{font-size:var(--t-lg); font-weight:900; letter-spacing:-.01em}
+table.pt td.pt-delta .delta{font-size:var(--t-xs); padding:1px 6px; font-weight:800}
+table.pt td.pt-act{width:84px; padding-inline:4px}
+table.pt td.pt-act{display:table-cell}
+.pt-call,.pt-more{display:inline-flex; align-items:center; justify-content:center; width:36px; height:36px;
+  border-radius:8px; border:1px solid var(--line-2); background:#fff; color:var(--steel-ink); margin:0 2px;
+  vertical-align:middle}
+.pt-call{border-color:var(--brand); color:var(--brand)}
+.pt-call:hover{background:var(--brand); color:#fff}
+.pt-more:hover{background:var(--surface); color:var(--ink)}
+.pt-call svg,.pt-more svg{width:17px;height:17px}
+.pt-foot{display:flex; align-items:center; justify-content:space-between; gap:var(--s4); flex-wrap:wrap;
+  padding:var(--s3) var(--s4); border-top:1px solid var(--line); font-size:var(--t-xs); color:var(--ink-2); background:var(--surface)}
+.pt-foot a{color:var(--steel-ink); font-weight:700; display:inline-flex; align-items:center; gap:4px; min-height:32px}
+.pt-foot a svg{width:15px;height:15px}
+.pt-foot a:hover{text-decoration:underline; text-underline-offset:3px}
+@media (max-width:1100px){table.pt .pt-lo{display:none}}
+.tfilter.slim{border:0; border-bottom:1px solid var(--line); border-radius:0; margin:0; padding:var(--s3) var(--s4); background:var(--surface)}
+.tfilter.slim .ffield > span{font-size:13px}
+.tfilter.slim .ffield input,.tfilter.slim .ffield select{height:44px; font-size:var(--t-sm)}
+.tfilter.slim .tfilter-foot{margin-top:var(--s2)}
+.tfilter.slim .tfilter-foot output{font-size:var(--t-sm)}
+/* جدول کوچک محصولات هم‌دسته */
+.pt-wrap.sib{border:1px solid var(--line); border-radius:var(--radius-lg)}
+table.pt-mini{min-width:0}
+table.pt-mini td.pt-price b{font-size:var(--t-base)}
+
+/* جدول آخرین تغییرات */
+.ch-card .pt-title h2{color:var(--brand-dark)}
+
+
+/* ===========================================================================
+   صفحه‌ی قیمت لحظه‌ای
+   =========================================================================== */
+.board-price{padding-block:var(--s6) var(--s5)}
+.board-price .board-head{margin-bottom:var(--s5)}
+.price-tools{display:grid; gap:var(--s3)}
+.gsearch{display:flex; align-items:center; gap:10px; background:#fff; border:1.5px solid var(--line-2);
+  border-radius:var(--radius-lg); padding:0 var(--s4); min-height:58px; max-width:760px}
+.gsearch > svg{width:22px;height:22px; color:var(--steel-ink); flex:none}
+.gsearch input{flex:1; min-width:0; border:0; outline:0; font:inherit; font-size:var(--t-base); background:transparent; height:56px; color:var(--ink)}
+.gsearch input::placeholder{color:var(--ink-3)}
+.gsearch:focus-within{border-color:var(--brand); box-shadow:0 0 0 3px rgba(180,35,50,.12)}
+.gsearch output{font-size:var(--t-xs); color:var(--ink-2); white-space:nowrap; font-weight:700}
+.price-section{padding-block:var(--s6)}
+.price-layout{display:grid; grid-template-columns:1fr 300px; gap:var(--s5); align-items:start}
+.price-layout > *{min-width:0}
+.side-box{background:#fff; border:1px solid var(--line); border-radius:var(--radius-lg); padding:var(--s4)}
+.side-box.sticky{position:sticky; top:72px}
+.side-box h3{font-size:var(--t-base); display:flex; align-items:center; gap:8px; margin-bottom:var(--s3); color:var(--ink)}
+.side-box h3 svg{width:18px;height:18px; color:var(--steel-ink)}
+.jump{display:grid; gap:2px; margin-bottom:var(--s4)}
+.jump a{display:flex; align-items:center; justify-content:space-between; gap:8px; min-height:42px; padding:0 10px;
+  border-radius:8px; color:var(--steel-ink); font-weight:600; font-size:var(--t-sm)}
+.jump a:hover{background:var(--surface)}
+.jump a .num{font-size:12px; color:var(--ink-3); background:var(--surface-2); border-radius:999px; padding:0 8px; min-width:26px; text-align:center}
+.side-call{display:flex; align-items:center; gap:12px; background:var(--brand-soft); border:2px solid var(--brand);
+  border-radius:var(--radius-lg); padding:10px 14px; min-height:64px; margin-bottom:var(--s3)}
+.side-call svg{width:24px;height:24px; color:var(--brand); flex:none}
+.side-call .l{display:block; font-size:12px; color:var(--brand-dark); font-weight:600}
+.side-call .n{display:block; font-size:var(--t-xl); font-weight:900; color:var(--brand-dark); line-height:1.15}
+.side-call:hover{background:#fff}
+.side-wa{display:inline-flex; align-items:center; gap:8px; min-height:44px; padding:0 12px; border-radius:8px;
+  border:1px solid var(--line-2); color:var(--steel-ink); font-weight:700; font-size:var(--t-sm); width:100%; justify-content:center}
+.side-wa svg{width:18px;height:18px}
+.side-wa:hover{background:var(--surface)}
+.side-note{font-size:13px; color:var(--ink-2); line-height:1.7; margin-top:var(--s3)}
+.side-more{display:inline-flex; align-items:center; gap:4px; min-height:40px; font-size:var(--t-xs); font-weight:700; color:var(--steel-ink)}
+.side-more svg{width:14px;height:14px}
+@media (max-width:1024px){.price-layout{grid-template-columns:1fr} .price-side{order:-1} .side-box.sticky{position:static} .jump{grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}}
+
+/* ===========================================================================
+   صفحه‌ی دسته — عکس‌های محصول کنار شاخص‌ها
+   =========================================================================== */
+.board-grid{display:grid; grid-template-columns:1fr auto; gap:var(--s4); align-items:stretch}
+.board-grid > *{min-width:0}
+.board-photos{display:grid; grid-template-columns:repeat(3,1fr); gap:8px; align-content:stretch}
+.board-photos .ph{display:block; width:150px; border-radius:var(--radius); overflow:hidden; border:1px solid var(--board-line); background:#fff; aspect-ratio:4/3}
+.board-photos .ph img{width:100%; height:100%; object-fit:cover; display:block}
+@media (max-width:1200px){.board-photos .ph{width:120px}}
+@media (max-width:860px){.board-grid{grid-template-columns:1fr} .board-photos .ph{width:auto}}
+
+/* ===========================================================================
+   کارخانه: سه واحد و متن تمام‌عرض
+   =========================================================================== */
+.plants.plants-3{grid-template-columns:repeat(3,1fr)}
+.plant figcaption b a{display:inline-flex; align-items:center; gap:6px; color:var(--ink)}
+.plant figcaption b a:hover{color:var(--brand-dark)}
+.plant figcaption b a svg{width:14px;height:14px; color:var(--ink-3)}
+.prose.wide{max-width:none}
+.prose.cols-2{column-count:2; column-gap:var(--s7)}
+.prose.cols-2 p{break-inside:avoid}
+.prose ul.cols-3{column-count:3; column-gap:var(--s5)}
+@media (max-width:1024px){.plants.plants-3{grid-template-columns:1fr 1fr}}
+@media (max-width:860px){.prose.cols-2{column-count:1} .prose ul.cols-3{column-count:2}}
+@media (max-width:640px){.plants.plants-3{grid-template-columns:1fr} .prose ul.cols-3{column-count:1}}
+
+/* پاصفحه سه ستونه */
+.fgrid.fgrid-3{grid-template-columns:1.2fr .8fr 1.2fr}
+.flinks{display:grid; gap:2px}
+.flinks a{min-height:40px; font-weight:600; color:var(--ink-2)}
+@media (max-width:820px){.fgrid.fgrid-3{grid-template-columns:1fr}}
+
+/* ===========================================================================
+   مجله — به سبک دیجی‌کالا مگ
+   =========================================================================== */
+.mag-img{display:block; aspect-ratio:16/9; background:var(--surface-2); overflow:hidden; border-radius:var(--radius-lg)}
+.mag-img img{width:100%; height:100%; object-fit:cover; display:block; transition:transform .3s ease}
+article:hover .mag-img img{transform:scale(1.03)}
+.mag-meta{display:inline-flex; align-items:center; gap:6px; font-size:13px; color:var(--ink-3); margin-top:auto; flex-wrap:wrap}
+.mag-meta svg{width:14px;height:14px}
+.mag-meta i{font-style:normal; color:var(--line-2)}
+.mag-txt{display:flex; flex-direction:column; gap:8px; align-items:flex-start}
+.mag-txt h2,.mag-txt h3{margin:0; color:var(--ink); line-height:1.5}
+.mag-txt h2 a:hover,.mag-txt h3 a:hover{color:var(--brand-dark)}
+.mag-txt p{font-size:var(--t-sm); color:var(--ink-2); line-height:1.75; margin:0}
+.mag-card{display:flex; flex-direction:column; gap:12px; background:#fff; border:1px solid var(--line); border-radius:var(--radius-lg); padding:12px; height:100%}
+.mag-card .mag-img{border-radius:var(--radius)}
+.mag-card h3{font-size:var(--t-base); font-weight:800}
+.mag-card .mag-txt{padding:0 4px 4px; flex:1}
+.mag-card:hover{border-color:var(--line-2); box-shadow:var(--sh-2)}
+.mag-sm{display:grid; grid-template-columns:150px 1fr; gap:12px; align-items:start; background:#fff; border:1px solid var(--line); border-radius:var(--radius-lg); padding:10px}
+.mag-sm .mag-img{aspect-ratio:4/3; border-radius:var(--radius)}
+.mag-sm h3{font-size:var(--t-sm); font-weight:800}
+.mag-sm .mag-txt{gap:6px; padding-top:2px; height:100%}
+.mag-sm:hover{border-color:var(--line-2); box-shadow:var(--sh-1)}
+.mag-feature{position:relative; display:grid; border-radius:var(--radius-lg); overflow:hidden; min-height:420px; background:var(--steel-ink); height:100%}
+.mag-feature .mag-img{position:absolute; inset:0; aspect-ratio:auto; border-radius:0}
+.mag-feature .mag-img img{height:100%}
+.mag-feature .mag-txt{position:relative; z-index:1; margin-top:auto; padding:var(--s6) var(--s5) var(--s5); color:#fff;
+  background:linear-gradient(180deg, rgba(11,18,32,0) 0%, rgba(11,18,32,.55) 35%, rgba(11,18,32,.92) 100%)}
+.mag-feature h2{font-size:var(--t-2xl); color:#fff; font-weight:900; max-width:26ch}
+.mag-feature h2 a:hover{color:#FFD9DD}
+.mag-feature p{color:#E6EDF6; max-width:56ch}
+.mag-feature .mag-meta{color:#C6D4E4}
+.mag-feature .chip{background:rgba(255,255,255,.14); color:#fff; border-color:rgba(255,255,255,.25)}
+.mag-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:var(--s4)}
+.mag-grid-3{grid-template-columns:repeat(3,1fr)}
+.mag-home-grid,.mag-hero{display:grid; grid-template-columns:1.4fr 1fr; gap:var(--s4); align-items:stretch}
+.mag-home-side,.mag-hero-side{display:grid; gap:var(--s3); align-content:start}
+.mag-home-grid > *,.mag-hero > *{min-width:0}
+.mag-head{display:flex; align-items:flex-end; justify-content:space-between; gap:var(--s4); flex-wrap:wrap; margin-bottom:var(--s5)}
+.mag-head h1{font-size:var(--t-3xl); color:var(--ink)}
+.mag-head .lede{font-size:var(--t-base); color:var(--ink-2); max-width:60ch; margin-top:var(--s2)}
+.mag-chips{display:flex; flex-wrap:wrap; gap:8px}
+.mag-chips .chip{min-height:40px}
+.mag-top{padding-bottom:var(--s6)}
+@media (max-width:1024px){.mag-home-grid,.mag-hero{grid-template-columns:1fr} .mag-grid-3{grid-template-columns:repeat(2,1fr)} .mag-feature{min-height:340px}}
+@media (max-width:640px){.mag-grid-3{grid-template-columns:1fr} .mag-sm{grid-template-columns:120px 1fr} .mag-feature{min-height:300px} .mag-feature h2{font-size:var(--t-xl)}}
+
+/* ---- صفحه‌ی مقاله ---- */
+.container.narrow{max-width:900px}
+.post-head{padding-block:var(--s6) var(--s4)}
+.post-head h1{font-size:var(--t-3xl); color:var(--ink); margin-top:var(--s3); line-height:1.4}
+.post-lede{font-size:var(--t-lg); color:var(--ink-2); margin-top:var(--s3); line-height:1.75}
+.post-meta{display:flex; flex-wrap:wrap; gap:var(--s4); margin-top:var(--s4); font-size:var(--t-xs); color:var(--ink-2)}
+.post-meta span{display:inline-flex; align-items:center; gap:6px}
+.post-meta svg{width:16px;height:16px; color:var(--ink-3)}
+.post-hero{margin:0 0 var(--s5); border-radius:var(--radius-lg); overflow:hidden; background:var(--surface-2); aspect-ratio:16/8}
+.post-hero img{width:100%; height:100%; object-fit:cover; display:block}
+.post-grid{display:grid; grid-template-columns:minmax(0,1fr) 320px; gap:var(--s6); align-items:start; padding-bottom:var(--s6)}
+.post-side{display:grid; gap:var(--s4); position:sticky; top:72px}
+.toc{background:var(--surface); border:1px solid var(--line); border-radius:var(--radius-lg); padding:var(--s4)}
+.toc h3{font-size:var(--t-sm); display:flex; align-items:center; gap:8px; color:var(--ink); margin-bottom:var(--s2)}
+.toc h3 svg{width:16px;height:16px; color:var(--steel-ink)}
+.toc ol{list-style:none; margin:0; padding:0; counter-reset:toc}
+.toc li{counter-increment:toc}
+.toc li a{display:flex; gap:8px; min-height:38px; align-items:center; font-size:13px; color:var(--ink-2); font-weight:600; line-height:1.5}
+.toc li a::before{content:counter(toc,persian); color:var(--ink-3); font-weight:800; flex:none; width:16px}
+.toc li a:hover{color:var(--brand-dark)}
+.relprod{display:grid; grid-template-columns:72px 1fr auto; gap:12px; align-items:center; padding:8px; border:1px solid var(--line);
+  border-radius:var(--radius); margin-bottom:8px; background:var(--surface)}
+.relprod:hover{border-color:var(--line-2); background:#fff}
+.relprod-img{display:block; width:72px; aspect-ratio:1; border-radius:8px; overflow:hidden; background:var(--surface-2)}
+.relprod-img img{width:100%; height:100%; object-fit:cover; display:block}
+.relprod-txt{display:grid; gap:2px; min-width:0}
+.relprod-txt b{color:var(--ink); font-size:var(--t-sm); font-weight:800}
+.relprod-txt span{font-size:12px; color:var(--ink-2)}
+.relprod-pr b{font-size:12px; color:var(--ink)}
+.relprod > svg{width:16px;height:16px; color:var(--ink-3)}
+.post-tags{display:flex; flex-wrap:wrap; gap:8px; margin-top:var(--s5); padding-top:var(--s4); border-top:1px solid var(--line)}
+.tag{display:inline-flex; align-items:center; gap:6px; font-size:13px; color:var(--ink-2); background:var(--surface); border:1px solid var(--line); border-radius:999px; padding:4px 12px}
+.tag svg{width:13px;height:13px}
+/* بدنه‌ی مقاله (HTML ویرایشگر سایت فعلی) */
+.article-body{font-size:var(--t-base); line-height:1.95; color:var(--ink); max-width:76ch}
+.article-body h2{font-size:var(--t-xl); margin:var(--s6) 0 var(--s3); color:var(--steel-ink); scroll-margin-top:80px}
+.article-body h3{font-size:var(--t-lg); margin:var(--s5) 0 var(--s2); color:var(--steel-ink)}
+.article-body h4{font-size:var(--t-base); margin:var(--s4) 0 var(--s2)}
+.article-body h2:first-child{margin-top:0}
+.article-body p{margin:0 0 var(--s4)}
+.article-body ul,.article-body ol{margin:0 0 var(--s4); padding-inline-start:var(--s5); list-style:disc}
+.article-body ol{list-style:persian}
+.article-body li{margin-bottom:6px}
+.article-body a{color:var(--brand-dark); text-decoration:underline; text-underline-offset:3px; font-weight:600}
+.article-body img{display:block; max-width:100%; height:auto; border-radius:var(--radius-lg); margin:var(--s4) auto; border:1px solid var(--line)}
+.article-body table{width:100%; border-collapse:collapse; font-size:var(--t-sm); margin:0 0 var(--s4); display:block; overflow-x:auto}
+.article-body th,.article-body td{border:1px solid var(--line); padding:8px 10px; text-align:start; vertical-align:top}
+.article-body th{background:var(--surface-2); font-weight:700}
+.article-body blockquote{margin:0 0 var(--s4); padding:var(--s3) var(--s4); border-inline-start:4px solid var(--brand); background:var(--surface); border-radius:var(--radius)}
+.article-body strong{font-weight:800}
+@media (max-width:1024px){.post-grid{grid-template-columns:1fr} .post-side{position:static; grid-template-columns:1fr 1fr} .toc{grid-column:1/-1}}
+@media (max-width:640px){.post-side{grid-template-columns:1fr} .post-head h1{font-size:var(--t-2xl)} .post-hero{aspect-ratio:16/10}}
+
+/* ===========================================================================
+   صفحه‌ی محصول
+   =========================================================================== */
+.product{padding-block:var(--s5) var(--s6)}
+.pgrid{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.2fr); gap:var(--s6); align-items:start}
+.gallery{position:sticky; top:72px}
+.gallery-main{aspect-ratio:4/3; border-radius:var(--radius-lg); overflow:hidden; background:var(--surface-2); border:1px solid var(--line)}
+.gallery-main img{width:100%; height:100%; object-fit:cover; display:block}
+.gallery-thumbs{display:flex; gap:8px; margin-top:8px}
+.thumb{width:84px; height:64px; border-radius:8px; overflow:hidden; border:2px solid var(--line); background:#fff; padding:0; cursor:pointer}
+.thumb img{width:100%; height:100%; object-fit:cover; display:block}
+.thumb.is-on{border-color:var(--brand)}
+.thumb:focus-visible{outline:none; box-shadow:var(--ring)}
+.gallery-note{font-size:12px; color:var(--ink-3); margin-top:8px}
+.pinfo h1{font-size:var(--t-2xl); color:var(--ink); margin-top:var(--s3); line-height:1.4}
+.plede{font-size:var(--t-sm); color:var(--ink-2); margin-top:var(--s2); line-height:1.7}
+.pcard{background:#fff; border:1.5px solid var(--line); border-radius:var(--radius-lg); padding:var(--s4) var(--s5); margin-top:var(--s4); box-shadow:var(--sh-1)}
+.pcard-price{display:flex; flex-direction:column; gap:4px}
+.pcard-price .k{font-size:var(--t-xs); color:var(--ink-2); font-weight:600}
+.pcard-price .v b{font-size:var(--t-3xl); font-weight:900; color:var(--ink); letter-spacing:-.02em; line-height:1.1}
+.pcard-price .u{font-size:var(--t-sm); color:var(--ink-2); font-weight:600}
+.pcard-meta{display:flex; align-items:center; gap:8px; flex-wrap:wrap; font-size:var(--t-xs); color:var(--ink-2); margin-top:4px}
+.pcard-prev{color:var(--ink-3)}
+.pcard-upd{margin-top:var(--s3); font-size:var(--t-xs); color:var(--ink-2); display:flex; align-items:center; gap:8px; flex-wrap:wrap}
+.pcard-cta{display:grid; grid-template-columns:1fr auto; gap:10px; margin-top:var(--s4)}
+.pcard-cta .btn{justify-content:center}
+.pcard-note{font-size:13px; color:var(--ink-2); margin-top:var(--s3); line-height:1.7}
+.callout.slim{padding:var(--s3) var(--s4); margin:var(--s3) 0 0; font-size:var(--t-xs)}
+.kvgrid{display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:var(--s4)}
+.kv{display:flex; justify-content:space-between; align-items:center; gap:12px; background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); padding:10px 14px; min-height:48px}
+.kv .k{font-size:13px; color:var(--ink-2); font-weight:600}
+.kv .v{font-weight:800; color:var(--ink); font-size:var(--t-sm); text-align:end}
+.kv .v a{color:var(--steel-ink); text-decoration:underline; text-underline-offset:3px}
+.two-col{display:grid; grid-template-columns:1fr 1fr; gap:var(--s7); align-items:start}
+.two-col > *{min-width:0}
+.tips{margin:0 0 var(--s4); padding:0; list-style:none; display:grid; gap:10px}
+.tips li{position:relative; padding:12px 44px 12px 16px; background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); line-height:1.8; font-size:var(--t-sm)}
+.tips li::before{content:""; position:absolute; inset-inline-start:16px; top:20px; width:10px; height:10px; border-radius:3px; background:var(--brand)}
+.tips li a{color:var(--steel-ink); font-weight:700; text-decoration:underline; text-underline-offset:3px}
+.guidelink{display:inline-flex; align-items:center; gap:6px; min-height:44px; font-weight:800; color:var(--steel-ink)}
+.guidelink svg{width:16px;height:16px}
+.guidelink:hover{color:var(--brand-dark)}
+.ixgrid.ix-tight .ix{min-height:100px}
+@media (max-width:1024px){.pgrid{grid-template-columns:1fr} .gallery{position:static} .two-col{grid-template-columns:1fr; gap:var(--s6)}}
+@media (max-width:640px){.kvgrid{grid-template-columns:1fr} .pcard-cta{grid-template-columns:1fr} .pcard-price .v b{font-size:var(--t-2xl)}}
+
+/* ---- تماس: نقشه‌ی دفتر تهران ---- */
+.maplink{display:block; margin-top:var(--s4); border:1px solid var(--line); border-radius:var(--radius-lg); overflow:hidden; background:#fff}
+.maplink img{width:100%; aspect-ratio:16/8; object-fit:cover; display:block}
+.maplink span{display:flex; align-items:center; gap:8px; padding:10px 14px; font-weight:700; color:var(--steel-ink); font-size:var(--t-sm)}
+.maplink span svg{width:16px;height:16px}
+.maplink:hover span{color:var(--brand-dark)}
+
+/* اصلاحات کوچک */
+.board h1 span{font-size:var(--t-lg)}
+.section-head > a.btn{color:#fff}
+.mainnav .nav-price{color:var(--brand-dark); font-weight:800}
+/* جهت تاریخِ stamp در قانون یکپارچه‌ی .pt-upd time بالا تعیین می‌شود. */
+
+/* ===========================================================================
+   نسخه ۱۹ — بازطراحی به خواست کارفرما (۱۸ شهریور ۱۴۰۵)
+   ---------------------------------------------------------------------------
+   خلوت، کاربردی، ردیف کوتاه. الگوی جدول از آهن آنلاین. نوار کارخانه حذف شد،
+   جدول از صفحه‌ی اصلی رفت، صفحه‌ی «قیمت لحظه‌ای» و «مجله» اضافه شد.
+   =========================================================================== */
+
+/* ---- کمکی‌های عمومی ---- */
+.chip{display:inline-flex; align-items:center; gap:6px; min-height:36px; padding:0 14px;
+  border-radius:999px; background:var(--surface); border:1px solid var(--line);
+  color:var(--steel-ink); font-size:var(--t-xs); font-weight:700; white-space:nowrap}
+.chip:hover{border-color:var(--line-2); background:#fff}
+.chip.is-on{background:var(--steel-ink); color:#fff; border-color:var(--steel-ink)}
+.chiprow .chip{min-height:40px}
+.btn-sm{min-height:40px; padding:0 var(--s3); font-size:var(--t-xs)}
+.btn-lg2{min-height:56px; font-size:var(--t-base); padding:0 var(--s5); border-radius:var(--radius-lg)}
+.btn-cta{min-height:56px; font-size:var(--t-base); padding:0 var(--s5); border-radius:var(--radius-lg)}
+.dim{color:var(--ink-3); font-size:var(--t-xs)}
+.two-col{display:grid; grid-template-columns:1fr 1fr; gap:var(--s7)}
+.two-col > *{min-width:0}
+@media (max-width:900px){.two-col{grid-template-columns:1fr; gap:var(--s6)}}
+
+/* متن تمام‌عرض زیر عکس‌های کارخانه — قبلاً ۷۶ch بود و از عرض کارت‌ها کوتاه‌تر می‌افتاد */
+.prose.wide{max-width:none}
+.prose.cols-2{column-count:2; column-gap:var(--s7)}
+.prose.cols-2 p{break-inside:avoid}
+@media (max-width:900px){.prose.cols-2{column-count:1}}
+.prose ul.cols-3{column-count:3; column-gap:var(--s5)}
+@media (max-width:700px){.prose ul.cols-3{column-count:1}}
+
+/* ---- سه واحد: دو کارخانه + دفتر تهران ---- */
+.plants.plants-3{grid-template-columns:repeat(3,1fr); gap:var(--s4)}
+.plant figcaption b a{display:inline-flex; align-items:center; gap:6px; color:var(--steel-ink)}
+.plant figcaption b a:hover{color:var(--brand-dark); text-decoration:underline; text-underline-offset:3px}
+.plant figcaption b a svg{width:16px; height:16px}
+@media (max-width:1000px){.plants.plants-3{grid-template-columns:1fr 1fr}}
+@media (max-width:640px){.plants.plants-3{grid-template-columns:1fr}}
+
+/* ---- کارت‌های دسته در صفحه‌ی اصلی (بدون قیمت) ---- */
+.homecats{display:grid; grid-template-columns:repeat(3,1fr); gap:var(--s4)}
+.hc{display:flex; flex-direction:column; background:#fff; border:1.5px solid var(--line);
+  border-radius:var(--radius-lg); overflow:hidden; min-height:100%;
+  transition:border-color .18s ease, box-shadow .18s ease, transform .18s ease}
+.hc:hover{border-color:var(--line-2); box-shadow:var(--sh-2); transform:translateY(-2px)}
+.hc-img{display:block; aspect-ratio:16/9; background:var(--surface-2); overflow:hidden}
+.hc-img img{width:100%; height:100%; object-fit:cover}
+.hc-t{font-weight:800; color:var(--ink); font-size:var(--t-lg); padding:var(--s3) var(--s4) 0; line-height:1.4}
+.hc-n{font-size:var(--t-xs); color:var(--ink-2); padding:4px var(--s4) 0}
+.hc-pr{font-size:var(--t-sm); color:var(--ink-2); padding:6px var(--s4) 0}
+.hc-pr b{color:var(--ink)}
+.hc-go{display:inline-flex; align-items:center; gap:6px; margin-top:auto; padding:var(--s3) var(--s4) var(--s4);
+  font-size:var(--t-sm); font-weight:700; color:var(--brand-dark)}
+.hc-go svg{width:16px; height:16px}
+@media (max-width:1000px){.homecats{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:560px){.homecats{grid-template-columns:1fr}}
+.section-head .btn-cta{flex:none}
+
+/* ===========================================================================
+   جدول قیمت فشرده (.pt) — خلوت، کوتاه، کاربردی
+   =========================================================================== */
+.pt-card{background:#fff; border:1px solid var(--line); border-radius:var(--radius-lg);
+  box-shadow:var(--sh-1); margin-bottom:var(--s6); overflow:hidden}
+.pt-card:target{box-shadow:0 0 0 3px var(--brand-soft), 0 0 0 5px var(--brand)}
+.pt-head{display:flex; align-items:center; justify-content:space-between; gap:var(--s4);
+  padding:var(--s4) var(--s5); border-bottom:1px solid var(--line); background:var(--surface); flex-wrap:wrap}
+.pt-title{display:flex; align-items:baseline; gap:var(--s3); flex-wrap:wrap}
+.pt-title h2{font-size:var(--t-xl); margin:0}
+.pt-title h2 a{color:var(--ink)}
+.pt-title h2 a:hover{color:var(--brand-dark)}
+.pt-meta{font-size:var(--t-xs); color:var(--ink-2); font-weight:600}
+.pt-upd{display:inline-flex; align-items:center; gap:6px; font-size:var(--t-xs); color:var(--ink-2);
+  background:#fff; border:1px solid var(--line); border-radius:999px; padding:4px 12px; white-space:nowrap}
+.pt-upd svg{width:15px; height:15px; color:var(--fresh)}
+.pt-upd b{color:var(--ink)}
+.pt-wrap{position:relative; overflow-x:auto; overscroll-behavior-x:contain}   /* relative: keeps the abs-positioned .vh labels inside the scroller (RTL page overflowed at 1050–1290px) */
+table.pt{width:100%; border-collapse:collapse; font-size:var(--t-sm)}
+table.pt th{background:#fff; color:var(--ink-2); font-weight:700; font-size:var(--t-xs);
+  text-align:start; padding:10px 14px; border-bottom:1.5px solid var(--line-2); white-space:nowrap}
+table.pt td{padding:9px 14px; border-bottom:1px solid var(--line); vertical-align:middle; white-space:nowrap}
+table.pt tbody tr:nth-child(even){background:#F8F9FB}
+table.pt tbody tr:hover{background:var(--surface-2)}
+table.pt tbody tr:last-child td{border-bottom:0}
+table.pt .pt-name{white-space:normal; min-width:220px}
+table.pt .pt-name a{font-weight:700; color:var(--ink); line-height:1.5; display:inline-flex; align-items:center; min-height:32px}
+table.pt .pt-name a:hover{color:var(--brand-dark); text-decoration:underline; text-underline-offset:3px}
+table.pt .pt-name .review{margin-inline-start:8px; vertical-align:middle}
+table.pt .pt-spec{color:var(--ink); font-variant-numeric:tabular-nums}
+table.pt .pt-unit{color:var(--ink-2); font-size:var(--t-xs)}
+table.pt .pt-price{text-align:start}
+table.pt .pt-price b{font-size:19px; font-weight:900; color:var(--ink); letter-spacing:-.02em}
+table.pt .pt-delta .delta{font-size:13px; padding:1px 7px}
+table.pt .pt-act{text-align:end; width:1%}
+.pt-call,.pt-more{display:inline-grid; place-items:center; width:40px; height:40px; border-radius:var(--radius);
+  border:1.5px solid var(--line-2); color:var(--steel-ink); background:#fff; vertical-align:middle}
+.pt-call{border-color:var(--brand); color:var(--brand); margin-inline-end:6px}
+.pt-call:hover{background:var(--brand); color:#fff}
+.pt-more:hover{background:var(--surface)}
+.pt-call svg,.pt-more svg{width:19px; height:19px}
+.pt-foot{display:flex; align-items:center; justify-content:space-between; gap:var(--s4); flex-wrap:wrap;
+  padding:var(--s3) var(--s5); border-top:1px solid var(--line); font-size:var(--t-xs); color:var(--ink-2); background:var(--surface)}
+.pt-foot a{display:inline-flex; align-items:center; gap:6px; font-weight:700; color:var(--brand-dark); min-height:40px}
+.pt-foot a svg{width:15px; height:15px}
+.pt-foot:empty{display:none}
+@media (max-width:1100px){table.pt .pt-lo{display:none}}
+table.pt.pt-mini th,table.pt.pt-mini td{padding:8px 12px}
+table.pt.pt-mini .pt-price b{font-size:16px}
+.pt-wrap.sib{border:1px solid var(--line); border-radius:var(--radius-lg)}
+
+/* نوار فیلتر باریک روی جدول */
+.tfilter.slim{border:0; border-bottom:1px solid var(--line); border-radius:0; margin:0; padding:var(--s3) var(--s5); background:#fff}
+.tfilter.slim .tfilter-row{grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:var(--s2) var(--s3)}
+.tfilter.slim .ffield > span{font-size:13px}
+.tfilter.slim .ffield input,.tfilter.slim .ffield select{height:44px; font-size:var(--t-sm)}
+.tfilter.slim .tfilter-foot{margin-top:var(--s2)}
+.tfilter.slim .tfilter-foot output{font-size:var(--t-sm)}
+
+/* جدول تغییرات */
+table.pt.ch .ch-dir{width:1%}
+table.pt.ch .ch-dir svg{width:16px; height:16px; vertical-align:middle}
+table.pt.ch .ch-dir.up{color:var(--up)} table.pt.ch .ch-dir.down{color:var(--down)}
+table.pt.ch .ch-name{white-space:normal; min-width:220px}
+table.pt.ch .ch-name a{font-weight:700; color:var(--ink)}
+table.pt.ch .ch-cat{display:block; font-size:13px; color:var(--ink-2)}
+table.pt.ch .ch-price b{font-size:18px; font-weight:900}
+table.pt.ch .ch-diff .up{color:var(--up); font-weight:700} table.pt.ch .ch-diff .down{color:var(--down); font-weight:700}
+table.pt.ch .ch-when{color:var(--ink-2); font-size:var(--t-xs)}
+
+/* موبایل: جدول → کارت فشرده (نه کارت بلند قبلی) */
+@media (max-width:820px){
+  .pt-wrap{overflow:visible}
+  table.pt thead{display:none}
+  table.pt,table.pt tbody,table.pt tr,table.pt td{display:block; width:100%; white-space:normal}
+  table.pt tr{padding:var(--s3) var(--s4); border-bottom:1px solid var(--line); position:relative}
+  table.pt tbody tr:nth-child(even){background:#F8F9FB}
+  table.pt td{padding:2px 0; border:0; display:flex; justify-content:space-between; align-items:center; gap:var(--s3)}
+  table.pt td::before{content:attr(data-label); font-size:13px; color:var(--ink-2); font-weight:600}
+  table.pt .pt-name{display:block; padding-bottom:6px; min-width:0; padding-inline-end:96px}
+  table.pt .pt-name::before{display:none}
+  table.pt .pt-lo{display:flex}
+  table.pt .pt-price{padding-block:4px}
+  table.pt .pt-price b{font-size:20px}
+  table.pt .pt-act{position:absolute; top:var(--s3); inset-inline-end:var(--s4); width:auto; padding:0}
+  table.pt .pt-act::before{display:none}
+  table.pt.ch .ch-dir{position:absolute; top:var(--s3); inset-inline-end:var(--s4); width:auto; padding:0}
+  table.pt.ch .ch-dir::before,table.pt.ch .ch-name::before{display:none}
+  table.pt.ch .ch-name{display:block; padding-inline-end:32px}
+  table.pt.pt-mini td{display:flex}
+  table.pt.pt-mini td:first-child{display:block; padding-inline-end:0}
+  table.pt.pt-mini td:first-child::before{display:none}
+  table.pt.pt-mini td::before{content:attr(data-label)}
+}
+
+/* ===========================================================================
+   صفحه‌ی قیمت لحظه‌ای
+   =========================================================================== */
+.board-price{padding-block:var(--s6) var(--s5)}
+.board-price .board-head{margin-bottom:var(--s4)}
+.price-tools{display:grid; gap:var(--s3)}
+.gsearch{position:relative; display:flex; align-items:center; gap:var(--s3); background:#fff;
+  border:1.5px solid var(--line-2); border-radius:var(--radius-lg); padding:0 var(--s4); min-height:56px}
+.gsearch > svg{width:22px; height:22px; color:var(--steel-ink); flex:none}
+.gsearch input{flex:1; min-width:0; border:0; height:52px; font:inherit; font-size:var(--t-base); background:transparent; color:var(--ink)}
+.gsearch input:focus{outline:none}
+.gsearch:focus-within{border-color:var(--brand); box-shadow:0 0 0 3px var(--brand-soft)}
+.gsearch output{font-size:var(--t-xs); color:var(--ink-2); font-weight:700; white-space:nowrap}
+.price-layout{display:grid; grid-template-columns:1fr 280px; gap:var(--s6); align-items:start}
+.price-layout > *{min-width:0}
+.price-section{padding-block:var(--s6)}
+.side-box{background:#fff; border:1px solid var(--line); border-radius:var(--radius-lg); padding:var(--s4)}
+.side-box.sticky{position:sticky; top:72px}
+.side-box h3{display:flex; align-items:center; gap:8px; font-size:var(--t-base); margin-bottom:var(--s3)}
+.side-box h3 svg{width:18px; height:18px; color:var(--steel-ink)}
+.jump{display:grid; gap:2px; margin-bottom:var(--s4)}
+.jump a{display:flex; align-items:center; justify-content:space-between; gap:8px; min-height:42px;
+  padding:0 var(--s3); border-radius:var(--radius); font-size:var(--t-sm); font-weight:600; color:var(--ink)}
+.jump a:hover{background:var(--surface); color:var(--brand-dark)}
+.jump a .num{font-size:13px; color:var(--ink-3); background:var(--surface); border-radius:999px; padding:0 8px}
+.side-call{display:flex; align-items:center; gap:var(--s3); background:var(--brand-soft); border:2px solid var(--brand);
+  border-radius:var(--radius-lg); padding:var(--s3) var(--s4); min-height:68px; margin-bottom:var(--s3)}
+.side-call svg{width:26px; height:26px; color:var(--brand); flex:none}
+.side-call .l{display:block; font-size:13px; font-weight:600; color:var(--brand-dark)}
+.side-call .n{display:block; font-size:var(--t-xl); font-weight:900; color:var(--brand-dark); line-height:1.15}
+.side-call:hover{background:#fff}
+.side-wa{display:inline-flex; align-items:center; gap:8px; min-height:44px; padding:0 var(--s3); width:100%;
+  border:1.5px solid var(--line-2); border-radius:var(--radius); font-size:var(--t-sm); font-weight:700; color:var(--steel-ink)}
+.side-wa svg{width:20px; height:20px; color:#0A6E44}
+.side-wa:hover{background:var(--surface)}
+.side-note{font-size:13px; color:var(--ink-2); line-height:1.7; margin-top:var(--s3)}
+.side-more{display:inline-flex; align-items:center; gap:6px; margin-top:var(--s3); font-size:var(--t-sm); font-weight:700; color:var(--brand-dark); min-height:40px}
+.side-more svg{width:15px; height:15px}
+@media (max-width:1000px){
+  .price-layout{grid-template-columns:1fr}
+  .price-side{order:-1}
+  .side-box.sticky{position:static}
+  .jump{grid-template-columns:repeat(auto-fill,minmax(180px,1fr))}
+}
+
+/* ---- صفحه‌ی دسته: شبکه‌ی بالای صفحه با عکس ---- */
+.board-grid{display:grid; grid-template-columns:1fr auto; gap:var(--s4); align-items:stretch}
+.board-grid > *{min-width:0}
+.board-photos{display:grid; grid-template-columns:repeat(3,110px); gap:8px; align-content:start}
+.board-photos .ph{display:block; aspect-ratio:1; border-radius:var(--radius); overflow:hidden; border:1px solid var(--board-line); background:#fff}
+.board-photos .ph img{width:100%; height:100%; object-fit:cover; transition:transform .2s ease}
+.board-photos .ph:hover img{transform:scale(1.05)}
+@media (max-width:1000px){.board-grid{grid-template-columns:1fr}.board-photos{grid-template-columns:repeat(3,1fr)}.board-photos .ph{aspect-ratio:4/3}}
+
+/* ===========================================================================
+   صفحه‌ی محصول — خلوت
+   =========================================================================== */
+.product{padding-block:var(--s6)}
+.pgrid{display:grid; grid-template-columns:minmax(0,460px) 1fr; gap:var(--s7); align-items:start}
+.pgrid > *{min-width:0}
+.gallery-main{aspect-ratio:4/3; border:1px solid var(--line); border-radius:var(--radius-lg); overflow:hidden; background:var(--surface)}
+.gallery-main img{width:100%; height:100%; object-fit:cover}
+.gallery-thumbs{display:flex; gap:8px; margin-top:8px}
+.thumb{width:76px; height:76px; padding:0; border:1.5px solid var(--line); border-radius:var(--radius); overflow:hidden; background:#fff; cursor:pointer}
+.thumb img{width:100%; height:100%; object-fit:cover}
+.thumb.is-on{border-color:var(--brand)}
+.thumb:focus-visible{outline:none; box-shadow:var(--ring)}
+.gallery-note{font-size:13px; color:var(--ink-3); margin-top:8px}
+.pinfo h1{font-size:var(--t-2xl); margin:var(--s3) 0 var(--s2); line-height:1.35}
+.plede{color:var(--ink-2); font-size:var(--t-sm); margin-bottom:var(--s4)}
+.pcard{background:var(--board); border:1px solid var(--board-line); border-radius:var(--radius-lg); padding:var(--s4) var(--s5); margin-bottom:var(--s4)}
+.pcard-price .k{display:block; font-size:var(--t-xs); color:var(--ink-2); font-weight:600}
+.pcard-price .v{display:block; margin-top:2px}
+.pcard-price .v b{font-size:var(--t-3xl); font-weight:900; color:var(--ink); letter-spacing:-.02em; line-height:1.15}
+.pcard-price .u{font-size:var(--t-sm); color:var(--ink-2); font-weight:600}
+.pcard-meta{display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-top:6px; font-size:var(--t-xs); color:var(--ink-2)}
+.pcard-prev{color:var(--ink-3)}
+.pcard-upd{margin-top:var(--s3); display:flex; align-items:center; gap:8px; flex-wrap:wrap}
+.pcard-cta{display:flex; gap:var(--s2); flex-wrap:wrap; margin-top:var(--s4)}
+.pcard-cta .btn-call .num{font-weight:900; margin-inline-start:6px}
+.pcard-note{font-size:13px; color:var(--ink-2); margin-top:var(--s3)}
+.callout.slim{padding:var(--s3) var(--s4); margin:var(--s3) 0 0; font-size:var(--t-sm)}
+.kvgrid{display:grid; grid-template-columns:1fr 1fr; gap:8px}
+.kv{display:flex; justify-content:space-between; align-items:center; gap:var(--s3); background:#fff; border:1px solid var(--line);
+  border-radius:var(--radius); padding:10px var(--s3); min-height:48px}
+.kv .k{font-size:13px; color:var(--ink-2); font-weight:600}
+.kv .v{font-weight:800; color:var(--ink); font-size:var(--t-sm); text-align:end}
+.kv .v a{color:var(--brand-dark); text-decoration:underline; text-underline-offset:3px}
+.tips{display:grid; gap:var(--s3)}
+.tips li{position:relative; padding-inline-start:var(--s5); line-height:1.8; color:var(--ink); font-size:var(--t-sm)}
+.tips li::before{content:""; position:absolute; inset-inline-start:4px; top:12px; width:8px; height:8px; border-radius:2px; background:var(--brand)}
+.tips li a{color:var(--brand-dark); font-weight:700; text-decoration:underline; text-underline-offset:3px}
+.guidelink{display:inline-flex; align-items:center; gap:6px; margin-top:var(--s4); font-weight:700; color:var(--brand-dark); min-height:44px}
+.guidelink svg{width:16px; height:16px}
+@media (max-width:900px){.pgrid{grid-template-columns:1fr; gap:var(--s5)}}
+@media (max-width:560px){.kvgrid{grid-template-columns:1fr}.pcard-price .v b{font-size:var(--t-2xl)}}
+
+/* ===========================================================================
+   مجله — به سبک دیجی‌کالا مگ
+   =========================================================================== */
+.mag-head{display:flex; align-items:flex-end; justify-content:space-between; gap:var(--s5); flex-wrap:wrap; margin-bottom:var(--s5)}
+.mag-head h1{font-size:var(--t-3xl); font-weight:900}
+.mag-head .lede{color:var(--ink-2); font-size:var(--t-base); margin-top:var(--s2); max-width:60ch}
+.mag-chips{display:flex; gap:8px; flex-wrap:wrap}
+.mag-img{display:block; aspect-ratio:16/9; overflow:hidden; background:var(--surface-2)}
+.mag-img img{width:100%; height:100%; object-fit:cover; transition:transform .25s ease}
+article:hover .mag-img img{transform:scale(1.03)}
+.mag-meta{display:flex; align-items:center; gap:6px; font-size:13px; color:var(--ink-3); margin-top:auto; padding-top:8px}
+.mag-meta svg{width:14px; height:14px}
+.mag-meta i{font-style:normal; margin:0 2px}
+.mag-txt{display:flex; flex-direction:column; align-items:flex-start; gap:6px; padding:var(--s3) var(--s4) var(--s4)}
+.mag-txt h2,.mag-txt h3{margin:0; line-height:1.45; color:var(--ink)}
+.mag-txt h2 a,.mag-txt h3 a{color:inherit}
+.mag-txt h2 a:hover,.mag-txt h3 a:hover{color:var(--brand-dark)}
+.mag-txt p{color:var(--ink-2); font-size:var(--t-sm); line-height:1.75}
+.mag-txt .chip{min-height:30px; padding:0 10px; font-size:13px}
+.mag-card,.mag-feature,.mag-sm{background:#fff; border:1px solid var(--line); border-radius:var(--radius-lg); overflow:hidden; display:flex; flex-direction:column;
+  transition:box-shadow .18s ease, transform .18s ease}
+.mag-card:hover,.mag-feature:hover,.mag-sm:hover{box-shadow:var(--sh-2); transform:translateY(-2px)}
+.mag-card h3{font-size:var(--t-lg); font-weight:800}
+.mag-feature h2{font-size:var(--t-2xl); font-weight:900}
+.mag-feature .mag-txt{padding:var(--s4) var(--s5) var(--s5)}
+.mag-sm{flex-direction:row; align-items:stretch}
+.mag-sm .mag-img{flex:0 0 150px; aspect-ratio:auto}
+.mag-sm h3{font-size:var(--t-base); font-weight:800}
+.mag-sm .mag-txt{padding:var(--s3)}
+.mag-hero{display:grid; grid-template-columns:1.4fr 1fr; gap:var(--s4)}
+.mag-hero-side{display:grid; gap:var(--s3); align-content:stretch}
+.mag-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:var(--s4)}
+.mag-grid > *{min-width:0}
+.mag-home-grid{display:grid; grid-template-columns:1.3fr 1fr; gap:var(--s4)}
+.mag-home-side{display:grid; gap:var(--s3)}
+@media (max-width:1000px){.mag-hero,.mag-home-grid{grid-template-columns:1fr}.mag-grid{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:620px){.mag-grid{grid-template-columns:1fr}.mag-sm .mag-img{flex-basis:120px}}
+
+/* مقاله */
+.post-head{padding-block:var(--s6) var(--s4); background:var(--surface); border-bottom:1px solid var(--line)}
+.container.narrow{max-width:960px}
+.post-head h1{font-size:var(--t-3xl); font-weight:900; line-height:1.35; margin:var(--s3) 0}
+.post-lede{color:var(--ink-2); font-size:var(--t-lg); line-height:1.75; max-width:70ch}
+.post-meta{display:flex; flex-wrap:wrap; gap:var(--s4); margin-top:var(--s4); font-size:var(--t-xs); color:var(--ink-2)}
+.post-meta span{display:inline-flex; align-items:center; gap:6px}
+.post-meta svg{width:16px; height:16px}
+.post-hero{margin:var(--s5) 0 0; border-radius:var(--radius-lg); overflow:hidden; border:1px solid var(--line); background:var(--surface-2)}
+.post-hero img{width:100%; height:auto; max-height:520px; object-fit:cover}
+.post-grid{display:grid; grid-template-columns:minmax(0,1fr) 320px; gap:var(--s7); padding-block:var(--s6); align-items:start}
+.post-grid > *{min-width:0}
+.post-side{position:sticky; top:72px; display:grid; gap:var(--s4)}
+.toc{background:#fff; border:1px solid var(--line); border-radius:var(--radius-lg); padding:var(--s4)}
+.toc h3{display:flex; align-items:center; gap:8px; font-size:var(--t-sm); margin-bottom:var(--s2)}
+.toc h3 svg{width:16px; height:16px}
+.toc ol{list-style:none; margin:0; padding:0; display:grid; gap:2px}
+.toc a{display:block; padding:6px 10px; border-radius:6px; font-size:var(--t-xs); color:var(--ink-2); line-height:1.6}
+.toc a:hover{background:var(--surface); color:var(--brand-dark)}
+.relprod{display:flex; align-items:center; gap:var(--s3); padding:10px; border:1px solid var(--line); border-radius:var(--radius); margin-bottom:8px; color:var(--ink)}
+.relprod:hover{border-color:var(--brand); background:var(--brand-soft)}
+.relprod-img{flex:0 0 64px; width:64px; height:64px; border-radius:8px; overflow:hidden; background:var(--surface-2)}
+.relprod-img img{width:100%; height:100%; object-fit:cover}
+.relprod-txt{flex:1; min-width:0; display:grid; gap:2px}
+.relprod-txt b{font-size:var(--t-sm); font-weight:800}
+.relprod-txt span{font-size:13px; color:var(--ink-2)}
+.relprod-pr b{font-size:13px; color:var(--ink)}
+.relprod > svg{width:16px; height:16px; color:var(--ink-3); flex:none}
+.article-body{max-width:76ch; font-size:var(--t-base); line-height:1.95; color:var(--ink)}
+.article-body h2{font-size:var(--t-xl); margin:var(--s6) 0 var(--s3); scroll-margin-top:80px}
+.article-body h3{font-size:var(--t-lg); margin:var(--s5) 0 var(--s2)}
+.article-body h4{font-size:var(--t-base); margin:var(--s4) 0 var(--s2)}
+.article-body p{margin:0 0 var(--s4)}
+.article-body ul,.article-body ol{margin:0 0 var(--s4); padding-inline-start:var(--s5)}
+.article-body ul{list-style:disc} .article-body ol{list-style:decimal}
+.article-body li{margin-bottom:6px}
+.article-body a{color:var(--brand-dark); text-decoration:underline; text-underline-offset:3px; font-weight:600}
+.article-body img{border-radius:var(--radius-lg); margin:var(--s3) auto var(--s4); max-width:100%; height:auto}
+.article-body table{width:100%; border-collapse:collapse; font-size:var(--t-sm); margin:0 0 var(--s4); display:block; overflow-x:auto}
+.article-body th,.article-body td{border:1px solid var(--line); padding:8px 12px; text-align:start; white-space:nowrap}
+.article-body th{background:var(--surface-2); font-weight:800}
+.article-body blockquote{border-inline-start:4px solid var(--brand); background:var(--surface); padding:var(--s3) var(--s4); margin:0 0 var(--s4); border-radius:var(--radius)}
+.post-tags{display:flex; flex-wrap:wrap; gap:8px; margin-top:var(--s6)}
+.tag{display:inline-flex; align-items:center; gap:6px; min-height:34px; padding:0 12px; border-radius:999px; background:var(--surface); border:1px solid var(--line); font-size:13px; color:var(--ink-2)}
+.tag svg{width:13px; height:13px}
+@media (max-width:1000px){.post-grid{grid-template-columns:1fr; gap:var(--s5)}.post-side{position:static}.post-head h1{font-size:var(--t-2xl)}}
+
+/* ---- تماس: نقشه‌ی دفتر تهران ---- */
+.maplink{display:block; margin-top:var(--s4); border:1px solid var(--line); border-radius:var(--radius-lg); overflow:hidden; background:#fff}
+.maplink img{width:100%; aspect-ratio:16/8; object-fit:cover; display:block}
+.maplink span{display:flex; align-items:center; gap:8px; padding:var(--s3) var(--s4); font-weight:700; color:var(--steel-ink); min-height:48px}
+.maplink span svg{width:18px; height:18px}
+.maplink:hover span{color:var(--brand-dark)}
+
+/* ---- پاصفحه: سه ستون ---- */
+.fgrid.fgrid-3{grid-template-columns:1.2fr .8fr 1.2fr}
+.flinks{display:grid; gap:2px}
+.flinks a{min-height:40px; color:var(--ink-2); font-weight:600}
+@media (max-width:900px){.fgrid.fgrid-3{grid-template-columns:1fr 1fr}}
+@media (max-width:640px){.fgrid.fgrid-3{grid-template-columns:1fr}}
+
+/* درباره: اعداد ۶ تایی */
+.factnums .fact .v{font-size:var(--t-xl)}
+
+/* بخش مجله در صفحه‌ی اصلی روی زمینه‌ی روشن */
+.mag-home .mag-card,.mag-home .mag-feature,.mag-home .mag-sm{border-color:var(--line)}
+
+/* ---- اصلاحات پس از اسکرین‌شات (نسخه ۱۹) ---- */
+/* لینک سرتیتر بخش‌ها با رنگ --steel تقریباً سفید و نامرئی بود */
+.section-head a{color:var(--steel-ink)}
+/* قرمز فقط برای تماس: لینک‌های دیگر سرمه‌ای */
+.hc-go,.pt-foot a,.guidelink,.side-more,.tips li a,.kv .v a,.catcard .go{color:var(--steel-ink)}
+.hc-go:hover,.pt-foot a:hover,.guidelink:hover,.side-more:hover{color:var(--brand-dark)}
+/* منوی اصلی در ۱۴۴۰ جا شود */
+.nav-scroll a{padding:0 12px; font-size:15px}
+/* جدول: ستون واحد زیر قیمت رفت */
+.pt-u{display:block; font-size:12px; color:var(--ink-3); font-weight:600; line-height:1.2}
+table.pt td{padding:8px 12px}
+table.pt th{padding:9px 12px}
+.price-layout table.pt .pt-lo{display:none}
+@media (min-width:1360px){.price-layout table.pt .pt-lo{display:table-cell}}
+@media (min-width:1001px){.price-layout{grid-template-columns:1fr 260px}}
+.pt-call{margin-inline-end:0}
+/* دکمه‌های صفحه‌ی محصول در موبایل تمام‌عرض */
+@media (max-width:600px){
+  .pcard-cta .btn{flex:1 1 100%; white-space:normal; text-align:center}
+}
+/* موبایل: ردیف جدول فشرده — مشخصات در دو ستون */
+@media (max-width:820px){
+  table.pt tr{display:grid; grid-template-columns:1fr 1fr; gap:2px 12px; align-items:center}
+  table.pt .pt-name{grid-column:1/-1; padding-inline-end:52px; padding-bottom:4px}
+  table.pt .pt-spec{font-size:14px}
+  table.pt .pt-spec::before{font-size:12px}
+  table.pt .pt-price{grid-column:1/-1; display:flex; justify-content:space-between; align-items:baseline; border-top:1px dashed var(--line); margin-top:4px; padding-top:8px}
+  table.pt .pt-price b{font-size:20px}
+  table.pt .pt-u{display:inline; margin-inline-start:6px}
+  table.pt .pt-delta{grid-column:1/-1; justify-content:flex-start; gap:8px}
+  table.pt .pt-delta::before{content:"نوسان نسبت به آخرین ثبت"}
+  table.pt .pt-act{grid-column:auto}
+  table.pt.ch tr{grid-template-columns:1fr}
+  table.pt.pt-mini tr{grid-template-columns:1fr 1fr}
+  table.pt.pt-mini td:first-child{grid-column:1/-1}
+  table.pt.pt-mini .pt-price{grid-column:1/-1}
+}
+/* موبایل: جلوگیری از پهن‌شدن ستون‌های 1fr با محتوای نشکن */
+@media (max-width:820px){
+  table.pt{width:100%; min-width:0; table-layout:fixed}
+  table.pt tr{grid-template-columns:minmax(0,1fr) minmax(0,1fr); width:100%; min-width:0}
+  table.pt td{min-width:0; overflow-wrap:anywhere}
+  table.pt.ch tr{grid-template-columns:minmax(0,1fr)}
+  table.pt.pt-mini tr{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+}
+@media (max-width:820px){
+  table.pt.ch td{overflow-wrap:normal}
+  table.pt.ch td.ch-diff{white-space:nowrap}
+  table.pt.ch td.ch-diff::before{white-space:normal}
+}
+/* ناحیه‌ی لمس: هیچ لینک یا دکمه‌ای زیر ۴۴px */
+.chip{min-height:44px}
+.mag-txt .chip{min-height:36px}
+.pt-call{width:44px; height:44px}
+.toc a{min-height:40px; display:flex; align-items:center}
+.jump a{min-height:44px}
+.flinks a{min-height:44px; display:inline-flex; align-items:center}
+
+/* ---- نسخه ۲۰: بازخورد کارفرما ---- */
+/* کارت شاخص مجله: متن روی عکس باید بی‌زحمت خوانده شود */
+.mag-feature .mag-txt{background:linear-gradient(to top, rgba(11,18,32,.94) 0%, rgba(11,18,32,.82) 45%, rgba(11,18,32,.35) 80%, rgba(11,18,32,0) 100%);
+  padding-top:var(--s8)}
+.mag-feature h2,.mag-feature h2 a{color:#fff; text-shadow:0 2px 8px rgba(0,0,0,.6)}
+.mag-feature p{color:#fff; opacity:.96; text-shadow:0 1px 4px rgba(0,0,0,.6); font-weight:500}
+.mag-feature .mag-meta{color:#fff; opacity:.9}
+.mag-feature .chip{background:rgba(255,255,255,.22); color:#fff; border-color:rgba(255,255,255,.45); backdrop-filter:blur(2px)}
+/* صفحه‌ی قیمت: بدون نوار کناری، جدول تمام‌عرض */
+.price-full{display:block}
+@media (min-width:1100px){table.pt .pt-lo{display:table-cell}}
+.price-full table.pt th,.price-full table.pt td{padding:10px 16px}
+.price-full table.pt .pt-price b{font-size:20px}
+.price-full .tnote{margin-top:var(--s2)}
+
+/* قرمز فقط برای تماس: تیتر جدول تغییرات سرمه‌ای */
+.ch-card .pt-title h2{color:var(--ink)}
+
+/* ===========================================================================
+   نسخه ۲۱ — نمودار قیمت، کارشناسان فروش، دیدگاه و امتیاز، ماشین‌حساب
+   =========================================================================== */
+
+/* ---- نمودار ---- */
+.chart{background:#fff; border:1px solid var(--line); border-radius:var(--radius-lg); padding:var(--s4) var(--s5)}
+.chart-head{display:flex; align-items:center; justify-content:space-between; gap:var(--s3); flex-wrap:wrap; margin-bottom:var(--s3)}
+.chart-head h3,.chart-title{font-size:var(--t-lg); font-weight:800; color:var(--ink); margin:0}
+.chart-head .dim{display:block; font-size:var(--t-xs)}
+.chart-ranges{display:flex; gap:4px; background:var(--surface); border:1px solid var(--line); border-radius:999px; padding:3px}
+.chart-ranges button{min-height:36px; padding:0 14px; border:0; border-radius:999px; background:transparent;
+  font:inherit; font-size:13px; font-weight:700; color:var(--ink-2)}
+.chart-ranges button.is-on{background:var(--steel-ink); color:#fff}
+.chart-svg svg{width:100%; height:auto; display:block}
+.chart-stats{display:flex; gap:var(--s5); flex-wrap:wrap; margin-top:var(--s3); padding-top:var(--s3); border-top:1px solid var(--line)}
+.chart-stats span{display:flex; flex-direction:column; gap:2px}
+.chart-stats i{font-style:normal; font-size:var(--t-xs); color:var(--ink-2)}
+.chart-stats b{font-size:var(--t-base); font-weight:900; color:var(--ink)}
+.chart-stats b.up{color:var(--up)} .chart-stats b.down{color:var(--down)}
+.chart-note{font-size:13px; color:var(--ink-2); line-height:1.7; margin-top:var(--s3)}
+.chart-dialog{border:0; border-radius:var(--radius-lg); padding:0; width:min(760px,94vw); box-shadow:var(--sh-2)}
+.chart-dialog::backdrop{background:rgba(11,18,32,.55)}
+.chart-dialog-in{position:relative}
+.chart-dialog .chart{border:0}
+.chart-close{position:absolute; top:10px; inset-inline-start:10px; width:40px; height:40px; border-radius:50%;
+  border:1px solid var(--line); background:#fff; font-size:22px; line-height:1; color:var(--ink-2); z-index:2}
+.chart-close:hover{background:var(--surface)}
+.pt-chart{display:inline-grid; place-items:center; width:40px; height:40px; border-radius:var(--radius);
+  border:1.5px solid var(--line-2); background:#fff; color:var(--steel-ink); margin-inline-end:6px; padding:0}
+.pt-chart:hover{background:var(--surface); border-color:var(--steel-ink)}
+.pt-chart svg{width:18px; height:18px}
+table.pt.ch .pt-act{width:1%}
+
+/* ---- کارشناسان ---- */
+.experts{background:#fff; border:1px solid var(--line); border-radius:var(--radius-lg); padding:var(--s4)}
+.experts h3{display:flex; align-items:center; gap:8px; font-size:var(--t-base); margin-bottom:var(--s3)}
+.experts h3 svg{width:18px; height:18px; color:var(--steel-ink)}
+.experts .dim{font-size:13px; line-height:1.7; display:block; margin-top:var(--s2)}
+.expert{display:flex; gap:var(--s3); align-items:flex-start; padding:var(--s3) 0; border-top:1px solid var(--line)}
+.experts .expert:first-of-type{border-top:0; padding-top:0}
+.expert img{width:64px; height:64px; border-radius:var(--radius); flex:none; background:var(--surface-2)}
+.expert-t{min-width:0; display:grid; gap:2px}
+.expert-t b{font-size:var(--t-sm); font-weight:800; color:var(--ink)}
+.expert-t > span{font-size:13px; color:var(--ink-2)}
+.expert-links{display:flex; flex-wrap:wrap; gap:8px; margin-top:4px}
+.expert-tel{display:inline-flex; align-items:center; gap:6px; min-height:40px; padding:0 12px; border-radius:var(--radius);
+  background:var(--brand-soft); border:1.5px solid var(--brand); color:var(--brand-dark); font-weight:800; font-size:var(--t-sm)}
+.expert-tel em{font-style:normal; font-weight:600; font-size:12px; color:var(--brand-dark)}
+.expert-tel:hover{background:#fff}
+.expert-wa{display:inline-flex; align-items:center; gap:6px; min-height:40px; padding:0 12px; border-radius:var(--radius);
+  border:1.5px solid var(--line-2); font-size:13px; font-weight:700; color:var(--steel-ink)}
+.expert-wa svg{width:17px; height:17px; color:#0A6E44}
+.expert-wa:hover{background:var(--surface)}
+.experts-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:var(--s3)}
+.experts-grid .expert{background:#fff; border:1px solid var(--line); border-radius:var(--radius-lg); padding:var(--s4); border-top:1px solid var(--line)}
+@media (max-width:1100px){.experts-grid{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:600px){.experts-grid{grid-template-columns:1fr}}
+.cat-layout{display:grid; grid-template-columns:minmax(0,1fr) 280px; gap:var(--s5); align-items:start}
+.cat-side{position:sticky; top:72px}
+@media (max-width:1100px){.cat-layout{grid-template-columns:1fr}.cat-side{position:static}}
+
+/* ---- دیدگاه و امتیاز ---- */
+.stars{display:inline-flex; gap:2px; direction:ltr; color:#E8CD94; font-size:15px; line-height:1; vertical-align:middle}
+.stars i{font-style:normal; color:#D9E0E8}
+.stars i.on{color:#E0A526}
+.stars.sm{font-size:13px} .stars.lg{font-size:22px}
+.reviews-grid{display:grid; grid-template-columns:260px minmax(0,1fr) 320px; gap:var(--s5); align-items:start}
+@media (max-width:1200px){.reviews-grid{grid-template-columns:1fr 1fr}.rform{grid-column:1/-1}}
+@media (max-width:760px){.reviews-grid{grid-template-columns:1fr}}
+.rsummary{background:#fff; border:1px solid var(--line); border-radius:var(--radius-lg); padding:var(--s4)}
+.ravg{display:grid; gap:4px; justify-items:center; padding-bottom:var(--s3); margin-bottom:var(--s3); border-bottom:1px solid var(--line)}
+.ravg b{font-size:40px; font-weight:900; color:var(--ink); line-height:1}
+.ravg > span{font-size:var(--t-xs); color:var(--ink-2)}
+.rdist{display:flex; align-items:center; gap:8px; font-size:13px; color:var(--ink-2); margin-bottom:4px}
+.rbar{flex:1; height:8px; border-radius:4px; background:var(--surface-2); overflow:hidden}
+.rbar i{display:block; height:100%; background:#E0A526}
+.rsummary .dim{font-size:12px; line-height:1.7; margin-top:var(--s3)}
+.rlist{display:grid; gap:var(--s3)}
+.review{background:#fff; border:1px solid var(--line); border-radius:var(--radius-lg); padding:var(--s4)}
+.review header{display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:6px}
+.review header b{font-size:var(--t-sm); color:var(--ink)}
+.review p{font-size:var(--t-sm); color:var(--ink-2); line-height:1.85; margin:0}
+.badge-sample{font-size:11px; font-weight:700; color:#6B4708; background:var(--fresh-soft);
+  border:1px solid #E8CD94; border-radius:999px; padding:1px 8px}
+.rform{background:var(--surface); border:1px solid var(--line); border-radius:var(--radius-lg); padding:var(--s4)}
+.rform h3{font-size:var(--t-base); margin-bottom:var(--s3)}
+.rform .cform-grid{grid-template-columns:1fr; gap:var(--s3)}
+.rform .dim{font-size:12px; margin-top:var(--s2); line-height:1.7}
+.star-input{display:flex; flex-direction:row-reverse; justify-content:flex-end; gap:2px; margin-bottom:var(--s3)}
+.star-input input{position:absolute; opacity:0; width:1px; height:1px}
+.star-input label{font-size:28px; line-height:1; color:#D9E0E8; cursor:pointer; padding:2px 4px; min-height:44px; display:inline-flex; align-items:center}
+.star-input label.is-on{color:#E0A526}
+.star-input input:focus-visible + label{outline:3px solid var(--steel-ink); outline-offset:2px; border-radius:4px}
+
+/* ---- ماشین‌حساب ---- */
+.calc[hidden]{display:none}
+.calc{background:#fff; border:1px solid var(--line); border-radius:var(--radius-lg); padding:var(--s4) var(--s5)}
+.calc-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:var(--s3)}
+.calc-basis{font-size:13px; color:var(--ink-2); margin-top:var(--s3)}
+.calc-out{margin-top:var(--s3); border-top:1px solid var(--line); padding-top:var(--s3); display:grid; gap:6px}
+.calc-out[hidden]{display:none}
+.calc-row{display:flex; align-items:baseline; justify-content:space-between; gap:var(--s4); font-size:var(--t-sm); color:var(--ink-2)}
+.calc-row b{color:var(--ink); font-weight:800}
+.calc-row.total{border-top:1px dashed var(--line-2); margin-top:4px; padding-top:8px; font-size:var(--t-base)}
+.calc-row.total b{font-size:var(--t-lg); font-weight:900}
+.calc .dim{font-size:12px; line-height:1.75; margin-top:var(--s3); display:block}
+
+/* ---- اصلاحات پس از بازبینی تصویری نسخه ۲۱ ---- */
+/* جعبه‌ی کارشناسان چسبان نباید روی جدول بیفتد */
+.cat-side{align-self:start; z-index:1}
+@media (min-width:1101px){.cat-side{position:sticky; top:84px}}
+/* ورودی امتیاز: چپ‌به‌راست تا ستاره‌ی اول سمت چپ پر شود */
+.star-input{direction:ltr; justify-content:flex-start; flex-direction:row-reverse}
+
+/* ---- راهنمای فنی دسته (نسخه ۲۲) ---- */
+/* min(340px,100%) به‌جای 340px ثابت: روی صفحه‌ی ۳۲۰ پیکسلی، کف ۳۴۰
+   از قاب بیرون می‌زد و مرورگر کل صفحه را کوچک‌نمایی می‌کرد. */
+.deepgrid{display:grid; grid-template-columns:repeat(auto-fit,minmax(min(340px,100%),1fr)); gap:var(--s5)}
+.deepgrid > *{min-width:0}
+.deep{background:#fff; border:1px solid var(--line); border-radius:var(--radius-lg); padding:var(--s5)}
+.deep h2{font-size:var(--t-lg); margin:0 0 var(--s3); color:var(--steel-ink)}
+.deep p{font-size:var(--t-sm); line-height:1.95; color:var(--ink); margin-bottom:var(--s3)}
+.deep p:last-child{margin-bottom:0}
+.deep b{color:var(--steel-ink); font-weight:800}
+
+/* ---- نشان برند واقعی در سرصفحه (نسخه ۲۳) ---- */
+.brand .mark{width:44px; height:44px; object-fit:contain; flex:none}
+@media (max-width:640px){.brand .mark{width:38px; height:38px}}
+
+/* ---- واحد فروش ---- */
+.unit-grid{display:grid; grid-template-columns:1.5fr 1fr; gap:var(--s6); align-items:start}
+.unit-grid > *{min-width:0}
+.unit-promise{grid-template-columns:1fr; gap:var(--s4)}
+.unit-rep{background:#fff; border:1px solid var(--line); border-radius:var(--radius-lg); padding:var(--s5)}
+.unit-rep h3{display:flex; align-items:center; gap:8px; font-size:var(--t-base); margin-bottom:var(--s3)}
+.unit-rep h3 svg{width:18px; height:18px; color:var(--steel-ink)}
+.unit-rep .expert{border-top:0; padding-top:0}
+.unit-call{width:100%; margin-top:var(--s3); justify-content:center}
+.unit-rep-wide{max-width:520px; margin-top:var(--s3)}
+@media (max-width:900px){.unit-grid{grid-template-columns:1fr; gap:var(--s5)}}
+
+/* ---- تولتیپ نمودار (نسخه ۲۳) ---- */
+.chart-svg{position:relative}
+.chart-svg svg{cursor:crosshair}
+.chart-svg svg:focus-visible{outline:2px solid var(--steel-ink); outline-offset:2px; border-radius:6px}
+.chart-tip{position:absolute; z-index:3; pointer-events:none; opacity:0; transition:opacity .12s ease;
+  transform:translate(8px, -50%); background:#fff; border:1px solid var(--line-2);
+  border-radius:var(--radius); box-shadow:var(--sh-2); padding:8px 12px; min-width:132px;
+  font-size:13px; line-height:1.6; white-space:nowrap}
+.chart-tip.flip-x{transform:translate(calc(-100% - 8px), -50%)}
+.chart-tip.flip-y{transform:translate(8px, 8px)}
+.chart-tip.flip-x.flip-y{transform:translate(calc(-100% - 8px), 8px)}
+.chart-tip b{display:inline-block; font-size:17px; font-weight:900; color:var(--ink);
+  font-variant-numeric:tabular-nums; direction:ltr}
+.chart-tip .u{font-size:12px; color:var(--ink-2); font-weight:600}
+.chart-tip i{display:block; font-style:normal; font-size:12px; color:var(--ink-2); margin-top:2px}
+.chart-tip .up{color:var(--up); font-weight:700}
+.chart-tip .down{color:var(--down); font-weight:700}
+.chart-tip .flat{color:var(--ink-3)}
+.chart-tip span{display:block; font-size:12px; margin-top:3px; direction:ltr; text-align:right}
+
+/* ── نسخه ۲۳ب: اصلاح سرریز در موبایل ─────────────────────────────────────
+   دکمه‌ی «تماس با واحد فروش» در ۳۹۰px عرض، شماره را از لبه بیرون می‌زد
+   (رقم اول و آیکن بریده می‌شد) چون متن و شماره در یک خط جا نمی‌شدند.
+   حالا در موبایل دو خطه می‌شود و شماره وسط‌چین زیر برچسب می‌نشیند. */
+@media (max-width:520px){
+  .unit-call{flex-wrap:wrap; row-gap:2px; line-height:1.3;
+    padding-inline:var(--s3); font-size:var(--t-sm); text-align:center}
+  .unit-call .num{flex-basis:100%; font-size:var(--t-lg)}
+  /* داخلی زیر شماره، نه بالای آن: در RTL با isolate بالا می‌پرید. */
+  .expert-tel{flex-wrap:wrap; justify-content:center; row-gap:0; padding-block:6px}
+  .expert-tel .num{flex-basis:100%; text-align:center}
+  .expert-tel em{flex-basis:100%; text-align:center}
+}
+
+/* هدف لمسی: نام محصول داخل ردیف جدول ۳۲px بود و نقطه‌های اسلایدر ۲۶px.
+   برای کاربر بالای ۴۰ سال روی موبایل کم است؛ به ۴۴px می‌رسانیم بدون
+   آنکه ارتفاع ردیف جدول تغییر کند (padding عمودی، نه height). */
+.pt-name > a{display:block; min-height:44px; padding-block:6px; align-content:center}
+.hero-dots > a,.hero-dots > button{min-width:44px; min-height:44px;
+  display:inline-flex; align-items:center; justify-content:center}
+
+/* جدول دسته حالا تمام‌عرض است و باکس کارشناس کنار نمودار نشسته.
+   تقسیم ۵۰/۵۰ برای این جفت مناسب نیست: نمودار عرض می‌خواهد و کارت
+   کارشناس حدود ۳۰۰px کافی است. */
+.chart-with-rep{display:grid; grid-template-columns:minmax(0,1fr) 300px;
+  gap:var(--s6); align-items:start}
+.chart-with-rep .experts{position:sticky; top:84px}
+@media (max-width:1024px){
+  .chart-with-rep{grid-template-columns:1fr}
+  .chart-with-rep .experts{position:static}
+}
+
+/* در ستون ۳۰۰px، ستون متنِ کارت کارشناس از کادر بیرون می‌زد: min-width:0
+   داشت ولی flex-shrink نداشت، پس عرض ذاتیِ دکمه‌ها را نگه می‌داشت. */
+.expert-t{flex:1 1 auto; min-width:0}
+.expert-t > *{min-width:0}
+.expert-tel,.expert-wa{max-width:100%}
+.chart-with-rep{grid-template-columns:minmax(0,1fr) 320px}
+@media (max-width:1024px){.chart-with-rep{grid-template-columns:1fr}}
+
+/* حباب چت گفتینو خودش fixed پایین صفحه می‌نشیند و روی داک تماس می‌افتد،
+   یعنی روی مهم‌ترین دکمه‌ی سایت. روی موبایل بالاتر از داک (۶۸px + فاصله)
+   می‌بریمش. سلکتورها هر دو نام‌گذاری گفتینو را پوشش می‌دهند. */
+@media (max-width:1000px){
+  #goftino_w,.goftino-widget,[id^="goftino"]{
+    bottom:82px !important;
+  }
+}
+
+/* دو آیکن ردیف جدول هم‌اندازه شوند: pt-call در قاعده‌ی لمسی به ۴۴px
+   رسیده بود ولی pt-chart روی ۴۰px مانده بود و آیکن‌ها هم ۱۹ و ۱۸ بودند.
+   هر دو را با هم تعریف می‌کنیم تا از این به بعد از هم جدا نیفتند. */
+.pt-call,.pt-chart{width:44px; height:44px; border-width:1.5px}
+.pt-call svg,.pt-chart svg{width:19px; height:19px}
+
+/* ── بازه‌ی دلخواه نمودار ─────────────────────────────────────────────── */
+/* دکمه‌ی «بازه‌ی دلخواه» داخل همان نوار بازه‌هاست ولی با جداکننده، چون
+   رفتارش فرق دارد: پنل باز می‌کند و بازه‌اش عددی ثابت نیست. */
+.cr-toggle{min-height:36px; padding:0 14px; border:0; border-radius:999px;
+  background:transparent; font:inherit; font-size:13px; font-weight:700;
+  color:var(--ink-2); position:relative; margin-inline-start:4px}
+.cr-toggle::before{content:""; position:absolute; inset-inline-start:-4px; top:8px; bottom:8px;
+  width:1px; background:var(--line-2)}
+.cr-toggle.is-on{background:var(--steel-ink); color:#fff}
+.cr-toggle.is-on::before{display:none}
+.cr-toggle:hover{color:var(--ink)}
+
+.cr-panel{display:flex; flex-wrap:wrap; align-items:flex-end; gap:var(--s4);
+  margin-top:var(--s3); padding:var(--s4); background:var(--surface);
+  border:1px solid var(--line); border-radius:var(--radius-lg)}
+.cr-panel[hidden]{display:none}
+.cr-field{display:flex; flex-direction:column; gap:6px}
+.cr-lbl{font-size:var(--t-xs); font-weight:700; color:var(--ink-2)}
+/* ورودی‌ها در RTL باید سال، ماه، روز از راست به چپ خوانده شوند؛
+   خودِ کادرها ltr نمی‌شوند چون ترتیبشان معنادار است، نه محتوایشان. */
+.cr-date{display:flex; gap:4px}
+.cr-date input{width:74px; min-height:44px; padding:0 8px; text-align:center;
+  border:1px solid var(--line-2); border-radius:var(--radius); background:#fff;
+  font:inherit; font-size:var(--t-sm); font-weight:700; color:var(--ink);
+  font-variant-numeric:tabular-nums}
+.cr-date input.cr-m,.cr-date input.cr-d{width:62px}
+.cr-date input:focus{border-color:var(--steel); outline:2px solid var(--steel); outline-offset:1px}
+/* فلش‌های ریز number در فارسی بیشتر مزاحم‌اند تا مفید */
+.cr-date input::-webkit-outer-spin-button,.cr-date input::-webkit-inner-spin-button{
+  -webkit-appearance:none; margin:0}
+.cr-date input[type=number]{-moz-appearance:textfield}
+.cr-apply{min-height:44px; align-self:flex-end}
+.cr-err{flex-basis:100%; margin:0; color:var(--brand); font-size:var(--t-sm); font-weight:700}
+.cr-err[hidden]{display:none}
+
+@media (max-width:640px){
+  .chart-head{flex-wrap:wrap}
+  .chart-ranges{flex-wrap:wrap; border-radius:var(--radius-lg)}
+  .cr-toggle::before{display:none}
+  .cr-field{flex:1 1 100%}
+  .cr-date{justify-content:stretch}
+  .cr-date input{flex:1 1 0; width:auto}
+  .cr-apply{flex:1 1 100%}
+}
+
+/* زیرنویس ثابت هر کادر تاریخ. placeholder با تایپ محو می‌شود و کاربر
+   دیگر نمی‌داند کدام کادر سال بود و کدام ماه. */
+.cr-one{display:flex; flex-direction:column; align-items:center; gap:3px}
+.cr-cap{font-size:11px; font-weight:700; color:var(--ink-3)}
+.cr-date input::placeholder{color:var(--ink-3); font-weight:600}
+
+/* پنج دکمه‌ی بازه در ۳۹۰px داخل نوار قرص‌شکل جا نمی‌شوند و «بازه‌ی دلخواه»
+   بیرون می‌زد. زیر ۷۶۸px نوار را شبکه‌ای می‌کنیم تا همه دیده شوند. */
+@media (max-width:768px){
+  .chart-head{flex-direction:column; align-items:stretch; gap:var(--s3)}
+  .chart-ranges{display:grid; grid-template-columns:repeat(3,1fr); gap:6px;
+    border-radius:var(--radius-lg); padding:6px}
+  .chart-ranges button,.cr-toggle{margin:0; padding:0 6px; font-size:12px}
+  .cr-toggle{grid-column:span 3}
+  .cr-toggle::before{display:none}
+}
+
+/* سه کادر تاریخ عرض ثابت ۷۴/۶۲px داشتند و در ۳۹۰px مجموعشان از کارت
+   بیرون می‌زد و کل صفحه را پهن می‌کرد (مرورگر موبایل هم zoom out می‌شد).
+   کادرها باید بتوانند جمع شوند. */
+.chart,.cr-panel,.cr-field,.cr-date,.cr-one,.chart-ranges{min-width:0}
+.cr-one{flex:1 1 0; min-width:0}
+.cr-date input{width:100%; min-width:0}
+.cr-date input.cr-m,.cr-date input.cr-d{width:100%}
+.chart-ranges button,.cr-toggle{min-width:0; white-space:nowrap}
+
+/* پنج دکمه در شبکه‌ی ۳ستونه یک خانه‌ی خالی می‌گذاشت. ۲ستونه پر می‌شود:
+   چهار بازه در دو ردیف و «بازه‌ی دلخواه» تمام‌عرض زیرشان. */
+@media (max-width:768px){
+  .chart-ranges{grid-template-columns:1fr 1fr}
+  .cr-toggle{grid-column:span 2}
+  .chart-ranges button,.cr-toggle{min-height:44px; font-size:13px}
+}
+
+/* ── جست‌وجوی سراسری ─────────────────────────────────────────────────── */
+.gs-wrap{position:relative}
+.gs-results{position:absolute; inset-inline:0; top:calc(100% + 6px); z-index:80;
+  background:#fff; border:1px solid var(--line); border-radius:var(--radius-lg);
+  box-shadow:0 18px 44px rgba(11,18,32,.18); max-height:min(70vh,480px);
+  overflow-y:auto; overscroll-behavior:contain; padding:6px}
+.gs-results[hidden]{display:none}
+.gs-group{font-size:var(--t-xs); font-weight:800; color:var(--ink-3);
+  padding:8px 10px 4px; letter-spacing:.02em}
+.gs-item{display:grid; grid-template-columns:auto 1fr auto; align-items:center;
+  gap:10px; min-height:52px; padding:8px 10px; border-radius:var(--radius);
+  color:var(--ink); text-decoration:none}
+.gs-item:hover,.gs-item.is-on{background:var(--surface)}
+.gs-item.is-on{outline:2px solid var(--steel); outline-offset:-2px}
+.gs-t{font-weight:700; font-size:var(--t-sm); line-height:1.4; min-width:0}
+.gs-t mark{background:#FFF1B8; color:inherit; padding:0 1px; border-radius:3px}
+.gs-sub{font-size:var(--t-xs); color:var(--ink-3); white-space:nowrap}
+.gs-price{font-size:var(--t-xs); color:var(--ink-2); white-space:nowrap;
+  font-variant-numeric:tabular-nums}
+.gs-price b{font-size:var(--t-sm); font-weight:900; color:var(--ink)}
+/* نشان نوع: رنگ فقط برای تفکیک، نه برای جلب توجه */
+.gs-k{font-size:11px; font-weight:800; padding:3px 8px; border-radius:999px;
+  white-space:nowrap; background:var(--surface-2); color:var(--ink-2)}
+.gs-k.k-prod{background:#EAF3EC; color:#1F6B35}
+.gs-k.k-cat{background:#E9EEF6; color:#2C4A73}
+.gs-k.k-art{background:#F4EDF7; color:#5B3A72}
+.gs-k.k-page{background:var(--surface-2); color:var(--ink-2)}
+.gs-empty{padding:16px 12px; font-size:var(--t-sm); color:var(--ink-2)}
+.gs-empty a{color:var(--brand); font-weight:700}
+
+@media (max-width:1000px){
+  /* در موبایل کادر جست‌وجو در هدر نیست؛ اگر جایی بود، نتایج تمام‌عرض شود */
+  .gs-results{position:fixed; inset-inline:var(--s4); top:auto;
+    max-height:60vh; margin-top:6px}
+}
+
+/* نوار جست‌وجوی موبایل. فقط زیر ۱۰۰۰px دیده می‌شود، چون بالای آن
+   کادر جست‌وجوی هدر هست و دو کادر همزمان گیج‌کننده است. */
+.msearch{display:none}
+@media (max-width:1000px){
+  .msearch{display:block; background:#fff; border-bottom:1px solid var(--line);
+    padding:var(--s3) 0}
+  .msearch .search{display:block; max-width:none}
+  .msearch .gs-results{position:absolute; inset-inline:0; top:calc(100% + 6px)}
+}
+@media print{.msearch{display:none}}
+
+/* ══════════════════════════════════════════════════════════════════════
+   ریسپانسیو موبایل — خوانایی و لمس برای مخاطب بالای ۴۰ سال
+   ══════════════════════════════════════════════════════════════════════
+   سه چیز اندازه‌گیری شد و اصلاح می‌شود: متن زیر ۱۲.۵px، هدف لمسی زیر
+   ۴۴px، و هر چیزی که در ۳۲۰px قاب را پهن می‌کند. */
+@media (max-width:768px){
+  /* ── خوانایی ─────────────────────────────────────────────────────── */
+  /* «ریال / کیلوگرم» زیر هر قیمت ۱۲px بود؛ همین واحد است که خریدار
+     برای مقایسه لازم دارد. */
+  .pt-u{font-size:13px}
+  .dim,.chart-note,.badge-sample{font-size:13px}
+  .badge-sample{font-size:12px; padding:3px 8px}
+  /* شماره‌ی تلفن هیچ‌جا نباید ریز باشد؛ اصلی‌ترین فراخوان سایت است. */
+  .num{font-size:inherit}
+  .callbox .number,.dock .primary .n{font-size:var(--t-lg)}
+  .dock .primary .l{font-size:13px}
+
+  /* ── هدف لمسی ────────────────────────────────────────────────────── */
+  /* نام کالا در کارت جدول و چیپ‌ها ۳۶px بودند. */
+  .pt-name > a{min-height:44px; display:flex; align-items:center}
+  .chip,.mag-txt .chip{min-height:44px}
+  .toc a{min-height:44px}
+
+  /* ── جلوگیری از کوچک‌نمایی ───────────────────────────────────────── */
+  /* هر چیزی با کف عرض ثابت، روی ۳۲۰px قاب را می‌شکند. */
+  .deep,.deepgrid > *{min-width:0}
+  img,video,svg,table,pre{max-width:100%}
+}
+
+/* گوشی‌های باریک (۳۶۰px و کمتر): فاصله‌ها کم‌تر تا متن جا بگیرد،
+   ولی اندازه‌ی قلم و هدف لمسی دست‌نخورده بماند. */
+@media (max-width:360px){
+  .container{padding-inline:12px}
+  .deep,.card,.pt-card{padding:var(--s4)}
+  .chart{padding:var(--s3)}
+  .chart-ranges button,.cr-toggle{padding:0 4px; font-size:12px}
+}
+
+/* بازمانده‌های متن ریز روی موبایل، همه در کارت کارشناس و بخش دیدگاه.
+   شماره‌ی تلفن و شماره‌ی داخلی مهم‌ترین اطلاعات تماس‌اند و نباید از
+   ۱۳px کوچک‌تر باشند. */
+@media (max-width:768px){
+  .expert-tel{font-size:var(--t-base); min-height:44px}
+  .expert-tel em,.expert-tel .num{font-size:14px}
+  .expert-wa{font-size:14px; min-height:44px}
+  .reviews .dim,.rv-note,.badge-sample{font-size:13px}
+  /* هدف لمسی دکمه‌های کارت کارشناس */
+  .expert-links > a{min-height:44px}
+}
+
+/* این دو قانون ۱۲px را سفت کرده بودند و از قانون عمومی .dim قوی‌ترند.
+   روی موبایل با همان ویژگی (specificity) بازنویسی می‌شوند. */
+@media (max-width:768px){
+  .rsummary .dim,.calc .dim{font-size:13px; line-height:1.8}
+}
+
+/* آخرین آیتم مسیر راهنما نام کامل محصول است و با nowrap روی گوشی‌های
+   باریک از قاب بیرون می‌زد و کل صفحه را کوچک‌نمایی می‌کرد. نام طولانی
+   باید کوتاه شود، نه اینکه صفحه را بشکند. */
+@media (max-width:768px){
+  .crumb li{white-space:normal}
+  .crumb li:last-child{overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+    max-width:100%; min-width:0}
+  .crumb ol{flex-wrap:wrap; row-gap:2px}
+  /* توضیح فرم دیدگاه هم ۱۲px مانده بود */
+  .rform .dim{font-size:13px; line-height:1.8}
+}
+
+/* دو مورد آخرِ ممیزی ریسپانسیو. */
+@media (max-width:1000px){
+  /* داک تماس با سه ستون و شماره‌ی بلند، روی ۳۲۰px به ۳۴۸ می‌رسید و
+     کل صفحه کوچک‌نمایی می‌شد. ستون‌ها باید بتوانند جمع شوند. */
+  .dock{grid-template-columns:minmax(0,1fr) auto auto; max-width:100vw}
+  .dock > *{min-width:0}
+  .dock a{padding-inline:var(--s3)}
+  .dock .primary{overflow:hidden}
+  .dock .primary .n{white-space:nowrap; overflow:hidden; text-overflow:clip}
+}
+@media (max-width:360px){
+  /* روی باریک‌ترین گوشی‌ها فقط دکمه‌ی تماس و واتساپ می‌ماند؛
+     «قیمت‌ها» یک کلیک بیشتر است و جایش در منوست. */
+  .dock{grid-template-columns:minmax(0,1fr) auto}
+  .dock a:nth-child(3){display:none}
+}
+/* نام کالا در حالت کارتیِ جدول هم باید ۴۴px باشد. align-content در
+   display:block کار نمی‌کند، پس flex می‌دهیم. */
+@media (max-width:1000px){
+  table.pt .pt-name > a{display:flex; align-items:center; min-height:44px}
+}
+
+/* دکمه‌ی «استعلام و ثبت سفارش» با شماره‌ی کنارش روی ۳۲۰px به ۳۱۱ پیکسل
+   می‌رسید و از کارت بیرون می‌زد. روی گوشی دو خطه می‌شود: برچسب بالا،
+   شماره زیرش و درشت‌تر، که برای تماس هم بهتر است. */
+@media (max-width:768px){
+  .pcard-cta .btn-call{flex-wrap:wrap; justify-content:center; row-gap:2px;
+    padding-inline:var(--s3); line-height:1.35; text-align:center}
+  .pcard-cta .btn-call .num{flex-basis:100%; margin-inline-start:0;
+    font-size:var(--t-lg)}
+  .pcard,.pcard-cta,.pcard-cta > *{min-width:0}
+}
+
+/* ── تراشه‌های ساعت و تاریخ ───────────────────────────────────────────
+   دو کپسول کنار هم: ساعت زنده و تاریخ کامل با نام روز هفته.
+   جهت هر کدام مستقل است تا با bidi درگیر نشوند. */
+.stampchips{display:inline-flex; align-items:center; gap:8px; flex-wrap:wrap}
+.chipx{display:inline-flex; align-items:center; gap:6px; min-height:36px;
+  padding:0 14px; border:1px solid var(--line); border-radius:999px;
+  background:#fff; font-size:var(--t-sm); font-weight:700; color:var(--ink-2);
+  white-space:nowrap}
+.chipx svg{width:16px; height:16px; color:var(--ink-3)}
+.chipx b{font-weight:800; color:var(--ink); font-variant-numeric:tabular-nums}
+/* ساعت همیشه چپ‌به‌راست؛ ۱۳:۲۹:۲۲ نباید برعکس شود. */
+.chipx [data-live-clock] b,.chipx b.num{direction:ltr; unicode-bidi:isolate}
+/* تاریخ: نام روز، بعد روز، ماه و سال — با flex چیده می‌شود نه با bidi. */
+.chipx time{color:var(--ink)}
+@media (max-width:640px){
+  .chipx{padding:0 11px; font-size:13px}
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+   لایت‌باکس تصویر — باز شدن عکس در همان صفحه، مثل تلگرام
+   ══════════════════════════════════════════════════════════════════════ */
+html.lb-open{overflow:hidden}
+/* سه ردیف: صحنه (کشسان و وسط‌چین)، شمارنده، نوار بندانگشتی.
+   align-items روی هر ردیف جدا تنظیم می‌شود وگرنه عکسِ پهن ته قاب
+   می‌چسبد به‌جای اینکه وسط بایستد. */
+.lb{position:fixed; inset:0; z-index:2147483000; background:#080C14;
+  display:grid; grid-template-rows:minmax(0,1fr) auto auto;
+  justify-items:center; padding:56px 16px 14px;
+  animation:lb-in .16s ease-out}
+.lb > .lb-stage{align-self:center}
+.lb[hidden]{display:none}
+@keyframes lb-in{from{opacity:0}to{opacity:1}}
+.lb-stage{margin:0; display:flex; flex-direction:column; align-items:center;
+  justify-content:center; max-width:100%; max-height:100%; min-height:0}
+/* عکس نباید تا زیر فلش‌ها برود: فلش‌ها ۵۶px عرض دارند و با فاصله‌ی
+   کناری، ۱۵۰px از هر طرف کنار گذاشته می‌شود تا کنترل‌ها همیشه روی
+   زمینه‌ی مشکی بنشینند، نه روی خود عکس. */
+.lb-img{max-width:min(100%,1200px); max-height:calc(100vh - 190px);
+  width:auto; height:auto; object-fit:contain; border-radius:10px;
+  background:#0B1220; box-shadow:0 24px 60px rgba(0,0,0,.5)}
+@media (min-width:641px){
+  .lb{padding-inline:150px}
+}
+.lb-cap{margin-top:10px; color:#E6EBF2; font-size:var(--t-sm); font-weight:700;
+  text-align:center; max-width:760px; line-height:1.7}
+.lb-count{color:#9AA7B6; font-size:var(--t-xs); font-weight:700; margin-top:6px;
+  font-variant-numeric:tabular-nums}
+
+/* دکمه‌ی بستن: گوشه‌ی بالا، همیشه در دسترس.
+   پس‌زمینه‌ی ۱۲٪ سفید روی مشکی تقریباً نامرئی بود و کاربر گزارش داد
+   دکمه‌ها را نمی‌بیند. حالا پس‌زمینه‌ی پُرتر + قاب روشن + سایه دارد. */
+.lb-x{position:absolute; top:14px; inset-inline-end:16px; width:48px; height:48px;
+  border-radius:50%; border:1.5px solid rgba(255,255,255,.55);
+  background:rgba(22,28,40,.92); color:#fff;
+  font-size:28px; line-height:1; cursor:pointer; display:grid; place-items:center;
+  box-shadow:0 4px 16px rgba(0,0,0,.5); transition:background .15s, transform .15s}
+.lb-x:hover{background:#B42332; border-color:#fff; transform:scale(1.06)}
+.lb-x:focus-visible{outline:3px solid #fff; outline-offset:3px}
+
+/* فلش‌های چرخش — با همان منطق دکمه‌ی بستن، دیده‌شدنی */
+.lb-nav{position:absolute; top:50%; transform:translateY(-50%); width:56px; height:56px;
+  border-radius:50%; border:1.5px solid rgba(255,255,255,.55);
+  background:rgba(22,28,40,.92); color:#fff;
+  cursor:pointer; display:grid; place-items:center;
+  box-shadow:0 4px 16px rgba(0,0,0,.5); transition:background .15s, transform .15s}
+.lb-nav:hover{background:#B42332; border-color:#fff}
+.lb-nav:focus-visible{outline:3px solid #fff; outline-offset:3px}
+.lb-nav svg{width:26px; height:26px}
+.lb-nav[hidden]{display:none}
+/* در RTL، «قبلی» سمت راست است */
+.lb-prev{inset-inline-end:14px}
+.lb-next{inset-inline-start:14px}
+
+/* نوار بندانگشتی پایین */
+.lb-strip{display:flex; gap:8px; overflow-x:auto; max-width:100%; padding:10px 2px 2px;
+  scrollbar-width:thin; overscroll-behavior-x:contain}
+.lb-strip[hidden]{display:none}
+.lb-th{flex:0 0 auto; width:62px; height:44px; padding:0; border:2px solid transparent;
+  border-radius:7px; overflow:hidden; background:#0B1220; cursor:pointer; opacity:.55}
+.lb-th img{width:100%; height:100%; object-fit:cover; display:block}
+.lb-th.is-on{border-color:#fff; opacity:1}
+.lb-th:hover{opacity:.85}
+
+@media (max-width:640px){
+  .lb{padding:52px 8px 10px}
+  .lb-img{max-height:calc(100vh - 168px)}
+  .lb-nav{width:44px; height:44px}
+  .lb-nav svg{width:22px; height:22px}
+  .lb-th{width:52px; height:38px}
+  .lb-cap{font-size:13px}
+}
+
+/* ── گالری دسته: از نوار ساده به شبکه‌ی خوش‌ترکیب ──────────────────── */
+.board-photos{display:grid; grid-template-columns:repeat(3,1fr); gap:8px;
+  margin-top:var(--s4)}
+.board-photos .ph{position:relative; display:block; border-radius:10px;
+  overflow:hidden; aspect-ratio:4/3; background:var(--surface-2);
+  border:1px solid var(--line); cursor:zoom-in}
+.board-photos .ph img{width:100%; height:100%; object-fit:cover; display:block;
+  transition:transform .35s ease}
+.board-photos .ph:hover img{transform:scale(1.06)}
+/* شمارنده روی آخرین کادر وقتی عکس بیشتری هست */
+.board-photos .ph .more{position:absolute; inset:0; display:grid; place-items:center;
+  background:rgba(8,12,20,.62); color:#fff; font-size:var(--t-lg); font-weight:900}
+.board-photos .ph::after{content:""; position:absolute; inset:0;
+  box-shadow:inset 0 0 0 0 rgba(255,255,255,.5); transition:box-shadow .2s}
+.board-photos .ph:focus-visible{outline:3px solid var(--steel); outline-offset:2px}
+@media (max-width:640px){
+  .board-photos{grid-template-columns:repeat(3,1fr); gap:6px}
+}
+
+/* ── گالری صفحه‌ی محصول ───────────────────────────────────────────── */
+.gallery-main{position:relative; cursor:zoom-in; border-radius:12px; overflow:hidden}
+.gallery-main img{display:block; width:100%; height:auto}
+.gzoom{position:absolute; inset-inline-end:10px; bottom:10px; width:38px; height:38px;
+  border-radius:50%; background:rgba(8,12,20,.6); color:#fff; display:grid;
+  place-items:center; pointer-events:none}
+.gzoom svg{width:18px; height:18px}
+/* آیتم‌های لایت‌باکس صفحه‌ی محصول فقط منبع داده‌اند، نه چیزی برای دیدن:
+   نوار بندانگشتی جداگانه بالای صفحه هست. */
+.gallery .lb-src{display:none}
+.gallery-thumbs{display:flex; gap:8px; margin-top:8px; overflow-x:auto;
+  padding-bottom:4px; overscroll-behavior-x:contain}
+.gallery-thumbs .thumb{flex:0 0 auto; width:76px; height:58px; padding:0;
+  border:2px solid var(--line); border-radius:8px; overflow:hidden;
+  background:var(--surface-2); cursor:pointer}
+.gallery-thumbs .thumb img{width:100%; height:100%; object-fit:cover; display:block}
+.gallery-thumbs .thumb.is-on{border-color:var(--brand)}
+
+
+/* وقتی لایت‌باکس باز است، هیچ عنصر شناوری نباید رویش بیفتد:
+   حباب چت گفتینو و داک تماس z-index بالایی دارند و روی عکس می‌نشستند. */
+html.lb-open #goftino_w,
+html.lb-open .goftino-widget,
+html.lb-open [id^="goftino"],
+html.lb-open .dock,
+html.lb-open .msearch{display:none !important}
+
+/* ===========================================================================
+   حساب کاربری، فرم‌های زنده، پیام‌ها، صفحه‌بندی و صفحه‌ی خطا
+   ---------------------------------------------------------------------------
+   این بخش برای نسخه‌ی لاراول نوشته شد (ورود و ثبت‌نام با پیامک، ناحیه‌ی
+   کاربری، فرم تماس و دیدگاهِ فعال) و در پروتوتایپ هم همان صفحه‌ها را
+   می‌سازد تا هر دو یک ظاهر داشته باشند. سبد خرید عمداً حذف شده است.
+   =========================================================================== */
+
+/* ---- لینک حساب در نوار خدماتی ---- */
+.utilbar .acct{display:inline-flex; align-items:center; gap:var(--s3)}
+.utilbar .acct form{display:inline}
+.utilbar .linkbtn{background:none; border:0; padding:0; color:inherit; font:inherit;
+  display:inline-flex; align-items:center; gap:var(--s2); min-height:36px; cursor:pointer}
+.utilbar .linkbtn:hover{color:var(--steel-ink); text-decoration:underline; text-underline-offset:3px}
+
+/* ---- پیام‌ها ---- */
+.alert{display:flex; gap:var(--s3); align-items:flex-start; border-radius:var(--radius);
+  padding:var(--s3) var(--s4); font-size:var(--t-sm); font-weight:600; line-height:1.8;
+  border:1px solid var(--line); background:var(--surface); color:var(--ink); margin-bottom:var(--s4)}
+.alert svg{width:20px; height:20px; flex:none; margin-top:3px}
+.alert ul{margin:0; padding:0}
+.alert-ok{background:#EDF7F1; border-color:#B7DEC7; color:#0A4D31}
+.alert-err{background:var(--brand-soft); border-color:#F0C3C8; color:var(--brand-dark)}
+.alert-info{background:var(--fresh-soft); border-color:#E8CD94; color:#6B4708}
+.ffield .err{font-size:14px; font-weight:700; color:var(--brand-dark)}
+.ffield input[aria-invalid="true"],.ffield textarea[aria-invalid="true"],
+.ffield select[aria-invalid="true"]{border-color:var(--brand)}
+.ffield textarea{border:1.5px solid var(--line-2); border-radius:var(--radius);
+  padding:var(--s3); font:inherit; font-size:var(--t-base); color:var(--ink);
+  background:#fff; width:100%; resize:vertical; min-height:120px}
+.ffield textarea:focus-visible{outline:none; border-color:var(--brand); box-shadow:var(--ring)}
+.ffield input[type=file]{height:auto; padding:var(--s3); background:var(--surface)}
+.ffield .hint{font-size:14px; color:var(--ink-3); font-weight:500}
+.fcheck{display:flex; align-items:center; gap:var(--s3); min-height:48px; font-weight:600;
+  cursor:pointer}
+.fcheck input{width:22px; height:22px; flex:none; accent-color:var(--steel-ink)}
+
+.toast{position:fixed; inset-inline:var(--s4); bottom:calc(var(--s4) + 72px); z-index:60;
+  max-width:520px; margin-inline:auto; box-shadow:var(--sh-2)}
+@media (min-width:1000px){.toast{bottom:var(--s5)}}
+.toast .x{margin-inline-start:auto; background:none; border:0; font-size:22px; line-height:1;
+  color:inherit; min-width:32px; min-height:32px}
+
+/* ---- ورود و ثبت‌نام ---- */
+.auth-wrap{display:grid; grid-template-columns:minmax(0,440px) minmax(0,1fr); gap:var(--s7);
+  align-items:start}
+.auth-card{background:#fff; border:1px solid var(--line); border-radius:var(--radius-lg);
+  padding:var(--s6) var(--s5); box-shadow:var(--sh-1)}
+.auth-card h1{font-size:var(--t-2xl); margin-bottom:var(--s2)}
+.auth-card .lede{color:var(--ink-2); font-size:var(--t-sm); margin-bottom:var(--s5)}
+.auth-card form{display:grid; gap:var(--s4)}
+.auth-card .btn{min-height:56px; font-size:var(--t-base)}
+.auth-card .code input{letter-spacing:.5em; text-align:center; font-size:var(--t-xl);
+  font-weight:800; direction:ltr}
+.auth-foot{margin-top:var(--s5); padding-top:var(--s4); border-top:1px solid var(--line);
+  font-size:var(--t-sm); color:var(--ink-2)}
+.auth-foot a{color:var(--steel-ink); font-weight:800; text-decoration:underline;
+  text-underline-offset:3px}
+.auth-resend{display:flex; align-items:center; gap:var(--s3); flex-wrap:wrap;
+  font-size:var(--t-sm); color:var(--ink-2)}
+.auth-resend button{background:none; border:0; padding:0; min-height:44px; color:var(--steel-ink);
+  font-weight:800; text-decoration:underline; text-underline-offset:3px}
+.auth-side{display:grid; gap:var(--s4)}
+.auth-side h2{font-size:var(--t-xl)}
+.auth-side .trustitem{background:#fff}
+@media (max-width:900px){.auth-wrap{grid-template-columns:1fr; gap:var(--s5)}}
+
+/* ---- ناحیه‌ی کاربری ---- */
+.panel{display:grid; grid-template-columns:260px minmax(0,1fr); gap:var(--s5); align-items:start}
+.panel-nav{background:#fff; border:1px solid var(--line); border-radius:var(--radius-lg);
+  padding:var(--s3); position:sticky; top:var(--s4)}
+.panel-who{display:flex; gap:var(--s3); align-items:center; padding:var(--s3);
+  border-bottom:1px solid var(--line); margin-bottom:var(--s2)}
+.panel-who .av{width:48px; height:48px; border-radius:50%; background:var(--surface-2);
+  display:grid; place-items:center; color:var(--steel-ink); flex:none; overflow:hidden}
+.panel-who .av svg{width:24px; height:24px}
+.panel-who .av img{width:100%; height:100%; object-fit:cover}
+.panel-who b{display:block; font-size:var(--t-sm); color:var(--ink)}
+.panel-who span{font-size:14px; color:var(--ink-3)}
+.panel-nav a,.panel-nav button{display:flex; align-items:center; gap:var(--s3); min-height:48px;
+  padding:0 var(--s3); border-radius:var(--radius); font-size:var(--t-sm); font-weight:700;
+  color:var(--ink-2); width:100%; background:none; border:0; text-align:start}
+.panel-nav a svg,.panel-nav button svg{width:19px; height:19px; flex:none}
+.panel-nav a:hover,.panel-nav button:hover{background:var(--surface); color:var(--steel-ink)}
+.panel-nav a[aria-current]{background:var(--steel-ink); color:#fff}
+.panel-main{min-width:0; display:grid; gap:var(--s5)}
+.panel-head{display:flex; align-items:flex-end; justify-content:space-between; gap:var(--s4); flex-wrap:wrap}
+.panel-head h1{font-size:var(--t-2xl)}
+.panel-head .sub{font-size:var(--t-sm); color:var(--ink-2); margin-top:var(--s1)}
+.pcard2{background:#fff; border:1px solid var(--line); border-radius:var(--radius-lg); padding:var(--s5)}
+.pcard2 > h2{font-size:var(--t-lg); margin-bottom:var(--s4)}
+.fgrid2{display:grid; grid-template-columns:1fr 1fr; gap:var(--s4)}
+.fgrid2 .full{grid-column:1/-1}
+.factions{display:flex; gap:var(--s3); flex-wrap:wrap; margin-top:var(--s5)}
+.empty{text-align:center; padding:var(--s7) var(--s5); color:var(--ink-2);
+  background:var(--surface); border:1px dashed var(--line-2); border-radius:var(--radius-lg)}
+.empty svg{width:40px; height:40px; color:var(--ink-3); margin:0 auto var(--s3)}
+.empty .btn{margin-top:var(--s4)}
+@media (max-width:900px){
+  .panel{grid-template-columns:1fr}
+  .panel-nav{position:static; display:flex; flex-wrap:wrap; gap:4px}
+  .panel-who{width:100%}
+  .panel-nav a,.panel-nav button{width:auto; flex:1 1 auto; justify-content:center}
+  .fgrid2{grid-template-columns:1fr}
+}
+
+/* جدول داده‌ی ناحیه‌ی کاربری — روی موبایل هر ردیف یک کارت */
+.dtable{width:100%; font-size:var(--t-sm)}
+.dtable th{text-align:start; font-weight:700; color:var(--ink-2); padding:var(--s3);
+  border-bottom:2px solid var(--line); white-space:nowrap}
+.dtable td{padding:var(--s3); border-bottom:1px solid var(--line); vertical-align:middle}
+.dtable tbody tr:hover{background:var(--surface)}
+.dtable a{color:var(--steel-ink); font-weight:700}
+.dtable .act{text-align:end; white-space:nowrap}
+@media (max-width:700px){
+  .dtable thead{display:none}
+  .dtable tr{display:block; border:1px solid var(--line); border-radius:var(--radius);
+    margin-bottom:var(--s3); padding:var(--s2) var(--s3)}
+  .dtable td{display:flex; justify-content:space-between; gap:var(--s3); border:0;
+    padding:6px 0}
+  .dtable td::before{content:attr(data-label); color:var(--ink-3); font-weight:600}
+  .dtable .act{justify-content:flex-end}
+  .dtable .act::before{content:none}
+}
+.badge{display:inline-flex; align-items:center; min-height:28px; padding:0 10px;
+  border-radius:999px; font-size:13px; font-weight:700; background:var(--surface-2);
+  color:var(--ink-2); white-space:nowrap}
+.badge-ok{background:#E3F3EA; color:#0A4D31}
+.badge-warn{background:var(--fresh-soft); color:#6B4708}
+.badge-err{background:var(--brand-soft); color:var(--brand-dark)}
+.badge-info{background:var(--board-2); color:var(--steel-ink)}
+
+/* گفت‌وگوی تیکت */
+.thread{display:grid; gap:var(--s3)}
+.msg{background:var(--surface); border:1px solid var(--line); border-radius:var(--radius-lg);
+  padding:var(--s4); max-width:88%}
+.msg.me{background:#fff; margin-inline-start:auto; border-color:var(--line-2)}
+.msg header{display:flex; gap:var(--s3); justify-content:space-between; flex-wrap:wrap;
+  font-size:14px; color:var(--ink-3); margin-bottom:6px}
+.msg header b{color:var(--ink)}
+.msg p{font-size:var(--t-sm); white-space:pre-line}
+.kvlist{display:grid; gap:0}
+.kvlist > div{display:flex; justify-content:space-between; gap:var(--s4); padding:var(--s3) 0;
+  border-bottom:1px solid var(--line); font-size:var(--t-sm)}
+.kvlist > div:last-child{border-bottom:0}
+.kvlist dt,.kvlist .k{color:var(--ink-2)}
+.kvlist dd,.kvlist .v{margin:0; font-weight:700; color:var(--ink)}
+.kvlist .total{font-size:var(--t-base)}
+
+/* ---- صفحه‌بندی ---- */
+.pager{display:flex; justify-content:center; gap:6px; flex-wrap:wrap; margin-top:var(--s6)}
+.pager a,.pager span{display:inline-grid; place-items:center; min-width:48px; min-height:48px;
+  padding:0 var(--s3); border-radius:var(--radius); border:1.5px solid var(--line-2);
+  background:#fff; font-weight:700; color:var(--steel-ink)}
+.pager a:hover{background:var(--surface)}
+.pager [aria-current]{background:var(--steel-ink); border-color:var(--steel-ink); color:#fff}
+.pager .off{color:var(--ink-3); background:var(--surface); border-color:var(--line)}
+
+/* ---- صفحه‌ی خطا ---- */
+.errpage{text-align:center; padding-block:var(--s8)}
+.errpage .code{font-size:clamp(64px,12vw,120px); font-weight:900; line-height:1;
+  color:var(--board-line)}
+.errpage h1{font-size:var(--t-3xl); margin:var(--s4) 0 var(--s3)}
+.errpage p{color:var(--ink-2); max-width:56ch; margin:0 auto var(--s5)}
+.errpage .factions{justify-content:center}
+
+/* ---- دیدگاه‌های مقاله ---- */
+.comments{display:grid; grid-template-columns:minmax(0,1fr) 360px; gap:var(--s5); align-items:start}
+.comments .rlist{display:grid; gap:var(--s3)}
+.review .answer{margin-top:var(--s3); padding:var(--s3); border-radius:var(--radius);
+  background:var(--surface); font-size:14px; color:var(--ink-2)}
+.review .answer b{color:var(--steel-ink)}
+@media (max-width:900px){.comments{grid-template-columns:1fr}}
+
+/* ---- نویسنده ---- */
+.author{display:flex; gap:var(--s5); align-items:flex-start}
+.author img{width:120px; height:120px; border-radius:50%; object-fit:cover; flex:none;
+  background:var(--surface-2)}
+@media (max-width:640px){.author{flex-direction:column}}
+
+.chart-empty{display:grid; place-items:center; min-height:180px; text-align:center;
+  color:var(--ink-2); font-size:var(--t-sm); background:var(--surface);
+  border:1px dashed var(--line-2); border-radius:var(--radius); padding:var(--s5)}
+
+/* ===========================================================================
+   ممیزی واکنش‌گرایی و خوانایی (۲ مهر ۱۴۰۵)
+   ---------------------------------------------------------------------------
+   از روی اسکرین‌شات کامل ۴۹ صفحه در ۳۶۰ تا ۱۹۲۰ پیکسل. این بخش آخر فایل
+   است و عمداً قاطع می‌نویسد، چون قواعد قبلی چند لایه روی هم دارند.
+   =========================================================================== */
+
+/* ۱. هیچ متن معناداری زیر ۱۴ پیکسل نیست — مخاطب بالای ۴۰ سال است. */
+.dim,.mag-meta,.pt-u,.chart-note,.calc-basis,.kv .k,.pcard-note,.gallery-note,
+.ch-cat,.relprod-txt span,.relprod-pr b,.side-call .l,.side-note,.toc li a,.tag,
+.expert-t > span,.expert-tel em,.tfilter.slim .ffield > span,table.pt td::before,
+.mag-txt .chip,.badge,.jump a .num,.rform .dim,.chart-head .dim,.hc-n,
+.ix .k,.ix .range,.ix .u,.cr-cap,.fcall .label,.callbox .label{font-size:14px}
+table.pt td.pt-name .review{font-size:13px}
+.chart-empty{font-size:15px}
+
+/* ۲. عنوان اصلی هر صفحه روی موبایل یک اندازه دارد. */
+@media (max-width:640px){
+  main h1{font-size:26px; line-height:1.45}
+  .board-head h1 span,.board-price h1 span{font-size:18px}
+  .section-head h2,.prose h2{font-size:22px}
+}
+
+/* ۳. جست‌وجو فقط یک‌بار: کادر سرصفحه تا ۶۴۰، کادر موبایل زیر آن. */
+@media (min-width:641px){.msearch{display:none}}
+@media (max-width:640px){.masthead .search{display:none}}
+
+/* ۴. جدول قیمت روی موبایل: کارت کوتاه — نام و دکمه‌ها، مشخصات در یک خط،
+      قیمت و نوسان کنار هم. دکمه‌ها دیگر روی عددها نمی‌افتند. */
+@media (max-width:820px){
+  table.pt tr,table.pt.ch tr{display:flex; flex-wrap:wrap; align-items:center; gap:6px 8px;
+    padding:var(--s3) var(--s4); position:static}
+  table.pt td{display:block; width:auto; padding:0; min-width:0}
+  table.pt td::before{display:none}
+  table.pt .pt-name,table.pt.ch .ch-name{order:1; flex:1 1 0; min-width:0; padding:0;
+    font-size:16px; line-height:1.6}
+  table.pt .pt-act{order:2; position:static; flex:0 0 auto; display:flex; gap:6px}
+  table.pt .pt-act .pt-chart,table.pt .pt-act .pt-call{width:44px; height:44px}
+  table.pt .pt-spec,table.pt .pt-lo{order:3; display:inline-flex; flex:0 0 auto; gap:4px;
+    font-size:14px; color:var(--ink); background:var(--surface); border:1px solid var(--line);
+    border-radius:999px; padding:2px 10px; white-space:nowrap; overflow-wrap:normal}
+  table.pt .pt-spec::before{display:inline; content:attr(data-label) ":"; color:var(--ink-3);
+    font-weight:500; font-size:13px}
+  table.pt .pt-price,table.pt.ch .ch-price{order:4; flex:1 1 auto; display:flex; align-items:baseline;
+    gap:6px; border:0; margin:4px 0 0; padding:0}
+  table.pt .pt-price b,table.pt.ch .ch-price b{font-size:20px}
+  table.pt .pt-u{display:inline; font-size:14px}
+  table.pt .pt-delta,table.pt.ch .ch-pct{order:5; flex:0 0 auto; margin-top:4px}
+  table.pt .pt-delta::before{content:none}
+  table.pt.ch .ch-dir,table.pt.ch .ch-diff{display:none}
+  table.pt.pt-mini tr{display:flex}
+  table.pt.pt-mini td:not(.pt-name):not(.pt-price){order:3; font-size:14px; color:var(--ink-2)}
+  table.pt.pt-mini td:not(.pt-name):not(.pt-price)::before{display:inline; content:attr(data-label) ": "; color:var(--ink-3)}
+  table.pt.pt-mini .pt-name{flex-basis:100%}
+}
+
+/* ۵. کارت‌های عدد (آمار دسته، قیمت قابل‌مقایسه) روی موبایل دو ستونه‌اند. */
+@media (max-width:640px){
+  .ixgrid,.ixgrid.ix-4,.ixgrid.ix-3{grid-template-columns:1fr 1fr; gap:8px}
+  .ix{padding:var(--s3); min-height:0}
+  .ix .v{font-size:20px}
+  .ixgrid.ix-tight .ix{min-height:0}
+}
+
+/* ۶. کارت دسته‌ها روی موبایل دو ستونه و فشرده — نه ۹ کارت تمام‌قد پشت هم. */
+@media (max-width:640px){
+  .homecats{grid-template-columns:1fr 1fr; gap:10px}
+  .hc-img{aspect-ratio:4/3}
+  .hc-t{font-size:16px; padding:8px 10px 0}
+  .hc-n,.hc-pr{padding:2px 10px 0; font-size:14px}
+  .hc-go{padding:6px 10px 10px; font-size:14px}
+}
+
+/* ۷. نوار فیلتر جدول روی موبایل: جست‌وجو تمام‌عرض، بقیه دو ستونه. */
+@media (max-width:640px){
+  .tfilter-row{grid-template-columns:1fr 1fr; gap:10px}
+  .tfilter-row .fsearch{grid-column:1/-1}
+  .tfilter{padding:var(--s3)}
+}
+
+/* ۸. صفحه‌ی محصول از ۷۰۰ پیکسل دو ستونه است؛ تبلت عکس غول‌پیکر نمی‌بیند. */
+@media (min-width:700px) and (max-width:900px){
+  .pgrid{grid-template-columns:minmax(0,1fr) minmax(0,1.15fr); gap:var(--s5)}
+}
+
+/* ۹. دکمه‌های بازه‌ی نمودار: یک ردیف، نه یک شبکه‌ی سنگین. */
+@media (max-width:820px){
+  .chart-head{flex-direction:column; align-items:stretch; gap:var(--s3)}
+  .chart-ranges{display:flex; flex-wrap:nowrap; overflow-x:auto; border-radius:999px;
+    gap:4px; padding:3px; scrollbar-width:none}
+  .chart-ranges::-webkit-scrollbar{display:none}
+  .chart-ranges button,.cr-toggle{flex:1 0 auto; min-height:40px; padding:0 12px; font-size:14px}
+}
+.chart-dialog .chart-head{padding-inline-end:48px}
+
+/* ۱۰. پاصفحه: برچسب بالای شماره، نه کنار آن. */
+.fcall .label{display:block; margin-bottom:2px}
+@media (max-width:640px){.fcall .number{font-size:24px}}
+
+/* ۱۱. کارت کارشناس: شماره و داخلی یک تکه. */
+.expert-links{flex-wrap:wrap}
+.expert-tel{white-space:nowrap}
+
+/* ۱۲. مقاله: تصویر شاخص قاب خالی نمی‌سازد؛ فهرست شماره‌دار فارسی. */
+.post-hero{aspect-ratio:auto}
+.article-body ol{list-style:persian}
+/* ۱۳. سلسله‌مراتب عنوان: صفحه‌های فهرستی و معرفی ۳۶، محصول/حساب ۲۹. */
+.section-head h1{font-size:var(--t-3xl); font-weight:900; color:var(--steel-ink)}
+.prose-lead h1{font-size:var(--t-3xl)}
+@media (max-width:640px){main h1,.section-head h1,.prose-lead h1,.mag-head h1,.post-head h1{font-size:26px; line-height:1.45}}
+/* ۱۴. اصلاح پس از دور دوم ممیزی */
+@media (max-width:820px){
+  table.pt td.pt-act{display:flex; flex-direction:row; width:auto; padding:0}
+  .chart-with-rep,.two-col{grid-template-columns:minmax(0,1fr)}
+  .chart,.chart-head,.chart-head > *{min-width:0; max-width:100%}
+  .chart-ranges{width:100%}
+}
+@media (max-width:420px){
+  .ixgrid.ix-tight{grid-template-columns:1fr}
+  .ix .v{font-size:18px}
+}
+.ix .v{overflow-wrap:anywhere}
+/* قاعده‌های قدیمی‌ترِ خاص‌تر این‌ها را ۱۳ نگه داشته بودند */
+main p.dim,main span.dim,.experts .dim,.calc .dim,.rsummary .dim,
+table.pt.ch .ch-cat,.expert-t .dim{font-size:14px}
+@media (max-width:820px){
+  table.pt td.pt-name,table.pt.ch td.ch-name{min-width:0; flex:1 1 0; width:auto}
+  table.pt td.pt-price,table.pt.ch td.ch-price{flex:1 1 0; min-width:0; flex-wrap:wrap}
+  table.pt td.pt-delta,table.pt.ch td.ch-pct{margin-inline-start:auto}
+}
+@media (max-width:820px){
+  /* نام و دکمه‌ها ردیف اول؛ بقیه ردیف‌های بعد */
+  table.pt td.pt-name,table.pt.ch td.ch-name{flex:1 1 calc(100% - 120px)}
+  table.pt .pt-price .pt-u,table.pt.ch .ch-price .riyal{flex-basis:auto}
+}
+/* ۱۵. کارت موبایل جدول قیمت — نسخه‌ی قطعی. «body main» فقط برای غلبه بر
+      قواعد قدیمی‌ترِ خاص‌تر (min-width:220px روی نام و table-cell روی دکمه‌ها). */
+@media (max-width:820px){
+  body main table.pt tbody tr{display:flex; flex-wrap:wrap; align-items:center; gap:6px 8px;
+    padding:12px 14px; position:static; grid-template-columns:none}
+  body main table.pt tbody tr > td{display:block; width:auto; min-width:0; max-width:100%;
+    flex:0 0 auto; padding:0; margin:0; border:0; text-align:start; order:3; position:static}
+  body main table.pt tbody tr > td::before{display:none}
+  body main table.pt tbody td.pt-name,body main table.pt tbody td.ch-name{order:1; flex:1 1 0; font-size:16px}
+  body main table.pt tbody td.pt-act{order:2; display:flex; gap:6px}
+  body main table.pt tbody td.pt-spec{display:inline-flex; gap:4px; font-size:14px; background:var(--surface);
+    border:1px solid var(--line); border-radius:999px; padding:2px 10px; white-space:nowrap}
+  body main table.pt tbody td.pt-spec::before{display:inline; content:attr(data-label) ":";
+    color:var(--ink-3); font-size:13px; font-weight:500}
+  body main table.pt tbody td.pt-price,body main table.pt tbody td.ch-price{order:4; flex:1 1 auto;
+    display:flex; align-items:baseline; gap:6px; white-space:nowrap; margin-top:2px}
+  body main table.pt tbody td.pt-price b,body main table.pt tbody td.ch-price b{font-size:19px}
+  body main table.pt tbody .pt-u{display:inline; font-size:14px}
+  body main table.pt tbody td.pt-delta,body main table.pt tbody td.ch-pct{order:5; margin-inline-start:auto}
+  body main table.pt tbody td.ch-dir,body main table.pt tbody td.ch-diff{display:none}
+  body main table.pt.pt-mini tbody td:not(.pt-name):not(.pt-price){font-size:14px; color:var(--ink-2)}
+  body main table.pt.pt-mini tbody td:not(.pt-name):not(.pt-price)::before{display:inline; content:attr(data-label) ": "; color:var(--ink-3)}
+  body main table.pt.pt-mini tbody td.pt-name{flex-basis:100%}
+}
+@media (max-width:820px){
+  /* پایه‌ی بزرگ برای نام: فقط دکمه‌ها کنارش جا می‌شوند و مشخصات به خط بعد می‌روند */
+  body main table.pt tbody td.pt-name{flex:1 1 calc(100% - 112px)}
+  body main table.pt.ch tbody td.ch-name{flex:1 1 calc(100% - 60px)}
+  body main table.pt.pt-mini tbody td.pt-name{flex:1 1 100%}
+}
+@media (max-width:820px){
+  body main table.pt.ch tbody td.pt-act{width:auto}
+  body main table.pt.ch tbody td.ch-price,body main table.pt tbody td.pt-price{flex:1 1 auto; border:0; padding:0}
+}
+/* ۱۶. دور سوم ممیزی */
+/* مقاله در ۱۰۰۰ تا ۱۱۰۰: محتوای پهن بدنه (جدول، تصویر با عرض ثابت) ستون را باز
+   می‌کرد و ستون کناری از صفحه بیرون می‌زد. */
+.post-grid{grid-template-columns:minmax(0,1fr) 300px}
+@media (max-width:1024px){.post-grid{grid-template-columns:minmax(0,1fr)} .post-side{position:static}}
+.article-body{min-width:0; overflow-wrap:anywhere}
+.article-body img{max-width:100%; height:auto}
+.article-body table{display:block; max-width:100%; overflow-x:auto}
+/* لینک درون متن مقاله سرمه‌ای است، نه قرمز؛ قرمز فقط برای تماس */
+.article-body a,.article-body a strong{color:var(--steel-ink); text-decoration:underline; text-underline-offset:3px}
+.chart-ranges button,.cr-toggle,.expert-wa,.expert-tel{font-size:14px}
+/* کلاس .review هم نشان «بازبینی» جدول است و هم کارت دیدگاه؛ قاعده‌ی
+   inline-flex نشان، محتوای کارت دیدگاه را افقی می‌چید. */
+.rlist .review,.comments .review{display:block; font-size:inherit; font-weight:400; color:inherit;
+  background:#fff; border:1px solid var(--line); padding:var(--s4)}
+.rlist .review::before,.comments .review::before{content:none}
+/* فرم دیدگاه یک ستون است؛ span 2 کادر متن ستون دوم ضمنی می‌ساخت و نام را له می‌کرد. */
+.rform .cform-grid{grid-template-columns:minmax(0,1fr)}
+.rform .fsearch,.comments .fsearch{grid-column:1/-1}
+
+/* ===========================================================================
+   بلوک‌هایی که از پنل مدیریت پر می‌شوند (نسخه‌ی لاراول)
+   متن صفحه‌ی اصلی و تصویرش، دو بنر صفحه‌ی اصلی، ویژگی‌ها و کاربردهای هر
+   دسته، ویدئوی دسته و صفحه‌ی درباره. همه اختیاری‌اند: خالی باشد، دیده نمی‌شود.
+   =========================================================================== */
+.home-about{display:grid; gap:var(--s6); align-items:start}
+.home-about.has-pic{grid-template-columns:minmax(0,1.4fr) minmax(0,1fr)}
+.home-about-pic{margin:0; border-radius:var(--radius-lg); overflow:hidden; background:var(--surface-2)}
+.home-about-pic img{width:100%; height:auto}
+.home-banners{display:grid; grid-template-columns:1fr 1fr; gap:var(--s4)}
+.home-banner{display:block; border-radius:var(--radius-lg); overflow:hidden; border:1px solid var(--line); background:var(--surface-2)}
+.home-banner img{width:100%; height:auto}
+.cards-3{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:var(--s4)}
+.icard{display:flex; gap:var(--s4); align-items:flex-start; background:#fff; border:1px solid var(--line);
+  border-radius:var(--radius-lg); padding:var(--s4)}
+.icard img{width:72px; height:72px; object-fit:cover; border-radius:var(--radius); flex:none; background:var(--surface-2)}
+.icard h3{font-size:var(--t-base); margin-bottom:4px}
+.icard p{font-size:var(--t-sm); color:var(--ink-2); line-height:1.8}
+.video-box{border-radius:var(--radius-lg); overflow:hidden; background:#000; aspect-ratio:16/9}
+.video-box iframe,.video-box video{width:100%; height:100%; border:0; display:block}
+.about-media{margin:var(--s5) 0; border-radius:var(--radius-lg); overflow:hidden; background:var(--surface-2)}
+.about-media video,.about-media img{width:100%; max-height:560px; object-fit:cover; display:block}
+.board-head .lede p{margin:0 0 var(--s2)}
+.fwho p{margin:0 0 var(--s2)}
+.auth-solo{grid-template-columns:minmax(0,480px); justify-content:center}
+@media (max-width:900px){
+  .home-about.has-pic{grid-template-columns:1fr}
+  .cards-3{grid-template-columns:1fr 1fr}
+}
+@media (max-width:640px){
+  .home-banners,.cards-3{grid-template-columns:1fr}
+}
+/* فهرست‌هایی که ادمین در ویرایشگر پنل می‌نویسد کلاس ندارند؛ همان ظاهر .bul را بگیرند. */
+.prose ul:not(.bul),.lede ul{margin:0 0 var(--s4); padding-inline-start:var(--s5); list-style:disc}
+.prose ol{margin:0 0 var(--s4); padding-inline-start:var(--s5); list-style:persian}
+.prose ul:not(.bul) li,.prose ol li{margin-bottom:var(--s2); line-height:1.9}
+.prose ul:not(.bul) li::marker{color:var(--steel-ink)}
+.prose table{width:100%; margin:0 0 var(--s4); font-size:var(--t-sm)}
+.prose table td,.prose table th{border:1px solid var(--line); padding:var(--s2) var(--s3)}
+.prose img{border-radius:var(--radius); margin:var(--s3) 0}
+.prose a{color:var(--steel-ink); text-decoration:underline; text-underline-offset:3px}
+
+/* ---- منوی اصلی با داده‌ی واقعی (۱۰ دسته با نام بلند) ---- */
+/* در دسکتاپ جا نمی‌شد و در ویندوز نوار اسکرول افقی می‌آمد و «مجله/درباره/تماس» پنهان می‌ماند.
+   دسکتاپ: اگر لازم شد به دو ردیف می‌شکند؛ موبایل: همان اسکرول افقی ولی بدون نوار. */
+.nav-scroll{scrollbar-width:none}
+.nav-scroll::-webkit-scrollbar{display:none}
+/* دسکتاپ: «مجله/درباره/تماس» به نوار بالا می‌روند تا دسته‌ها در یک ردیف جا شوند. */
+.utilbar .util-pages{display:none}
+@media (min-width:1001px){
+  .utilbar .util-pages{display:flex}
+  .nav-scroll .nav-aux{display:none}
+  .nav-scroll a{padding:0 11px}
+}
+/* لپ‌تاپ‌های کوچک (۱۰۰۱ تا ۱۲۷۹): اگر جا نشد، ردیف دوم */
+@media (min-width:1001px) and (max-width:1279px){
+  .nav-scroll{flex-wrap:wrap; overflow:visible}
+  .nav-scroll a{min-height:44px}
+}
+
+/* ---- متن‌ها هم‌عرض container و هم‌تراز با المان‌های بالا و پایین ---- */
+/* قبلاً سقف عرض (۵۶ تا ۷۶ حرف) داشتند و در دسکتاپ سمت چپشان خالی می‌ماند. */
+.prose,.prose-lead,.article-body,.post-lede,
+.board-call .say,.callband p,.hours,.mag-head .lede{max-width:none}
+/* سرتیتر و عکس مقاله، ویدئوی دسته و صفحه‌ی نویسنده هم‌عرض بقیه‌ی صفحه */
+.container.narrow{max-width:var(--container)}
+
+/* «تماس بگیرید»: a product whose panel price is 1 has no price on the site, only a call link */
+.pt-askp{font-weight:800; color:var(--brand); white-space:nowrap; text-decoration:underline; text-underline-offset:3px}
+.pt-askp:hover{color:var(--brand-dark)}

@@ -32,9 +32,9 @@ SERVICES = [
     ("sepahanfelez-social.timer", "صف شبکه‌ها و درایو (هر ۱۰ دقیقه ۷–۱۹)", "timer"),
     ("sepahanfelez-health.timer", "نگهبان سلامت (هر ۱۵ دقیقه)", "timer"),
 ]
-# The dashboard's address is served by Caddy (docker compose in ~/projects/sepahanfelez-prelive, network host),
+# The dashboard's address is served by Caddy (docker compose in ~/projects/sepahanfelez-seo/deploy/caddy, network host),
 # straight from this server on 9444 — Cloudflare's edge stalled for the owner's connection in Iran.
-EDGE_COMPOSE = os.path.expanduser("~/projects/sepahanfelez-prelive")
+EDGE_COMPOSE = os.path.expanduser("~/projects/sepahanfelez-seo/deploy/caddy")
 
 
 def _url_ok(url):
