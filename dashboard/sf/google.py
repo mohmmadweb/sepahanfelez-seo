@@ -9,8 +9,7 @@ Google's API front-ends return 403 to our server's IP, so
 these run in GitHub Actions. Credentials, in order of preference:
   GOOGLE_SERVICE_ACCOUNT        env var holding the JSON key itself (Actions secret)
   GOOGLE_APPLICATION_CREDENTIALS  path to the JSON key
-  ~/.config/claude-seo/service_account.json
-PageSpeed key: GOOGLE_API_KEY env var, or ~/.config/claude-seo/google-api.json.
+PageSpeed key: GOOGLE_API_KEY (.env).
 """
 
 import json
@@ -20,8 +19,6 @@ from datetime import date, timedelta
 
 from .util import fetch, read_json
 
-SA_FALLBACK = os.path.expanduser("~/.config/claude-seo/service_account.json")
-KEY_FALLBACK = os.path.expanduser("~/.config/claude-seo/google-api.json")
 
 
 def _credentials(scopes):
@@ -33,8 +30,8 @@ def _credentials(scopes):
     try:
         if raw:
             return service_account.Credentials.from_service_account_info(json.loads(raw), scopes=scopes), None
-        path = os.environ.get("GOOGLE_APPLICATION_CREDENTIALS") or SA_FALLBACK
-        if os.path.exists(path):
+        path = os.environ.get("GOOGLE_APPLICATION_CREDENTIALS")
+        if path and os.path.exists(path):
             return service_account.Credentials.from_service_account_file(path, scopes=scopes), None
     except Exception as exc:                                          # noqa: BLE001
         return None, f"service account unusable: {type(exc).__name__}"
@@ -195,7 +192,7 @@ def collect_ga4(site, days=90):
 
 # ---------------------------------------------------------------- PageSpeed Insights
 def collect_psi(site):
-    key = os.environ.get("GOOGLE_API_KEY") or (read_json(KEY_FALLBACK, {}) or {}).get("api_key")
+    key = os.environ.get("GOOGLE_API_KEY")
     results, blocked = [], None
     for url in site["psi_urls"]:
         for strategy in ("mobile", "desktop"):

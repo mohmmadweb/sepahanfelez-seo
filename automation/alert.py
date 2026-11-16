@@ -1,11 +1,9 @@
 """
 Alerts to the person who fixes things, through the company's own Telegram bot (@sepahanfelezbot).
 
-Who: the mobile number in SF_ALERT_MOBILE (.env). Telegram bots cannot write to a phone number,
-only to a chat that has started the bot, so the number is matched against the bot's signed-in
-managers (pricebot data/users.json, where every number was proven with the site's SMS code). The
-chat id found is remembered in dashboard/data/alert_chat.json, so a later «خروج از حساب» in the
-bot does not silence the alerts. TELEGRAM_ADMIN_CHAT_ID in .env, if set, is used as a fallback.
+Who: the chat in SF_ALERT_CHAT_ID (.env), else the chat remembered in dashboard/data/alert_chat.json,
+else TELEGRAM_ADMIN_CHAT_ID. The bot token is SF_ALERT_BOT_TOKEN in this project's .env. Nothing is read
+from the price bot's folder: this project only needs its own .env (SF_ALERT_MOBILE is shown in the UI).
 
     alert.send(key, title, detail, fix)   # once per key per `every_h` hours (default 6)
     alert.resolved(key, title)            # «✅ وصل شد» once, when a key that alerted is healthy again
@@ -25,8 +23,6 @@ from sf.env import get, load_env  # noqa: E402
 from sf.util import DATA, read_json, write_json  # noqa: E402
 
 load_env()
-BOT_ENV = os.path.expanduser("~/.secrets/sepahanfelez-pricebot.env")
-BOT_USERS = os.path.expanduser("~/projects/sepahanfelez-pricebot/data/users.json")
 CHAT_FILE = os.path.join(DATA, "alert_chat.json")
 SENT = os.path.join(DATA, "alerts_sent.json")
 LOG = os.path.join(DATA, "alerts_log.jsonl")
@@ -40,25 +36,12 @@ def _digits(m):
 
 
 def token():
-    try:
-        cfg = dict(l.strip().split("=", 1) for l in open(BOT_ENV, encoding="utf-8") if "=" in l)
-        return cfg.get("BOT_TOKEN", "")
-    except OSError:
-        return ""
+    return get("SF_ALERT_BOT_TOKEN", "")
 
 
 def chat_id():
-    want = _digits(get("SF_ALERT_MOBILE", ""))
     saved = read_json(CHAT_FILE, {}) or {}
-    if want:
-        for chat, u in (read_json(BOT_USERS, {}) or {}).items():
-            if _digits(u.get("mobile")) == want:
-                if saved.get("chat") != chat:
-                    write_json(CHAT_FILE, {"chat": chat, "mobile_tail": want[-4:], "found": datetime.now(TEHRAN).isoformat(timespec="minutes")})
-                return chat
-        if saved.get("mobile_tail") == want[-4:]:
-            return saved.get("chat")
-    return get("TELEGRAM_ADMIN_CHAT_ID", "") or None
+    return get("SF_ALERT_CHAT_ID", "") or saved.get("chat") or get("TELEGRAM_ADMIN_CHAT_ID", "") or None
 
 
 def _post(text):
@@ -67,7 +50,7 @@ def _post(text):
     urllib3.util.connection.allowed_gai_family = lambda: socket.AF_INET     # IPv6 to Telegram hangs from this server
     tok, chat = token(), chat_id()
     if not (tok and chat):
-        return False, "ربات یا گیرنده پیدا نشد (SF_ALERT_MOBILE باید یک بار در @sepahanfelezbot وارد شده باشد)"
+        return False, "ربات یا گیرنده پیدا نشد (SF_ALERT_BOT_TOKEN و SF_ALERT_CHAT_ID در .env)"
     r = requests.post(f"https://api.telegram.org/bot{tok}/sendMessage", timeout=25,
                       data={"chat_id": chat, "text": text, "parse_mode": "HTML", "disable_web_page_preview": "true"})
     return r.ok, r.text[:200]

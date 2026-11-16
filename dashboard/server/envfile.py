@@ -13,7 +13,7 @@ import tempfile
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 ENV = os.path.join(ROOT, ".env")
 EXAMPLE = os.path.join(ROOT, ".env.example")
-SECRET_RE = re.compile(r"TOKEN|SECRET|PASSWORD|HASH|_KEY$|KEY_|CREDENTIALS|PROXY|STATE_KEY", re.I)
+SECRET_RE = re.compile(r"TOKEN|SECRET|PASSWORD|HASH|_KEY$|KEY_|CREDENTIALS|SERVICE_ACCOUNT|PROXY|STATE_KEY", re.I)
 READ_ONLY = {"SF_STATE_KEY"}          # changing it orphans every encrypted backup; edit by hand if ever needed
 LINE = re.compile(r"^([A-Z][A-Z0-9_]*)=(.*)$")
 

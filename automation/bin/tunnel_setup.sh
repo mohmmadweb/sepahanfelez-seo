@@ -6,7 +6,9 @@
 set -uo pipefail
 CF="$HOME/.local/bin/cloudflared"; NAME="sepahanfelez-seo"; HOST="sepahanfelezseo.lenzit.ir"
 DIR="$HOME/.cloudflared"; ROOT="$(cd "$(dirname "$0")/../.." && pwd)"; LOG="$ROOT/dashboard/data/tunnel_setup.log"
-mkdir -p "$DIR" "$(dirname "$LOG")"; chmod 700 "$DIR"
+# cert.pem (the Cloudflare account login) stays in ~/.cloudflared; this tunnel's config and credentials live in the project
+PROJ="$ROOT/deploy/cloudflared"
+mkdir -p "$DIR" "$PROJ" "$(dirname "$LOG")"; chmod 700 "$DIR" "$PROJ"
 echo "[$(date -Is)] start" >> "$LOG"
 if [ ! -f "$DIR/cert.pem" ]; then
   "$CF" tunnel login >> "$LOG" 2>&1 || { echo "[$(date -Is)] login failed" >> "$LOG"; exit 1; }
@@ -16,16 +18,17 @@ if ! "$CF" tunnel info "$NAME" >/dev/null 2>&1; then
   "$CF" tunnel create "$NAME" >> "$LOG" 2>&1 || { echo "[$(date -Is)] create failed" >> "$LOG"; exit 1; }
 fi
 ID="$("$CF" tunnel list -o json 2>/dev/null | python3 -c "import json,sys;print(next(t['id'] for t in json.load(sys.stdin) if t['name']=='$NAME'))")"
-cat > "$DIR/$NAME.yml" <<YML
+[ -f "$DIR/$ID.json" ] && mv "$DIR/$ID.json" "$PROJ/$ID.json"
+cat > "$PROJ/$NAME.yml" <<YML
 protocol: http2
 tunnel: $ID
-credentials-file: $DIR/$ID.json
+credentials-file: $PROJ/$ID.json
 ingress:
   - hostname: $HOST
     service: http://localhost:8813
   - service: http_status:404
 YML
-chmod 600 "$DIR/$ID.json" "$DIR/$NAME.yml" 2>/dev/null
+chmod 600 "$PROJ/$ID.json" "$PROJ/$NAME.yml" 2>/dev/null
 "$CF" tunnel route dns --overwrite-dns "$NAME" "$HOST" >> "$LOG" 2>&1 || { echo "[$(date -Is)] dns failed" >> "$LOG"; exit 1; }
 TOKEN="$("$CF" tunnel token "$NAME" 2>/dev/null)"
 if [ -n "$TOKEN" ]; then

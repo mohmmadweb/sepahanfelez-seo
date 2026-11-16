@@ -16,3 +16,6 @@ __pycache__/
 *.pyc
 *.tmp
 dashboard/.backup/
+
+# Cloudflare tunnel config + credentials (secret, this server only)
+deploy/cloudflared/

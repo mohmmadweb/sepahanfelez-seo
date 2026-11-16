@@ -3,7 +3,7 @@
 # Prefers the local config written by tunnel_setup.sh; falls back to CLOUDFLARE_TUNNEL_TOKEN from .env
 # (passed through the TUNNEL_TOKEN environment variable, never the command line).
 set -euo pipefail
-CONF="$HOME/.cloudflared/sepahanfelez-seo.yml"
+CONF="$(cd "$(dirname "$0")/../.." && pwd)/deploy/cloudflared/sepahanfelez-seo.yml"
 if [ -f "$CONF" ]; then
   exec "$HOME/.local/bin/cloudflared" tunnel --no-autoupdate --config "$CONF" run
 fi

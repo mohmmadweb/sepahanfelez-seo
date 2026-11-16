@@ -14,6 +14,7 @@ used as content photos. Anything else lands in _unmatched/<folder> and is listed
 dashboard for a decision.
 """
 
+import json
 import os
 import re
 
@@ -58,8 +59,12 @@ def match(name):
 def _session():
     from google.auth.transport.requests import AuthorizedSession
     from google.oauth2 import service_account
-    path = os.environ.get("GOOGLE_APPLICATION_CREDENTIALS") or os.path.expanduser("~/.config/claude-seo/service_account.json")
-    creds = service_account.Credentials.from_service_account_file(path, scopes=["https://www.googleapis.com/auth/drive.readonly"])
+    scopes = ["https://www.googleapis.com/auth/drive.readonly"]
+    raw = os.environ.get("GOOGLE_SERVICE_ACCOUNT")
+    if raw:
+        creds = service_account.Credentials.from_service_account_info(json.loads(raw), scopes=scopes)
+    else:
+        creds = service_account.Credentials.from_service_account_file(os.environ["GOOGLE_APPLICATION_CREDENTIALS"], scopes=scopes)
     return AuthorizedSession(creds), creds.service_account_email
 
 

@@ -646,23 +646,26 @@ GH_REPO = "mohmmadweb/sepahanfelez-seo"
 
 
 def _gh_token():
-    try:
-        for line in open(os.path.expanduser("~/.git-credentials"), encoding="utf-8"):
-            if "mohmmadweb" in line and "github.com" in line:
-                return line.strip().split("://", 1)[1].split("@", 1)[0].split(":", 1)[1]
-    except OSError:
-        pass
-    return None
+    load_env()
+    return os.environ.get("GITHUB_TOKEN") or None
+
+
+def _sa_json():
+    """The service-account JSON: GOOGLE_SERVICE_ACCOUNT in .env (or a file in GOOGLE_APPLICATION_CREDENTIALS)."""
+    raw = os.environ.get("GOOGLE_SERVICE_ACCOUNT", "")
+    if raw:
+        return raw
+    sa = os.environ.get("GOOGLE_APPLICATION_CREDENTIALS", "")
+    return open(sa).read() if sa and os.path.exists(sa) else ""
 
 
 def _google_state():
     g = read_json(os.path.join(DATA, "latest", "gsc.json"), {}) or {}
     a = read_json(os.path.join(DATA, "latest", "ga4.json"), {}) or {}
-    sa = os.environ.get("GOOGLE_APPLICATION_CREDENTIALS", "")
     email = None
     try:
-        email = json.load(open(sa)).get("client_email") if sa and os.path.exists(sa) else None
-    except (OSError, ValueError):
+        email = json.loads(_sa_json() or "{}").get("client_email")
+    except ValueError:
         pass
     return {"service_account": email, "gsc": {"status": g.get("status"), "reason": g.get("reason")},
             "ga4": {"status": a.get("status"), "reason": a.get("reason"), "property": a.get("property")},
@@ -678,10 +681,9 @@ async def google_push_secrets():
     from nacl import encoding, public
     tok = _gh_token()
     if not tok:
-        raise HTTPException(409, "دسترسی GitHub (mohmmadweb) روی سرور پیدا نشد")
-    sa = os.environ.get("GOOGLE_APPLICATION_CREDENTIALS", "")
-    vals = {"GOOGLE_SERVICE_ACCOUNT": open(sa).read() if sa and os.path.exists(sa) else "",
-            "GOOGLE_API_KEY": os.environ.get("GOOGLE_API_KEY") or (read_json(os.path.expanduser("~/.config/claude-seo/google-api.json"), {}) or {}).get("api_key", ""),
+        raise HTTPException(409, "GITHUB_TOKEN در .env خالی است")
+    vals = {"GOOGLE_SERVICE_ACCOUNT": _sa_json(),
+            "GOOGLE_API_KEY": os.environ.get("GOOGLE_API_KEY", ""),
             "SF_STATE_KEY": os.environ.get("SF_STATE_KEY", "")}
     missing = [k for k, v in vals.items() if not v]
     if missing:
