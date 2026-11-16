@@ -7,7 +7,7 @@ Rendered through headless Chromium so Persian shaping, the Estedad font and RTL 
 contact, prices in ریال, the company's numbers from .env (SITE_CONTACT_PHONES; the mobile goes on the
 card), sepahanfelez.ir.
 
-    ~/.venvs/pw/bin/python automation/render_card.py cards.json out_dir/
+    .venv/bin/python automation/render_card.py cards.json out_dir/
 cards.json: [{"id", "format": "story|post", "layout": "classic|full|bold", "type", "title", "points": [...], "photo", "cta"}]
 """
 
