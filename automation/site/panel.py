@@ -6,13 +6,17 @@ admin would use and saved with the same button, so the panel's own checks (slug 
 lengths, image upload) and cache flushes run as usual. Before a form is saved its current
 values are kept in dashboard/data/site/backup/<date>/ so any change can be put back by hand.
 
-Login is the panel's own: mobile → SMS code. The code is asked through IO (the dashboard's
-login window). The session is kept in automation/sessions/site/panel.json and stays alive as
-long as the panel is visited within SESSION_LIFETIME (3 days on the host) — the daily run
-and the 15-minute health check both visit it, so one login lasts.
+Sign-in: the site signs people out after SESSION_LIFETIME (6 hours) without activity, but the
+dashboard must never drop out, even after an outage longer than that. So it carries the key
+SITE_SERVICE_TOKEN in the `sf_service` cookie; whenever its session has ended, the site's
+ServiceLogin middleware signs SERVICE_LOGIN_MOBILE in again on the next request (the site keeps
+only the key's SHA-256 and accepts it only from this server's address). The session itself is
+kept in automation/sessions/site/<host>.json as before. Without the key, the old way still
+works: mobile → SMS code through IO (the dashboard's login window).
 
 .env
-  SITE_ADMIN_MOBILE   the admin's mobile (the code goes to it)
+  SITE_SERVICE_TOKEN  the standing sign-in key (its SHA-256 is SERVICE_LOGIN_TOKEN_SHA256 on the host)
+  SITE_ADMIN_MOBILE   the admin's mobile (the code goes to it; the host's SERVICE_LOGIN_MOBILE)
   SITE_PANEL_BASE     optional, default https://sepahanfelez.ir (stage for tests)
   SITE_GATE_PASSWORD  optional, only for the password-gated stage
 """
@@ -53,6 +57,11 @@ IO = TerminalIO()
 def base():
     load_env()
     return (os.environ.get("SITE_PANEL_BASE") or "https://sepahanfelez.ir").rstrip("/")
+
+
+def service_token():
+    load_env()
+    return (os.environ.get("SITE_SERVICE_TOKEN") or "").strip()
 
 
 def state_path():
@@ -101,6 +110,10 @@ class Panel:
         self.ctx = self.browser.new_context(storage_state=sp if os.path.exists(sp) else None,
                                             viewport={"width": 1366, "height": 900}, locale="fa-IR")
         self.ctx.set_default_timeout(90000)
+        if service_token():
+            self.ctx.add_cookies([{"name": "sf_service", "value": service_token(),
+                                   "url": self.base + "/", "httpOnly": True, "secure": self.base.startswith("https"),
+                                   "sameSite": "Lax"}])
         self.page = self.ctx.new_page()
         self._gate()
         if self.need_login and not self.logged_in():
@@ -109,7 +122,7 @@ class Panel:
 
     def __exit__(self, *exc):
         try:
-            if self.need_login and os.path.exists(state_path()):
+            if self.need_login and (os.path.exists(state_path()) or service_token()):
                 self.ctx.storage_state(path=state_path())          # keep the refreshed session cookie
         finally:
             self.browser.close()
@@ -311,7 +324,8 @@ def login(mobile=None):
         pg = p.page
         if p.logged_in():
             p.ctx.storage_state(path=state_path())
-            IO.say("از قبل وارد هستید.")
+            os.chmod(state_path(), 0o600)
+            IO.say("وارد هستید؛ اتصال دائمی است و دیگر کد پیامکی لازم نیست." if service_token() else "از قبل وارد هستید.")
             save_status(True, "ok")
             return True
         pg.goto(p.base + "/login", wait_until="domcontentloaded")
@@ -338,11 +352,11 @@ def login(mobile=None):
 
 
 def check():
-    """Visit the panel (keeps the 3-day sliding session alive) and record the result.
+    """Visit the panel (the standing key signs in again whenever the 6-hour session has ended) and record the result.
 
     Only a redirect to /login counts as «logged out». A network error or a site outage keeps the
     last known state and is reported as «unreachable», so a bad minute never cries wolf."""
-    if not os.path.exists(state_path()):
+    if not os.path.exists(state_path()) and not service_token():
         save_status(False, "no session")
         return False
     prev = status()
@@ -353,7 +367,9 @@ def check():
                 ok = False
             elif r and r.status == 200:
                 ok = True
+                os.makedirs(SESS_DIR, exist_ok=True)
                 p.ctx.storage_state(path=state_path())
+                os.chmod(state_path(), 0o600)
             else:
                 raise RuntimeError(f"HTTP {r.status if r else '—'}")
     except Exception as exc:                                         # noqa: BLE001

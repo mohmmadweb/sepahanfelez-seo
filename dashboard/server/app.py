@@ -37,7 +37,7 @@ from . import drive_auth, envfile, linkedin_auth, social_jobs  # noqa: E402
 load_env()
 WEB = os.path.join(DASH, "web")
 COOKIE = "sf_session"
-SESSION_HOURS = 12
+IDLE_HOURS = 6        # signed out after 6 hours without a request; every request moves the deadline
 app = FastAPI(docs_url=None, redoc_url=None, openapi_url=None)
 
 
@@ -65,6 +65,14 @@ def _verify(token):
         return None
 
 
+def _issue(req, resp, nonce=None):
+    """(Re)set the session cookie to run IDLE_HOURS from now."""
+    token = _sign({"exp": time.time() + IDLE_HOURS * 3600, "n": nonce or uuid.uuid4().hex[:8]})
+    secure = req.headers.get("x-forwarded-proto", req.url.scheme) == "https"
+    resp.set_cookie(COOKIE, token, max_age=IDLE_HOURS * 3600, httponly=True, secure=secure,
+                    samesite="strict", path="/")
+
+
 _attempts = {}
 
 
@@ -75,14 +83,20 @@ def _ip(req):
 @app.middleware("http")
 async def guard(req: Request, call_next):
     path = req.url.path
+    session = None
     if path.startswith("/api/") and path not in ("/api/login", "/api/linkedin/callback"):
-        if not _verify(req.cookies.get(COOKIE, "")):
+        session = _verify(req.cookies.get(COOKIE, ""))
+        if not session:
             return JSONResponse({"error": "login required"}, status_code=401)
         if req.method != "GET" and req.headers.get("x-requested-with") != "sf":
             return JSONResponse({"error": "bad request"}, status_code=403)       # CSRF: same-origin fetch only
     if path.startswith("/media/") and not _verify(req.cookies.get(COOKIE, "")):
         return JSONResponse({"error": "login required"}, status_code=401)
     resp = await call_next(req)
+    # sliding: while someone works the deadline keeps moving (refreshed at most every 5 minutes)
+    if session and path != "/api/logout" and session.get("exp", 0) - time.time() < IDLE_HOURS * 3600 - 300 \
+            and COOKIE not in resp.headers.get("set-cookie", ""):
+        _issue(req, resp, session.get("n"))
     resp.headers["X-Robots-Tag"] = "noindex, nofollow"
     resp.headers["X-Frame-Options"] = "DENY"
     resp.headers["Referrer-Policy"] = "same-origin"
@@ -109,11 +123,8 @@ async def login(req: Request):
         time.sleep(1)
         return JSONResponse({"error": "رمز درست نیست."}, status_code=401)
     _attempts.pop(ip, None)
-    token = _sign({"exp": now + SESSION_HOURS * 3600, "n": uuid.uuid4().hex[:8]})
     resp = JSONResponse({"ok": True})
-    secure = req.headers.get("x-forwarded-proto", req.url.scheme) == "https"
-    resp.set_cookie(COOKIE, token, max_age=SESSION_HOURS * 3600, httponly=True, secure=secure,
-                    samesite="strict", path="/")
+    _issue(req, resp)
     return resp
 
 

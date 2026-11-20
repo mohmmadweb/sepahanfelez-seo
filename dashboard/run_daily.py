@@ -159,7 +159,7 @@ def main():
         sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "automation", "site"))
         import articles
         import panel
-        logged = panel.check() if os.path.exists(panel.state_path()) else False
+        logged = panel.check() if os.path.exists(panel.state_path()) or panel.service_token() else False
         nxt = articles.next_item()
         wrote = None
         from datetime import date

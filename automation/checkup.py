@@ -104,11 +104,11 @@ def _age_h(iso):
 
 def site(prev):
     import panel
-    if os.path.exists(panel.state_path()) and (_age_h(panel.status().get("checked")) or 99) > 0.2:
+    if (os.path.exists(panel.state_path()) or panel.service_token()) and (_age_h(panel.status().get("checked")) or 99) > 0.2:
         panel.check()
     st = panel.status()
     if st.get("logged_in") and not str(st.get("detail", "")).startswith("unreachable"):
-        r = _row("site", "سایت", "پنل مدیریت sepahanfelez.ir", "ok", "وارد است؛ هر ۲ ساعت تمدید می‌شود", "", prev.get("site"))
+        r = _row("site", "سایت", "پنل مدیریت sepahanfelez.ir", "ok", "وارد است؛ اتصال دائمی (بدون کد پیامکی)" if panel.service_token() else "وارد است؛ هر ۲ ساعت تمدید می‌شود", "", prev.get("site"))
     elif str(st.get("detail", "")).startswith("unreachable"):
         r = _row("site", "سایت", "پنل مدیریت sepahanfelez.ir", "warn", "سایت موقتاً پاسخ نداد", "خودکار دوباره امتحان می‌شود", prev.get("site"))
     else:

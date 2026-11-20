@@ -1,7 +1,7 @@
 """
 Every hour, day and night (systemd: sepahanfelez-site.timer):
-  - keep the panel session alive: the site's session lasts 3 days and slides with every visit,
-    so a visit every ~2 hours means it never runs out;
+  - visit the panel: the site signs a session out after 6 idle hours, and the dashboard's standing
+    key (SITE_SERVICE_TOKEN) signs it in again whenever that happened, so this only records the state;
   - in working hours (08–21 Tehran) publish articles and news whose time has come.
 Quiet when there is nothing to do.
 """
@@ -20,7 +20,7 @@ from sf.util import now_tehran  # noqa: E402
 KEEPALIVE = timedelta(minutes=110)
 
 if __name__ == "__main__":
-    if os.path.exists(panel.state_path()):
+    if os.path.exists(panel.state_path()) or panel.service_token():
         st = panel.status()
         last = st.get("checked")
         if not last or datetime.now().astimezone() - datetime.fromisoformat(last) > KEEPALIVE:
