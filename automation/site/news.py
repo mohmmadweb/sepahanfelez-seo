@@ -469,6 +469,7 @@ def publish(nid, say=print, force=False):
         url = p.base + urllib.parse.quote(art["path"])
         r = p.page.request.get(url)
     d.update({"status": "published", "published_at": _now(), "url": url, "article_id": art["id"], "live_check": r.status})
+    d.pop("last_error", None)                     # an earlier failed attempt is history now
     history.record("site", "news", content_type="خبر", text=f["title"], media=d.get("image"), url=url, plan_ref=d["id"])
     trace.step(d["id"], "publish", "منتشر شد", url, decision="نشانی زنده بررسی شد: " + str(r.status))
     say(f"✓ خبر منتشر شد: {urllib.parse.unquote(url)}")

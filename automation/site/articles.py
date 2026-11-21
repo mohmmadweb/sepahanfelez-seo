@@ -389,6 +389,7 @@ def publish(item_id, say=print, force=False):
         r = p.page.request.get(url)
         live = r.status == 200
     d.update({"status": "published", "published_at": _now(), "url": url, "article_id": art["id"], "live_check": r.status})
+    d.pop("last_error", None)                     # an earlier failed attempt is history now
     history.record("site", "article", content_type=d.get("type"), product=d.get("product"), text=f["title"],
                    media=d.get("image"), url=url, plan_ref=d["id"])
     trace.step(d["id"], "publish", "منتشر شد", url, decision="نشانی زنده بررسی شد: " + ("۲۰۰" if live else str(r.status)))

@@ -176,7 +176,10 @@ def notify(out, prev, last):
     sent = None
     for r in out["rows"]:
         key = "conn:" + r["key"]
-        transient = r["state"] == "warn" and (r["key"] == "site" or r["detail"].startswith("بررسی نشد"))
+        # «could not check» (network) is a passing thing — unless it has lasted a day: then publishing on that
+        # network has been blocked for a day and someone must look (11-19..21 WhatsApp signed out unseen this way)
+        long = bool(r.get("since")) and (_age_h(r["since"]) or 0) >= 24
+        transient = r["state"] == "warn" and (r["key"] == "site" or r["detail"].startswith("بررسی نشد")) and not long
         never = r["group"] == "شبکه‌ها" and not r.get("last_ok")      # added but not connected yet: the dashboard shows it, no alarm
         if not never and (r["state"] == "broken" or (r["state"] == "warn" and not transient and r["group"] == "شبکه‌ها")):
             if alert.send(key, ("اتصال قطع: " if r["state"] == "broken" else "مانع انتشار: ") + r["name"],
